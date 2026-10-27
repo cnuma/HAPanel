@@ -30,19 +30,21 @@ Livrables :
 4. fichiers concernés ;
 5. risques et invariants ;
 6. plan de modification et plan de test ;
-7. confirmation que le port COM sera redemandé avant upload.
+7. confirmation que le port COM ou l'IP sera redemandé avant téléversement.
 
 ## Réponse attendue après code
 
 ```text
 Base utilisée :
 Fichiers modifiés :
-Positions et fonctions modifiées :
+Packages et composants modifiés :
 Fichiers non modifiés :
 Diff hors périmètre :
-Compilation HAThermostat :
-Tests matériels :
-Port COM confirmé :
+Version ESPHome :
+esphome config / compile :
+Tests sur le panneau (HA connecté, déconnecté, entité indisponible) :
+Port COM ou IP confirmé :
+Mémoire libre et plus grand bloc :
 Résultat observé :
 Risques résiduels :
 Commit proposé :

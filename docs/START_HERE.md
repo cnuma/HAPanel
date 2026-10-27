@@ -1,4 +1,4 @@
-# HAThermostat — START HERE
+# HAPanel — START HERE
 
 Point d'entrée officiel de la documentation.
 
@@ -7,7 +7,7 @@ Point d'entrée officiel de la documentation.
 1. `AGENTS.md` — règles impératives et checklist de démarrage ;
 2. le checkpoint le plus récent de `docs/checkpoints/` — état du jour ;
 3. `docs/TODO.md` — reste à faire, par priorité ;
-4. `docs/codex/00_CONTEXT.md` — périmètre, matériel, intégration ;
+4. `docs/codex/00_CONTEXT.md` — écrans, matériel, Home Assistant ;
 5. `docs/codex/03_INVARIANTS.md`, `04_DEVELOPMENT_RULES.md`,
    `05_BUILD_AND_TEST.md` ;
 6. `docs/codex/02_DECISIONS.md`, `06_ANTI_REGRESSION.md`,
@@ -16,10 +16,10 @@ Point d'entrée officiel de la documentation.
 
 ## Source de vérité
 
-Le dépôt `cnuma/HAthermostat` est la mémoire officielle du projet. En cas de
+Le dépôt `cnuma/HAPanel` est la mémoire officielle du projet. En cas de
 contradiction, l'ordre de confiance est :
 
-1. code et configuration du commit ciblé ;
+1. configuration YAML du commit ciblé ;
 2. checkpoint exact ;
 3. invariants et décisions ;
 4. documentation `docs/codex/` ;
@@ -34,4 +34,4 @@ Une contradiction détectée se corrige dans le dépôt, pas oralement.
 - conserver l'historique et la justification des décisions ;
 - ne jamais présenter une hypothèse ou une fonction prévue comme un
   comportement implémenté ;
-- mettre à jour la documentation dans le même lot que le code.
+- mettre à jour la documentation dans le même lot que la configuration.

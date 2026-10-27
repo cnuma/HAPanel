@@ -1,23 +1,26 @@
 # 08 — Risques, surfaces exposées et dette technique
 
-Toute nouvelle surface (route, port, service, secret, intégration) et toute
-dette introduite volontairement ajoute une ligne avant fusion.
+Toute nouvelle surface (serveur Web, point d'accès, action Home Assistant
+autorisée, secret) et toute dette introduite volontairement ajoute une ligne
+avant fusion.
 
 ## Risques
 
 | ID | Risque | Impact | Mesure | État |
 |---|---|---|---|---|
-| R1 | Sortie de commande active au démarrage ou après plantage | Chauffage ou froid non maîtrisé | Invariant T1, test au boot et au reset | Ouvert |
-| R2 | Mesure de température fausse ou figée | Surchauffe ou non-chauffe | Invariant T2, détection de capteur absent ou figé | Ouvert |
-| R3 | Secrets (Wi-Fi, MQTT) exposés dans le dépôt | Compromission du réseau domestique | Invariant G9, `secrets.h` ignoré | Ouvert |
-| R4 | GPIO libres insuffisants sur la carte ESP32-2432S024 pour capteur et sortie | Recours à un bus ou une carte d'extension | Relevé des connecteurs avant choix (D004) | Ouvert |
-| R5 | Mémoire saturée sans PSRAM (TLS, JSON, affichage) | Plantage, redémarrages | Invariant G6, mesures de heap à chaque palier | Ouvert |
+| R1 | Tactile CST820 non reconnu par le composant `cst816` (compatibilité annoncée sans garantie) | Panneau inutilisable au doigt | Essai sur banc avant tout écran (TODO P1) | Ouvert |
+| R2 | Mémoire saturée sans PSRAM (tampon LVGL, polices, images, nombre d'écrans) | Échec LVGL, redémarrages | Invariant G6, `buffer_size` explicite, mesure à chaque écran | Ouvert |
+| R3 | Secrets exposés dans le dépôt | Compromission du réseau domestique ou du panneau | Invariant G9, `secrets.yaml` ignoré | Ouvert |
+| R4 | Commande envoyée sur un état inconnu ou sans Home Assistant | Action inattendue dans la maison | Invariants P2 à P4 | Ouvert |
+| R5 | Écart de version entre l'ESPHome du dépôt et Home Assistant | Incompatibilité de l'API ou de l'OTA | Version figée (D005), mise à jour par décision et test | Ouvert |
 
 ## Surfaces exposées
 
 | Surface | Protocole | Authentification | Document |
 |---|---|---|---|
-| — | — | — | — |
+| API native ESPHome | TCP local | Clé de chiffrement (`secrets.yaml`) | `04_DEVELOPMENT_RULES.md` |
+| Mise à jour OTA | Réseau local | Mot de passe (`secrets.yaml`) | `04_DEVELOPMENT_RULES.md` |
+| Actions Home Assistant autorisées pour le panneau | API native | Autorisation dans l'intégration ESPHome | À activer au premier écran qui commande |
 
 ## Dette technique
 

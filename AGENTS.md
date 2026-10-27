@@ -1,38 +1,41 @@
-# AGENTS.md — HAThermostat
+# AGENTS.md — HAPanel
 
 ## Mission
 
-Ce dépôt contient le firmware du thermostat HAThermostat sur ESP32 (carte
-ESP32-2432S024, sans PSRAM), intégré à Home Assistant.
+Ce dépôt contient la configuration ESPHome de HAPanel, panneau de commande
+mural multi-écrans pour Home Assistant, sur carte ESP32-2432S024C (ESP32 sans
+PSRAM, écran tactile capacitif 2,4").
 
-Toute intervention automatisée ou assistée (Claude Code, Codex) doit préserver
-en priorité :
+Le panneau affiche et commande des entités de Home Assistant ; il ne pilote
+jamais directement un appareil (décision D007). Toute intervention
+automatisée ou assistée (Claude Code, Codex) doit préserver en priorité :
 
-1. la sécurité de commande de l'organe de chauffage ou de climatisation
-   (état sûr au démarrage, en cas de perte de mesure et en cas de perte
-   réseau) ;
-2. la persistance de la configuration ;
-3. le fonctionnement autonome du thermostat sans Wi-Fi, sans Home Assistant
-   et sans Internet ;
-4. les invariants documentés dans `docs/codex/03_INVARIANTS.md`.
+1. l'absence de toute commande envoyée sur un état inconnu ou périmé ;
+2. un état de connexion à Home Assistant toujours visible et véridique ;
+3. la réactivité de l'écran, y compris sans Home Assistant ;
+4. la stabilité des identifiants et des entités exposées à Home Assistant ;
+5. les invariants documentés dans `docs/codex/03_INVARIANTS.md`.
 
-Le périmètre fonctionnel, le matériel et le mode d'intégration Home Assistant
-sont fixés dans `docs/codex/00_CONTEXT.md`. Tant qu'une rubrique y est
-marquée « À définir », aucune implémentation ne s'appuie sur une hypothèse
-à sa place : poser la question au propriétaire.
+Les écrans sont définis pas à pas dans `docs/codex/00_CONTEXT.md` et
+`docs/TODO.md`. Aucun écran n'est implémenté sur une hypothèse : poser la
+question au propriétaire.
 
 ## Source de vérité
 
-- Dépôt : `cnuma/HAthermostat`
+- Dépôt : `cnuma/HAPanel`
 - Branche stable : `main`
 - Point d'entrée de reprise : `docs/START_HERE.md`, puis le checkpoint le plus
   récent de `docs/checkpoints/`
-- Origine du socle : AquaLook, voir `SOCLE_MANIFEST.md`
+- Origine du socle de méthode : AquaLook, voir `SOCLE_MANIFEST.md`
+
+Les fichiers YAML vivent dans le dépôt et se compilent avec la ligne de
+commande ESPHome à version figée (D005). Ils ne sont jamais édités dans
+l'outil ESPHome de Home Assistant, qui les ferait vivre hors de Git.
 
 Ne jamais reconstruire un fichier depuis un ancien extrait, un souvenir, une
 conversation ou une version locale non vérifiée si le dépôt contient une
 version plus récente. Une décision n'est acquise que lorsqu'elle est inscrite
-dans le dépôt (document, décision, invariant, test, checkpoint ou code).
+dans le dépôt.
 
 ## Lecture obligatoire avant modification
 
@@ -46,21 +49,22 @@ dans le dépôt (document, décision, invariant, test, checkpoint ou code).
 Pour une évolution significative, lire aussi `docs/codex/02_DECISIONS.md`,
 `docs/codex/06_ANTI_REGRESSION.md` et `docs/codex/10_TASK_HANDOFF.md`.
 
-### Checklist automatique au début de chaque chat HAThermostat
+### Checklist automatique au début de chaque chat HAPanel
 
 L'utilisateur ne doit pas avoir à demander cette passe. Avant toute analyse,
 proposition, commande Git, compilation, téléversement ou test matériel :
 
-1. commencer la numérotation conversationnelle à `HAT-R001` ;
+1. commencer la numérotation conversationnelle à `HAP-R001` ;
 2. identifier le dépôt, la branche ou le checkpoint de reprise demandé ;
 3. lire la version courante de `AGENTS.md` depuis Git ;
 4. exécuter l'ordre de lecture obligatoire ;
 5. vérifier le dernier checkpoint applicable ;
-6. relire `platformio.ini` avant de proposer une commande de build, d'upload,
-   de buildfs ou de monitoring, et confirmer le nom exact des environnements ;
-7. demander le port COM courant avant toute commande qui en dépend ;
-8. regrouper les commandes Git, compilation, téléversement et monitoring dans
-   un seul bloc continu, dans l'ordre exact d'exécution ;
+6. relire les YAML concernés et `requirements.txt` (version ESPHome) avant
+   de proposer une commande ;
+7. demander le port COM ou l'adresse IP courante avant toute commande qui en
+   dépend ;
+8. regrouper les commandes Git, validation, compilation, téléversement et
+   journaux dans un seul bloc continu, dans l'ordre exact d'exécution ;
 9. signaler toute divergence entre branche de travail, `main`, checkpoint et
    règles documentaires ;
 10. ne commencer aucune modification tant que cette passe n'est pas terminée.
@@ -69,13 +73,11 @@ proposition, commande Git, compilation, téléversement ou test matériel :
 
 ### Numérotation des réponses de l'agent
 
-- Toute réponse principale commence par `HAT-RNNN` (`HAT-R001`, `HAT-R002`…),
-  remis à `HAT-R001` à chaque nouveau chat ; les messages intermédiaires
-  d'une même réponse prennent un suffixe (`HAT-R004.1`).
-- Au-delà d'environ `HAT-R030`, signaler que le chat devient profond et
+- Toute réponse principale commence par `HAP-RNNN` (`HAP-R001`, `HAP-R002`…),
+  remis à `HAP-R001` à chaque nouveau chat ; les messages intermédiaires
+  d'une même réponse prennent un suffixe (`HAP-R004.1`).
+- Au-delà d'environ `HAP-R030`, signaler que le chat devient profond et
   proposer un checkpoint autonome avant de poursuivre.
-- Cette numérotation ne remplace ni les versions, ni les commits, ni les
-  identifiants d'issues.
 
 ### Choix soumis au propriétaire : impacts d'abord
 
@@ -95,73 +97,58 @@ visible de l'extérieur, écart à une règle du dépôt) :
 
 - Modifier le minimum nécessaire ; ne pas réécrire un fichier complet pour
   une modification locale ; pas de reformatage global.
-- Ne pas modifier un nom d'API, une route, une entité ou un topic Home
-  Assistant, ni une structure persistée sans décision documentée.
+- Ne jamais renommer un `id`, un `name` d'entité exposée ou le nom du nœud
+  ESPHome sans décision documentée : Home Assistant lie ses tableaux de bord
+  et automatisations à ces noms.
 - Ne pas supprimer un comportement existant sous prétexte de simplification.
 
-### Vérification fonctionnelle obligatoire (tout développement ESP)
+### Vérification fonctionnelle obligatoire
 
-- Une modification n'est validée ni par sa présence dans le dépôt ni par la
-  réussite de la compilation.
-- Vérifier toute la chaîne : inclusion, instanciation, appel, déclencheur,
-  conditions d'entrée, rafraîchissement et effet observable.
-- Toute nouvelle fonction, classe, tâche, route ou callback est reliée à un
-  point d'entrée réellement exécuté (`setup()`, `loop()`, tâche FreeRTOS,
-  événement, route, callback matériel).
-- Vérifier qu'aucun cache, rendu ou rechargement de configuration ne masque
-  le résultat, et vérifier tous les modes concernés.
-- Si la vérification matérielle n'a pas été faite, le dire explicitement.
+- Une modification n'est validée ni par sa présence dans le dépôt, ni par
+  `esphome config`, ni par `esphome compile`.
+- Vérifier toute la chaîne : package inclus, composant déclaré, entité Home
+  Assistant importée, déclencheur (`on_value`, `on_click`…), action, effet
+  observable à l'écran et dans Home Assistant.
+- Vérifier les cas : Home Assistant connecté, déconnecté, entité
+  indisponible, redémarrage du panneau et redémarrage de Home Assistant.
+- Si la vérification sur le panneau n'a pas été faite, le dire explicitement.
 
-### Port série
+### Port série et adresse
 
-Avant la première compilation, le premier téléversement ou l'ouverture du
-moniteur d'une session, demander le port COM. Ne jamais reprendre celui de
-`platformio.ini` ou d'une ancienne session. Tant qu'il n'est pas confirmé,
-utiliser `<PORT_COM>` et proposer `pio device list`.
+Avant le premier téléversement ou l'ouverture des journaux d'une session,
+demander le port COM (USB) ou l'adresse IP (OTA). Ne jamais reprendre ceux
+d'une ancienne session. Tant qu'ils ne sont pas confirmés, utiliser
+`<PORT_COM>` ou `<IP_PANNEAU>`.
 
-La carte ESP32-2432S024 passe par un convertisseur USB-série : la règle
-`--dtr 1` du socle d'origine (USB natif de l'ESP32-S3) ne s'applique pas.
-Fermer le moniteur avant un téléversement (il tient le port).
-
-### Versionnement, identité de build et espace « À propos »
+### Versionnement et identité de build
 
 - Version fonctionnelle `MAJEUR.MINEUR.CORRECTIF` (suffixe `-dev`, `-beta`,
   `-rc`), dans le fichier unique `VERSION`.
-- Identité de build automatique (numéro de build, SHA court, branche,
-  environnement, date) injectée par `tools/version_build.py`, exposée par
-  `include/BuildInfo.h` : aucune version écrite en dur ailleurs.
-- Un binaire compilé avec des sources non commitées porte le suffixe `+modif`
-  sur son SHA.
-- Le produit expose un espace « À propos » (série au boot, diagnostic, page
-  ou entité Home Assistant) affichant nom, version et identifiant de build.
-- Proposer une évolution de version à chaque palier, release ou correction
-  publiée.
-
-### Identité et progression de démarrage
-
-- La sortie série de démarrage identifie produit, version, cible matérielle,
-  environnement PlatformIO, numéro de build, SHA et branche, depuis
-  `BuildInfo`.
-- Chaque étape significative du boot produit un état : en cours, réussi,
-  dégradé ou échec ; un mode dégradé est nommé, jamais présenté comme nominal.
-- La fin du boot produit un bilan : version, cible, durée de démarrage, état
-  réseau ou IP, mémoire libre utile.
-- Aucun délai long ou non borné n'est ajouté au boot ; aucune attente ne
-  retarde la mise en état sûr de la sortie de commande.
+- La version et le SHA Git sont injectés à la compilation par substitution
+  (`-s version …`, `-s git_sha …`), jamais écrits à la main dans un YAML ; un
+  SHA suffixé `+modif` signale des fichiers non commités.
+- Le panneau expose son identité : bloc `project:` d'ESPHome, entité de
+  diagnostic dans Home Assistant et page « À propos » sur l'écran (nom,
+  version, SHA).
+- Proposer une évolution de version à chaque palier ou correction publiée.
 
 ### Cybersécurité
 
-- Le dépôt peut devenir public : la sécurité ne repose jamais sur le secret du
-  code ; aucun secret dans Git, un journal ou un chat (`secrets.h` ignoré).
-- Toute nouvelle surface (route, port, service, secret, intégration) est
-  inscrite dans `docs/codex/08_RISKS_AND_DEBT.md` avant fusion.
+- Le dépôt peut devenir public : aucun secret dans Git, un journal ou un
+  chat. Mots de passe Wi-Fi, clé de chiffrement de l'API et mot de passe OTA
+  vivent dans `secrets.yaml`, ignoré par Git ; `secrets.example.yaml` en
+  donne la forme sans valeur réelle.
+- API Home Assistant toujours chiffrée ; OTA toujours protégée.
+- Toute nouvelle surface (serveur Web, point d'accès de secours, action Home
+  Assistant autorisée) est inscrite dans `docs/codex/08_RISKS_AND_DEBT.md`
+  avant fusion.
 
 ### Validation obligatoire des fichiers livrés
 
-- Tout patch, script, archive ou fichier de configuration destiné à
-  l'utilisateur est testé avant livraison avec l'outil exact prévu.
-- Patch Git : `git apply --check`, application réelle dans une copie, puis
-  `git diff --check`.
+- Tout YAML livré passe `esphome config` puis `esphome compile` avec la
+  version figée avant livraison ; tout patch passe `git apply --check`,
+  une application réelle dans une copie, puis `git diff --check` ; tout
+  script passe au minimum un contrôle syntaxique.
 - Ne jamais utiliser l'utilisateur comme premier testeur d'un artefact que
   l'agent pouvait vérifier. Si la validation est impossible, le dire avant
   livraison et fournir la commande de contrôle locale.
@@ -171,11 +158,12 @@ Fermer le moniteur avant un téléversement (il tient le port).
 Lorsque l'utilisateur écrit exactement « checkpoint » :
 
 1. identifier branche, commit et état Git ;
-2. vérifier que le code validé compile et que le dépôt est propre ;
+2. vérifier que la configuration validée compile et que le dépôt est propre ;
 3. créer `docs/checkpoints/CHECKPOINT_YYYY-MM-DD_<sha-court>.md`, autonome :
-   dépôt, branche, commit, version, fonctionnalités validées, fichiers et
-   fonctions modifiés, invariants préservés, état compilation et matériel,
-   risques et limites, procédure exacte de reprise, commandes Git ;
+   dépôt, branche, commit, version, version ESPHome, écrans et fonctions
+   validés, fichiers modifiés, invariants préservés, état compilation et
+   panneau, mémoire libre mesurée, risques et limites, procédure exacte de
+   reprise, commandes Git ;
 4. ajouter, committer et pousser ce document, puis vérifier qu'il est bien
    sur le dépôt distant avant de l'annoncer ;
 5. fournir un bloc minimal de reprise prêt à copier dans un nouveau chat.
@@ -183,19 +171,18 @@ Lorsque l'utilisateur écrit exactement « checkpoint » :
 ## Procédure obligatoire avant livraison
 
 1. Identifier la branche et le commit de base.
-2. Lister les fichiers et fonctions concernés.
+2. Lister les fichiers YAML et composants concernés.
 3. Énoncer les invariants à préserver.
 4. Faire la modification minimale.
-5. Vérifier que les changements sont réellement appelés.
-6. Demander et confirmer le port COM avant toute commande qui en dépend.
-7. `git -c core.whitespace=cr-at-eol diff --check`.
-8. Compiler l'environnement de production ; si essai matériel, téléverser
-   l'environnement de banc (voir `05_BUILD_AND_TEST.md`).
-9. Ouvrir le moniteur et effectuer le test matériel du nouveau chemin.
-10. Relire le diff final : duplication, hors périmètre, hausse de taille.
-11. Documenter : fichiers modifiés et volontairement non modifiés,
-    compilation, profil et port flashés, tests réalisés et restant à faire,
-    risques.
+5. `esphome config`, puis `esphome compile` avec la version figée.
+6. Demander le port COM ou l'IP avant tout téléversement.
+7. Téléverser sur le panneau de banc, lire les journaux, tester les cas de
+   la vérification fonctionnelle et relever la mémoire libre.
+8. `git -c core.whitespace=cr-at-eol diff --check` et relecture du diff :
+   duplication, hors périmètre, identifiant renommé.
+9. Documenter : fichiers modifiés et volontairement non modifiés,
+   compilation, mode de téléversement, tests réalisés et restant à faire,
+   mémoire libre, risques.
 
 ## Livrables
 
@@ -206,8 +193,10 @@ complets ou un package, avec l'emplacement exact de chacun dans le dépôt.
 
 - `main` est stable ; toute évolution passe par `feature/…`, `fix/…`,
   `docs/…` ou `chore/…`.
-- Commits petits, explicites, testables ; pas de code non compilé poussé.
-- Ne pas fusionner vers `main` avant validation firmware.
+- Si `git checkout -b` répond qu'une branche existe déjà, s'arrêter et
+  signaler : ne jamais poursuivre la séquence sur `main`.
+- Commits petits, explicites, testables ; pas de configuration qui ne
+  compile pas poussée.
 - Ne jamais réécrire une branche publiée sans accord explicite du
   propriétaire ; si accordé, `git push --force-with-lease=<branche>:<sha>`.
 
@@ -216,4 +205,4 @@ complets ou un package, avec l'emplacement exact de chacun dans le dépôt.
 - Expliquer hypothèses et limites ; préserver les décisions validées.
 - Ne jamais masquer une régression sous une simplification.
 - Documenter toute dette technique introduite volontairement.
-- Mettre à jour la documentation dans le même lot que le code.
+- Mettre à jour la documentation dans le même lot que la configuration.

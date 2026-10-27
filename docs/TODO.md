@@ -1,22 +1,26 @@
-# TODO — HAThermostat
+# TODO — HAPanel
 
-Liste unique du reste à faire, par priorité.
+Liste unique du reste à faire, par priorité. On avance écran par écran.
 
-## P0 — Cadrage (bloquant pour tout code)
+## P0 — Cadrage
 
-- [ ] Trancher le mode d'intégration Home Assistant : MQTT avec
-      auto-découverte (firmware C++) ou ESPHome (YAML) ; confirmer ou
-      remplacer D002.
-- [x] Choisir la carte : ESP32-2432S024 (D004).
-- [ ] Confirmer sur la carte reçue : variante tactile (R, C ou N), contrôleur
-      d'écran, taille de flash ; relever les GPIO libres des connecteurs.
-- [ ] Fixer capteurs, organe commandé et étage de sortie.
-- [ ] Valider les invariants T1 à T4.
+- [x] Carte : ESP32-2432S024C (D004).
+- [x] Intégration : ESPHome en ligne de commande (D005).
+- [x] Nom : HAPanel (D006) ; tout passe par Home Assistant (D007).
+- [ ] Relever la version de Home Assistant dans `00_CONTEXT.md`.
 
-## P1 — Squelette firmware
+## P1 — Panneau de banc minimal
 
-- [ ] Créer `platformio.ini` (`HAThermostat`, `HAThermostat_banc`)
-      selon `05_BUILD_AND_TEST.md`.
-- [ ] `src/main.cpp` minimal : sortie en état sûr, bannière de boot depuis
-      `BuildInfo`, bilan de fin de boot.
-- [ ] Premier checkpoint après compilation et boot validés sur la carte.
+- [ ] `requirements.txt` (ESPHome figé), `secrets.example.yaml`,
+      `tools/build.ps1` (injection de `version` et `git_sha`).
+- [ ] `hapanel.yaml`, `hapanel_banc.yaml`, `packages/base.yaml`,
+      `packages/hardware.yaml`, `packages/lvgl.yaml`.
+- [ ] Valider sur la carte : écran (contrôleur ILI9341 ou ST7789,
+      orientation, couleurs), tactile CST820 (risque R1), Wi-Fi, connexion
+      chiffrée à Home Assistant, OTA.
+- [ ] Page « À propos » : version, SHA, état de connexion, mémoire libre.
+- [ ] Mesurer la mémoire libre de référence ; premier checkpoint.
+
+## P2 — Premier écran fonctionnel
+
+- [ ] Définir l'écran d'accueil avec le propriétaire (entités lues, actions).

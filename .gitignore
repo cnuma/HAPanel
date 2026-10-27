@@ -1,42 +1,31 @@
-# PlatformIO
-.pio/
-.pioenvs/
-.piolibdeps/
+# ESPHome : repertoire de compilation et environnement Python local
+.esphome/
+.venv/
+__pycache__/
+
+# Secrets (invariant G9) : jamais dans le depot.
+# secrets.example.yaml, lui, est versionne.
+secrets.yaml
+*.key
+*.pem
+.env
 
 # VS Code
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
 
-# Fichiers compiles
+# Fichiers compiles, temporaires et archives
 *.bin
 *.elf
-*.hex
-*.map
-
-# Fichiers temporaires
 *.tmp
 *.bak
 *.log
 *~
+*.zip
 .DS_Store
 Thumbs.db
 
-# Secrets (invariant G9) : jamais dans le depot
-secrets.h
-credentials.h
-.env
-*.key
-*.pem
-
-# Archives locales et exports
-*.zip
-
-# Captures serie et sauvegardes NVS (contiennent des identifiants en clair)
+# Captures de journaux et sauvegardes locales
 logs/
 backups/
-
-# Caches Python des scripts outils
-__pycache__/

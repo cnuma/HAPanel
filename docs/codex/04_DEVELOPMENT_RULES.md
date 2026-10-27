@@ -1,102 +1,86 @@
 # 04 — Règles de développement
 
-Règles génériques ESP32 reprises du socle AquaLook (`docs/codex/04_DEVELOPMENT_RULES.md`
-et `docs/developer/DEV-005`), sans les règles propres à son matériel.
+Règles ESPHome du projet. Les principes de méthode viennent du socle AquaLook
+(`docs/codex/04_DEVELOPMENT_RULES.md` et `docs/developer/DEV-005`), transposés
+du C++ au YAML.
 
-## C++
+## Organisation des fichiers
 
-- Compatible avec la configuration PlatformIO/Arduino de `platformio.ini`.
-- API minimale, types explicites, une responsabilité par module ; éviter les
-  dépendances circulaires ; `main.cpp` assemble, il ne porte pas de logique
-  métier.
-- Pas d'allocation dynamique répétée dans les chemins fréquents ; préférer
-  buffers bornés, `strlcpy`, `snprintf`, chaînes toujours terminées.
-- Pas de `String` dans les modules temps réel sans justification écrite.
-- Aucun appel bloquant sans timeout ; gestion correcte du débordement de
-  `millis()`.
-- Valider les entrées à la frontière (réseau, MQTT, série, configuration).
-- Toute constante matérielle compile-time va dans `include/config.h` ; toute
-  valeur modifiable en production va dans le gestionnaire de configuration.
-- Différer les écritures persistantes et les redémarrages hors des callbacks
-  réseau (AsyncTCP, client MQTT).
-- Mesurer le coût de tout traitement ajouté à `loop()`.
+- `hapanel.yaml` : configuration de production, limitée à l'assemblage des
+  packages et aux substitutions.
+- `hapanel_banc.yaml` : même configuration plus les outils de mise au point
+  (composant `debug`, journaux plus bavards) ; c'est elle qu'on flashe sur
+  le panneau de banc.
+- `packages/` : un fichier par domaine (`base.yaml` pour Wi-Fi, API, OTA et
+  journaux ; `hardware.yaml` pour écran, tactile, bus et broches ;
+  `lvgl.yaml` pour le socle graphique ; `pages/<écran>.yaml` pour chaque
+  écran).
+- Les broches et réglages matériels vivent uniquement dans
+  `packages/hardware.yaml`, sous forme de substitutions, relevés sur la carte
+  réelle et jamais supposés.
+- `secrets.yaml` (ignoré) et `secrets.example.yaml` (versionné, sans valeur
+  réelle).
 
-## Mémoire, flux et régressions indirectes
+## YAML
 
-- Évaluer le pic transitoire du chemin complet : pile de tâche, buffers
-  réseau, `String`, documents JSON, caches, allocations concurrentes.
-- Toute tâche FreeRTOS ajoute une pile dédiée : en tenir compte avant de
-  rendre asynchrone une fonction synchrone.
-- Pour JSON, fichiers et réponses réseau volumineux : parsing en flux,
-  filtres de champs, buffers bornés ; pas de double représentation d'une
-  même donnée.
-- Toute hausse de l'empreinte RAM globale impose de retester les fonctions
-  stables qui font des allocations transitoires importantes.
-- Avant validation, relever le heap libre au repos, avant et après
-  l'opération sensible, et le plus grand bloc libre lors d'ajouts réseau/TLS.
-- Les diagnostics distinguent : erreur réseau, réponse vide, erreur de
-  format, manque de mémoire, authentification refusée.
+- Une responsabilité par package ; pas de duplication d'un bloc entre
+  packages.
+- Chaque composant porte un `id` explicite et stable (G10).
+- Les noms d'entités exposées sont en français, courts, sans le nom du
+  panneau (Home Assistant le préfixe).
+- Le framework ESP32 (`esp-idf` ou `arduino`) est fixé explicitement dans le
+  YAML, jamais laissé au défaut d'une version d'ESPHome.
 
-## Carte ESP32-2432S024 (ESP32 classique, sans PSRAM)
+## Lambdas et code C++
 
-Contraintes reprises de l'expérience AquaLook sur la carte CYD voisine
-(ESP32-2432S028), même famille et même absence de PSRAM.
+- Lambdas courtes, sans attente, sans allocation répétée, sans `std::string`
+  volumineux dans un chemin fréquent (G1).
+- Toujours tester `has_state()` et `isnan()` avant d'utiliser une valeur
+  (P3, P4).
+- Une logique qui dépasse quelques lignes passe dans un `script` ESPHome ;
+  au-delà, dans un composant externe local documenté par une décision.
 
-- Sans PSRAM, la mémoire est la ressource critique : les règles « Mémoire,
-  flux et régressions indirectes » ci-dessus s'appliquent strictement. Aucune
-  réponse réseau ou document JSON volumineux n'est chargé en entier ; pas de
-  sprite plein écran (240 × 320 × 2 octets = 150 Ko).
-- Ne jamais définir `BOARD_HAS_PSRAM` ni de type de mémoire PSRAM.
-- Broches de l'écran, du tactile et du rétroéclairage dans `include/config.h`,
-  relevées sur le schéma de la variante réellement reçue, jamais supposées.
-- Tactile résistif XPT2046 (variante `R`) : bus séparé de celui de l'écran,
-  comme sur la CYD d'AquaLook (invariant I5 d'origine).
-- Les GPIO libres sont peu nombreux : inventorier ceux des connecteurs avant
-  de choisir capteur et étage de sortie ; toute affectation de broche est
-  documentée.
-- Épingler explicitement les tâches réseau au cœur 0 (pile Wi-Fi/lwIP) et
-  laisser la régulation sur le cœur 1, sauf décision documentée.
-- Conserver un boot anti-blocage : sortie en état sûr d'abord, réseau ensuite.
-- Rétroéclairage et écran ne doivent jamais retarder la mise en état sûr de
-  la sortie de commande.
+## Home Assistant
 
-## Persistance
+- Lecture d'une entité : plateformes `homeassistant` (sensor, text_sensor,
+  binary_sensor) ; mise à jour de l'affichage sur `on_value`, pas par
+  interrogation périodique.
+- Commande : action `homeassistant.action`, uniquement si l'API est
+  connectée et l'état de départ connu (P2, P4).
+- L'autorisation « actions Home Assistant » du panneau est activée dans
+  l'intégration ESPHome de Home Assistant et consignée comme surface dans
+  `08_RISKS_AND_DEBT.md`.
+- Chaque entité lue ou action appelée est inscrite dans le tableau des
+  écrans de `00_CONTEXT.md`.
 
-Avant de modifier une structure persistée :
+## LVGL et mémoire (carte sans PSRAM)
 
-1. mesurer sa taille (`sizeof`) ;
-2. décider d'un changement de schéma ;
-3. définir le comportement face à l'ancien blob ;
-4. vérifier le CRC ;
-5. tester les valeurs par défaut et le reset ;
-6. documenter la migration.
+- `buffer_size` fixé explicitement ; la documentation ESPHome recommande
+  25 % sans PSRAM (environ 38 Ko en 240 × 320). Une valeur explicite n'a pas
+  de repli : un échec d'allocation met LVGL en échec, à vérifier dans les
+  journaux.
+- Polices : seulement les tailles et glyphes utilisés ; images
+  redimensionnées à leur taille d'affichage.
+- Un écran = un package ; mesurer la mémoire libre et le plus grand bloc
+  libre avant et après chaque ajout d'écran (G6).
+- Mise à jour des widgets sur événement ; pas de rafraîchissement global
+  périodique.
 
-Ne jamais changer silencieusement l'ordre, le type ou la taille d'un champ
-persisté.
+## Sécurité
 
-## Interfaces exposées
+- `api:` avec clé de chiffrement ; `ota:` avec mot de passe ; tous deux dans
+  `secrets.yaml`.
+- Pas de `web_server` ni de point d'accès de secours sans décision et ligne
+  au registre des risques.
 
-- Une route, une entité ou un topic Home Assistant est un contrat versionné :
-  pas de renommage sans décision.
-- Aucune donnée sensible dans une URL ou un topic.
-- Schémas JSON validés à la réception.
+## Journaux
 
-## Logs
-
-- Niveaux INFO, WARN, ERROR ; buffer borné ; messages courts et actionnables,
-  sans secret.
-- Code mnémonique entre crochets en tête de ligne quand le sens n'est pas
-  évident hors contexte (ex. `[REG-TIMEOUT]`).
-- INFO pour un état normal même inhabituel ; WARN et ERROR réservés à ce qui
-  appelle une action.
-
-## Commentaires
-
-Documenter pourquoi une contrainte existe, le risque supprimé et l'invariant
-concerné ; pas de commentaire qui répète le code.
+- Niveau `INFO` en production, `DEBUG` sur le banc.
+- Tags explicites dans les lambdas (`ESP_LOGI("hapanel.page", …)`) ; messages
+  courts et actionnables, sans secret.
 
 ## Encodage
 
-- UTF-8 sans BOM pour les sources.
-- Vérifier accents et emoji dans les scripts PowerShell ; préférer des
-  marqueurs ASCII dans les scripts de transformation.
+- UTF-8 sans BOM ; indentation YAML à deux espaces, sans tabulation.
+- Accents et emoji vérifiés à l'écran : une police LVGL ne contient que les
+  glyphes déclarés.
