@@ -1,8 +1,6 @@
 # 05 — Compilation et tests
 
-Mis à jour le 27 octobre 2026 (D005). Les fichiers `requirements.txt`,
-`hapanel.yaml` et `hapanel_banc.yaml` sont créés au premier palier
-(`docs/TODO.md`).
+Mis à jour le 27 octobre 2026 (D005).
 
 ## Outil
 
@@ -38,18 +36,25 @@ par Git.
 
 ## Chaîne courante
 
+`tools/build.ps1` lit `VERSION` et le SHA Git (suffixe `+modif` si des
+fichiers ne sont pas commités) et les injecte dans ESPHome :
+
 ```powershell
 git -c core.whitespace=cr-at-eol diff --check
-esphome config hapanel_banc.yaml
-esphome -s version <VERSION> -s git_sha <SHA> run hapanel_banc.yaml --device <PORT_COM ou IP_PANNEAU>
+.	oolsuild.ps1 config
+.	oolsuild.ps1 run -Device <PORT_COM ou IP_PANNEAU>
 ```
 
 - `run` valide, compile, téléverse puis affiche les journaux.
-- Sans téléversement prévu : `esphome compile hapanel.yaml`.
-- Journaux seuls : `esphome logs hapanel_banc.yaml --device <PORT_COM ou IP_PANNEAU>`.
-- L'injection de `version` et `git_sha` depuis `VERSION` et Git (avec le
-  suffixe `+modif` si des fichiers ne sont pas commités) sera portée par un
-  script `tools/build.ps1`, à créer au premier palier.
+- Sans téléversement prévu : `.	oolsuild.ps1 compile -Config hapanel.yaml`.
+- Journaux seuls : `.	oolsuild.ps1 logs -Device <PORT_COM ou IP_PANNEAU>`.
+- `secrets.yaml` est à créer depuis `secrets.example.yaml` avant la
+  première commande.
+- La première commande télécharge les polices Roboto (Google Fonts) : accès
+  Internet requis.
+- Lancer ESPHome depuis PowerShell, pas depuis Git Bash : l'installation
+  d'ESP-IDF refuse les environnements MSys/Mingw. La première compilation
+  télécharge ESP-IDF (plusieurs minutes).
 
 ## Vérification du binaire exécuté
 

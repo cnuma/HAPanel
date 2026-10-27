@@ -1,0 +1,108 @@
+# Socle graphique LVGL et page « À propos » (version, SHA, connexion a Home
+# Assistant, memoire). Carte sans PSRAM : buffer_size explicite (G6, R2).
+font:
+  - file: "gfonts://Roboto"
+    id: police_texte
+    size: 16
+    bpp: 4
+    glyphsets: [GF_Latin_Core]
+  - file: "gfonts://Roboto@500"
+    id: police_titre
+    size: 22
+    bpp: 4
+    glyphsets: [GF_Latin_Core]
+
+globals:
+  # Etat de connexion affiche : 0 non connecte, 1 connecte. Le libelle n'est
+  # redessine qu'au changement d'etat.
+  - id: ha_connecte_affiche
+    type: int
+    initial_value: "0"
+
+lvgl:
+  displays: [ecran]
+  touchscreens: [tactile]
+  buffer_size: 25%
+  bg_color: 0x000000
+  text_color: 0xFFFFFF
+  text_font: police_texte
+  pages:
+    - id: page_apropos
+      bg_color: 0x000000
+      widgets:
+        - label:
+            id: lbl_apropos_titre
+            align: TOP_MID
+            y: 12
+            text_font: police_titre
+            text: "À propos"
+        - label:
+            id: lbl_apropos_version
+            align: TOP_LEFT
+            x: 12
+            y: 60
+            text: "HAPanel ${version}"
+        - label:
+            id: lbl_apropos_sha
+            align: TOP_LEFT
+            x: 12
+            y: 88
+            text: "SHA ${git_sha}"
+        - label:
+            id: lbl_apropos_connexion
+            align: TOP_LEFT
+            x: 12
+            y: 128
+            text_color: 0xF44336
+            text: "Home Assistant : non connecté"
+        - label:
+            id: lbl_apropos_memoire
+            align: TOP_LEFT
+            x: 12
+            y: 168
+            long_mode: WRAP
+            width: 216
+            text: "Mémoire : mesure en cours"
+
+interval:
+  # Connexion a Home Assistant : seul un client abonne aux etats (Home
+  # Assistant, pas un simple lecteur de journaux) compte comme connecte (P2).
+  - interval: 2s
+    then:
+      - if:
+          condition:
+            api.connected:
+              state_subscription_only: true
+          then:
+            - if:
+                condition:
+                  lambda: return id(ha_connecte_affiche) != 1;
+                then:
+                  - globals.set:
+                      id: ha_connecte_affiche
+                      value: "1"
+                  - lvgl.label.update:
+                      id: lbl_apropos_connexion
+                      text_color: 0x4CAF50
+                      text: "Home Assistant : connecté"
+          else:
+            - if:
+                condition:
+                  lambda: return id(ha_connecte_affiche) != 0;
+                then:
+                  - globals.set:
+                      id: ha_connecte_affiche
+                      value: "0"
+                  - lvgl.label.update:
+                      id: lbl_apropos_connexion
+                      text_color: 0xF44336
+                      text: "Home Assistant : non connecté"
+  - interval: 10s
+    then:
+      - lvgl.label.update:
+          id: lbl_apropos_memoire
+          text:
+            format: "Mémoire : %u Ko libres, plus grand bloc %u Ko"
+            args:
+              - heap_caps_get_free_size(MALLOC_CAP_INTERNAL) / 1024
+              - heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL) / 1024

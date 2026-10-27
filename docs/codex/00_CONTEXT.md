@@ -22,14 +22,14 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Écran | Entités lues | Actions | État |
 |---|---|---|---|
 | Accueil | À définir | À définir | À définir |
-| À propos (version, SHA, connexion, mémoire) | Internes | Aucune | Prévu (`docs/TODO.md`) |
+| À propos (version, SHA, connexion, mémoire) | Internes | Aucune | Compilé, non testé sur la carte (`packages/lvgl.yaml`) |
 
 ## Home Assistant
 
 | Rubrique | Valeur |
 |---|---|
 | Installation | HA OS, en natif sur Raspberry Pi |
-| Version | À relever (Paramètres > À propos) |
+| Version | Core 2026.9.4, Supervisor 2026.10.4, OS 18.3 (relevé le 27 octobre 2026) |
 | Intégration | ESPHome, API native chiffrée (D005) |
 
 ## Matériel de référence
@@ -45,7 +45,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 ## Environnement de développement
 
 ESPHome en ligne de commande, version figée dans `requirements.txt`, YAML
-dans le dépôt (D005).
+dans le dépôt (D005). Nœud `hapanel`, framework `esp-idf` (D008).
 
 ## Hors périmètre
 

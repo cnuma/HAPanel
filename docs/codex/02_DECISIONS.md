@@ -104,3 +104,16 @@ qui cite la précédente.
     d'actionneur prévus pour le thermostat sont abandonnés ;
   - sans Home Assistant, le panneau reste navigable mais n'envoie aucune
     commande et l'affiche (invariant P2).
+
+## D008 — Nœud `hapanel` et framework `esp-idf`
+
+- Date : 27 octobre 2026 — Statut : accepté (choix du propriétaire)
+- Contexte : le nom du nœud ESPHome est un contrat (G10) et le framework doit
+  être fixé explicitement (`04_DEVELOPMENT_RULES.md`).
+- Décision : nœud `hapanel` (un seul panneau prévu) ; framework `esp-idf`.
+- Options écartées : `hapanel-<pièce>`, utile seulement avec plusieurs
+  panneaux ; `arduino`, qu'aucun composant n'exige et qui produit un binaire
+  plus gros, alors que la carte n'a pas de PSRAM.
+- Conséquences : les entités Home Assistant sont préfixées `hapanel_` ; un
+  second panneau imposera une nouvelle décision et un renommage de celui-ci ;
+  changer de framework impose un re-flash par USB.

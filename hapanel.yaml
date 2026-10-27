@@ -1,0 +1,16 @@
+# HAPanel : configuration de production. Assemblage des packages et
+# substitutions uniquement (docs/codex/04_DEVELOPMENT_RULES.md).
+#
+# version et git_sha sont injectes par tools/build.ps1 (invariant G5). Les
+# valeurs ci-dessous ne servent qu'a signaler une compilation sans le script.
+substitutions:
+  node_name: hapanel
+  friendly_name: HAPanel
+  version: "0.0.0-non-injectee"
+  git_sha: "inconnu"
+  log_level: INFO
+
+packages:
+  base: !include packages/base.yaml
+  hardware: !include packages/hardware.yaml
+  lvgl: !include packages/lvgl.yaml

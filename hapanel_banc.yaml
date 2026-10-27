@@ -1,0 +1,19 @@
+# HAPanel : configuration du panneau de banc. Production + composant debug
+# (memoire libre, plus grand bloc libre) et journaux DEBUG.
+substitutions:
+  log_level: DEBUG
+
+packages:
+  production: !include hapanel.yaml
+
+debug:
+  update_interval: 30s
+
+sensor:
+  - platform: debug
+    free:
+      id: banc_memoire_libre
+      name: "Mémoire libre"
+    block:
+      id: banc_plus_grand_bloc
+      name: "Plus grand bloc libre"

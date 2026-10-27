@@ -12,7 +12,8 @@ avant fusion.
 | R2 | Mémoire saturée sans PSRAM (tampon LVGL, polices, images, nombre d'écrans) | Échec LVGL, redémarrages | Invariant G6, `buffer_size` explicite, mesure à chaque écran | Ouvert |
 | R3 | Secrets exposés dans le dépôt | Compromission du réseau domestique ou du panneau | Invariant G9, `secrets.yaml` ignoré | Ouvert |
 | R4 | Commande envoyée sur un état inconnu ou sans Home Assistant | Action inattendue dans la maison | Invariants P2 à P4 | Ouvert |
-| R5 | Écart de version entre l'ESPHome du dépôt et Home Assistant | Incompatibilité de l'API ou de l'OTA | Version figée (D005), mise à jour par décision et test | Ouvert |
+| R5 | Écart de version entre l'ESPHome du dépôt et Home Assistant | Incompatibilité de l'API ou de l'OTA | Version figée (D005), mise à jour par décision et test ; au 27 octobre 2026, ESPHome 2026.10.1 pour Home Assistant 2026.9.4 | Ouvert |
+| R6 | Brochage de `packages/hardware.yaml` repris des valeurs publiées pour la carte, sans documentation vendeur | Écran noir ou tactile muet au premier flash, sans dommage | Essai sur banc (TODO P1) ; corriger les substitutions de `hardware.yaml` seulement | Ouvert |
 
 ## Surfaces exposées
 

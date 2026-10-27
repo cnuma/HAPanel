@@ -1,0 +1,66 @@
+# Materiel : ESP32-2432S024C (D004). Seul fichier qui declare broches et bus
+# (invariant G2).
+#
+# Brochage publie pour cette carte, A CONFIRMER AU BANC (TODO P1) : aucune
+# documentation vendeur n'a ete recoupee. display_model vaut ILI9341 ou
+# ST7789V selon la serie de la carte.
+substitutions:
+  display_model: ILI9341
+  pin_spi_clk: GPIO14
+  pin_spi_mosi: GPIO13
+  pin_spi_miso: GPIO12
+  pin_ecran_cs: GPIO15
+  pin_ecran_dc: GPIO2
+  pin_retroeclairage: GPIO27
+  pin_i2c_sda: GPIO33
+  pin_i2c_scl: GPIO32
+  pin_tactile_int: GPIO21
+  pin_tactile_rst: GPIO25
+
+spi:
+  id: bus_spi_ecran
+  clk_pin: ${pin_spi_clk}
+  mosi_pin: ${pin_spi_mosi}
+  # GPIO12 est une broche de demarrage : cablage d'origine de la carte.
+  miso_pin:
+    number: ${pin_spi_miso}
+    ignore_strapping_warning: true
+
+i2c:
+  id: bus_i2c_tactile
+  sda: ${pin_i2c_sda}
+  scl: ${pin_i2c_scl}
+
+output:
+  - platform: ledc
+    id: sortie_retroeclairage
+    pin: ${pin_retroeclairage}
+
+light:
+  - platform: monochromatic
+    id: retroeclairage
+    name: "Rétroéclairage"
+    output: sortie_retroeclairage
+    restore_mode: ALWAYS_ON
+    internal: true
+
+display:
+  - platform: mipi_spi
+    id: ecran
+    model: ${display_model}
+    spi_id: bus_spi_ecran
+    data_rate: 40MHz
+    cs_pin:
+      number: ${pin_ecran_cs}
+      ignore_strapping_warning: true
+    dc_pin:
+      number: ${pin_ecran_dc}
+      ignore_strapping_warning: true
+
+touchscreen:
+  - platform: cst816
+    id: tactile
+    i2c_id: bus_i2c_tactile
+    display: ecran
+    interrupt_pin: ${pin_tactile_int}
+    reset_pin: ${pin_tactile_rst}
