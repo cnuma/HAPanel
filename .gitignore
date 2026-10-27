@@ -1,0 +1,42 @@
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# Fichiers compiles
+*.bin
+*.elf
+*.hex
+*.map
+
+# Fichiers temporaires
+*.tmp
+*.bak
+*.log
+*~
+.DS_Store
+Thumbs.db
+
+# Secrets (invariant G9) : jamais dans le depot
+secrets.h
+credentials.h
+.env
+*.key
+*.pem
+
+# Archives locales et exports
+*.zip
+
+# Captures serie et sauvegardes NVS (contiennent des identifiants en clair)
+logs/
+backups/
+
+# Caches Python des scripts outils
+__pycache__/
