@@ -40,7 +40,7 @@ Fichiers modifiés :
 Positions et fonctions modifiées :
 Fichiers non modifiés :
 Diff hors périmètre :
-Compilation HAThermostat_s3 :
+Compilation HAThermostat :
 Tests matériels :
 Port COM confirmé :
 Résultat observé :

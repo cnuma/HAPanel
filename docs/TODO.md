@@ -7,13 +7,15 @@ Liste unique du reste à faire, par priorité.
 - [ ] Trancher le mode d'intégration Home Assistant : MQTT avec
       auto-découverte (firmware C++) ou ESPHome (YAML) ; confirmer ou
       remplacer D002.
-- [ ] Fixer la carte ESP32-S3 exacte (flash, PSRAM) dans `00_CONTEXT.md`.
+- [x] Choisir la carte : ESP32-2432S024 (D004).
+- [ ] Confirmer sur la carte reçue : variante tactile (R, C ou N), contrôleur
+      d'écran, taille de flash ; relever les GPIO libres des connecteurs.
 - [ ] Fixer capteurs, organe commandé et étage de sortie.
 - [ ] Valider les invariants T1 à T4.
 
 ## P1 — Squelette firmware
 
-- [ ] Créer `platformio.ini` (`HAThermostat_s3`, `HAThermostat_s3_banc`)
+- [ ] Créer `platformio.ini` (`HAThermostat`, `HAThermostat_banc`)
       selon `05_BUILD_AND_TEST.md`.
 - [ ] `src/main.cpp` minimal : sortie en état sûr, bannière de boot depuis
       `BuildInfo`, bilan de fin de boot.

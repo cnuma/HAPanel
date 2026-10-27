@@ -18,7 +18,7 @@
 | `docs/codex/00_CONTEXT.md` | — | nouveau, à compléter |
 | `docs/codex/02_DECISIONS.md` | — | nouveau (D001 à D003) |
 | `docs/codex/03_INVARIANTS.md` | `docs/codex/03_INVARIANTS.md` | invariants génériques G1 à G9 extraits ; T1 à T4 proposés |
-| `docs/codex/04_DEVELOPMENT_RULES.md` | `docs/codex/04_DEVELOPMENT_RULES.md`, `docs/developer/DEV-005` | génériques conservées ; section ESP32-S3 ajoutée |
+| `docs/codex/04_DEVELOPMENT_RULES.md` | `docs/codex/04_DEVELOPMENT_RULES.md`, `docs/developer/DEV-005` | génériques conservées ; section carte ESP32-2432S024 ajoutée (D004) |
 | `docs/codex/05_BUILD_AND_TEST.md` | `docs/codex/05_BUILD_AND_TEST.md` | adapté, environnements renommés |
 | `docs/codex/06_ANTI_REGRESSION.md` | `docs/codex/06_ANTI_REGRESSION.md` | adapté |
 | `docs/codex/07_GIT_WORKFLOW.md` | `docs/codex/07_GIT_WORKFLOW.md` | adapté, checkpoints ZIP retirés |

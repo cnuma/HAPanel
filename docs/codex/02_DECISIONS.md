@@ -23,7 +23,7 @@ qui cite la précédente.
   un couplage entre les deux projets.
 - Conséquence : une amélioration d'une règle générique dans un projet doit
   être reportée manuellement dans l'autre. À terme, un dépôt modèle
-  `esp32-s3-template` peut porter le socle commun.
+  `esp32-template` peut porter le socle commun.
 
 ## D002 — PlatformIO et framework Arduino
 
@@ -43,3 +43,24 @@ qui cite la précédente.
 - Justification : un dossier synchronisé verrouille des fichiers de `.git` et
   `.pio` pendant la compilation et peut créer des conflits qui corrompent
   l'historique.
+
+## D004 — Carte ESP32-2432S024 au lieu d'un ESP32-S3
+
+- Date : 27 octobre 2026 — Statut : accepté (choix du propriétaire)
+- Contexte : le projet était prévu sur ESP32-S3 comme AquaLook ; le
+  thermostat demande une carte plus petite.
+- Décision : carte ESP32-2432S024 (écran tactile 2,4", 240 × 320), à base
+  d'ESP32 classique (module WROOM, double cœur), sans PSRAM.
+- Conséquences :
+  - la cible n'est plus un ESP32-S3 : les règles propres au S3 du socle
+    (USB natif, `--dtr 1`, PSRAM OPI) sont retirées ; les environnements
+    s'appellent `HAThermostat` et `HAThermostat_banc` ;
+  - sans PSRAM, la marge mémoire devient la contrainte de conception
+    principale (invariant G6), en particulier pour TLS et l'affichage ;
+  - l'expérience AquaLook sur la carte CYD voisine (ESP32-2432S028) est
+    directement réutilisable : `board = esp32dev`, bus tactile séparé,
+    budget mémoire sans PSRAM ;
+  - GPIO libres limités : capteur et étage de sortie se choisissent après
+    relevé des connecteurs.
+- Points ouverts : variante tactile (`R`, `C` ou `N`), contrôleur d'écran
+  (ILI9341 ou ST7789 selon la série), taille de flash.

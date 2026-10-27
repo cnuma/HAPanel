@@ -1,6 +1,6 @@
 # HAThermostat
 
-Thermostat sur ESP32-S3 intégré à Home Assistant.
+Thermostat sur ESP32 (carte ESP32-2432S024) intégré à Home Assistant.
 
 - Point d'entrée de la documentation : `docs/START_HERE.md`
 - Règles de développement (humains et agents) : `AGENTS.md`

@@ -37,16 +37,28 @@ et `docs/developer/DEV-005`), sans les règles propres à son matériel.
 - Les diagnostics distinguent : erreur réseau, réponse vide, erreur de
   format, manque de mémoire, authentification refusée.
 
-## ESP32-S3
+## Carte ESP32-2432S024 (ESP32 classique, sans PSRAM)
 
-- USB natif : `ARDUINO_USB_CDC_ON_BOOT=1` et `monitor_dtr = 1` ; le port COM
-  se ré-énumère à chaque redémarrage.
-- PSRAM : n'activer `BOARD_HAS_PSRAM` et le type de mémoire (`qio_opi`,
-  `opi`) qu'après identification exacte du module ; une mauvaise
-  configuration empêche le boot.
+Contraintes reprises de l'expérience AquaLook sur la carte CYD voisine
+(ESP32-2432S028), même famille et même absence de PSRAM.
+
+- Sans PSRAM, la mémoire est la ressource critique : les règles « Mémoire,
+  flux et régressions indirectes » ci-dessus s'appliquent strictement. Aucune
+  réponse réseau ou document JSON volumineux n'est chargé en entier ; pas de
+  sprite plein écran (240 × 320 × 2 octets = 150 Ko).
+- Ne jamais définir `BOARD_HAS_PSRAM` ni de type de mémoire PSRAM.
+- Broches de l'écran, du tactile et du rétroéclairage dans `include/config.h`,
+  relevées sur le schéma de la variante réellement reçue, jamais supposées.
+- Tactile résistif XPT2046 (variante `R`) : bus séparé de celui de l'écran,
+  comme sur la CYD d'AquaLook (invariant I5 d'origine).
+- Les GPIO libres sont peu nombreux : inventorier ceux des connecteurs avant
+  de choisir capteur et étage de sortie ; toute affectation de broche est
+  documentée.
 - Épingler explicitement les tâches réseau au cœur 0 (pile Wi-Fi/lwIP) et
   laisser la régulation sur le cœur 1, sauf décision documentée.
 - Conserver un boot anti-blocage : sortie en état sûr d'abord, réseau ensuite.
+- Rétroéclairage et écran ne doivent jamais retarder la mise en état sûr de
+  la sortie de commande.
 
 ## Persistance
 

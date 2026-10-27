@@ -29,7 +29,7 @@ invariants, comportement actuel et comportement attendu.
 
 ```powershell
 git -c core.whitespace=cr-at-eol diff --check
-pio run -e HAThermostat_s3
+pio run -e HAThermostat
 ```
 
 ## Revue du diff

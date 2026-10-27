@@ -16,7 +16,7 @@ Point d'entrée officiel de la documentation.
 
 ## Source de vérité
 
-Le dépôt `cnuma/HAThermostat` est la mémoire officielle du projet. En cas de
+Le dépôt `cnuma/HAthermostat` est la mémoire officielle du projet. En cas de
 contradiction, l'ordre de confiance est :
 
 1. code et configuration du commit ciblé ;

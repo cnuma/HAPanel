@@ -6,7 +6,8 @@ s'inscrivent ici et dans `02_DECISIONS.md`.
 
 ## Produit
 
-HAThermostat est un thermostat sur ESP32-S3 intégré à Home Assistant.
+HAThermostat est un thermostat sur ESP32 (carte ESP32-2432S024) intégré à
+Home Assistant.
 
 **Principe directeur (proposé) :** la régulation et les sécurités fonctionnent
 sans Wi-Fi, sans Home Assistant et sans Internet ; Home Assistant supervise et
@@ -19,7 +20,7 @@ règle, il n'est pas indispensable à la régulation.
 | Grandeurs mesurées (température, humidité…) et capteurs | À définir |
 | Organe commandé (chaudière, radiateur, clim, pompe à chaleur…) et type de sortie (relais, contact sec, IR, bus) | À définir |
 | Modes (chauffage, froid, hors-gel, absence, programmation locale) | À définir |
-| Interface locale (écran, boutons, aucune) | À définir |
+| Interface locale | Écran tactile 2,4" de la carte (proposé, D004) ; usage à définir |
 
 ## Intégration Home Assistant
 
@@ -32,7 +33,11 @@ règle, il n'est pas indispensable à la régulation.
 
 | Rubrique | État |
 |---|---|
-| Carte ESP32-S3 (référence exacte, flash, PSRAM) | À définir |
+| Carte | ESP32-2432S024 (D004) : ESP32 classique (module WROOM, double cœur), sans PSRAM |
+| Écran | 2,4", 240 × 320, contrôleur ILI9341 ou ST7789 selon la série — à confirmer sur la carte reçue |
+| Tactile et variante | `R` résistif (XPT2046), `C` capacitif (CST820) ou `N` sans tactile — à confirmer (marquage au dos) |
+| Flash | À confirmer (4 Mo attendus) |
+| GPIO libres sur les connecteurs | À relever sur le schéma de la variante reçue |
 | Capteurs et étage de sortie (référence, broches) | À définir |
 | Alimentation | À définir |
 

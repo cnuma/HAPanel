@@ -2,8 +2,8 @@
 
 ## Mission
 
-Ce dépôt contient le firmware du thermostat HAThermostat sur ESP32-S3,
-intégré à Home Assistant.
+Ce dépôt contient le firmware du thermostat HAThermostat sur ESP32 (carte
+ESP32-2432S024, sans PSRAM), intégré à Home Assistant.
 
 Toute intervention automatisée ou assistée (Claude Code, Codex) doit préserver
 en priorité :
@@ -23,7 +23,7 @@ marquée « À définir », aucune implémentation ne s'appuie sur une hypothès
 
 ## Source de vérité
 
-- Dépôt : `cnuma/HAThermostat`
+- Dépôt : `cnuma/HAthermostat`
 - Branche stable : `main`
 - Point d'entrée de reprise : `docs/START_HERE.md`, puis le checkpoint le plus
   récent de `docs/checkpoints/`
@@ -119,9 +119,9 @@ moniteur d'une session, demander le port COM. Ne jamais reprendre celui de
 `platformio.ini` ou d'une ancienne session. Tant qu'il n'est pas confirmé,
 utiliser `<PORT_COM>` et proposer `pio device list`.
 
-Sur l'ESP32-S3 en USB natif, le moniteur exige `--dtr 1` (ou
-`monitor_dtr = 1`) : sans lui il reste muet. Fermer le moniteur avant un
-téléversement.
+La carte ESP32-2432S024 passe par un convertisseur USB-série : la règle
+`--dtr 1` du socle d'origine (USB natif de l'ESP32-S3) ne s'applique pas.
+Fermer le moniteur avant un téléversement (il tient le port).
 
 ### Versionnement, identité de build et espace « À propos »
 

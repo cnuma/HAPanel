@@ -8,9 +8,9 @@ D002).
 
 | Env | Usage |
 |---|---|
-| `HAThermostat_s3` | binaire de production ; compilation de validation |
-| `HAThermostat_s3_banc` | même firmware + routes et traces de développement ; flashé sur le module de banc |
-| `test_*_s3` | bancs matériels ciblés (capteur, sortie, Wi-Fi…) |
+| `HAThermostat` | binaire de production ; compilation de validation |
+| `HAThermostat_banc` | même firmware + routes et traces de développement ; flashé sur le module de banc |
+| `test_*` | bancs matériels ciblés (écran, tactile, capteur, sortie, Wi-Fi…) |
 
 Chaque `test_*.cpp` définit son propre `setup()`/`loop()` : il est exclu du
 `build_src_filter` des environnements de production.
@@ -19,14 +19,17 @@ Chaque `test_*.cpp` définit son propre `setup()`/`loop()` : il est exclu du
 
 ```ini
 platform = espressif32 @ <version figée>
+board = esp32dev
 framework = arduino
 extra_scripts = pre:tools/version_build.py
 monitor_speed = 115200
 monitor_filters = esp32_exception_decoder
-monitor_dtr = 1
 ```
 
 Les bibliothèques sont déclarées dans `lib_deps` avec une version bornée.
+Il n'existe pas de définition PlatformIO dédiée à l'ESP32-2432S024 :
+`esp32dev` est la base, comme pour la carte CYD d'AquaLook
+(ESP32-2432S028) ; broches écran et tactile dans `include/config.h`.
 
 ## Port série
 
@@ -38,12 +41,12 @@ trouver. Le port confirmé vaut pour la session.
 
 ```powershell
 git -c core.whitespace=cr-at-eol diff --check
-pio run -e HAThermostat_s3_banc -t upload --upload-port <PORT_COM>
-pio device monitor -p <PORT_COM> -b 115200 --dtr 1 --rts 0
+pio run -e HAThermostat_banc -t upload --upload-port <PORT_COM>
+pio device monitor -p <PORT_COM> -b 115200
 ```
 
 - `upload` compile avant de téléverser ; en cas d'échec, rien n'est écrit.
-- Sans téléversement prévu : `pio run -e HAThermostat_s3`.
+- Sans téléversement prévu : `pio run -e HAThermostat`.
 - `git diff --check` simple signale à tort les fins de ligne CRLF : utiliser
   `-c core.whitespace=cr-at-eol`.
 - Fermer le moniteur avant un téléversement.
