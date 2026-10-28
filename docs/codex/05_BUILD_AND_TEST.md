@@ -55,6 +55,9 @@ git -c core.whitespace=cr-at-eol diff --check
 - Lancer ESPHome depuis PowerShell, pas depuis Git Bash : l'installation
   d'ESP-IDF refuse les environnements MSys/Mingw. La première compilation
   télécharge ESP-IDF (plusieurs minutes).
+- `hapanel.yaml` et `hapanel_banc.yaml` partagent le répertoire de
+  compilation `.esphome/build/hapanel` : alterner entre les deux recompile
+  tout (environ 10 minutes).
 
 ## Vérification du binaire exécuté
 

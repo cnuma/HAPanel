@@ -19,13 +19,17 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [x] Valider sur la carte : brochage publié (R6), écran ILI9341
       (orientation, couleurs, accents), tactile CST820 (R1, D009), Wi-Fi,
       OTA par mot de passe.
-- [ ] Adopter le panneau dans Home Assistant ; vérifier « connecté » puis
-      « non connecté » à l'écran (P2).
-- [ ] Page « À propos » : version, SHA, état de connexion, mémoire libre
-      (écrite, à vérifier à l'écran, y compris les accents).
+- [x] Adopter le panneau dans Home Assistant (28 octobre 2026).
+- [x] Page « À propos » : version, SHA, mémoire libre et accents vérifiés
+      à l'écran.
+- [ ] Vérifier sur la page « À propos » l'état « connecté » puis
+      « non connecté » (désactivation de l'appareil dans Home Assistant).
 - [ ] Décider : OTA protégée par la clé de l'API au lieu d'un mot de passe
       (recommandation d'ESPHome 2026.10).
-- [ ] Mesurer la mémoire libre de référence ; premier checkpoint.
+- [x] Mesurer la mémoire libre de référence ; premier checkpoint.
+- [ ] Décider : options d'ESPHome `sram1_as_iram`, `minimum_chip_revision`
+      et `flash_chip` (gain d'IRAM et de flash signalé au démarrage).
+- [ ] Passer `VERSION` à `0.1.0` une fois P1 entièrement validé.
 
 ## P2 — Premier écran fonctionnel
 
