@@ -35,5 +35,8 @@ if ($Device) {
     $arguments += @('--device', $Device)
 }
 
+# ESPHome journalise sur stderr : sous PowerShell 5.1, 'Stop' en ferait une
+# erreur fatale. Le code de sortie d'esphome fait foi.
+$ErrorActionPreference = 'Continue'
 & esphome @arguments
 exit $LASTEXITCODE
