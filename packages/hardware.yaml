@@ -1,9 +1,9 @@
 # Materiel : ESP32-2432S024C (D004). Seul fichier qui declare broches et bus
 # (invariant G2).
 #
-# Brochage publie pour cette carte, A CONFIRMER AU BANC (TODO P1) : aucune
-# documentation vendeur n'a ete recoupee. display_model vaut ILI9341 ou
-# ST7789V selon la serie de la carte.
+# Brochage publie pour cette carte, sans documentation vendeur. Confirme au
+# banc le 28 octobre 2026 : ecran ILI9341, bus SPI, bus I2C et reset du
+# tactile. pin_tactile_int ne recoit aucune interruption (D009, R6).
 substitutions:
   display_model: ILI9341
   pin_spi_clk: GPIO14
@@ -14,7 +14,7 @@ substitutions:
   pin_retroeclairage: GPIO27
   pin_i2c_sda: GPIO33
   pin_i2c_scl: GPIO32
-  pin_tactile_int: GPIO21
+  pin_tactile_int: GPIO21  # non utilisee (D009)
   pin_tactile_rst: GPIO25
 
 spi:
@@ -62,7 +62,7 @@ touchscreen:
     id: tactile
     i2c_id: bus_i2c_tactile
     display: ecran
-    # Diagnostic P1 : aucune interruption recue sur GPIO21, le tactile est lu
-    # periodiquement (update_interval 50 ms par defaut).
-    # interrupt_pin: ${pin_tactile_int}
+    # Lecture periodique (50 ms) : aucune interruption n'arrive sur
+    # pin_tactile_int, volontairement non declaree (D009).
+    update_interval: 50ms
     reset_pin: ${pin_tactile_rst}

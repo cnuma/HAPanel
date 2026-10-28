@@ -117,3 +117,18 @@ qui cite la précédente.
 - Conséquences : les entités Home Assistant sont préfixées `hapanel_` ; un
   second panneau imposera une nouvelle décision et un renommage de celui-ci ;
   changer de framework impose un re-flash par USB.
+
+## D009 — Tactile lu périodiquement, sans interruption
+
+- Date : 28 octobre 2026 — Statut : accepté (choix du propriétaire)
+- Contexte : au banc, la puce CST820 répond sur le bus I²C mais aucune
+  interruption n'arrive sur GPIO21 (broche publiée) ; avec `interrupt_pin`,
+  ESPHome n'interroge plus la puce et aucun toucher n'est reçu.
+- Décision : `interrupt_pin` n'est pas déclarée ; le tactile est lu toutes
+  les 50 ms (`update_interval`).
+- Option écartée : rechercher la cause (résistance de rappel, autre broche,
+  mode de la puce) : plusieurs flashs pour un gain pratique nul sur un
+  panneau alimenté en permanence.
+- Conséquences : une transaction I²C toutes les 50 ms, latence de toucher
+  d'au plus 50 ms ; dette T1 ; à reprendre si la veille profonde devient
+  nécessaire.

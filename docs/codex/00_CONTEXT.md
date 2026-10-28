@@ -22,7 +22,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Écran | Entités lues | Actions | État |
 |---|---|---|---|
 | Accueil | À définir | À définir | À définir |
-| À propos (version, SHA, connexion, mémoire) | Internes | Aucune | Compilé, non testé sur la carte (`packages/lvgl.yaml`) |
+| À propos (version, SHA, connexion, mémoire) | Internes | Aucune | Affichage validé au banc ; état « connecté » à valider après adoption (`packages/lvgl.yaml`) |
 
 ## Home Assistant
 
@@ -37,9 +37,9 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Rubrique | Valeur |
 |---|---|
 | Carte | ESP32-2432S024C (D004) : ESP32 classique (module WROOM, double cœur), sans PSRAM |
-| Écran | 2,4", 240 × 320, contrôleur ILI9341 ou ST7789 selon la série — à confirmer au premier essai |
-| Tactile | Capacitif CST820, bus I²C, composant ESPHome `cst816` (annoncé « devrait fonctionner ») |
-| Flash | À confirmer (4 Mo attendus) |
+| Écran | 2,4", 240 × 320, contrôleur ILI9341 (confirmé au banc le 28 octobre 2026) |
+| Tactile | Capacitif CST820, bus I²C (adresse `0x15`), composant ESPHome `cst816`, lecture périodique 50 ms (D009) ; coordonnées conformes à l'écran sans calibrage |
+| Flash | 4 Mo (détectée au premier flash) ; ESP32 rev 3.1 |
 | Alimentation et montage mural | À définir |
 
 ## Environnement de développement

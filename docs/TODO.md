@@ -16,9 +16,11 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [x] `hapanel.yaml`, `hapanel_banc.yaml`, `packages/base.yaml`,
       `packages/hardware.yaml`, `packages/lvgl.yaml` (compilés, non testés
       sur la carte).
-- [ ] Valider sur la carte : brochage publié (R6), écran (contrôleur
-      ILI9341 ou ST7789, orientation, couleurs), tactile CST820 (risque R1), Wi-Fi, connexion
-      chiffrée à Home Assistant, OTA.
+- [x] Valider sur la carte : brochage publié (R6), écran ILI9341
+      (orientation, couleurs, accents), tactile CST820 (R1, D009), Wi-Fi,
+      OTA par mot de passe.
+- [ ] Adopter le panneau dans Home Assistant ; vérifier « connecté » puis
+      « non connecté » à l'écran (P2).
 - [ ] Page « À propos » : version, SHA, état de connexion, mémoire libre
       (écrite, à vérifier à l'écran, y compris les accents).
 - [ ] Décider : OTA protégée par la clé de l'API au lieu d'un mot de passe
