@@ -68,8 +68,9 @@ du C++ au YAML.
 
 ## Sécurité
 
-- `api:` avec clé de chiffrement ; `ota:` avec mot de passe ; tous deux dans
-  `secrets.yaml`.
+- `api:` avec clé de chiffrement dans `secrets.yaml` ; `ota:` chiffrée par
+  la même clé (`encryption:` sans clé propre, D010), sans mot de passe ni
+  `allow_plaintext_upload`.
 - Pas de `web_server` ni de point d'accès de secours sans décision et ligne
   au registre des risques.
 

@@ -132,3 +132,39 @@ qui cite la précédente.
 - Conséquences : une transaction I²C toutes les 50 ms, latence de toucher
   d'au plus 50 ms ; dette T1 ; à reprendre si la veille profonde devient
   nécessaire.
+
+## D010 — OTA authentifiée par la clé de l'API
+
+- Date : 28 octobre 2026 — Statut : accepté (choix du propriétaire)
+- Contexte : ESPHome 2026.10 signale à chaque compilation que le mot de
+  passe OTA « gaspille flash et RAM » et recommande le chiffrement de l'OTA
+  par la clé de l'API (protocole Noise, comme l'API).
+- Décision : `ota: encryption:` sans clé propre, qui hérite de
+  `api_encryption_key` ; plus de mot de passe OTA. Migration en deux
+  installations : la première avec `password` et
+  `encryption: allow_plaintext_upload: true` (au cas où le firmware en place
+  demanderait encore le mot de passe), la seconde sans les deux, qui prouve
+  que l'OTA chiffrée fonctionne. Constaté le 28 octobre 2026 : le firmware
+  en place proposait déjà le chiffrement par la clé de l'API, la première
+  installation était donc déjà chiffrée.
+- Options écartées : garder le mot de passe (avertissement permanent, coût
+  mémoire) ; laisser `allow_plaintext_upload` (un tiers sur le réseau pourrait
+  forcer une installation en clair).
+- Conséquences : un seul secret protège l'API et l'OTA ; `ota_password`
+  disparaît de `secrets.example.yaml` ; perdre la clé de l'API impose un
+  flash par USB.
+
+## D011 — Options avancées de l'ESP32
+
+- Date : 28 octobre 2026 — Statut : accepté (choix du propriétaire)
+- Contexte : au démarrage, ESPHome propose `minimum_chip_revision: "3.1"`,
+  `flash_chip: generic` et `sram1_as_iram: true`.
+- Décision : `minimum_chip_revision: "3.1"` (puce du panneau en révision
+  3.1) ; `flash_chip` et `sram1_as_iram` reportés.
+- Justification : la révision réduit le binaire sans contrepartie pour ce
+  panneau ; les deux autres options libèrent de l'IRAM (mémoire de code),
+  qui ne manque pas, et `sram1_as_iram` prélève probablement de la mémoire
+  de données utile à LVGL (G6, R2), sans compter qu'elle exige un chargeur
+  compatible que l'OTA ne met pas à jour.
+- Conséquences : une carte de rechange de révision inférieure à 3.1 ne
+  démarrerait pas ce binaire ; à réévaluer si l'IRAM vient à manquer.

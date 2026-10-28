@@ -28,12 +28,17 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       par le propriétaire).
 - [x] Binaire exécuté = `main` (`33bf440`) après reflash OTA sur bloc
       secteur 1 A ; brownout sur le port USB du PC (R7).
-- [ ] Décider : OTA protégée par la clé de l'API au lieu d'un mot de passe
-      (recommandation d'ESPHome 2026.10).
+- [x] Décider : OTA protégée par la clé de l'API au lieu d'un mot de passe
+      (D010).
 - [x] Mesurer la mémoire libre de référence ; premier checkpoint.
-- [ ] Décider : options d'ESPHome `sram1_as_iram`, `minimum_chip_revision`
-      et `flash_chip` (gain d'IRAM et de flash signalé au démarrage).
-- [ ] Passer `VERSION` à `0.1.0` une fois P1 entièrement validé.
+- [x] Décider : options d'ESPHome `sram1_as_iram`, `minimum_chip_revision`
+      et `flash_chip` (D011 : révision 3.1 ; les deux autres reportées).
+- [x] Passer `VERSION` à `0.1.0` une fois P1 entièrement validé.
+
+## Reporté
+
+- [ ] `flash_chip: generic` et `sram1_as_iram` : seulement si l'IRAM vient à
+      manquer, après mesure de la mémoire de données (D011).
 
 ## P2 — Premier écran fonctionnel
 

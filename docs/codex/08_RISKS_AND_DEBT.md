@@ -21,7 +21,7 @@ avant fusion.
 | Surface | Protocole | Authentification | Document |
 |---|---|---|---|
 | API native ESPHome | TCP local | Clé de chiffrement (`secrets.yaml`) | `04_DEVELOPMENT_RULES.md` |
-| Mise à jour OTA | Réseau local | Mot de passe (`secrets.yaml`) | `04_DEVELOPMENT_RULES.md` |
+| Mise à jour OTA | Réseau local, chiffré (Noise) | Clé de chiffrement de l'API (`secrets.yaml`, D010) | `04_DEVELOPMENT_RULES.md` |
 | Actions Home Assistant autorisées pour le panneau | API native | Autorisation dans l'intégration ESPHome | À activer au premier écran qui commande |
 
 ## Dette technique
