@@ -62,5 +62,7 @@ touchscreen:
     id: tactile
     i2c_id: bus_i2c_tactile
     display: ecran
-    interrupt_pin: ${pin_tactile_int}
+    # Diagnostic P1 : aucune interruption recue sur GPIO21, le tactile est lu
+    # periodiquement (update_interval 50 ms par defaut).
+    # interrupt_pin: ${pin_tactile_int}
     reset_pin: ${pin_tactile_rst}
