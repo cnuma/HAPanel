@@ -41,13 +41,13 @@ fichiers ne sont pas commités) et les injecte dans ESPHome :
 
 ```powershell
 git -c core.whitespace=cr-at-eol diff --check
-.	oolsuild.ps1 config
-.	oolsuild.ps1 run -Device <PORT_COM ou IP_PANNEAU>
+.\tools\build.ps1 config
+.\tools\build.ps1 run -Device <PORT_COM ou IP_PANNEAU>
 ```
 
 - `run` valide, compile, téléverse puis affiche les journaux.
-- Sans téléversement prévu : `.	oolsuild.ps1 compile -Config hapanel.yaml`.
-- Journaux seuls : `.	oolsuild.ps1 logs -Device <PORT_COM ou IP_PANNEAU>`.
+- Sans téléversement prévu : `.\tools\build.ps1 compile -Config hapanel.yaml`.
+- Journaux seuls : `.\tools\build.ps1 logs -Device <PORT_COM ou IP_PANNEAU>`.
 - `secrets.yaml` est à créer depuis `secrets.example.yaml` avant la
   première commande.
 - La première commande télécharge les polices Roboto (Google Fonts) : accès
@@ -64,6 +64,20 @@ git -c core.whitespace=cr-at-eol diff --check
 Les journaux de démarrage, l'entité de diagnostic dans Home Assistant et la
 page « À propos » du panneau affichent version et SHA. Un SHA suffixé
 `+modif` ne vaut pas validation.
+
+« OTA successful » ne prouve pas que le nouveau binaire tourne : s'il
+redémarre avant 60 s (`safe_mode`), le chargeur revient seul au binaire
+précédent (« OTA rollback detected » dans les journaux). Relire le SHA à
+l'écran ou dans les journaux après au moins 60 s, et chercher
+« Boot seems successful » (constaté le 28 octobre 2026, R7).
+
+## Alimentation
+
+La carte exige une alimentation qui tient le pic de courant du démarrage du
+Wi-Fi, rétroéclairage allumé. Le port USB du PC du propriétaire ne suffit
+pas : « Brownout detector was triggered » à chaque démarrage, puis mode sans
+échec (R7). Validé sur bloc secteur externe 1 A. Le port USB du PC reste
+utilisable pour lire le journal série, pas pour juger un démarrage.
 
 ## Compte rendu de test
 

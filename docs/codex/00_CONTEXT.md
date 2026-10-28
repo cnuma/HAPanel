@@ -1,6 +1,6 @@
 # 00 — Contexte du projet
 
-Mis à jour le 27 octobre 2026. Les rubriques « À définir » bloquent toute
+Mis à jour le 28 octobre 2026. Les rubriques « À définir » bloquent toute
 implémentation qui en dépend : elles se tranchent avec le propriétaire puis
 s'inscrivent ici et dans `02_DECISIONS.md`.
 
@@ -22,7 +22,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Écran | Entités lues | Actions | État |
 |---|---|---|---|
 | Accueil | À définir | À définir | À définir |
-| À propos (version, SHA, connexion, mémoire) | Internes | Aucune | Affichage validé au banc ; état « connecté » à valider après adoption (`packages/lvgl.yaml`) |
+| À propos (version, SHA, connexion, mémoire) | Internes | Aucune | Validé au banc le 28 octobre 2026, y compris connecté / non connecté (`packages/lvgl.yaml`) |
 
 ## Home Assistant
 
@@ -40,7 +40,8 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Écran | 2,4", 240 × 320, contrôleur ILI9341 (confirmé au banc le 28 octobre 2026) |
 | Tactile | Capacitif CST820, bus I²C (adresse `0x15`), composant ESPHome `cst816`, lecture périodique 50 ms (D009) ; coordonnées conformes à l'écran sans calibrage |
 | Flash | 4 Mo (détectée au premier flash) ; ESP32 rev 3.1 |
-| Alimentation et montage mural | À définir |
+| Alimentation | Bloc secteur externe 1 A validé au banc ; port USB du PC insuffisant (R7) |
+| Montage mural | À définir |
 
 ## Environnement de développement
 

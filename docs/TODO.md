@@ -22,8 +22,12 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [x] Adopter le panneau dans Home Assistant (28 octobre 2026).
 - [x] Page « À propos » : version, SHA, mémoire libre et accents vérifiés
       à l'écran.
-- [ ] Vérifier sur la page « À propos » l'état « connecté » puis
-      « non connecté » (désactivation de l'appareil dans Home Assistant).
+- [x] Vérifier sur la page « À propos » l'état « connecté » puis
+      « non connecté » (désactivation de l'appareil dans Home Assistant)
+      (28 octobre 2026 ; redémarrage de Home Assistant non testé, écarté
+      par le propriétaire).
+- [x] Binaire exécuté = `main` (`33bf440`) après reflash OTA sur bloc
+      secteur 1 A ; brownout sur le port USB du PC (R7).
 - [ ] Décider : OTA protégée par la clé de l'API au lieu d'un mot de passe
       (recommandation d'ESPHome 2026.10).
 - [x] Mesurer la mémoire libre de référence ; premier checkpoint.

@@ -14,6 +14,7 @@ avant fusion.
 | R4 | Commande envoyée sur un état inconnu ou sans Home Assistant | Action inattendue dans la maison | Invariants P2 à P4 | Ouvert |
 | R5 | Écart de version entre l'ESPHome du dépôt et Home Assistant | Incompatibilité de l'API ou de l'OTA | Version figée (D005), mise à jour par décision et test ; au 27 octobre 2026, ESPHome 2026.10.1 pour Home Assistant 2026.9.4 | Ouvert |
 | R6 | Brochage de `packages/hardware.yaml` repris des valeurs publiées pour la carte, sans documentation vendeur | Écran noir ou tactile muet au premier flash, sans dommage | Essai sur banc (TODO P1) ; corriger les substitutions de `hardware.yaml` seulement | Réduit le 28 octobre 2026 : tout confirmé sauf l'interruption du tactile (GPIO21), contournée par D009 |
+| R7 | Alimentation insuffisante au pic de démarrage du Wi-Fi (sous-tension, *brownout*) | Boucle de redémarrages, mode sans échec, retour silencieux au binaire précédent après une OTA | Bloc secteur externe (1 A validé) ; SHA relu après chaque OTA (`05_BUILD_AND_TEST.md`) | Ouvert le 28 octobre 2026 : constaté sur le port USB du PC ; alimentation du montage mural à définir |
 
 ## Surfaces exposées
 
