@@ -17,3 +17,11 @@ sensor:
     block:
       id: banc_plus_grand_bloc
       name: "Plus grand bloc libre"
+
+# Banc : journalise chaque toucher pour verifier que les coordonnees du
+# tactile correspondent a l'ecran (haut-gauche ~ 0,0 ; bas-droit ~ 240,320).
+touchscreen:
+  - id: !extend tactile
+    on_touch:
+      - lambda: |-
+          ESP_LOGI("hapanel.banc", "toucher x=%d y=%d", touch.x, touch.y);
