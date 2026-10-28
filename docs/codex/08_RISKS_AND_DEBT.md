@@ -15,6 +15,8 @@ avant fusion.
 | R5 | Écart de version entre l'ESPHome du dépôt et Home Assistant | Incompatibilité de l'API ou de l'OTA | Version figée (D005), mise à jour par décision et test ; au 27 octobre 2026, ESPHome 2026.10.1 pour Home Assistant 2026.9.4 | Ouvert |
 | R6 | Brochage de `packages/hardware.yaml` repris des valeurs publiées pour la carte, sans documentation vendeur | Écran noir ou tactile muet au premier flash, sans dommage | Essai sur banc (TODO P1) ; corriger les substitutions de `hardware.yaml` seulement | Réduit le 28 octobre 2026 : tout confirmé sauf l'interruption du tactile (GPIO21), contournée par D009 |
 | R7 | Alimentation insuffisante au pic de démarrage du Wi-Fi (sous-tension, *brownout*) | Boucle de redémarrages, mode sans échec, retour silencieux au binaire précédent après une OTA | Bloc secteur externe (1 A validé) ; SHA relu après chaque OTA (`05_BUILD_AND_TEST.md`) | Ouvert le 28 octobre 2026 : constaté sur le port USB du PC ; alimentation du montage mural à définir |
+| R8 | Clé d'API et d'OTA commune à tous les modules (D012) | La clé d'un module donne accès à tous (lecture, affichage, OTA) | Choix du propriétaire ; option ouverte : clé par module, fournie à l'exécution | Ouvert le 28 octobre 2026 |
+| R9 | Valeurs affichées poussées par un blueprint (D012) : un blueprint absent ou en erreur laisse l'écran vide ou périmé | Affichage incomplet, jamais une valeur fausse non signalée | Garde-fous « indisponible », « périmée », effacement à la déconnexion | Ouvert le 28 octobre 2026 |
 
 ## Surfaces exposées
 
@@ -22,7 +24,8 @@ avant fusion.
 |---|---|---|---|
 | API native ESPHome | TCP local | Clé de chiffrement (`secrets.yaml`) | `04_DEVELOPMENT_RULES.md` |
 | Mise à jour OTA | Réseau local, chiffré (Noise) | Clé de chiffrement de l'API (`secrets.yaml`, D010) | `04_DEVELOPMENT_RULES.md` |
-| Actions Home Assistant autorisées pour le panneau | API native | Autorisation dans l'intégration ESPHome | À activer au premier écran qui commande |
+| Actions Home Assistant autorisées pour le panneau | API native | Autorisation dans l'intégration ESPHome | Requise dès le prototype D012 pour l'événement `esphome.hapanel_demande_valeurs` |
+| Action ESPHome `maj_valeur(cle, valeur)` | API native | Clé de chiffrement de l'API | D012 : n'importe quel client muni de la clé peut changer ce qu'affiche le panneau |
 
 ## Dette technique
 

@@ -1,0 +1,64 @@
+blueprint:
+  name: HAPanel — envoyer une entité à un panneau
+  description: >-
+    Envoie l'état d'une entité à un panneau HAPanel sous une clé (par exemple
+    « temperature ») : à chaque changement, toutes les 5 minutes, au
+    démarrage de Home Assistant et quand le panneau le demande (connexion).
+    Le module doit être autorisé à effectuer des actions Home Assistant
+    (options de l'intégration ESPHome) pour que sa demande soit reçue.
+    Décision D012 du dépôt cnuma/HAPanel.
+  domain: automation
+  source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/envoyer_valeur.yaml
+  input:
+    panneau:
+      name: Panneau
+      description: Module HAPanel destinataire.
+      selector:
+        device:
+          filter:
+            - integration: esphome
+    cle:
+      name: Clé
+      description: Clé attendue par le panneau.
+      default: temperature
+      selector:
+        text:
+    entite:
+      name: Entité
+      description: Entité dont l'état est envoyé.
+      selector:
+        entity: {}
+
+mode: queued
+max: 10
+
+variables:
+  panneau: !input panneau
+  cle: !input cle
+  entite: !input entite
+  # Action ESPHome du module : esphome.<nom du noeud>_maj_valeur.
+  action_maj: "esphome.{{ device_attr(panneau, 'name') | slugify }}_maj_valeur"
+
+triggers:
+  - trigger: state
+    entity_id: !input entite
+  - trigger: time_pattern
+    minutes: "/5"
+  - trigger: homeassistant
+    event: start
+  - trigger: event
+    id: demande
+    event_type: esphome.hapanel_demande_valeurs
+
+conditions:
+  # Une demande ne concerne que le panneau qui l'a émise.
+  - condition: template
+    value_template: >-
+      {{ trigger.id != 'demande'
+         or trigger.event.data.get('device_id') == panneau }}
+
+actions:
+  - action: "{{ action_maj }}"
+    data:
+      cle: "{{ cle }}"
+      valeur: "{{ states(entite) }}"

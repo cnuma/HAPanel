@@ -42,4 +42,15 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 
 ## P2 — Premier écran fonctionnel
 
-- [ ] Définir l'écran d'accueil avec le propriétaire (entités lues, actions).
+- [ ] Définir l'écran d'accueil avec le propriétaire. Acquis : température
+      du séjour ; allumer et couper le chauffage ; consigne au pas de
+      0,5 °C ; date, heure et signal Wi-Fi ; barre de navigation en bas,
+      « À propos » derrière un bouton. Manque : attributs du thermostat
+      (`hvac_modes`, `min_temp`, `max_temp`), bornes de la consigne.
+- [ ] Prototype D012 (firmware unique, valeurs poussées par blueprint) :
+      réadoption du module renommé, blueprint importé, température affichée,
+      cas indisponible, déconnexion, péremption, mémoire.
+- [ ] Signal Wi-Fi exposé dans Home Assistant (entité de diagnostic,
+      ajoutée avec le prototype, à vérifier).
+- [ ] Commandes du panneau par événement : à concevoir avec l'écran
+      d'accueil (D012).

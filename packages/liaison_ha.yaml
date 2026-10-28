@@ -1,0 +1,89 @@
+# Liaison avec Home Assistant (D012). Le panneau ne connait aucune entite :
+# un blueprint de Home Assistant lui pousse des valeurs par cle avec l'action
+# maj_valeur, et le panneau demande un envoi complet a chaque connexion.
+#
+# PROTOTYPE P2 : seule la cle "temperature" est affichee, sur la page
+# « À propos ».
+substitutions:
+  # Sans nouvelle valeur pendant ce delai, la valeur affichee est perimee
+  # (le blueprint renvoie tout toutes les 5 min).
+  liaison_peremption_ms: "900000"
+
+globals:
+  # Instant (millis) de la derniere temperature valide recue ; 0 : aucune.
+  - id: liaison_temperature_ms
+    type: uint32_t
+    initial_value: "0"
+
+api:
+  actions:
+    - action: maj_valeur
+      variables:
+        cle: string
+        valeur: string
+      then:
+        - lambda: |-
+            // cle et valeur pointent dans le tampon de reception, sans zero
+            // terminal : copie bornee avant toute conversion.
+            char k[24], v[24];
+            snprintf(k, sizeof(k), "%.*s", (int) cle.size(), cle.c_str());
+            snprintf(v, sizeof(v), "%.*s", (int) valeur.size(), valeur.c_str());
+            if (strcmp(k, "temperature") != 0) {
+              ESP_LOGW("hapanel.liaison", "cle inconnue : %s", k);
+              return;
+            }
+            char *fin = nullptr;
+            float t = strtof(v, &fin);
+            char texte[32];
+            if (fin == v || *fin != '\0' || isnan(t)) {
+              // unavailable, unknown ou valeur illisible (P3)
+              id(liaison_temperature_ms) = 0;
+              snprintf(texte, sizeof(texte), "Séjour : indisponible");
+              ESP_LOGI("hapanel.liaison", "temperature indisponible (%s)", v);
+            } else {
+              id(liaison_temperature_ms) = millis();
+              if (id(liaison_temperature_ms) == 0) id(liaison_temperature_ms) = 1;
+              snprintf(texte, sizeof(texte), "Séjour : %.1f °C", t);
+              for (char *c = texte; *c; c++) if (*c == '.') *c = ',';
+              ESP_LOGI("hapanel.liaison", "temperature %s", v);
+            }
+            lv_label_set_text(id(lbl_proto_temperature), texte);
+
+script:
+  # Appeles par le suivi de connexion (packages/lvgl.yaml) a chaque
+  # changement d'etat.
+  - id: liaison_connectee
+    then:
+      # Demande au blueprint de renvoyer toutes les valeurs. Exige
+      # l'autorisation des actions Home Assistant pour ce module (08).
+      - homeassistant.event:
+          event: esphome.hapanel_demande_valeurs
+  - id: liaison_deconnectee
+    then:
+      # Sans Home Assistant, plus rien ne garantit la valeur (P2, P3).
+      - globals.set:
+          id: liaison_temperature_ms
+          value: "0"
+      - lvgl.label.update:
+          id: lbl_proto_temperature
+          text: "Séjour : --,- °C"
+
+interval:
+  - interval: 30s
+    then:
+      - if:
+          condition:
+            lambda: |-
+              uint32_t t = id(liaison_temperature_ms);
+              return t != 0 && millis() - t > ${liaison_peremption_ms};
+          then:
+            - globals.set:
+                id: liaison_temperature_ms
+                value: "0"
+            - lvgl.label.update:
+                id: lbl_proto_temperature
+                text: "Séjour : périmée"
+            - logger.log:
+                tag: hapanel.liaison
+                level: WARN
+                format: "temperature perimee"

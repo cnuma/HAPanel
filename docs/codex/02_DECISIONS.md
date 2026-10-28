@@ -168,3 +168,38 @@ qui cite la précédente.
   compatible que l'OTA ne met pas à jour.
 - Conséquences : une carte de rechange de révision inférieure à 3.1 ne
   démarrerait pas ce binaire ; à réévaluer si l'IRAM vient à manquer.
+
+## D012 — Firmware unique, entités choisies dans Home Assistant
+
+- Date : 28 octobre 2026 — Statut : accepté (choix du propriétaire), en
+  prototype ; remplace D008 pour le nom du nœud
+- Contexte : le propriétaire veut déployer plusieurs modules sans
+  recompiler pour chacun ; ESPHome fixe à la compilation les entités lues
+  par les plateformes `homeassistant`.
+- Décision :
+  - un seul binaire pour tous les modules : `name_add_mac_suffix: true`,
+    nœud `hapanel-xxxxxx` (suffixe tiré de l'adresse MAC) ;
+  - le panneau ne connaît aucune entité : un blueprint de Home Assistant
+    (`blueprints/automation/hapanel/`, versionné ici) lui pousse des valeurs
+    par clé avec l'action `maj_valeur(cle, valeur)` ; à chaque connexion de
+    Home Assistant, le panneau émet l'événement
+    `esphome.hapanel_demande_valeurs` et le blueprint renvoie tout ;
+  - les commandes du panneau passeront par des événements traités par le
+    blueprint (à concevoir avec l'écran d'accueil) ;
+  - une clé d'API commune à tous les modules (choix du propriétaire), en
+    gardant la possibilité d'une clé par module (R8).
+- Options étudiées : paramètres de compilation (une compilation par
+  module) ; réglages du module lus par le panneau avec abonnement dynamique
+  (`subscribe_home_assistant_state`), qui gardait P2 à P4 sur le panneau
+  mais reposait sur du C++ interne à ESPHome.
+- Garde-fous côté panneau (P2, P3) : valeur effacée à la déconnexion de
+  Home Assistant, « indisponible » si l'état reçu n'est pas un nombre,
+  « périmée » sans nouvelle valeur pendant 15 minutes (le blueprint renvoie
+  tout toutes les 5 minutes).
+- Conséquences :
+  - le panneau actuel est renommé et doit être réadopté dans Home Assistant ;
+    ses entités changent de nom (G10, aucune n'était utilisée) ;
+  - une partie de la logique vit dans Home Assistant : le blueprint est
+    une pièce du produit, versionnée et testée avec le firmware ;
+  - la règle « lecture par plateformes `homeassistant` » de
+    `04_DEVELOPMENT_RULES.md` est remplacée.

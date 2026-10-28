@@ -42,11 +42,14 @@ du C++ au YAML.
 
 ## Home Assistant
 
-- Lecture d'une entité : plateformes `homeassistant` (sensor, text_sensor,
-  binary_sensor) ; mise à jour de l'affichage sur `on_value`, pas par
-  interrogation périodique.
-- Commande : action `homeassistant.action`, uniquement si l'API est
+- Aucun `entity_id` dans le firmware (D012) : les valeurs arrivent par
+  l'action `maj_valeur(cle, valeur)`, poussée par un blueprint de
+  `blueprints/automation/hapanel/` ; chaque clé a un garde-fou
+  « indisponible », « périmée » et un effacement à la déconnexion (P3).
+- Commande : événement traité par le blueprint, uniquement si l'API est
   connectée et l'état de départ connu (P2, P4).
+- Toute clé ou tout événement ajouté est documenté dans le blueprint et dans
+  `00_CONTEXT.md`, dans le même lot que le firmware.
 - L'autorisation « actions Home Assistant » du panneau est activée dans
   l'intégration ESPHome de Home Assistant et consignée comme surface dans
   `08_RISKS_AND_DEBT.md`.

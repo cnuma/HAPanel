@@ -14,3 +14,4 @@ packages:
   base: !include packages/base.yaml
   hardware: !include packages/hardware.yaml
   lvgl: !include packages/lvgl.yaml
+  liaison_ha: !include packages/liaison_ha.yaml

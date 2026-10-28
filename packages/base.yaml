@@ -3,6 +3,9 @@
 esphome:
   name: ${node_name}
   friendly_name: ${friendly_name}
+  # Un seul binaire pour tous les modules : nom unique tire de l'adresse MAC
+  # (hapanel-xxxxxx), D012.
+  name_add_mac_suffix: true
   project:
     name: cnuma.hapanel
     version: ${version}
@@ -41,6 +44,13 @@ ota:
 
 logger:
   level: ${log_level}
+
+sensor:
+  - platform: wifi_signal
+    id: signal_wifi
+    name: "Signal Wi-Fi"
+    entity_category: diagnostic
+    update_interval: 60s
 
 text_sensor:
   - platform: template
