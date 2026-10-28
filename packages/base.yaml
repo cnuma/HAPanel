@@ -22,6 +22,9 @@ esp32:
   flash_size: 4MB
   framework:
     type: esp-idf
+    advanced:
+      # Puce du panneau en revision 3.1 : binaire plus petit (D011).
+      minimum_chip_revision: "3.1"
 
 wifi:
   ssid: !secret wifi_ssid
@@ -33,7 +36,11 @@ api:
 
 ota:
   - platform: esphome
+    # TRANSITOIRE (D010) : le firmware en place demande encore le mot de
+    # passe ; a retirer apres cette seule installation.
     password: !secret ota_password
+    encryption:
+      allow_plaintext_upload: true
 
 logger:
   level: ${log_level}
