@@ -45,12 +45,20 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [ ] Définir l'écran d'accueil avec le propriétaire. Acquis : température
       du séjour ; allumer et couper le chauffage ; consigne au pas de
       0,5 °C ; date, heure et signal Wi-Fi ; barre de navigation en bas,
-      « À propos » derrière un bouton. Manque : attributs du thermostat
-      (`hvac_modes`, `min_temp`, `max_temp`), bornes de la consigne.
-- [ ] Prototype D012 (firmware unique, valeurs poussées par blueprint) :
-      réadoption du module renommé, blueprint importé, température affichée,
-      cas indisponible, déconnexion, péremption, mémoire.
-- [ ] Signal Wi-Fi exposé dans Home Assistant (entité de diagnostic,
-      ajoutée avec le prototype, à vérifier).
+      « À propos » derrière un bouton. Banc : thermostat
+      `climate.entree_thermostat` (Versatile Thermostat, dans le séjour :
+      modes `heat`/`off`, 7 à 35 °C, préréglages), thermomètre
+      `sensor.sejour_cheminee_radiateur_ema_temperature` ; consigne libre
+      (le thermostat quitte alors son préréglage). Manque : bornes de la
+      consigne.
+- [x] Prototype D012 validé le 29 octobre 2026 (`96227cf`) : module
+      réadopté sous `hapanel-a85bfc`, blueprint importé, température
+      affichée, effacement à la déconnexion et renvoi immédiat à la
+      reconnexion (constatés par le propriétaire). Mémoire inchangée
+      (≈ 197 Ko libres, bloc 108 Ko). Non testés : « indisponible »,
+      « périmée ».
+- [ ] D013 : vérifier « non connecté » avec `esphome logs` ouvert (correctif
+      flashé, non testé journaux ouverts).
+- [x] Signal Wi-Fi exposé dans Home Assistant (entité de diagnostic).
 - [ ] Commandes du panneau par événement : à concevoir avec l'écran
       d'accueil (D012).
