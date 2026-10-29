@@ -144,14 +144,17 @@ actions:
                     thermostat {{ etat }}, verrou {{ verrou }})
     default:
       - repeat:
+          # Le rendu doit commencer par « [ » (aucun espace ni {% set %}
+          # avant) pour que Home Assistant en fasse une liste.
           for_each: >-
-            {% set c = state_attr(thermostat, 'temperature') %}
             {{ [
               ['temperature', states(thermometre)],
               ['chauffage_mode', etat],
               ['chauffage_action', (state_attr(thermostat, 'hvac_action') or 'unknown')
                                    if disponible else 'unavailable'],
-              ['chauffage_consigne', (c if c is not none else 'unknown')
+              ['chauffage_consigne', (state_attr(thermostat, 'temperature')
+                                      if state_attr(thermostat, 'temperature') is not none
+                                      else 'unknown')
                                      if disponible else 'unavailable'],
               ['chauffage_prereglage', (state_attr(thermostat, 'preset_mode') or 'none')
                                        if disponible else 'unavailable'],
