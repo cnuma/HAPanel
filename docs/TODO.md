@@ -72,3 +72,18 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [x] Signal Wi-Fi exposé dans Home Assistant (entité de diagnostic).
 - [x] Commandes du panneau par événement : `esphome.hapanel_commande`
       (D014).
+
+## P3 — Idées du propriétaire (30 octobre 2026), à spécifier avant tout code
+
+- [ ] Chauffage éteint : masquer ou griser fortement les icônes de
+      préréglage et la consigne, pour alléger l'écran (P3 : la consigne
+      reste lisible ou explicitement absente, jamais trompeuse).
+- [ ] Bouton de pied de page « Scénarios » : icône Material Design à
+      choisir (par exemple `mdi:play-box-multiple` ou
+      `mdi:script-text-play`), scénarios et commandes à définir.
+- [ ] Icône de pied de page « Météo » : prévisions sur 3 jours, zone
+      paramétrable (entité `weather.*` choisie dans un blueprint, D012).
+- [ ] LED de face avant : état du module (connexion HA, anomalie) puis
+      autres informations (alerte météo…) ; broches et nature de la LED à
+      relever sur la carte réelle (`packages/hardware.yaml`, R6), jamais
+      supposées.
