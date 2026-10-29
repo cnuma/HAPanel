@@ -1,0 +1,447 @@
+# Ecran d'accueil (D014) : bandeau (date, heure, Wi-Fi, connexion a Home
+# Assistant), temperature du sejour, chauffage (mode, activite, prereglage,
+# consigne) et commandes. Valeurs recues par packages/liaison_ha.yaml ;
+# commandes par l'evenement esphome.hapanel_commande, traduit par le
+# blueprint blueprints/automation/hapanel/ecran_accueil.yaml.
+#
+# Ce package doit etre inclus avant packages/lvgl.yaml dans hapanel.yaml :
+# la premiere page est celle affichee au demarrage.
+substitutions:
+  # Delai entre le dernier appui sur - / + et l'envoi de la consigne.
+  accueil_envoi_consigne: 2s
+  # Sans confirmation de Home Assistant dans ce delai, l'affichage revient a
+  # la valeur reelle.
+  accueil_attente_confirmation: 10s
+
+font:
+  # Chiffres de la temperature du sejour, glyphes limites (G6).
+  - file: "gfonts://Roboto@500"
+    id: police_grande
+    size: 48
+    bpp: 4
+    glyphs: ["0123456789,-°C "]
+
+globals:
+  # Consigne affichee en attente de confirmation (orange) ; NAN : aucune.
+  - id: accueil_consigne_cible
+    type: float
+    initial_value: "NAN"
+  # Mode envoye en attente de confirmation : -1 aucun, 0 coupe, 1 allume.
+  - id: accueil_mode_cible
+    type: int
+    initial_value: "-1"
+  # Commandes autorisees, recalculees par accueil_rafraichir (P2, P4).
+  - id: accueil_consigne_permise
+    type: bool
+    initial_value: "false"
+  - id: accueil_mode_permis
+    type: bool
+    initial_value: "false"
+
+time:
+  - platform: homeassistant
+    id: heure_ha
+    on_time_sync:
+      - script.execute: accueil_heure
+    on_time:
+      - seconds: 0
+        then:
+          - script.execute: accueil_heure
+
+sensor:
+  - id: !extend signal_wifi
+    on_value:
+      - script.execute: accueil_wifi
+
+wifi:
+  on_disconnect:
+    - script.execute: accueil_wifi
+
+lvgl:
+  pages:
+    - id: page_accueil
+      bg_color: 0x000000
+      widgets:
+        # Bandeau
+        - label:
+            id: lbl_acc_date
+            align: TOP_LEFT
+            x: 8
+            y: 6
+            text: "--:--"
+        - obj:
+            id: obj_acc_wifi_1
+            align: TOP_LEFT
+            x: 186
+            y: 18
+            width: 4
+            height: 4
+            radius: 0
+            border_width: 0
+            pad_all: 0
+            bg_color: 0x424242
+        - obj:
+            id: obj_acc_wifi_2
+            align: TOP_LEFT
+            x: 192
+            y: 15
+            width: 4
+            height: 7
+            radius: 0
+            border_width: 0
+            pad_all: 0
+            bg_color: 0x424242
+        - obj:
+            id: obj_acc_wifi_3
+            align: TOP_LEFT
+            x: 198
+            y: 12
+            width: 4
+            height: 10
+            radius: 0
+            border_width: 0
+            pad_all: 0
+            bg_color: 0x424242
+        - obj:
+            id: obj_acc_wifi_4
+            align: TOP_LEFT
+            x: 204
+            y: 9
+            width: 4
+            height: 13
+            radius: 0
+            border_width: 0
+            pad_all: 0
+            bg_color: 0x424242
+        - obj:
+            id: obj_acc_point_ha
+            align: TOP_LEFT
+            x: 218
+            y: 9
+            width: 13
+            height: 13
+            radius: 7
+            border_width: 0
+            pad_all: 0
+            bg_color: 0xF44336
+        # Temperature du sejour
+        - label:
+            id: lbl_acc_sejour
+            align: TOP_LEFT
+            x: 12
+            y: 36
+            text: "Séjour"
+        - label:
+            id: lbl_acc_temperature
+            align: TOP_MID
+            y: 50
+            text_font: police_grande
+            text: "--,- °C"
+        - label:
+            id: lbl_acc_temperature_etat
+            align: TOP_MID
+            y: 104
+            text_color: 0xFF9800
+            text: ""
+        # Chauffage
+        - label:
+            id: lbl_acc_chauffage
+            align: TOP_LEFT
+            x: 12
+            y: 128
+            text: "Chauffage : --"
+        - label:
+            id: lbl_acc_prereglage
+            align: TOP_LEFT
+            x: 12
+            y: 150
+            text: "Préréglage : --"
+        - button:
+            id: btn_acc_moins
+            align: TOP_LEFT
+            x: 12
+            y: 178
+            width: 56
+            height: 44
+            text_font: police_titre
+            text: "-"
+            state:
+              disabled: true
+            on_click:
+              - script.execute:
+                  id: accueil_regler_consigne
+                  sens: -1
+        - label:
+            id: lbl_acc_consigne
+            align: TOP_MID
+            y: 188
+            text_font: police_titre
+            text: "--,- °C"
+        - button:
+            id: btn_acc_plus
+            align: TOP_LEFT
+            x: 172
+            y: 178
+            width: 56
+            height: 44
+            text_font: police_titre
+            text: "+"
+            state:
+              disabled: true
+            on_click:
+              - script.execute:
+                  id: accueil_regler_consigne
+                  sens: 1
+        # Allumer : appui simple ; couper : appui long (D014, long_press_time
+        # dans packages/lvgl.yaml).
+        - button:
+            id: btn_acc_mode
+            align: TOP_MID
+            y: 230
+            width: 216
+            height: 40
+            text: "Chauffage : --"
+            state:
+              disabled: true
+            on_short_click:
+              - if:
+                  condition:
+                    lambda: return id(liaison_chauffage_mode) == 0;
+                  then:
+                    - script.execute:
+                        id: accueil_envoyer_mode
+                        mode_cible: 1
+            on_long_press:
+              - if:
+                  condition:
+                    lambda: return id(liaison_chauffage_mode) == 1;
+                  then:
+                    - script.execute:
+                        id: accueil_envoyer_mode
+                        mode_cible: 0
+
+script:
+  # Redessine l'ecran d'accueil depuis les valeurs recues et recalcule les
+  # commandes autorisees. Appele a chaque valeur recue, a chaque changement
+  # de connexion et a chaque peremption.
+  - id: accueil_rafraichir
+    then:
+      - lambda: |-
+          bool ha = id(ha_connecte_affiche) == 1;
+          if (!ha) {
+            // Sans Home Assistant, rien n'est en attente (P2).
+            id(accueil_consigne_cible) = NAN;
+            id(accueil_mode_cible) = -1;
+          }
+          lv_obj_set_style_bg_color(id(obj_acc_point_ha), lv_color_hex(ha ? 0x4CAF50 : 0xF44336), 0);
+
+          char texte[40];
+          int et = id(liaison_temperature_etat);
+          if (et == 1) {
+            snprintf(texte, sizeof(texte), "%.1f °C", id(liaison_temperature));
+            for (char *c = texte; *c; c++) if (*c == '.') *c = ',';
+          } else {
+            snprintf(texte, sizeof(texte), "--,- °C");
+          }
+          lv_label_set_text(id(lbl_acc_temperature), texte);
+          lv_label_set_text(id(lbl_acc_temperature_etat),
+                            et == 2 ? "indisponible" : et == 3 ? "périmée" : "");
+
+          int ec = id(liaison_chauffage_etat);
+          int mode = id(liaison_chauffage_mode);
+          int action = id(liaison_chauffage_action);
+          float consigne = id(liaison_chauffage_consigne);
+          const char *ligne = "Chauffage : --";
+          if (ec == 3) ligne = "Chauffage : périmé";
+          else if (ec == 1 && mode == 0) ligne = "Chauffage : coupé";
+          else if (ec == 1 && mode == 1)
+            ligne = action == 1 ? "Chauffage : allumé · chauffe"
+                  : action == 2 ? "Chauffage : allumé · attente" : "Chauffage : allumé";
+          else if (ec == 1) ligne = "Chauffage : indisponible";
+          lv_label_set_text(id(lbl_acc_chauffage), ligne);
+
+          const std::string &p = id(liaison_chauffage_prereglage);
+          const char *nom = p.c_str();
+          if (ec != 1 || p.empty()) nom = "--";
+          else if (p == "none") nom = "Manuel";
+          else if (p == "frost") nom = "Hors-gel";
+          else if (p == "eco") nom = "Éco";
+          else if (p == "comfort") nom = "Confort";
+          else if (p == "boost") nom = "Boost";
+          snprintf(texte, sizeof(texte), "Préréglage : %s", nom);
+          lv_label_set_text(id(lbl_acc_prereglage), texte);
+
+          // Confirmation : la valeur reelle a rejoint la valeur envoyee.
+          if (!isnan(id(accueil_consigne_cible)) && !isnan(consigne) &&
+              fabsf(consigne - id(accueil_consigne_cible)) < 0.05f)
+            id(accueil_consigne_cible) = NAN;
+          if (id(accueil_mode_cible) != -1 && mode == id(accueil_mode_cible))
+            id(accueil_mode_cible) = -1;
+
+          bool commun = ha && ec == 1 && id(liaison_chauffage_verrou) == 0;
+          bool cons_ok = commun && !isnan(consigne) && !isnan(id(liaison_consigne_min)) &&
+                         !isnan(id(liaison_consigne_max)) &&
+                         id(liaison_consigne_min) <= id(liaison_consigne_max);
+          bool mode_ok = commun && (mode == 0 || mode == 1) && id(accueil_mode_cible) == -1;
+          id(accueil_consigne_permise) = cons_ok;
+          id(accueil_mode_permis) = mode_ok;
+
+          float affichee = !isnan(id(accueil_consigne_cible)) ? id(accueil_consigne_cible)
+                         : (ec == 1 ? consigne : NAN);
+          if (isnan(affichee)) {
+            snprintf(texte, sizeof(texte), "--,- °C");
+          } else {
+            snprintf(texte, sizeof(texte), "%.1f °C", affichee);
+            for (char *c = texte; *c; c++) if (*c == '.') *c = ',';
+          }
+          lv_label_set_text(id(lbl_acc_consigne), texte);
+          lv_obj_set_style_text_color(id(lbl_acc_consigne),
+              lv_color_hex(!isnan(id(accueil_consigne_cible)) ? 0xFF9800
+                           : isnan(affichee) ? 0x9E9E9E : 0xFFFFFF), 0);
+
+          const char *bouton = "Chauffage : --";
+          if (id(accueil_mode_cible) != -1) bouton = "Envoi...";
+          else if (ec == 1 && id(liaison_chauffage_verrou) == 1) bouton = "Verrouillé";
+          else if (ec == 1 && mode == 0) bouton = "Allumer";
+          else if (ec == 1 && mode == 1) bouton = "Maintenir : couper";
+          lv_label_set_text(lv_obj_get_child(id(btn_acc_mode), 0), bouton);
+          lv_obj_set_style_text_color(lv_obj_get_child(id(btn_acc_mode), 0),
+              lv_color_hex(id(accueil_mode_cible) != -1 ? 0xFF9800 : 0xFFFFFF), 0);
+
+          lv_obj_t *boutons[] = {id(btn_acc_moins), id(btn_acc_plus), id(btn_acc_mode)};
+          bool actifs[] = {cons_ok, cons_ok, mode_ok};
+          for (int i = 0; i < 3; i++) {
+            if (actifs[i]) lv_obj_remove_state(boutons[i], LV_STATE_DISABLED);
+            else lv_obj_add_state(boutons[i], LV_STATE_DISABLED);
+          }
+
+  # Un appui sur - ou + : consigne au pas de 0,5 °C dans les bornes, envoyee
+  # apres accueil_envoi_consigne sans nouvel appui.
+  - id: accueil_regler_consigne
+    parameters:
+      sens: int
+    then:
+      - if:
+          condition:
+            lambda: |-
+              if (!id(accueil_consigne_permise)) return false;
+              float depart = isnan(id(accueil_consigne_cible))
+                  ? id(liaison_chauffage_consigne) : id(accueil_consigne_cible);
+              // Premier pas : demi-degre suivant (20,3 donne 20,5 ou 20,0).
+              float c = sens > 0 ? floorf(depart * 2.0f + 0.001f) / 2.0f + 0.5f
+                                 : ceilf(depart * 2.0f - 0.001f) / 2.0f - 0.5f;
+              if (c > id(liaison_consigne_max)) c = id(liaison_consigne_max);
+              if (c < id(liaison_consigne_min)) c = id(liaison_consigne_min);
+              if (fabsf(c - depart) < 0.05f) return false;
+              id(accueil_consigne_cible) = c;
+              return true;
+          then:
+            - script.execute: accueil_rafraichir
+            - script.execute: accueil_envoyer_consigne
+
+  - id: accueil_envoyer_consigne
+    mode: restart
+    then:
+      - delay: ${accueil_envoi_consigne}
+      - if:
+          condition:
+            lambda: return id(accueil_consigne_permise) && !isnan(id(accueil_consigne_cible));
+          then:
+            - homeassistant.event:
+                event: esphome.hapanel_commande
+                data:
+                  commande: chauffage_consigne
+                  valeur: !lambda |-
+                    char v[8];
+                    snprintf(v, sizeof(v), "%.1f", id(accueil_consigne_cible));
+                    return std::string(v);
+            - logger.log:
+                tag: hapanel.accueil
+                level: INFO
+                format: "consigne envoyee %.1f"
+                args: ["id(accueil_consigne_cible)"]
+            - delay: ${accueil_attente_confirmation}
+          else:
+            - logger.log:
+                tag: hapanel.accueil
+                level: INFO
+                format: "consigne non envoyee (commande interdite ou annulee)"
+      - if:
+          condition:
+            lambda: return !isnan(id(accueil_consigne_cible));
+          then:
+            - logger.log:
+                tag: hapanel.accueil
+                level: WARN
+                format: "consigne non confirmee : retour a la valeur reelle"
+            - globals.set:
+                id: accueil_consigne_cible
+                value: "NAN"
+            - script.execute: accueil_rafraichir
+
+  - id: accueil_envoyer_mode
+    mode: single
+    parameters:
+      mode_cible: int
+    then:
+      - if:
+          condition:
+            lambda: return id(accueil_mode_permis) && id(liaison_chauffage_mode) == 1 - mode_cible;
+          then:
+            - globals.set:
+                id: accueil_mode_cible
+                value: !lambda return mode_cible;
+            - script.execute: accueil_rafraichir
+            - homeassistant.event:
+                event: esphome.hapanel_commande
+                data:
+                  commande: chauffage_mode
+                  valeur: !lambda 'return mode_cible ? std::string("heat") : std::string("off");'
+            - logger.log:
+                tag: hapanel.accueil
+                level: INFO
+                format: "mode envoye %s"
+                args: ["mode_cible ? \"heat\" : \"off\""]
+            - delay: ${accueil_attente_confirmation}
+            - if:
+                condition:
+                  lambda: return id(accueil_mode_cible) != -1;
+                then:
+                  - logger.log:
+                      tag: hapanel.accueil
+                      level: WARN
+                      format: "mode non confirme : retour a l'etat reel"
+                  - globals.set:
+                      id: accueil_mode_cible
+                      value: "-1"
+                  - script.execute: accueil_rafraichir
+
+  # Heure de Home Assistant, en francais, 24 h ; --:-- avant synchronisation.
+  - id: accueil_heure
+    then:
+      - lambda: |-
+          auto t = id(heure_ha).now();
+          if (!t.is_valid()) {
+            lv_label_set_text(id(lbl_acc_date), "--:--");
+            return;
+          }
+          static const char *const jours[] = {"dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."};
+          static const char *const mois[] = {"janv.", "févr.", "mars", "avr.", "mai", "juin",
+                                             "juil.", "août", "sept.", "oct.", "nov.", "déc."};
+          char texte[32];
+          snprintf(texte, sizeof(texte), "%s %d %s  %02d:%02d", jours[t.day_of_week - 1],
+                   t.day_of_month, mois[t.month - 1], t.hour, t.minute);
+          lv_label_set_text(id(lbl_acc_date), texte);
+
+  # Barres Wi-Fi : 4 au-dessus de -55 dBm, aucune sans Wi-Fi.
+  - id: accueil_wifi
+    then:
+      - lambda: |-
+          int n = 0;
+          float r = id(signal_wifi).state;
+          if (wifi::global_wifi_component->is_connected() && !isnan(r))
+            n = r > -55 ? 4 : r > -65 ? 3 : r > -75 ? 2 : r > -85 ? 1 : 0;
+          lv_obj_t *barres[] = {id(obj_acc_wifi_1), id(obj_acc_wifi_2),
+                                id(obj_acc_wifi_3), id(obj_acc_wifi_4)};
+          for (int i = 0; i < 4; i++)
+            lv_obj_set_style_bg_color(barres[i], lv_color_hex(i < n ? 0xFFFFFF : 0x424242), 0);

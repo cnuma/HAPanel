@@ -21,7 +21,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 
 | Écran | Entités lues | Actions | État |
 |---|---|---|---|
-| Accueil | Température du séjour, état et consigne du chauffage (entités choisies dans le blueprint, D012) | Allumer / couper le chauffage, consigne ±0,5 °C | En définition (`docs/TODO.md`) ; prototype : clé `temperature` affichée sur « À propos » |
+| Accueil (page de démarrage) | Température du séjour ; mode, activité, consigne, préréglage et verrou du thermostat ; bornes ; heure de HA (entités choisies dans le blueprint `ecran_accueil.yaml`, D012, D014) | Allumer (appui simple) / couper (appui long) le chauffage, consigne ±0,5 °C entre les bornes (15 à 25 °C par défaut) | Implémenté (`packages/pages/accueil.yaml`, D014) ; test au banc en cours |
 | À propos (version, SHA, connexion, mémoire) | Internes | Aucune | Validé au banc le 28 octobre 2026, y compris connecté / non connecté (`packages/lvgl.yaml`) |
 
 ## Home Assistant
@@ -32,7 +32,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Version | Core 2026.9.4, Supervisor 2026.10.4, OS 18.3 (relevé le 27 octobre 2026) |
 | Intégration | ESPHome, API native chiffrée (D005) |
 | Modules | Plusieurs prévus, un seul binaire : nœud `hapanel-xxxxxx` (D012) |
-| Liaison | Valeurs poussées par le blueprint `blueprints/automation/hapanel/envoyer_valeur.yaml` (action `maj_valeur`, clé `temperature`) ; demande de renvoi par l'événement `esphome.hapanel_demande_valeurs` (D012) |
+| Liaison | Valeurs poussées par le blueprint `blueprints/automation/hapanel/ecran_accueil.yaml` (action `maj_valeur`, clés listées en D014) ; demande de renvoi par l'événement `esphome.hapanel_demande_valeurs` (D012) ; commandes par l'événement `esphome.hapanel_commande` (D014). Le blueprint générique `envoyer_valeur.yaml` reste disponible |
 
 ## Matériel de référence
 

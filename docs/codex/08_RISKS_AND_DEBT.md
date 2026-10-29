@@ -26,6 +26,7 @@ avant fusion.
 | Mise à jour OTA | Réseau local, chiffré (Noise) | Clé de chiffrement de l'API (`secrets.yaml`, D010) | `04_DEVELOPMENT_RULES.md` |
 | Actions Home Assistant autorisées pour le panneau | API native | Autorisation dans l'intégration ESPHome | Requise dès le prototype D012 pour l'événement `esphome.hapanel_demande_valeurs` |
 | Action ESPHome `maj_valeur(cle, valeur)` | API native | Clé de chiffrement de l'API | D012 : n'importe quel client muni de la clé peut changer ce qu'affiche le panneau |
+| Événement `esphome.hapanel_commande` (commande du chauffage) | API native, puis blueprint | Autorisation des actions HA du module ; le blueprint n'accepte que l'événement de son panneau, thermostat disponible et non verrouillé, consigne dans les bornes | D014 : le panneau ne peut qu'allumer, couper ou régler la consigne du thermostat choisi dans le blueprint |
 
 ## Dette technique
 

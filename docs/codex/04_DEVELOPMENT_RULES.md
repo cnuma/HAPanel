@@ -46,8 +46,12 @@ du C++ au YAML.
   l'action `maj_valeur(cle, valeur)`, poussée par un blueprint de
   `blueprints/automation/hapanel/` ; chaque clé a un garde-fou
   « indisponible », « périmée » et un effacement à la déconnexion (P3).
-- Commande : événement traité par le blueprint, uniquement si l'API est
-  connectée et l'état de départ connu (P2, P4).
+- Commande : événement `esphome.hapanel_commande` (D014) traité par le
+  blueprint, uniquement si l'API est connectée et l'état de départ connu
+  (P2, P4) ; le blueprint refait ces contrôles avant d'agir.
+- Un écran redessine ses widgets dans un seul script de rafraîchissement
+  (`accueil_rafraichir`), appelé à chaque valeur reçue, changement de
+  connexion ou péremption, qui calcule aussi les commandes autorisées.
 - Toute clé ou tout événement ajouté est documenté dans le blueprint et dans
   `00_CONTEXT.md`, dans le même lot que le firmware.
 - L'autorisation « actions Home Assistant » du panneau est activée dans

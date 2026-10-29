@@ -221,3 +221,42 @@ qui cite la précédente.
   à tort, dans le sens prudent. Le constat « client de journaux non compté
   comme connecté » du checkpoint `6567c6f` ne valait que pour les journaux
   série.
+
+## D014 — Écran d'accueil et commandes par événement
+
+- Date : 29 octobre 2026 — Statut : accepté (choix du propriétaire)
+- Contexte : spécification proposée au checkpoint `96227cf` ; trois
+  questions ouvertes tranchées par le propriétaire le 29 octobre 2026.
+- Décision :
+  - disposition : bandeau (date et heure de HA en français, 24 h, `--:--`
+    avant synchronisation ; barres Wi-Fi ; point de connexion HA), séjour en
+    grand, chauffage (mode et activité, préréglage, « Manuel » si consigne
+    libre), consigne − / + au pas de 0,5 °C, bouton Allumer / Couper, barre
+    de navigation commune (Accueil, `i` pour « À propos ») ; l'accueil est
+    la page de démarrage ;
+  - **allumer : appui simple ; couper : appui long** (1 s, libellé
+    « Maintenir : couper »), contre les frôlements d'un panneau mural ;
+  - bornes de consigne par défaut **15 à 25 °C**, entrées du blueprint,
+    resserrées aux bornes du thermostat ;
+  - blueprint dédié `blueprints/automation/hapanel/ecran_accueil.yaml`
+    (panneau, thermomètre, thermostat, bornes) ; clés `temperature`,
+    `chauffage_mode`, `chauffage_action`, `chauffage_consigne`,
+    `chauffage_prereglage`, `chauffage_verrou`, `consigne_min`,
+    `consigne_max` ;
+  - commandes : événement `esphome.hapanel_commande` (`commande` =
+    `chauffage_mode` avec `valeur` heat / off, ou `chauffage_consigne` avec
+    une valeur en °C), traduit par le blueprint en `climate.set_hvac_mode` et
+    `climate.set_temperature`.
+- Garde-fous (P2, P4), contrôlés deux fois :
+  - panneau : boutons grisés et aucun envoi si HA déconnecté, chauffage non
+    reçu ou périmé, mode inconnu, thermostat verrouillé ou bornes absentes ;
+    consigne envoyée 2 s après le dernier appui, affichée en orange jusqu'à
+    confirmation, retour à la valeur réelle après 10 s sans confirmation ;
+    même attente de 10 s pour le mode (« Envoi... ») ;
+  - blueprint : commande ignorée si elle ne vient pas de ce panneau, si le
+    thermostat n'est pas en `heat` / `off`, s'il est verrouillé ou si la
+    consigne sort des bornes ; refus inscrit au journal système de HA.
+- Conséquences : l'automatisation `temperature` du blueprint
+  `envoyer_valeur` fait doublon et est à désactiver ; une seule clé de
+  péremption par groupe (température, chauffage) ; nouvelle surface
+  (événement de commande) au registre `08`.

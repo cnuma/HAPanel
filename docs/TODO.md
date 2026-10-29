@@ -42,15 +42,16 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 
 ## P2 — Premier écran fonctionnel
 
-- [ ] Définir l'écran d'accueil avec le propriétaire. Acquis : température
-      du séjour ; allumer et couper le chauffage ; consigne au pas de
-      0,5 °C ; date, heure et signal Wi-Fi ; barre de navigation en bas,
-      « À propos » derrière un bouton. Banc : thermostat
-      `climate.entree_thermostat` (Versatile Thermostat, dans le séjour :
-      modes `heat`/`off`, 7 à 35 °C, préréglages), thermomètre
-      `sensor.sejour_cheminee_radiateur_ema_temperature` ; consigne libre
-      (le thermostat quitte alors son préréglage). Manque : bornes de la
-      consigne.
+- [x] Définir l'écran d'accueil avec le propriétaire (D014, 29 octobre
+      2026) : schéma validé, couper par appui long, bornes 15 à 25 °C.
+      Banc : thermostat `climate.entree_thermostat` (Versatile Thermostat),
+      thermomètre `sensor.sejour_cheminee_radiateur_ema_temperature`.
+- [ ] Écran d'accueil et blueprint `ecran_accueil.yaml` implémentés
+      (`feature/p2-ecran-accueil`) : test au banc (nominal, allumer,
+      couper, consigne, HA déconnecté avec et sans `esphome logs`,
+      indisponible, périmée, redémarrage), mémoire.
+- [ ] HA : désactiver l'automatisation `temperature` (blueprint
+      `envoyer_valeur`), remplacée par l'automatisation de l'accueil.
 - [x] Prototype D012 validé le 29 octobre 2026 (`96227cf`) : module
       réadopté sous `hapanel-a85bfc`, blueprint importé, température
       affichée, effacement à la déconnexion et renvoi immédiat à la
@@ -60,5 +61,5 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [ ] D013 : vérifier « non connecté » avec `esphome logs` ouvert (correctif
       flashé, non testé journaux ouverts).
 - [x] Signal Wi-Fi exposé dans Home Assistant (entité de diagnostic).
-- [ ] Commandes du panneau par événement : à concevoir avec l'écran
-      d'accueil (D012).
+- [x] Commandes du panneau par événement : `esphome.hapanel_commande`
+      (D014).

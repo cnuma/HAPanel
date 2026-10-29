@@ -1,5 +1,5 @@
-# Socle graphique LVGL et page « À propos » (version, SHA, connexion a Home
-# Assistant, memoire). Carte sans PSRAM : buffer_size explicite (G6, R2).
+# Socle graphique LVGL, barre de navigation et page « À propos » (version,
+# SHA, connexion a Home Assistant, memoire). Carte sans PSRAM : buffer_size explicite (G6, R2).
 font:
   - file: "gfonts://Roboto"
     id: police_texte
@@ -21,7 +21,10 @@ globals:
 
 lvgl:
   displays: [ecran]
-  touchscreens: [tactile]
+  touchscreens:
+    - touchscreen_id: tactile
+      # Appui long : couper le chauffage (D014).
+      long_press_time: 1000ms
   buffer_size: 25%
   bg_color: 0x000000
   text_color: 0xFFFFFF
@@ -63,13 +66,40 @@ lvgl:
             long_mode: WRAP
             width: 216
             text: "Mémoire : mesure en cours"
-        # PROTOTYPE P2 (D012) : valeur poussee par le blueprint.
-        - label:
-            id: lbl_proto_temperature
-            align: TOP_LEFT
-            x: 12
-            y: 236
-            text: "Séjour : --,- °C"
+  # Barre de navigation, commune a toutes les pages (D014).
+  top_layer:
+    widgets:
+      - obj:
+          id: obj_nav
+          align: BOTTOM_MID
+          width: 240
+          height: 44
+          radius: 0
+          border_width: 0
+          pad_all: 4
+          bg_color: 0x212121
+          scrollable: false
+          widgets:
+            - button:
+                id: btn_nav_accueil
+                align: LEFT_MID
+                width: 160
+                height: 36
+                text: "Accueil"
+                on_click:
+                  - lvgl.page.show:
+                      id: page_accueil
+                      animation: NONE
+            - button:
+                id: btn_nav_apropos
+                align: RIGHT_MID
+                width: 64
+                height: 36
+                text: "i"
+                on_click:
+                  - lvgl.page.show:
+                      id: page_apropos
+                      animation: NONE
 
 interval:
   # Connexion a Home Assistant : seul un client qui s'annonce « Home

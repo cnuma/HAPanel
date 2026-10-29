@@ -1,0 +1,166 @@
+blueprint:
+  name: HAPanel — écran d'accueil
+  description: >-
+    Alimente l'écran d'accueil d'un panneau HAPanel : température du séjour,
+    mode, activité, consigne, préréglage et verrou du thermostat, bornes de la
+    consigne. Envoi à chaque changement, toutes les 5 minutes, au démarrage
+    de Home Assistant et quand le panneau le demande (connexion). Exécute les
+    commandes du panneau (allumer, couper, consigne) seulement si elles
+    viennent de ce panneau, si le thermostat est disponible et non verrouillé
+    et si la consigne est dans les bornes. Le module doit être autorisé à
+    effectuer des actions Home Assistant (options de l'intégration ESPHome).
+    Décision D014 du dépôt cnuma/HAPanel.
+  domain: automation
+  source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/ecran_accueil.yaml
+  input:
+    panneau:
+      name: Panneau
+      description: Module HAPanel destinataire.
+      selector:
+        device:
+          filter:
+            - integration: esphome
+    thermometre:
+      name: Thermomètre
+      description: Température affichée en grand (séjour).
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+    thermostat:
+      name: Thermostat
+      description: Thermostat commandé (modes heat et off).
+      selector:
+        entity:
+          filter:
+            - domain: climate
+    consigne_min:
+      name: Consigne minimale
+      description: Le panneau ne descend pas la consigne en dessous.
+      default: 15
+      selector:
+        number:
+          min: 5
+          max: 35
+          step: 0.5
+          unit_of_measurement: "°C"
+    consigne_max:
+      name: Consigne maximale
+      description: Le panneau ne monte pas la consigne au-dessus.
+      default: 25
+      selector:
+        number:
+          min: 5
+          max: 35
+          step: 0.5
+          unit_of_measurement: "°C"
+
+mode: queued
+max: 20
+
+variables:
+  panneau: !input panneau
+  thermometre: !input thermometre
+  thermostat: !input thermostat
+  consigne_min: !input consigne_min
+  consigne_max: !input consigne_max
+  # Action ESPHome du module : esphome.<nom du noeud>_maj_valeur.
+  action_maj: "esphome.{{ device_attr(panneau, 'name') | slugify }}_maj_valeur"
+
+triggers:
+  - trigger: state
+    entity_id: !input thermometre
+  # Sans « to » : se déclenche aussi sur les changements d'attributs
+  # (consigne, activité, préréglage, verrou).
+  - trigger: state
+    entity_id: !input thermostat
+  - trigger: time_pattern
+    minutes: "/5"
+  - trigger: homeassistant
+    event: start
+  - trigger: event
+    id: demande
+    event_type: esphome.hapanel_demande_valeurs
+  - trigger: event
+    id: commande
+    event_type: esphome.hapanel_commande
+
+conditions:
+  # Une demande ou une commande ne concerne que le panneau qui l'a émise.
+  - condition: template
+    value_template: >-
+      {{ trigger.id not in ['demande', 'commande']
+         or trigger.event.data.get('device_id') == panneau }}
+
+actions:
+  - variables:
+      etat: "{{ states(thermostat) }}"
+      disponible: "{{ etat not in ['unavailable', 'unknown'] }}"
+      verrou: "{{ state_attr(thermostat, 'is_locked') == true }}"
+      # Bornes du blueprint, resserrées à celles du thermostat.
+      borne_min: >-
+        {{ [consigne_min | float, state_attr(thermostat, 'min_temp') | float(consigne_min)] | max }}
+      borne_max: >-
+        {{ [consigne_max | float, state_attr(thermostat, 'max_temp') | float(consigne_max)] | min }}
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id == 'commande' }}"
+        sequence:
+          - variables:
+              commande: "{{ trigger.event.data.get('commande', '') }}"
+              valeur: "{{ trigger.event.data.get('valeur', '') }}"
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: >-
+                      {{ commande == 'chauffage_mode' and valeur in ['heat', 'off']
+                         and etat in ['heat', 'off'] and etat != valeur and not verrou }}
+                sequence:
+                  - action: climate.set_hvac_mode
+                    target:
+                      entity_id: "{{ thermostat }}"
+                    data:
+                      hvac_mode: "{{ valeur }}"
+              - conditions:
+                  - condition: template
+                    value_template: >-
+                      {{ commande == 'chauffage_consigne' and valeur is number
+                         and etat in ['heat', 'off'] and not verrou
+                         and borne_min <= valeur | float <= borne_max }}
+                sequence:
+                  - action: climate.set_temperature
+                    target:
+                      entity_id: "{{ thermostat }}"
+                    data:
+                      temperature: "{{ valeur | float }}"
+            default:
+              - action: system_log.write
+                data:
+                  level: warning
+                  logger: hapanel.blueprint
+                  message: >-
+                    HAPanel : commande refusée ({{ commande }} {{ valeur }},
+                    thermostat {{ etat }}, verrou {{ verrou }})
+    default:
+      - repeat:
+          for_each: >-
+            {% set c = state_attr(thermostat, 'temperature') %}
+            {{ [
+              ['temperature', states(thermometre)],
+              ['chauffage_mode', etat],
+              ['chauffage_action', (state_attr(thermostat, 'hvac_action') or 'unknown')
+                                   if disponible else 'unavailable'],
+              ['chauffage_consigne', (c if c is not none else 'unknown')
+                                     if disponible else 'unavailable'],
+              ['chauffage_prereglage', (state_attr(thermostat, 'preset_mode') or 'none')
+                                       if disponible else 'unavailable'],
+              ['chauffage_verrou', ('on' if verrou else 'off') if disponible else 'unavailable'],
+              ['consigne_min', borne_min],
+              ['consigne_max', borne_max]
+            ] }}
+          sequence:
+            - action: "{{ action_maj }}"
+              data:
+                cle: "{{ repeat.item[0] }}"
+                valeur: "{{ repeat.item[1] }}"

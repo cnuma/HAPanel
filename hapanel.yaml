@@ -13,5 +13,8 @@ substitutions:
 packages:
   base: !include packages/base.yaml
   hardware: !include packages/hardware.yaml
+  # Avant lvgl : ESPHome garde l'ordre des packages pour les pages, et la
+  # premiere page est celle affichee au demarrage (accueil).
+  accueil: !include packages/pages/accueil.yaml
   lvgl: !include packages/lvgl.yaml
   liaison_ha: !include packages/liaison_ha.yaml
