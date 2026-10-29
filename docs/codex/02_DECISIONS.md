@@ -235,9 +235,11 @@ qui cite la précédente.
     de navigation commune (Accueil, `i` pour « À propos ») ; l'accueil est
     la page de démarrage ;
   - **mode par glissière à deux positions** (« Éteint » à gauche,
-    « Chauffage » à droite) : une pastille orange couvre le mode réel ; la
-    faire glisser au-delà du milieu envoie l'autre mode, un simple toucher
-    ne fait rien (protection contre les frôlements d'un panneau mural).
+    « Chauffage » à droite) : une pastille orange couvre le mode réel ;
+    glisser le doigt d'au moins un tiers de la glissière vers l'autre côté,
+    depuis n'importe quel point de la glissière, envoie l'autre mode ; un
+    simple toucher ne fait rien (protection contre les frôlements d'un
+    panneau mural).
     Choix du propriétaire au banc le 29 octobre 2026, qui remplace l'appui
     long d'abord retenu (libellé « Maintenir : couper » jugé peu clair) ;
     widget sur mesure, le curseur LVGL sautant à l'endroit touché ;

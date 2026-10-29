@@ -77,12 +77,18 @@ lvgl:
           bg_color: 0x212121
           scrollable: false
           widgets:
+            # Icones : maison (symbole LVGL de la police integree
+            # montserrat_20) et « i ».
             - button:
                 id: btn_nav_accueil
                 align: LEFT_MID
-                width: 160
+                width: 112
                 height: 36
-                text: "Accueil"
+                widgets:
+                  - label:
+                      align: CENTER
+                      text_font: montserrat_20
+                      text: ""
                 on_click:
                   - lvgl.page.show:
                       id: page_accueil
@@ -90,9 +96,13 @@ lvgl:
             - button:
                 id: btn_nav_apropos
                 align: RIGHT_MID
-                width: 64
+                width: 112
                 height: 36
-                text: "i"
+                widgets:
+                  - label:
+                      align: CENTER
+                      text_font: police_titre
+                      text: "i"
                 on_click:
                   - lvgl.page.show:
                       id: page_apropos

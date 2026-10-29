@@ -174,8 +174,12 @@ lvgl:
             y: 178
             width: 56
             height: 44
-            text_font: police_titre
-            text: "-"
+            bg_color: 0x1E88E5
+            widgets:
+              - label:
+                  align: CENTER
+                  text_font: police_titre
+                  text: "-"
             state:
               disabled: true
             on_click:
@@ -195,8 +199,12 @@ lvgl:
             y: 178
             width: 56
             height: 44
-            text_font: police_titre
-            text: "+"
+            bg_color: 0xE53935
+            widgets:
+              - label:
+                  align: CENTER
+                  text_font: police_titre
+                  text: "+"
             state:
               disabled: true
             on_click:
@@ -204,8 +212,10 @@ lvgl:
                   id: accueil_regler_consigne
                   sens: 1
         # Glissiere du chauffage (D014) : la pastille orange couvre le mode
-        # reel (Eteint a gauche, Chauffage a droite). La faire glisser au-dela
-        # du milieu envoie l'autre mode ; un simple toucher ne fait rien.
+        # reel (Eteint a gauche, Chauffage a droite). Glisser le doigt d'au
+        # moins un tiers de la glissiere vers l'autre cote, depuis n'importe
+        # quel point de la glissiere, envoie l'autre mode ; un simple toucher
+        # ne fait rien.
         - obj:
             id: obj_acc_glissiere
             align: TOP_MID
@@ -217,6 +227,39 @@ lvgl:
             pad_all: 0
             bg_color: 0x303030
             scrollable: false
+            press_lock: true
+            on_press:
+              - lambda: |-
+                  id(accueil_glisse_actif) = id(accueil_mode_permis);
+                  if (!id(accueil_glisse_actif)) return;
+                  lv_point_t p;
+                  lv_indev_get_point(lv_indev_active(), &p);
+                  id(accueil_glisse_x0) = p.x;
+                  id(accueil_glisse_depart) = lv_obj_get_x(id(obj_acc_pastille));
+            on_pressing:
+              - lambda: |-
+                  if (!id(accueil_glisse_actif)) return;
+                  lv_point_t p;
+                  lv_indev_get_point(lv_indev_active(), &p);
+                  int x = id(accueil_glisse_depart) + p.x - id(accueil_glisse_x0);
+                  lv_obj_set_x(id(obj_acc_pastille), x < 0 ? 0 : x > 108 ? 108 : x);
+            on_release:
+              - if:
+                  condition:
+                    lambda: |-
+                      if (!id(accueil_glisse_actif)) return false;
+                      id(accueil_glisse_actif) = false;
+                      return abs(lv_obj_get_x(id(obj_acc_pastille)) - id(accueil_glisse_depart)) >= 36;
+                  then:
+                    - script.execute:
+                        id: accueil_envoyer_mode
+                        mode_cible: !lambda "return id(accueil_glisse_depart) >= 54 ? 0 : 1;"
+              - script.execute: accueil_rafraichir
+            on_press_lost:
+              - globals.set:
+                  id: accueil_glisse_actif
+                  value: "false"
+              - script.execute: accueil_rafraichir
             widgets:
               - obj:
                   id: obj_acc_pastille
@@ -229,41 +272,8 @@ lvgl:
                   pad_all: 0
                   bg_color: 0xFF9800
                   hidden: true
+                  clickable: false
                   scrollable: false
-                  press_lock: true
-                  on_press:
-                    - lambda: |-
-                        id(accueil_glisse_actif) = id(accueil_mode_permis);
-                        if (!id(accueil_glisse_actif)) return;
-                        lv_point_t p;
-                        lv_indev_get_point(lv_indev_active(), &p);
-                        id(accueil_glisse_x0) = p.x;
-                        id(accueil_glisse_depart) = lv_obj_get_x(id(obj_acc_pastille));
-                  on_pressing:
-                    - lambda: |-
-                        if (!id(accueil_glisse_actif)) return;
-                        lv_point_t p;
-                        lv_indev_get_point(lv_indev_active(), &p);
-                        int x = id(accueil_glisse_depart) + p.x - id(accueil_glisse_x0);
-                        lv_obj_set_x(id(obj_acc_pastille), x < 0 ? 0 : x > 108 ? 108 : x);
-                  on_release:
-                    - if:
-                        condition:
-                          lambda: |-
-                            if (!id(accueil_glisse_actif)) return false;
-                            id(accueil_glisse_actif) = false;
-                            int cible = lv_obj_get_x(id(obj_acc_pastille)) >= 54 ? 1 : 0;
-                            return cible != id(liaison_chauffage_mode);
-                        then:
-                          - script.execute:
-                              id: accueil_envoyer_mode
-                              mode_cible: !lambda "return lv_obj_get_x(id(obj_acc_pastille)) >= 54 ? 1 : 0;"
-                    - script.execute: accueil_rafraichir
-                  on_press_lost:
-                    - globals.set:
-                        id: accueil_glisse_actif
-                        value: "false"
-                    - script.execute: accueil_rafraichir
               - label:
                   id: lbl_acc_option_eteint
                   align: CENTER
@@ -450,8 +460,10 @@ script:
                 value: "NAN"
             - script.execute: accueil_rafraichir
 
+  # mode restart : une fois l'envoi confirme (accueil_mode_cible remis a -1),
+  # une nouvelle commande est acceptee sans attendre la fin du delai.
   - id: accueil_envoyer_mode
-    mode: single
+    mode: restart
     parameters:
       mode_cible: int
     then:
