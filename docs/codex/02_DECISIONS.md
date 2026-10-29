@@ -251,6 +251,10 @@ qui cite la précédente.
     `boost`) traduite en `climate.set_preset_mode` si le thermostat
     connaît ce préréglage, est allumé et non verrouillé ; la ligne texte
     « Préréglage » disparaît ;
+  - ligne « Chauffage : … » supprimée en fonctionnement normal (redondante
+    avec la glissière, demande du propriétaire) ; elle n'apparaît, en
+    orange, que pour « non reçu », « périmé » ou « indisponible » (P3) ;
+    l'activité (chauffe / attente) n'est plus affichée ;
   - barre de navigation en icônes : maison (Material Design) et « i » ;
     boutons − en bleu et + en rouge ;
   - bornes de consigne par défaut **15 à 25 °C**, entrées du blueprint,

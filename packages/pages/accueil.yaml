@@ -172,7 +172,8 @@ lvgl:
             align: TOP_LEFT
             x: 12
             y: 102
-            text: "Chauffage : --"
+            text_color: 0xFF9800
+            text: "Chauffage : non reçu"
         # Prereglages (D014) : Manuel, Hors-gel, Eco, Confort, Boost ; le
         # prereglage reel est entoure d'orange.
         - button:
@@ -437,15 +438,13 @@ script:
 
           int ec = id(liaison_chauffage_etat);
           int mode = id(liaison_chauffage_mode);
-          int action = id(liaison_chauffage_action);
           float consigne = id(liaison_chauffage_consigne);
-          const char *ligne = "Chauffage : --";
-          if (ec == 3) ligne = "Chauffage : périmé";
-          else if (ec == 1 && mode == 0) ligne = "Chauffage : coupé";
-          else if (ec == 1 && mode == 1)
-            ligne = action == 1 ? "Chauffage : allumé · chauffe"
-                  : action == 2 ? "Chauffage : allumé · attente" : "Chauffage : allumé";
-          else if (ec == 1) ligne = "Chauffage : indisponible";
+          // Ligne vide en fonctionnement normal (le mode est lu sur la
+          // glissiere) ; seul un etat anormal s'affiche, en orange (P3).
+          const char *ligne = "";
+          if (ec == 0) ligne = "Chauffage : non reçu";
+          else if (ec == 3) ligne = "Chauffage : périmé";
+          else if (mode != 0 && mode != 1) ligne = "Chauffage : indisponible";
           lv_label_set_text(id(lbl_acc_chauffage), ligne);
 
           // Prereglage reel : indice dans l'ordre des boutons, -1 inconnu
