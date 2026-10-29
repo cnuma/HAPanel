@@ -72,14 +72,20 @@ lvgl:
             text: "Séjour : --,- °C"
 
 interval:
-  # Connexion a Home Assistant : seul un client abonne aux etats (Home
-  # Assistant, pas un simple lecteur de journaux) compte comme connecte (P2).
+  # Connexion a Home Assistant : seul un client qui s'annonce « Home
+  # Assistant » compte comme connecte (P2, D013). esphome logs s'abonne aussi
+  # aux etats : state_subscription_only ne suffit pas.
   - interval: 2s
     then:
       - if:
           condition:
-            api.connected:
-              state_subscription_only: true
+            lambda: |-
+              if (api::global_api_server == nullptr) return false;
+              for (auto &client : api::global_api_server->active_clients()) {
+                const char *nom = client->get_name();
+                if (nom != nullptr && strncmp(nom, "Home Assistant", 14) == 0) return true;
+              }
+              return false;
           then:
             - if:
                 condition:

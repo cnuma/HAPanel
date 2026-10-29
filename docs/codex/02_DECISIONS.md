@@ -203,3 +203,21 @@ qui cite la précédente.
     une pièce du produit, versionnée et testée avec le firmware ;
   - la règle « lecture par plateformes `homeassistant` » de
     `04_DEVELOPMENT_RULES.md` est remplacée.
+
+## D013 — Connexion à Home Assistant identifiée par le nom du client
+
+- Date : 28 octobre 2026 — Statut : accepté (choix du propriétaire)
+- Contexte : l'indicateur de connexion utilisait
+  `api.connected: state_subscription_only: true`. Au banc, `esphome logs`
+  (2026.10) s'abonne aussi aux états : avec les journaux ouverts, l'écran
+  restait « connecté » alors que Home Assistant était déconnecté (P2 violé).
+- Décision : seul un client API dont le nom commence par « Home Assistant »
+  (nom envoyé par Home Assistant à la connexion, par exemple
+  `Home Assistant 2026.9.4`) compte comme connecté ; courte lambda sur
+  `api::global_api_server->active_clients()` et `get_name()`.
+- Conséquences : dépend de fonctions internes d'ESPHome (R5) : une
+  évolution casserait la compilation, sans erreur silencieuse ; si Home
+  Assistant changeait de nom de client, l'écran afficherait « non connecté »
+  à tort, dans le sens prudent. Le constat « client de journaux non compté
+  comme connecté » du checkpoint `6567c6f` ne valait que pour les journaux
+  série.
