@@ -5,7 +5,7 @@ blueprint:
     mode, activité, consigne, préréglage et verrou du thermostat, bornes de la
     consigne. Envoi à chaque changement, toutes les 5 minutes, au démarrage
     de Home Assistant et quand le panneau le demande (connexion). Exécute les
-    commandes du panneau (allumer, couper, consigne) seulement si elles
+    commandes du panneau (allumer, couper, consigne, préréglage) seulement si elles
     viennent de ce panneau, si le thermostat est disponible et non verrouillé
     et si la consigne est dans les bornes. Le module doit être autorisé à
     effectuer des actions Home Assistant (options de l'intégration ESPHome).
@@ -134,6 +134,20 @@ actions:
                       entity_id: "{{ thermostat }}"
                     data:
                       temperature: "{{ valeur | float }}"
+              # Préréglage : chauffage allumé seulement, préréglage connu du
+              # thermostat.
+              - conditions:
+                  - condition: template
+                    value_template: >-
+                      {{ commande == 'chauffage_prereglage'
+                         and valeur in (state_attr(thermostat, 'preset_modes') or [])
+                         and etat == 'heat' and not verrou }}
+                sequence:
+                  - action: climate.set_preset_mode
+                    target:
+                      entity_id: "{{ thermostat }}"
+                    data:
+                      preset_mode: "{{ valeur }}"
             default:
               - action: system_log.write
                 data:

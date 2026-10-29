@@ -37,6 +37,17 @@ globals:
   - id: accueil_mode_permis
     type: bool
     initial_value: "false"
+  # Prereglage envoye en attente de confirmation, prereglage reel et
+  # autorisation : indice none, frost, eco, comfort, boost ; -1 aucun.
+  - id: accueil_prereglage_cible
+    type: int
+    initial_value: "-1"
+  - id: accueil_prereglage_actuel
+    type: int
+    initial_value: "-1"
+  - id: accueil_prereglage_permis
+    type: bool
+    initial_value: "false"
   # Glissiere : glissement en cours, point de depart du doigt et de la
   # pastille.
   - id: accueil_glisse_actif
@@ -140,38 +151,145 @@ lvgl:
             id: lbl_acc_sejour
             align: TOP_LEFT
             x: 12
-            y: 36
+            y: 32
             text: "Séjour"
+        - label:
+            id: lbl_acc_temperature_etat
+            align: TOP_RIGHT
+            x: -12
+            y: 32
+            text_color: 0xFF9800
+            text: ""
         - label:
             id: lbl_acc_temperature
             align: TOP_MID
-            y: 50
+            y: 46
             text_font: police_grande
             text: "--,- °C"
-        - label:
-            id: lbl_acc_temperature_etat
-            align: TOP_MID
-            y: 104
-            text_color: 0xFF9800
-            text: ""
         # Chauffage
         - label:
             id: lbl_acc_chauffage
             align: TOP_LEFT
             x: 12
-            y: 128
+            y: 102
             text: "Chauffage : --"
-        - label:
-            id: lbl_acc_prereglage
+        # Prereglages (D014) : Manuel, Hors-gel, Eco, Confort, Boost ; le
+        # prereglage reel est entoure d'orange.
+        - button:
+            id: btn_acc_pre_none
             align: TOP_LEFT
             x: 12
-            y: 150
-            text: "Préréglage : --"
+            y: 126
+            width: 40
+            height: 40
+            pad_all: 0
+            bg_color: 0x303030
+            border_color: 0xFF9800
+            border_width: 0
+            widgets:
+              - label:
+                  align: CENTER
+                  text_font: police_icones
+                  text: "\U000F09DE"
+            state:
+              disabled: true
+            on_click:
+              - script.execute:
+                  id: accueil_envoyer_prereglage
+                  indice: 0
+        - button:
+            id: btn_acc_pre_frost
+            align: TOP_LEFT
+            x: 56
+            y: 126
+            width: 40
+            height: 40
+            pad_all: 0
+            bg_color: 0x303030
+            border_color: 0xFF9800
+            border_width: 0
+            widgets:
+              - label:
+                  align: CENTER
+                  text_font: police_icones
+                  text: "\U000F0717"
+            state:
+              disabled: true
+            on_click:
+              - script.execute:
+                  id: accueil_envoyer_prereglage
+                  indice: 1
+        - button:
+            id: btn_acc_pre_eco
+            align: TOP_LEFT
+            x: 100
+            y: 126
+            width: 40
+            height: 40
+            pad_all: 0
+            bg_color: 0x303030
+            border_color: 0xFF9800
+            border_width: 0
+            widgets:
+              - label:
+                  align: CENTER
+                  text_font: police_icones
+                  text: "\U000F032A"
+            state:
+              disabled: true
+            on_click:
+              - script.execute:
+                  id: accueil_envoyer_prereglage
+                  indice: 2
+        - button:
+            id: btn_acc_pre_comfort
+            align: TOP_LEFT
+            x: 144
+            y: 126
+            width: 40
+            height: 40
+            pad_all: 0
+            bg_color: 0x303030
+            border_color: 0xFF9800
+            border_width: 0
+            widgets:
+              - label:
+                  align: CENTER
+                  text_font: police_icones
+                  text: "\U000F04B9"
+            state:
+              disabled: true
+            on_click:
+              - script.execute:
+                  id: accueil_envoyer_prereglage
+                  indice: 3
+        - button:
+            id: btn_acc_pre_boost
+            align: TOP_LEFT
+            x: 188
+            y: 126
+            width: 40
+            height: 40
+            pad_all: 0
+            bg_color: 0x303030
+            border_color: 0xFF9800
+            border_width: 0
+            widgets:
+              - label:
+                  align: CENTER
+                  text_font: police_icones
+                  text: "\U000F14DE"
+            state:
+              disabled: true
+            on_click:
+              - script.execute:
+                  id: accueil_envoyer_prereglage
+                  indice: 4
         - button:
             id: btn_acc_moins
             align: TOP_LEFT
             x: 12
-            y: 178
+            y: 174
             width: 56
             height: 44
             bg_color: 0x1E88E5
@@ -189,14 +307,14 @@ lvgl:
         - label:
             id: lbl_acc_consigne
             align: TOP_MID
-            y: 188
+            y: 184
             text_font: police_titre
             text: "--,- °C"
         - button:
             id: btn_acc_plus
             align: TOP_LEFT
             x: 172
-            y: 178
+            y: 174
             width: 56
             height: 44
             bg_color: 0xE53935
@@ -219,7 +337,7 @@ lvgl:
         - obj:
             id: obj_acc_glissiere
             align: TOP_MID
-            y: 230
+            y: 226
             width: 216
             height: 40
             radius: 20
@@ -301,6 +419,7 @@ script:
             // Sans Home Assistant, rien n'est en attente (P2).
             id(accueil_consigne_cible) = NAN;
             id(accueil_mode_cible) = -1;
+            id(accueil_prereglage_cible) = -1;
           }
           lv_obj_set_style_bg_color(id(obj_acc_point_ha), lv_color_hex(ha ? 0x4CAF50 : 0xF44336), 0);
 
@@ -329,16 +448,15 @@ script:
           else if (ec == 1) ligne = "Chauffage : indisponible";
           lv_label_set_text(id(lbl_acc_chauffage), ligne);
 
+          // Prereglage reel : indice dans l'ordre des boutons, -1 inconnu
+          // ou absent de la liste.
+          static const char *const prereglages[] = {"none", "frost", "eco", "comfort", "boost"};
           const std::string &p = id(liaison_chauffage_prereglage);
-          const char *nom = p.c_str();
-          if (ec != 1 || p.empty()) nom = "--";
-          else if (p == "none") nom = "Manuel";
-          else if (p == "frost") nom = "Hors-gel";
-          else if (p == "eco") nom = "Éco";
-          else if (p == "comfort") nom = "Confort";
-          else if (p == "boost") nom = "Boost";
-          snprintf(texte, sizeof(texte), "Préréglage : %s", nom);
-          lv_label_set_text(id(lbl_acc_prereglage), texte);
+          int pre = -1;
+          for (int i = 0; ec == 1 && i < 5; i++) if (p == prereglages[i]) pre = i;
+          id(accueil_prereglage_actuel) = pre;
+          if (id(accueil_prereglage_cible) != -1 && pre == id(accueil_prereglage_cible))
+            id(accueil_prereglage_cible) = -1;
 
           // Confirmation : la valeur reelle a rejoint la valeur envoyee.
           if (!isnan(id(accueil_consigne_cible)) && !isnan(consigne) &&
@@ -352,8 +470,27 @@ script:
                          !isnan(id(liaison_consigne_max)) &&
                          id(liaison_consigne_min) <= id(liaison_consigne_max);
           bool mode_ok = commun && (mode == 0 || mode == 1) && id(accueil_mode_cible) == -1;
+          // Prereglage : chauffage allume seulement (choix du proprietaire).
+          bool pre_ok = commun && mode == 1 && pre != -1 && id(accueil_prereglage_cible) == -1;
           id(accueil_consigne_permise) = cons_ok;
           id(accueil_mode_permis) = mode_ok;
+          id(accueil_prereglage_permis) = pre_ok;
+
+          // Boutons de prereglage : bord orange sur le reel, orange attenue
+          // sur celui en attente de confirmation.
+          lv_obj_t *pre_boutons[] = {id(btn_acc_pre_none), id(btn_acc_pre_frost), id(btn_acc_pre_eco),
+                                     id(btn_acc_pre_comfort), id(btn_acc_pre_boost)};
+          int pre_cible = id(accueil_prereglage_cible);
+          for (int i = 0; i < 5; i++) {
+            bool marque = pre_cible != -1 ? i == pre_cible : i == pre;
+            uint32_t couleur = pre_cible != -1 ? 0x7A4A00 : 0xFF9800;
+            lv_obj_set_style_border_width(pre_boutons[i], marque ? 3 : 0, 0);
+            lv_obj_set_style_border_color(pre_boutons[i], lv_color_hex(couleur), 0);
+            lv_obj_set_style_text_color(lv_obj_get_child(pre_boutons[i], 0),
+                                        lv_color_hex(marque ? couleur : 0xFFFFFF), 0);
+            if (pre_ok) lv_obj_remove_state(pre_boutons[i], LV_STATE_DISABLED);
+            else lv_obj_add_state(pre_boutons[i], LV_STATE_DISABLED);
+          }
 
           float affichee = !isnan(id(accueil_consigne_cible)) ? id(accueil_consigne_cible)
                          : (ec == 1 ? consigne : NAN);
@@ -496,6 +633,45 @@ script:
                       format: "mode non confirme : retour a l'etat reel"
                   - globals.set:
                       id: accueil_mode_cible
+                      value: "-1"
+                  - script.execute: accueil_rafraichir
+
+  - id: accueil_envoyer_prereglage
+    mode: restart
+    parameters:
+      indice: int
+    then:
+      - if:
+          condition:
+            lambda: return id(accueil_prereglage_permis) && indice != id(accueil_prereglage_actuel);
+          then:
+            - globals.set:
+                id: accueil_prereglage_cible
+                value: !lambda return indice;
+            - script.execute: accueil_rafraichir
+            - homeassistant.event:
+                event: esphome.hapanel_commande
+                data:
+                  commande: chauffage_prereglage
+                  valeur: !lambda |-
+                    static const char *const n[] = {"none", "frost", "eco", "comfort", "boost"};
+                    return std::string(n[indice]);
+            - logger.log:
+                tag: hapanel.accueil
+                level: INFO
+                format: "prereglage envoye %d"
+                args: ["indice"]
+            - delay: ${accueil_attente_confirmation}
+            - if:
+                condition:
+                  lambda: return id(accueil_prereglage_cible) != -1;
+                then:
+                  - logger.log:
+                      tag: hapanel.accueil
+                      level: WARN
+                      format: "prereglage non confirme : retour a l'etat reel"
+                  - globals.set:
+                      id: accueil_prereglage_cible
                       value: "-1"
                   - script.execute: accueil_rafraichir
 

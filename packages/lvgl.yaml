@@ -11,6 +11,16 @@ font:
     size: 22
     bpp: 4
     glyphsets: [GF_Latin_Core]
+  # Icones Material Design (celles de Home Assistant), glyphes limites (G6) :
+  # maison, Manuel (circle-medium), Hors-gel (snowflake), Eco (leaf),
+  # Confort (sofa), Boost (rocket-launch).
+  - file:
+      type: web
+      url: https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/fonts/materialdesignicons-webfont.ttf
+    id: police_icones
+    size: 24
+    bpp: 4
+    glyphs: ["\U000F02DC", "\U000F09DE", "\U000F0717", "\U000F032A", "\U000F04B9", "\U000F14DE"]
 
 globals:
   # Etat de connexion affiche : 0 non connecte, 1 connecte. Le libelle n'est
@@ -77,8 +87,7 @@ lvgl:
           bg_color: 0x212121
           scrollable: false
           widgets:
-            # Icones : maison (symbole LVGL de la police integree
-            # montserrat_20) et « i ».
+            # Icones : maison (Material Design) et « i ».
             - button:
                 id: btn_nav_accueil
                 align: LEFT_MID
@@ -87,8 +96,8 @@ lvgl:
                 widgets:
                   - label:
                       align: CENTER
-                      text_font: montserrat_20
-                      text: ""
+                      text_font: police_icones
+                      text: "\U000F02DC"
                 on_click:
                   - lvgl.page.show:
                       id: page_accueil

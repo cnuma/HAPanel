@@ -243,6 +243,16 @@ qui cite la précédente.
     Choix du propriétaire au banc le 29 octobre 2026, qui remplace l'appui
     long d'abord retenu (libellé « Maintenir : couper » jugé peu clair) ;
     widget sur mesure, le curseur LVGL sautant à l'endroit touché ;
+  - **préréglages en icônes** (ajout du propriétaire au banc le
+    29 octobre 2026) : Manuel, Hors-gel, Éco, Confort, Boost, icônes
+    Material Design de Home Assistant ; le préréglage réel est entouré
+    d'orange ; appui simple ; **grisés quand le chauffage est éteint** ;
+    commande `chauffage_prereglage` (`none`, `frost`, `eco`, `comfort`,
+    `boost`) traduite en `climate.set_preset_mode` si le thermostat
+    connaît ce préréglage, est allumé et non verrouillé ; la ligne texte
+    « Préréglage » disparaît ;
+  - barre de navigation en icônes : maison (Material Design) et « i » ;
+    boutons − en bleu et + en rouge ;
   - bornes de consigne par défaut **15 à 25 °C**, entrées du blueprint,
     resserrées aux bornes du thermostat ;
   - blueprint dédié `blueprints/automation/hapanel/ecran_accueil.yaml`
