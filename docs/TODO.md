@@ -47,10 +47,18 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       (remplace l'appui long après essai au banc).
       Banc : thermostat `climate.entree_thermostat` (Versatile Thermostat),
       thermomètre `sensor.sejour_cheminee_radiateur_ema_temperature`.
-- [ ] Écran d'accueil et blueprint `ecran_accueil.yaml` implémentés
-      (`feature/p2-ecran-accueil`) : test au banc (nominal, allumer,
-      couper, consigne, HA déconnecté avec et sans `esphome logs`,
-      indisponible, périmée, redémarrage), mémoire.
+- [x] Écran d'accueil et blueprint `ecran_accueil.yaml` (D014), fusionnés
+      le 30 octobre 2026 (`ef223f6`) : valeurs reçues, consigne ± avec
+      confirmation, glissière Éteint / Chauffage dans les deux sens,
+      redémarrage du panneau sans blueprint (« non reçu » jusqu'au retour
+      des valeurs) validés au banc. Mémoire ≈ 189 Ko libres, bloc 108 Ko.
+- [ ] Accueil, tests restants : préréglages (blueprint réimporté, retour
+      du propriétaire non consigné), « indisponible » (thermomètre
+      désactivé), « périmée » (automatisation désactivée 15 min sans
+      redémarrage), HA déconnecté avec `esphome logs` ouvert, centrage des
+      icônes ; puis `VERSION` 0.2.0.
+- [ ] HA : réimporter `ecran_accueil.yaml` depuis `main` (URL de
+      `source_url`), le blueprint ayant été importé depuis la branche.
 - [ ] HA : désactiver l'automatisation `temperature` (blueprint
       `envoyer_valeur`), remplacée par l'automatisation de l'accueil.
 - [x] Prototype D012 validé le 29 octobre 2026 (`96227cf`) : module
