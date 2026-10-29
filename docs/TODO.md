@@ -43,7 +43,8 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 ## P2 — Premier écran fonctionnel
 
 - [x] Définir l'écran d'accueil avec le propriétaire (D014, 29 octobre
-      2026) : schéma validé, couper par appui long, bornes 15 à 25 °C.
+      2026) : schéma validé, bornes 15 à 25 °C ; mode par glissière
+      (remplace l'appui long après essai au banc).
       Banc : thermostat `climate.entree_thermostat` (Versatile Thermostat),
       thermomètre `sensor.sejour_cheminee_radiateur_ema_temperature`.
 - [ ] Écran d'accueil et blueprint `ecran_accueil.yaml` implémentés

@@ -234,8 +234,13 @@ qui cite la précédente.
     libre), consigne − / + au pas de 0,5 °C, bouton Allumer / Couper, barre
     de navigation commune (Accueil, `i` pour « À propos ») ; l'accueil est
     la page de démarrage ;
-  - **allumer : appui simple ; couper : appui long** (1 s, libellé
-    « Maintenir : couper »), contre les frôlements d'un panneau mural ;
+  - **mode par glissière à deux positions** (« Éteint » à gauche,
+    « Chauffage » à droite) : une pastille orange couvre le mode réel ; la
+    faire glisser au-delà du milieu envoie l'autre mode, un simple toucher
+    ne fait rien (protection contre les frôlements d'un panneau mural).
+    Choix du propriétaire au banc le 29 octobre 2026, qui remplace l'appui
+    long d'abord retenu (libellé « Maintenir : couper » jugé peu clair) ;
+    widget sur mesure, le curseur LVGL sautant à l'endroit touché ;
   - bornes de consigne par défaut **15 à 25 °C**, entrées du blueprint,
     resserrées aux bornes du thermostat ;
   - blueprint dédié `blueprints/automation/hapanel/ecran_accueil.yaml`
@@ -252,7 +257,9 @@ qui cite la précédente.
     reçu ou périmé, mode inconnu, thermostat verrouillé ou bornes absentes ;
     consigne envoyée 2 s après le dernier appui, affichée en orange jusqu'à
     confirmation, retour à la valeur réelle après 10 s sans confirmation ;
-    même attente de 10 s pour le mode (« Envoi... ») ;
+    même attente de 10 s pour le mode (pastille orange atténuée du côté
+    demandé) ; pas de pastille si le mode est inconnu, pastille grise si le
+    thermostat est verrouillé ;
   - blueprint : commande ignorée si elle ne vient pas de ce panneau, si le
     thermostat n'est pas en `heat` / `off`, s'il est verrouillé ou si la
     consigne sort des bornes ; refus inscrit au journal système de HA.

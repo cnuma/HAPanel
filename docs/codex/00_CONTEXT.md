@@ -21,7 +21,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 
 | Écran | Entités lues | Actions | État |
 |---|---|---|---|
-| Accueil (page de démarrage) | Température du séjour ; mode, activité, consigne, préréglage et verrou du thermostat ; bornes ; heure de HA (entités choisies dans le blueprint `ecran_accueil.yaml`, D012, D014) | Allumer (appui simple) / couper (appui long) le chauffage, consigne ±0,5 °C entre les bornes (15 à 25 °C par défaut) | Implémenté (`packages/pages/accueil.yaml`, D014) ; test au banc en cours |
+| Accueil (page de démarrage) | Température du séjour ; mode, activité, consigne, préréglage et verrou du thermostat ; bornes ; heure de HA (entités choisies dans le blueprint `ecran_accueil.yaml`, D012, D014) | Allumer / couper le chauffage (glissière Éteint / Chauffage), consigne ±0,5 °C entre les bornes (15 à 25 °C par défaut) | Implémenté (`packages/pages/accueil.yaml`, D014) ; test au banc en cours |
 | À propos (version, SHA, connexion, mémoire) | Internes | Aucune | Validé au banc le 28 octobre 2026, y compris connecté / non connecté (`packages/lvgl.yaml`) |
 
 ## Home Assistant

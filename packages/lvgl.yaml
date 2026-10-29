@@ -21,10 +21,7 @@ globals:
 
 lvgl:
   displays: [ecran]
-  touchscreens:
-    - touchscreen_id: tactile
-      # Appui long : couper le chauffage (D014).
-      long_press_time: 1000ms
+  touchscreens: [tactile]
   buffer_size: 25%
   bg_color: 0x000000
   text_color: 0xFFFFFF

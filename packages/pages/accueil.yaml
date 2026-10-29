@@ -37,6 +37,17 @@ globals:
   - id: accueil_mode_permis
     type: bool
     initial_value: "false"
+  # Glissiere : glissement en cours, point de depart du doigt et de la
+  # pastille.
+  - id: accueil_glisse_actif
+    type: bool
+    initial_value: "false"
+  - id: accueil_glisse_x0
+    type: int
+    initial_value: "0"
+  - id: accueil_glisse_depart
+    type: int
+    initial_value: "0"
 
 time:
   - platform: homeassistant
@@ -192,33 +203,81 @@ lvgl:
               - script.execute:
                   id: accueil_regler_consigne
                   sens: 1
-        # Allumer : appui simple ; couper : appui long (D014, long_press_time
-        # dans packages/lvgl.yaml).
-        - button:
-            id: btn_acc_mode
+        # Glissiere du chauffage (D014) : la pastille orange couvre le mode
+        # reel (Eteint a gauche, Chauffage a droite). La faire glisser au-dela
+        # du milieu envoie l'autre mode ; un simple toucher ne fait rien.
+        - obj:
+            id: obj_acc_glissiere
             align: TOP_MID
             y: 230
             width: 216
             height: 40
-            text: "Chauffage : --"
-            state:
-              disabled: true
-            on_short_click:
-              - if:
-                  condition:
-                    lambda: return id(liaison_chauffage_mode) == 0;
-                  then:
-                    - script.execute:
-                        id: accueil_envoyer_mode
-                        mode_cible: 1
-            on_long_press:
-              - if:
-                  condition:
-                    lambda: return id(liaison_chauffage_mode) == 1;
-                  then:
-                    - script.execute:
-                        id: accueil_envoyer_mode
-                        mode_cible: 0
+            radius: 20
+            border_width: 0
+            pad_all: 0
+            bg_color: 0x303030
+            scrollable: false
+            widgets:
+              - obj:
+                  id: obj_acc_pastille
+                  x: 0
+                  y: 0
+                  width: 108
+                  height: 40
+                  radius: 20
+                  border_width: 0
+                  pad_all: 0
+                  bg_color: 0xFF9800
+                  hidden: true
+                  scrollable: false
+                  press_lock: true
+                  on_press:
+                    - lambda: |-
+                        id(accueil_glisse_actif) = id(accueil_mode_permis);
+                        if (!id(accueil_glisse_actif)) return;
+                        lv_point_t p;
+                        lv_indev_get_point(lv_indev_active(), &p);
+                        id(accueil_glisse_x0) = p.x;
+                        id(accueil_glisse_depart) = lv_obj_get_x(id(obj_acc_pastille));
+                  on_pressing:
+                    - lambda: |-
+                        if (!id(accueil_glisse_actif)) return;
+                        lv_point_t p;
+                        lv_indev_get_point(lv_indev_active(), &p);
+                        int x = id(accueil_glisse_depart) + p.x - id(accueil_glisse_x0);
+                        lv_obj_set_x(id(obj_acc_pastille), x < 0 ? 0 : x > 108 ? 108 : x);
+                  on_release:
+                    - if:
+                        condition:
+                          lambda: |-
+                            if (!id(accueil_glisse_actif)) return false;
+                            id(accueil_glisse_actif) = false;
+                            int cible = lv_obj_get_x(id(obj_acc_pastille)) >= 54 ? 1 : 0;
+                            return cible != id(liaison_chauffage_mode);
+                        then:
+                          - script.execute:
+                              id: accueil_envoyer_mode
+                              mode_cible: !lambda "return lv_obj_get_x(id(obj_acc_pastille)) >= 54 ? 1 : 0;"
+                    - script.execute: accueil_rafraichir
+                  on_press_lost:
+                    - globals.set:
+                        id: accueil_glisse_actif
+                        value: "false"
+                    - script.execute: accueil_rafraichir
+              - label:
+                  id: lbl_acc_option_eteint
+                  align: CENTER
+                  x: -54
+                  clickable: false
+                  text_color: 0x9E9E9E
+                  text: "Éteint"
+              - label:
+                  id: lbl_acc_option_chauffage
+                  align: CENTER
+                  x: 54
+                  clickable: false
+                  text_color: 0x9E9E9E
+                  text: "Chauffage"
 
 script:
   # Redessine l'ecran d'accueil depuis les valeurs recues et recalcule les
@@ -299,19 +358,31 @@ script:
               lv_color_hex(!isnan(id(accueil_consigne_cible)) ? 0xFF9800
                            : isnan(affichee) ? 0x9E9E9E : 0xFFFFFF), 0);
 
-          const char *bouton = "Chauffage : --";
-          if (id(accueil_mode_cible) != -1) bouton = "Envoi...";
-          else if (ec == 1 && id(liaison_chauffage_verrou) == 1) bouton = "Verrouillé";
-          else if (ec == 1 && mode == 0) bouton = "Allumer";
-          else if (ec == 1 && mode == 1) bouton = "Maintenir : couper";
-          lv_label_set_text(lv_obj_get_child(id(btn_acc_mode), 0), bouton);
-          lv_obj_set_style_text_color(lv_obj_get_child(id(btn_acc_mode), 0),
-              lv_color_hex(id(accueil_mode_cible) != -1 ? 0xFF9800 : 0xFFFFFF), 0);
+          // Glissiere : orange plein = mode reel ; orange attenue = envoi en
+          // attente ; gris = mode connu mais commande interdite (verrou) ;
+          // pas de pastille = mode inconnu (P3).
+          if (!mode_ok) id(accueil_glisse_actif) = false;
+          bool attente = id(accueil_mode_cible) != -1;
+          int pos = attente ? id(accueil_mode_cible) : (ec == 1 && (mode == 0 || mode == 1)) ? mode : -1;
+          lv_obj_t *pastille = id(obj_acc_pastille);
+          if (!id(accueil_glisse_actif)) {
+            if (pos < 0) {
+              lv_obj_add_flag(pastille, LV_OBJ_FLAG_HIDDEN);
+            } else {
+              lv_obj_remove_flag(pastille, LV_OBJ_FLAG_HIDDEN);
+              lv_obj_set_x(pastille, pos == 1 ? 108 : 0);
+            }
+          }
+          lv_obj_set_style_bg_color(pastille,
+              lv_color_hex(attente ? 0x7A4A00 : mode_ok ? 0xFF9800 : 0x616161), 0);
+          lv_obj_set_style_text_color(id(lbl_acc_option_eteint),
+              lv_color_hex(pos == 0 ? 0xFFFFFF : 0x9E9E9E), 0);
+          lv_obj_set_style_text_color(id(lbl_acc_option_chauffage),
+              lv_color_hex(pos == 1 ? 0xFFFFFF : 0x9E9E9E), 0);
 
-          lv_obj_t *boutons[] = {id(btn_acc_moins), id(btn_acc_plus), id(btn_acc_mode)};
-          bool actifs[] = {cons_ok, cons_ok, mode_ok};
-          for (int i = 0; i < 3; i++) {
-            if (actifs[i]) lv_obj_remove_state(boutons[i], LV_STATE_DISABLED);
+          lv_obj_t *boutons[] = {id(btn_acc_moins), id(btn_acc_plus)};
+          for (int i = 0; i < 2; i++) {
+            if (cons_ok) lv_obj_remove_state(boutons[i], LV_STATE_DISABLED);
             else lv_obj_add_state(boutons[i], LV_STATE_DISABLED);
           }
 
