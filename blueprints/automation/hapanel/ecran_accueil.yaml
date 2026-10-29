@@ -144,26 +144,35 @@ actions:
                     thermostat {{ etat }}, verrou {{ verrou }})
     default:
       - repeat:
-          # Le rendu doit commencer par « [ » (aucun espace ni {% set %}
-          # avant) pour que Home Assistant en fasse une liste.
-          for_each: >-
-            {{ [
-              ['temperature', states(thermometre)],
-              ['chauffage_mode', etat],
-              ['chauffage_action', (state_attr(thermostat, 'hvac_action') or 'unknown')
-                                   if disponible else 'unavailable'],
-              ['chauffage_consigne', (state_attr(thermostat, 'temperature')
-                                      if state_attr(thermostat, 'temperature') is not none
-                                      else 'unknown')
-                                     if disponible else 'unavailable'],
-              ['chauffage_prereglage', (state_attr(thermostat, 'preset_mode') or 'none')
-                                       if disponible else 'unavailable'],
-              ['chauffage_verrou', ('on' if verrou else 'off') if disponible else 'unavailable'],
-              ['consigne_min', borne_min],
-              ['consigne_max', borne_max]
-            ] }}
+          # Liste YAML : chaque valeur est rendue en texte. Un modèle qui
+          # produirait toute la liste échoue, car hvac_action est une
+          # énumération que Home Assistant ne sait pas relire dans une liste.
+          for_each:
+            - cle: temperature
+              valeur: "{{ states(thermometre) }}"
+            - cle: chauffage_mode
+              valeur: "{{ etat }}"
+            - cle: chauffage_action
+              valeur: >-
+                {{ (state_attr(thermostat, 'hvac_action') or 'unknown') | string
+                   if disponible else 'unavailable' }}
+            - cle: chauffage_consigne
+              valeur: >-
+                {{ (state_attr(thermostat, 'temperature') | string
+                    if state_attr(thermostat, 'temperature') is not none else 'unknown')
+                   if disponible else 'unavailable' }}
+            - cle: chauffage_prereglage
+              valeur: >-
+                {{ (state_attr(thermostat, 'preset_mode') or 'none') | string
+                   if disponible else 'unavailable' }}
+            - cle: chauffage_verrou
+              valeur: "{{ ('on' if verrou else 'off') if disponible else 'unavailable' }}"
+            - cle: consigne_min
+              valeur: "{{ borne_min }}"
+            - cle: consigne_max
+              valeur: "{{ borne_max }}"
           sequence:
             - action: "{{ action_maj }}"
               data:
-                cle: "{{ repeat.item[0] }}"
-                valeur: "{{ repeat.item[1] }}"
+                cle: "{{ repeat.item.cle }}"
+                valeur: "{{ repeat.item.valeur }}"
