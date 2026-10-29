@@ -87,3 +87,8 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       autres informations (alerte météo…) ; broches et nature de la LED à
       relever sur la carte réelle (`packages/hardware.yaml`, R6), jamais
       supposées.
+- [ ] Photorésistance (LDR) de face avant : baisser la luminosité du
+      rétroéclairage (déjà en PWM, `retroeclairage`) selon la lumière de la
+      pièce. Broche à relever sur la carte réelle (R6) ; seuils, courbe,
+      lissage et luminosité minimale à définir ; l'écran reste lisible et
+      réactif sans HA (P5).
