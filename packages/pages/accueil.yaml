@@ -153,11 +153,15 @@ lvgl:
             x: 12
             y: 32
             text: "Séjour"
+        # Largeur fixe : alignee a droite avec une largeur au contenu, le
+        # label cree vide s'elargissait hors de l'ecran (P3).
         - label:
             id: lbl_acc_temperature_etat
             align: TOP_RIGHT
             x: -12
             y: 32
+            width: 120
+            text_align: RIGHT
             text_color: 0xFF9800
             text: ""
         - label:
