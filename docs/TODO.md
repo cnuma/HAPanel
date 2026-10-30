@@ -82,15 +82,10 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 
 ## P3 — Idées du propriétaire (30 octobre 2026), à spécifier avant tout code
 
-- [ ] Chauffage éteint : masquer ou griser fortement les icônes de
-      préréglage et la consigne, pour alléger l'écran (P3 : la consigne
-      reste lisible ou explicitement absente, jamais trompeuse).
-- [ ] HA déconnecté : remplacer le contenu de l'accueil par un seul
-      message clair, du type « Pas de communication avec Home Assistant »,
-      au lieu des valeurs effacées et commandes grisées (retour du test du
-      30 octobre 2026). Même logique d'allègement que l'idée précédente ;
-      la barre de navigation reste utilisable (P5) et l'état de connexion
-      visible (P2).
+- [ ] Accueil allégé, spécifié (D015, 30 octobre 2026), à implémenter :
+      chauffage éteint, préréglages et consigne masqués et non réglables ;
+      HA déconnecté, bandeau + message selon la cause (« Pas de Wi-Fi » /
+      « Pas de communication avec Home Assistant ») + navigation.
 - [ ] Bouton de pied de page « Scénarios » : icône Material Design à
       choisir (par exemple `mdi:play-box-multiple` ou
       `mdi:script-text-play`), scénarios et commandes à définir.

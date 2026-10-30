@@ -283,3 +283,42 @@ qui cite la précédente.
   `envoyer_valeur` fait doublon et est à désactiver ; une seule clé de
   péremption par groupe (température, chauffage) ; nouvelle surface
   (événement de commande) au registre `08`.
+
+## D015 — Accueil allégé : chauffage éteint et HA déconnecté
+
+- Date : 30 octobre 2026 — Statut : accepté (choix du propriétaire),
+  spécifié, non implémenté
+- Contexte : idées P3 du propriétaire (30 octobre 2026) et retour du test
+  « HA déconnecté » au banc : les valeurs effacées et les commandes grisées
+  chargent l'écran sans dire clairement ce qui se passe.
+- Décision, chauffage éteint :
+  - condition : HA connecté, chauffage reçu, mode réel `off`, ou envoi de
+    `off` en attente de confirmation ;
+  - **préréglages, −, + et consigne masqués** (pas seulement grisés) ;
+    restent la température du séjour, la glissière et la navigation ;
+  - **consigne non réglable chauffage éteint** : on la règle après avoir
+    rallumé (remplace le comportement D014, où − / + restaient actifs) ;
+    le blueprint refuse aussi `chauffage_consigne` si le thermostat est
+    `off` (double contrôle, comme les préréglages) ;
+  - aucun widget restant ne change de position (la glissière reste sous
+    le doigt) ; au rallumage, tout réapparaît avec les valeurs réelles ;
+  - un état de chauffage inconnu (« non reçu », « périmé »,
+    « indisponible ») garde le comportement D014.
+- Décision, HA déconnecté (`ha_connecte_affiche` ≠ 1) :
+  - **le bandeau reste** (heure, barres Wi-Fi, point rouge) ainsi que la
+    barre de navigation (P5) ; tout le reste de l'accueil est remplacé par
+    une icône et un message centrés ;
+  - **message selon la cause** : « Pas de Wi-Fi » si le Wi-Fi n'est pas
+    connecté, sinon « Pas de communication avec Home Assistant » ;
+    icônes Material Design (`mdi:wifi-off`, `mdi:lan-disconnect`, glyphes
+    ajoutés à `police_icones`) ;
+  - affiché dès la coupure, sans temporisation (P2) ; prioritaire sur
+    l'affichage « chauffage éteint » ; au retour de HA, l'écran normal
+    revient et les valeurs arrivent par le renvoi existant (D012).
+- Garde-fous inchangés : aucune commande sans HA ni sur état inconnu (P2,
+  P4) ; les widgets masqués sont aussi désactivés.
+- Conséquences : `packages/pages/accueil.yaml` (script
+  `accueil_rafraichir`, conteneurs à masquer, message), `packages/lvgl.yaml`
+  (deux glyphes), blueprint `ecran_accueil.yaml` (refus de consigne
+  chauffage éteint) ; mémoire à mesurer (G6) ; aucun identifiant existant
+  renommé (G10).
