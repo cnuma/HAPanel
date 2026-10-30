@@ -52,11 +52,18 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       confirmation, glissière Éteint / Chauffage dans les deux sens,
       redémarrage du panneau sans blueprint (« non reçu » jusqu'au retour
       des valeurs) validés au banc. Mémoire ≈ 189 Ko libres, bloc 108 Ko.
-- [ ] Accueil, tests restants : préréglages (blueprint réimporté, retour
-      du propriétaire non consigné), « indisponible » (thermomètre
-      désactivé), « périmée » (automatisation désactivée 15 min sans
-      redémarrage), HA déconnecté avec `esphome logs` ouvert, centrage des
-      icônes ; puis `VERSION` 0.2.0.
+- [x] Accueil, tests du 30 octobre 2026 (binaire `ef223f6`) : préréglages,
+      HA déconnecté avec `esphome logs` ouvert (D013, reconnexion et renvoi
+      des valeurs en 2 s), centrage des icônes et du « − » / « + » validés
+      par le propriétaire ; `VERSION` 0.2.0.
+- [ ] Accueil, non vérifié : « indisponible » (méthode : Outils de
+      développement › États, forcer le thermomètre à `unavailable`, sans
+      toucher à Versatile Thermostat) et « périmée » (automatisation
+      désactivée 15 min sans redémarrage).
+- [ ] Anomalie du 30 octobre 2026, 18:18 : deux « mode envoye off » et une
+      « consigne envoyee 20.5 » non appliqués par HA alors que l'API était
+      connectée (le panneau est revenu à l'état réel après 10 s, comme
+      prévu). Cause à lire dans les traces de l'automatisation de l'accueil.
 - [ ] HA : réimporter `ecran_accueil.yaml` depuis `main` (URL de
       `source_url`), le blueprint ayant été importé depuis la branche.
 - [ ] HA : désactiver l'automatisation `temperature` (blueprint
@@ -67,8 +74,8 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       reconnexion (constatés par le propriétaire). Mémoire inchangée
       (≈ 197 Ko libres, bloc 108 Ko). Non testés : « indisponible »,
       « périmée ».
-- [ ] D013 : vérifier « non connecté » avec `esphome logs` ouvert (correctif
-      flashé, non testé journaux ouverts).
+- [x] D013 : « non connecté » vérifié avec `esphome logs` ouvert
+      (30 octobre 2026).
 - [x] Signal Wi-Fi exposé dans Home Assistant (entité de diagnostic).
 - [x] Commandes du panneau par événement : `esphome.hapanel_commande`
       (D014).
