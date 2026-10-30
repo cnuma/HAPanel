@@ -72,6 +72,10 @@ du C++ au YAML.
   libre avant et après chaque ajout d'écran (G6).
 - Mise à jour des widgets sur événement ; pas de rafraîchissement global
   périodique.
+- Un `label` dont le texte change et qui n'est pas aligné à gauche porte
+  une largeur fixe et un `text_align` : créé vide avec une largeur au
+  contenu, il s'élargit sans se recaler, hors de l'écran (constaté le
+  30 octobre 2026, corrigé en 0.2.1).
 
 ## Sécurité
 
