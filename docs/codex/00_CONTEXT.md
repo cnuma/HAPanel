@@ -21,7 +21,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 
 | Écran | Entités lues | Actions | État |
 |---|---|---|---|
-| Accueil (page de démarrage) | Température du séjour ; mode, activité, consigne, préréglage et verrou du thermostat ; bornes ; heure de HA (entités choisies dans le blueprint `ecran_accueil.yaml`, D012, D014) | Allumer / couper le chauffage (glissière Éteint / Chauffage), préréglage (icônes Manuel, Hors-gel, Éco, Confort, Boost, chauffage allumé), consigne ±0,5 °C entre les bornes (15 à 25 °C par défaut) | Implémenté (`packages/pages/accueil.yaml`, D014) ; validé au banc le 30 octobre 2026 : usage nominal, préréglages, redémarrage, HA déconnecté ; « indisponible » et « périmée » non vérifiés (`docs/TODO.md`) |
+| Accueil (page de démarrage) | Température du séjour ; mode, activité, consigne, préréglage et verrou du thermostat ; bornes ; heure de HA (entités choisies dans le blueprint `ecran_accueil.yaml`, D012, D014) | Allumer / couper le chauffage (glissière Éteint / Chauffage), préréglage (icônes Manuel, Hors-gel, Éco, Confort, Boost, chauffage allumé), consigne ±0,5 °C entre les bornes (15 à 25 °C par défaut) | Implémenté (`packages/pages/accueil.yaml`, D014) ; validé au banc le 30 octobre 2026 : usage nominal, préréglages, redémarrage, HA déconnecté, « indisponible » (0.2.1) ; « périmée » non vérifiée (`docs/TODO.md`) |
 | À propos (version, SHA, connexion, mémoire) | Internes | Aucune | Validé au banc le 28 octobre 2026, y compris connecté / non connecté (`packages/lvgl.yaml`) |
 
 ## Home Assistant

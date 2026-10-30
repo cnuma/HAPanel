@@ -56,10 +56,12 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       HA déconnecté avec `esphome logs` ouvert (D013, reconnexion et renvoi
       des valeurs en 2 s), centrage des icônes et du « − » / « + » validés
       par le propriétaire ; `VERSION` 0.2.0.
-- [ ] Accueil, non vérifié : « indisponible » (méthode : Outils de
-      développement › États, forcer le thermomètre à `unavailable`, sans
-      toucher à Versatile Thermostat) et « périmée » (automatisation
-      désactivée 15 min sans redémarrage).
+- [x] Accueil, « indisponible » (30 octobre 2026) : invisible en 0.2.0
+      (label aligné à droite, créé vide, élargi hors de l'écran) ; corrigé
+      en 0.2.1 (`dba8a48`, largeur fixe) et constaté à l'écran. Méthode :
+      Outils de développement › États, thermomètre forcé à `unavailable`.
+- [ ] Accueil, non vérifié : « périmée » (automatisation désactivée 15 min
+      sans redémarrage) ; même label que « indisponible », corrigé en 0.2.1.
 - [x] Anomalie du 30 octobre 2026, 18:18 : deux « mode envoye off » et une
       « consigne envoyee 20.5 » non appliqués par HA alors que l'API était
       connectée (le panneau est revenu à l'état réel après 10 s, comme
