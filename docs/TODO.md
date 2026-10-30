@@ -60,14 +60,19 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       développement › États, forcer le thermomètre à `unavailable`, sans
       toucher à Versatile Thermostat) et « périmée » (automatisation
       désactivée 15 min sans redémarrage).
-- [ ] Anomalie du 30 octobre 2026, 18:18 : deux « mode envoye off » et une
+- [x] Anomalie du 30 octobre 2026, 18:18 : deux « mode envoye off » et une
       « consigne envoyee 20.5 » non appliqués par HA alors que l'API était
       connectée (le panneau est revenu à l'état réel après 10 s, comme
-      prévu). Cause à lire dans les traces de l'automatisation de l'accueil.
-- [ ] HA : réimporter `ecran_accueil.yaml` depuis `main` (URL de
-      `source_url`), le blueprint ayant été importé depuis la branche.
-- [ ] HA : désactiver l'automatisation `temperature` (blueprint
-      `envoyer_valeur`), remplacée par l'automatisation de l'accueil.
+      prévu). Non reproduite à 21:29 (0.2.0) : coupure et remise du
+      chauffage confirmées en moins de 130 ms. Cause probable :
+      automatisation en cours de rechargement (réimport du blueprint,
+      valeurs renvoyées à 18:17:17). À rouvrir si elle se reproduit.
+- [x] HA : blueprint `ecran_accueil.yaml` à jour (`source_url` pointe
+      sur `main` depuis sa création ; réimporté le 30 octobre 2026).
+- [x] HA : automatisation `temperature` et blueprint `envoyer_valeur`
+      supprimés de HA le 30 octobre 2026 (constaté : seul « HAPanel —
+      écran d'accueil » reste, utilisé par une automatisation). Le
+      blueprint reste dans le dépôt.
 - [x] Prototype D012 validé le 29 octobre 2026 (`96227cf`) : module
       réadopté sous `hapanel-a85bfc`, blueprint importé, température
       affichée, effacement à la déconnexion et renvoi immédiat à la
