@@ -96,6 +96,17 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       Assistant ») + navigation.
 - [ ] Blueprint D015 : réimporter dans HA et constater le refus de
       `chauffage_consigne` thermostat `off`.
+- [ ] Glissière (31 octobre 2026) : jugée peu lisible comme curseur ; le
+      propriétaire veut pouvoir toucher « Éteint » ou « Chauffage » (D014 avait
+      retenu le glissement contre les frôlements).
+- [ ] Température extérieure sur l'accueil : entité choisie dans le blueprint
+      (D012), `sensor.exterieur_temperature_humidite_temperature` au banc.
+- [ ] Icônes de préréglage en couleur : Hors-gel bleu, Éco vert, Confort
+      orange, Boost rouge, Manuel violet.
+- [ ] LED de face avant à la couleur du préréglage sélectionné (à concilier
+      avec l'idée « état du module » ci-dessous).
+- [ ] Écran éteint après un temps d'inactivité, seule la LED reste active
+      (à concilier avec P2 : connexion à HA toujours visible).
 - [ ] Bouton de pied de page « Scénarios » : icône Material Design à
       choisir (par exemple `mdi:play-box-multiple` ou
       `mdi:script-text-play`), scénarios et commandes à définir.
