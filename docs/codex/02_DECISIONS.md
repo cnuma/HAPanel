@@ -354,7 +354,7 @@ qui cite la précédente.
 ## D017 — LED de face avant et écran éteint par inactivité
 
 - Date : 31 octobre 2026 — Statut : accepté (choix du propriétaire),
-  implémenté en 0.5.0, à valider à l'écran
+  implémenté en 0.5.0, validé au banc le 31 octobre 2026
 - Relevé au banc : LED RVB allumée à l'état bas, GPIO4 rouge, GPIO16 vert,
   GPIO17 bleu. Trois canaux à fond : violet, le vert étant dominé ; orange
   obtenu avec rouge 10 % et vert 100 %, blanc avec rouge 10 %, vert 100 %,

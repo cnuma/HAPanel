@@ -100,9 +100,11 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       sur la glissière, température extérieure
       (`sensor.exterieur_temperature_humidite_temperature` au banc, choisie
       dans le blueprint), icônes de préréglage en couleur.
-- [ ] 0.5.0 (D017), à valider à l'écran : LED à la couleur du préréglage,
-      rouge clignotant sur anomalie ; écran éteint après 60 s, premier toucher
-      sans commande.
+- [x] 0.5.0 (D017), validée par le propriétaire le 31 octobre 2026 : LED à la
+      couleur du préréglage, rouge clignotant sur anomalie ; écran éteint après
+      60 s, premier toucher sans commande.
+- [ ] LED un peu trop lumineuse (retour du 31 octobre 2026) : à adapter à
+      l'usage ; l'atténuation doit conserver les mélanges orange et blanc.
 - [ ] Bouton de pied de page « Scénarios » : icône Material Design à
       choisir (par exemple `mdi:play-box-multiple` ou
       `mdi:script-text-play`), scénarios et commandes à définir.

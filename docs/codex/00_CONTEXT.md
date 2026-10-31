@@ -21,7 +21,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 
 | Écran | Entités lues | Actions | État |
 |---|---|---|---|
-| Accueil (page de démarrage) | Températures du séjour et de l'extérieur ; mode, activité, consigne, préréglage et verrou du thermostat ; bornes ; heure de HA (entités choisies dans le blueprint `ecran_accueil.yaml`, D012, D014) | Allumer / couper le chauffage (glissière Éteint / Chauffage), préréglage (icônes Manuel, Hors-gel, Éco, Confort, Boost, chauffage allumé), consigne ±0,5 °C entre les bornes (15 à 25 °C par défaut), chauffage allumé seulement (D015) | Implémenté (`packages/pages/accueil.yaml`, D014, D015) ; validé au banc le 30 octobre 2026 : usage nominal, préréglages, redémarrage, HA déconnecté, « indisponible » (0.2.1) ; accueil allégé (0.3.0), toucher sur la glissière, température extérieure et icônes en couleur (0.4.0, D016) validés le 31 octobre 2026 ; « périmée » non vérifiée (`docs/TODO.md`) |
+| Accueil (page de démarrage) | Températures du séjour et de l'extérieur ; mode, activité, consigne, préréglage et verrou du thermostat ; bornes ; heure de HA (entités choisies dans le blueprint `ecran_accueil.yaml`, D012, D014) | Allumer / couper le chauffage (glissière Éteint / Chauffage), préréglage (icônes Manuel, Hors-gel, Éco, Confort, Boost, chauffage allumé), consigne ±0,5 °C entre les bornes (15 à 25 °C par défaut), chauffage allumé seulement (D015) | Implémenté (`packages/pages/accueil.yaml`, D014, D015) ; validé au banc le 30 octobre 2026 : usage nominal, préréglages, redémarrage, HA déconnecté, « indisponible » (0.2.1) ; accueil allégé (0.3.0), toucher sur la glissière, température extérieure et icônes en couleur (0.4.0, D016), LED et écran éteint par inactivité (0.5.0, D017) validés le 31 octobre 2026 ; « périmée » non vérifiée (`docs/TODO.md`) |
 | À propos (version, SHA, connexion, mémoire) | Internes | Aucune | Validé au banc le 28 octobre 2026, y compris connecté / non connecté (`packages/lvgl.yaml`) |
 
 ## Home Assistant
@@ -41,6 +41,8 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Carte | ESP32-2432S024C (D004) : ESP32 classique (module WROOM, double cœur), sans PSRAM |
 | Écran | 2,4", 240 × 320, contrôleur ILI9341 (confirmé au banc le 28 octobre 2026) |
 | Tactile | Capacitif CST820, bus I²C (adresse `0x15`), composant ESPHome `cst816`, lecture périodique 50 ms (D009) ; coordonnées conformes à l'écran sans calibrage |
+| LED | RVB de face avant, allumée à l'état bas : GPIO4 rouge, GPIO16 vert, GPIO17 bleu (D017) |
+| LDR | GPIO34, relevée le 31 octobre 2026, non utilisée (`docs/TODO.md`) |
 | Flash | 4 Mo (détectée au premier flash) ; ESP32 rev 3.1 |
 | Alimentation | Bloc secteur externe 1 A validé au banc ; port USB du PC insuffisant (R7) |
 | Montage mural | À définir |
