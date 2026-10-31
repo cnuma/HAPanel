@@ -105,6 +105,11 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       60 s, premier toucher sans commande.
 - [ ] LED un peu trop lumineuse (retour du 31 octobre 2026) : à adapter à
       l'usage ; l'atténuation doit conserver les mélanges orange et blanc.
+- [ ] Outillage : `hapanel.yaml` et `hapanel_banc.yaml` partagent
+      `.esphome/build/hapanel` ; chaque changement de configuration recompile
+      environ 1 500 fichiers (environ 10 min). Piste : `build_path` distinct par
+      configuration (première compilation complète, plus de disque, gain à
+      mesurer). À décider avant le prochain lot.
 - [ ] Bouton de pied de page « Scénarios » : icône Material Design à
       choisir (par exemple `mdi:play-box-multiple` ou
       `mdi:script-text-play`), scénarios et commandes à définir.
