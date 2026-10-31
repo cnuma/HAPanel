@@ -120,6 +120,13 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       `mdi:script-text-play`), scénarios et commandes à définir.
 - [ ] Icône de pied de page « Météo » : prévisions sur 3 jours, zone
       paramétrable (entité `weather.*` choisie dans un blueprint, D012).
+- [ ] Planning du chauffage en vue simplifiée (idée du 31 octobre 2026) : les
+      24 h sous forme de petits points, plus hauts sur les créneaux en marche.
+      Variante à étudier : bande de 24 segments à la couleur du préréglage, avec
+      un repère de l'heure courante. Sur un écran supplémentaire, vu la taille
+      (choix du propriétaire). Source du planning dans HA, jour affiché et accès
+      à définir ; données poussées par un blueprint (D012), planning non reçu
+      affiché comme tel (P3) ; mémoire à mesurer (G6).
 - [ ] LED de face avant, autres informations (alerte météo…), après D017.
 - [ ] Photorésistance (LDR) de face avant : baisser la luminosité du
       rétroéclairage (déjà en PWM, `retroeclairage`) selon la lumière de la
