@@ -330,7 +330,7 @@ qui cite la précédente.
 ## D016 — Glissière au toucher, température extérieure, icônes en couleur
 
 - Date : 31 octobre 2026 — Statut : accepté (choix du propriétaire),
-  implémenté en 0.4.0, à valider à l'écran ; complète D014
+  implémenté en 0.4.0, validé au banc le 31 octobre 2026 ; complète D014
 - Contexte : glissière jugée peu lisible comme curseur ; souhait d'afficher la
   température extérieure avec un capteur modifiable depuis HA ; préréglages à
   distinguer par couleur.

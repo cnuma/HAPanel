@@ -94,10 +94,10 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       consigne masqués et non réglables ; HA déconnecté, bandeau + message
       selon la cause (« Pas de Wi-Fi » / « Pas de communication avec Home
       Assistant ») + navigation.
-- [ ] Blueprint D015 : réimporter dans HA et constater le refus de
-      `chauffage_consigne` thermostat `off`.
-- [ ] 0.4.0 (D016), à valider à l'écran : toucher sur la glissière,
-      température extérieure
+- [x] Blueprint D015 : réimporté dans HA (automatisation reconfigurée) et
+      refus de `chauffage_consigne` thermostat `off` validé le 31 octobre 2026.
+- [x] 0.4.0 (D016), validée par le propriétaire le 31 octobre 2026 : toucher
+      sur la glissière, température extérieure
       (`sensor.exterieur_temperature_humidite_temperature` au banc, choisie
       dans le blueprint), icônes de préréglage en couleur.
 - [ ] 0.5.0 (D017), spécifiée : LED à la couleur du préréglage, rouge
