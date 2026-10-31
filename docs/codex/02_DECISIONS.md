@@ -371,3 +371,26 @@ qui cite la précédente.
 - Conséquence : écran éteint, la LED porte seule l'état visible (P2).
   Réveil au relâchement du doigt (`resume_on_input: false`) : LVGL en pause
   ignore le toucher.
+
+## D018 — Respiration de la LED selon la lumière de la pièce
+
+- Date : 31 octobre 2026 — Statut : demandé par le propriétaire, implémenté
+  en 0.6.0-dev, **non testé sur le panneau** ; niveaux choisis par l'agent, à
+  ajuster au banc.
+- Décision :
+  - état normal, chauffage allumé : respiration de 6 s, du plancher (20 % du
+    plafond, jamais éteinte) au plafond ; un même facteur sur les trois canaux
+    conserve les mélanges de D017 ;
+  - plafond : 25 % pièce éclairée, 5 % pièce sombre, interpolé selon la LDR
+    (0,09 à 0,20 V, moyenne sur 1 min) ; sans mesure, plafond de jour ;
+  - alerte inchangée (D017) : rouge clignotant franc à pleine intensité, qui la
+    distingue de Boost, rouge respirant et atténué ;
+  - chauffage éteint : LED éteinte, inchangé ;
+  - orange de Confort corrigé (retour du propriétaire : trop proche du vert
+    d'Éco, qui reste vert) : rouge 10 % → 30 %, vert 100 %, validé à l'œil par le propriétaire le
+    31 octobre 2026.
+- Limite : d'après le relevé du 31 octobre 2026, la LDR distingue au mieux une
+  pièce sombre d'une pièce éclairée, pas les niveaux intermédiaires. La mesure
+  n'alimente pas Home Assistant ; elle paraît dans les journaux de banc
+  (`hapanel.led`).
+- À vérifier au banc : influence du rétroéclairage et de la LED sur la LDR.

@@ -20,6 +20,8 @@ substitutions:
   pin_led_rouge: GPIO4
   pin_led_vert: GPIO16
   pin_led_bleu: GPIO17
+  # LDR, confirmee au banc le 31 octobre 2026 : la tension monte dans le noir.
+  pin_ldr: GPIO34
 
 spi:
   id: bus_spi_ecran
@@ -54,6 +56,26 @@ output:
     pin:
       number: ${pin_led_bleu}
       inverted: true
+
+sensor:
+  # Interne (pas d'entite HA) ; signal instable, moyenne sur 1 min (D018).
+  - platform: adc
+    id: ldr_tension
+    pin: ${pin_ldr}
+    attenuation: 0db
+    samples: 8
+    update_interval: 2s
+    filters:
+      - sliding_window_moving_average:
+          window_size: 30
+          send_every: 5
+          send_first_at: 1
+    on_value:
+      - logger.log:
+          tag: hapanel.led
+          level: DEBUG
+          format: "LDR %.3f V"
+          args: [x]
 
 light:
   - platform: monochromatic

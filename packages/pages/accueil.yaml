@@ -636,12 +636,13 @@ script:
           } else {
             // Manuel, Hors-gel, Eco, Confort, Boost, puis prereglage inconnu.
             static const float led_couleurs[][3] = {{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f},
-                                                    {0.10f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.10f, 1.0f, 0.20f}};
+                                                    {0.30f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.10f, 1.0f, 0.20f}};
             const float *l = led_couleurs[pre != -1 ? pre : 5];
             bool allumee = mode == 1;
-            id(sortie_led_rouge).set_level(allumee ? l[0] : 0.0f);
-            id(sortie_led_vert).set_level(allumee ? l[1] : 0.0f);
-            id(sortie_led_bleu).set_level(allumee ? l[2] : 0.0f);
+            // Appliquee avec la respiration par packages/led_veille.yaml (D018).
+            id(led_rouge) = allumee ? l[0] : 0.0f;
+            id(led_vert) = allumee ? l[1] : 0.0f;
+            id(led_bleu) = allumee ? l[2] : 0.0f;
           }
 
   # Un appui sur - ou + : consigne au pas de 0,5 °C dans les bornes, envoyee

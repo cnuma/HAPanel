@@ -3,8 +3,27 @@
 substitutions:
   # Sans toucher pendant ce delai, l'ecran s'eteint.
   veille_delai_ms: "60000"
+  # Respiration de la LED (D018) : niveaux a ajuster au banc. Plafond interpole
+  # entre piece eclairee et piece sombre selon la tension de la LDR, qui monte
+  # dans le noir. Le plancher garde l'etat visible, ecran eteint (P2).
+  led_periode_ms: "6000"
+  led_plancher: "0.20"
+  led_plafond_jour: "0.25"
+  led_plafond_nuit: "0.05"
+  ldr_tension_jour: "0.09"
+  ldr_tension_nuit: "0.20"
 
 globals:
+  # Couleur du prereglage, calculee par accueil_rafraichir ; 0 : eteinte.
+  - id: led_rouge
+    type: float
+    initial_value: "0.0f"
+  - id: led_vert
+    type: float
+    initial_value: "0.0f"
+  - id: led_bleu
+    type: float
+    initial_value: "0.0f"
   # LED en alerte : rouge clignotant (P2, P3).
   - id: led_alerte
     type: bool
@@ -57,3 +76,21 @@ interval:
           if (!id(led_alerte)) return;
           id(led_allumee) = !id(led_allumee);
           id(sortie_led_rouge).set_level(id(led_allumee) ? 1.0f : 0.0f);
+  # Meme facteur sur les trois canaux : les melanges sont conserves (D018).
+  - interval: 50ms
+    then:
+      - lambda: |-
+          if (id(led_alerte)) return;
+          // LDR sans mesure : plafond de jour, la LED reste visible (P2).
+          float plafond = ${led_plafond_jour};
+          float v = id(ldr_tension).state;
+          if (!isnan(v)) {
+            float t = (v - ${ldr_tension_jour}) / (${ldr_tension_nuit} - ${ldr_tension_jour});
+            t = t < 0.0f ? 0.0f : (t > 1.0f ? 1.0f : t);
+            plafond += t * (${led_plafond_nuit} - ${led_plafond_jour});
+          }
+          float s = 0.5f - 0.5f * cos(2.0f * M_PI * (millis() % ${led_periode_ms}) / ${led_periode_ms});
+          float k = plafond * (${led_plancher} + (1.0f - ${led_plancher}) * s * s);
+          id(sortie_led_rouge).set_level(id(led_rouge) * k);
+          id(sortie_led_vert).set_level(id(led_vert) * k);
+          id(sortie_led_bleu).set_level(id(led_bleu) * k);

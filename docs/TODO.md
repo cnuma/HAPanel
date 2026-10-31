@@ -60,7 +60,7 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       (label aligné à droite, créé vide, élargi hors de l'écran) ; corrigé
       en 0.2.1 (`dba8a48`, largeur fixe) et constaté à l'écran. Méthode :
       Outils de développement › États, thermomètre forcé à `unavailable`.
-- [ ] Accueil, non vérifié : « périmée » (automatisation désactivée 15 min
+- [ ] Accueil, non vérifié : « périmée » (automatisation désactivée 16 min
       sans redémarrage) ; même label que « indisponible », corrigé en 0.2.1.
 - [x] Anomalie du 30 octobre 2026, 18:18 : deux « mode envoye off » et une
       « consigne envoyee 20.5 » non appliqués par HA alors que l'API était
@@ -103,13 +103,18 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [x] 0.5.0 (D017), validée par le propriétaire le 31 octobre 2026 : LED à la
       couleur du préréglage, rouge clignotant sur anomalie ; écran éteint après
       60 s, premier toucher sans commande.
-- [ ] LED un peu trop lumineuse (retour du 31 octobre 2026) : à adapter à
-      l'usage ; l'atténuation doit conserver les mélanges orange et blanc.
-- [ ] Outillage : `hapanel.yaml` et `hapanel_banc.yaml` partagent
+- [ ] LED un peu trop lumineuse (retour du 31 octobre 2026) : respiration selon
+      la lumière de la pièce (D018), codée sur `feature/led-respiration`, à
+      tester au banc : pièce sombre, blanc, Boost / alerte, influence du
+      rétroéclairage sur la LDR. Validé à l'œil le 31 octobre 2026 : respiration,
+      intensité en pièce éclairée, orange de Confort (rouge 30 %) distinct du
+      vert d'Éco.
+- [ ] Outillage, reporté par le propriétaire le 31 octobre 2026 (à reprendre
+      devant le module) : `hapanel.yaml` et `hapanel_banc.yaml` partagent
       `.esphome/build/hapanel` ; chaque changement de configuration recompile
-      environ 1 500 fichiers (environ 10 min). Piste : `build_path` distinct par
-      configuration (première compilation complète, plus de disque, gain à
-      mesurer). À décider avant le prochain lot.
+      environ 1 500 fichiers (environ 10 min). Option recommandée :
+      `build_path: build/hapanel_banc` dans `hapanel_banc.yaml` (première
+      compilation complète, environ 430 Mo de plus, gain à mesurer).
 - [ ] Bouton de pied de page « Scénarios » : icône Material Design à
       choisir (par exemple `mdi:play-box-multiple` ou
       `mdi:script-text-play`), scénarios et commandes à définir.

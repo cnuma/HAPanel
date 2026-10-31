@@ -42,7 +42,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Écran | 2,4", 240 × 320, contrôleur ILI9341 (confirmé au banc le 28 octobre 2026) |
 | Tactile | Capacitif CST820, bus I²C (adresse `0x15`), composant ESPHome `cst816`, lecture périodique 50 ms (D009) ; coordonnées conformes à l'écran sans calibrage |
 | LED | RVB de face avant, allumée à l'état bas : GPIO4 rouge, GPIO16 vert, GPIO17 bleu (D017) |
-| LDR | GPIO34, relevée le 31 octobre 2026, non utilisée (`docs/TODO.md`) |
+| LDR | GPIO34, relevée le 31 octobre 2026, règle l'intensité de la LED (D018, non testé) ; pas le rétroéclairage (`docs/TODO.md`) |
 | Flash | 4 Mo (détectée au premier flash) ; ESP32 rev 3.1 |
 | Alimentation | Bloc secteur externe 1 A validé au banc ; port USB du PC insuffisant (R7) |
 | Montage mural | À définir |
