@@ -89,10 +89,13 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 
 ## P3 — Idées du propriétaire (30 octobre 2026), à spécifier avant tout code
 
-- [ ] Accueil allégé, spécifié (D015, 30 octobre 2026), à implémenter :
-      chauffage éteint, préréglages et consigne masqués et non réglables ;
-      HA déconnecté, bandeau + message selon la cause (« Pas de Wi-Fi » /
-      « Pas de communication avec Home Assistant ») + navigation.
+- [x] Accueil allégé (D015), version 0.3.0 (`a81d3bb`), validé à l'écran par
+      le propriétaire le 31 octobre 2026 : chauffage éteint, préréglages et
+      consigne masqués et non réglables ; HA déconnecté, bandeau + message
+      selon la cause (« Pas de Wi-Fi » / « Pas de communication avec Home
+      Assistant ») + navigation.
+- [ ] Blueprint D015 : réimporter dans HA et constater le refus de
+      `chauffage_consigne` thermostat `off`.
 - [ ] Bouton de pied de page « Scénarios » : icône Material Design à
       choisir (par exemple `mdi:play-box-multiple` ou
       `mdi:script-text-play`), scénarios et commandes à définir.

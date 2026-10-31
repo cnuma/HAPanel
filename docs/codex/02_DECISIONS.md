@@ -287,7 +287,7 @@ qui cite la précédente.
 ## D015 — Accueil allégé : chauffage éteint et HA déconnecté
 
 - Date : 30 octobre 2026 — Statut : accepté (choix du propriétaire),
-  spécifié, non implémenté
+  implémenté en 0.3.0, validé à l'écran le 31 octobre 2026
 - Contexte : idées P3 du propriétaire (30 octobre 2026) et retour du test
   « HA déconnecté » au banc : les valeurs effacées et les commandes grisées
   chargent l'écran sans dire clairement ce qui se passe.
