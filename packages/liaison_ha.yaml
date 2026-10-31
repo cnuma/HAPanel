@@ -2,9 +2,10 @@
 # un blueprint de Home Assistant lui pousse des valeurs par cle avec l'action
 # maj_valeur, et le panneau demande un envoi complet a chaque connexion.
 #
-# Cles de l'ecran d'accueil (D014) : temperature, chauffage_mode,
-# chauffage_action, chauffage_consigne, chauffage_prereglage,
-# chauffage_verrou, consigne_min, consigne_max. Affichage :
+# Cles de l'ecran d'accueil (D014, D016) : temperature,
+# temperature_exterieure, chauffage_mode, chauffage_action,
+# chauffage_consigne, chauffage_prereglage, chauffage_verrou, consigne_min,
+# consigne_max. Affichage :
 # packages/pages/accueil.yaml (script accueil_rafraichir).
 substitutions:
   # Sans nouvelle valeur pendant ce delai, la valeur affichee est perimee
@@ -21,6 +22,16 @@ globals:
     initial_value: "NAN"
   # Etat d'une valeur : 0 non recue, 1 valide, 2 indisponible, 3 perimee.
   - id: liaison_temperature_etat
+    type: int
+    initial_value: "0"
+  # Temperature exterieure (D016) : meme logique que la temperature.
+  - id: liaison_exterieure_ms
+    type: uint32_t
+    initial_value: "0"
+  - id: liaison_exterieure
+    type: float
+    initial_value: "NAN"
+  - id: liaison_exterieure_etat
     type: int
     initial_value: "0"
   # Chauffage : toutes les cles chauffage_* et consigne_* arrivent ensemble ;
@@ -80,6 +91,10 @@ api:
               id(liaison_temperature) = nombre ? f : NAN;
               id(liaison_temperature_etat) = nombre ? 1 : 2;
               id(liaison_temperature_ms) = nombre ? maintenant : 0;
+            } else if (strcmp(k, "temperature_exterieure") == 0) {
+              id(liaison_exterieure) = nombre ? f : NAN;
+              id(liaison_exterieure_etat) = nombre ? 1 : 2;
+              id(liaison_exterieure_ms) = nombre ? maintenant : 0;
             } else if (strcmp(k, "chauffage_mode") == 0) {
               id(liaison_chauffage_mode) = strcmp(v, "heat") == 0 ? 1 : strcmp(v, "off") == 0 ? 0 : -1;
             } else if (strcmp(k, "chauffage_action") == 0) {
@@ -125,6 +140,9 @@ script:
           id(liaison_temperature_ms) = 0;
           id(liaison_temperature) = NAN;
           id(liaison_temperature_etat) = 0;
+          id(liaison_exterieure_ms) = 0;
+          id(liaison_exterieure) = NAN;
+          id(liaison_exterieure_etat) = 0;
       - script.execute:
           id: liaison_chauffage_effacer
           etat: 0
@@ -162,6 +180,21 @@ interval:
                 tag: hapanel.liaison
                 level: WARN
                 format: "temperature perimee"
+            - script.execute: accueil_rafraichir
+      - if:
+          condition:
+            lambda: |-
+              uint32_t t = id(liaison_exterieure_ms);
+              return t != 0 && millis() - t > ${liaison_peremption_ms};
+          then:
+            - lambda: |-
+                id(liaison_exterieure_ms) = 0;
+                id(liaison_exterieure) = NAN;
+                id(liaison_exterieure_etat) = 3;
+            - logger.log:
+                tag: hapanel.liaison
+                level: WARN
+                format: "temperature exterieure perimee"
             - script.execute: accueil_rafraichir
       - if:
           condition:

@@ -326,3 +326,42 @@ qui cite la précédente.
   `off` côté blueprint confirmé par le propriétaire. L'écran HA déconnecté
   s'applique dès le démarrage (rafraîchissement à `on_boot`) et le message
   suit les changements de Wi-Fi (`on_connect`, `on_disconnect`).
+
+## D016 — Glissière au toucher, température extérieure, icônes en couleur
+
+- Date : 31 octobre 2026 — Statut : accepté (choix du propriétaire),
+  implémenté en 0.4.0, à valider à l'écran ; complète D014
+- Contexte : glissière jugée peu lisible comme curseur ; souhait d'afficher la
+  température extérieure avec un capteur modifiable depuis HA ; préréglages à
+  distinguer par couleur.
+- Décision :
+  - **glissière :** toucher le côté inactif envoie l'autre mode ; le
+    glissement reste possible. Remplace « un simple toucher ne fait rien » de
+    D014 : un frôlement peut changer le mode, risque accepté (visible et
+    réversible) ;
+  - **température extérieure :** ligne « Extérieur 12,3 °C » sous le séjour ;
+    clé `temperature_exterieure`, entrée obligatoire du blueprint
+    (`thermometre_exterieur`, D012) ; « indisponible », « périmée », « non
+    reçue » et effacement à la déconnexion (P3) ; la ligne du chauffage en
+    anomalie prend sa place ;
+  - **icônes :** Manuel violet, Hors-gel bleu, Éco vert, Confort orange, Boost
+    rouge, en permanence (grises si interdites) ; préréglage réel à bord blanc
+    épais, bord gris pendant l'attente de confirmation. Remplace le marquage
+    orange de D014.
+- Conséquence : après réimport du blueprint, l'entrée doit être renseignée
+  dans l'automatisation, sinon le panneau n'est plus alimenté (signalé par P3).
+
+## D017 — LED de face avant et écran éteint par inactivité
+
+- Date : 31 octobre 2026 — Statut : accepté (choix du propriétaire), spécifié,
+  non implémenté (0.5.0) ; broches et type de LED à relever sur la carte (R6)
+- Décision, LED :
+  - chauffage allumé, état normal : couleur du préréglage (D016) ; chauffage
+    éteint : éteinte ; préréglage inconnu : blanc ;
+  - valeurs périmées ou indisponibles, ou HA déconnecté : rouge clignotant.
+- Décision, écran :
+  - extinction après 60 s sans toucher, délai réglable à la compilation ;
+  - le premier toucher ne fait que rallumer l'écran, sans commande (P4) ;
+  - HA déconnecté : l'écran se rallume avec son message (P2).
+- Conséquence : écran éteint, la LED porte seule l'état visible (P2) ; essai
+  au banc des broches et couleurs avant le code.

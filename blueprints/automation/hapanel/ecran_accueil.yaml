@@ -1,8 +1,8 @@
 blueprint:
   name: HAPanel — écran d'accueil
   description: >-
-    Alimente l'écran d'accueil d'un panneau HAPanel : température du séjour,
-    mode, activité, consigne, préréglage et verrou du thermostat, bornes de la
+    Alimente l'écran d'accueil d'un panneau HAPanel : températures du séjour et
+    de l'extérieur, mode, activité, consigne, préréglage et verrou du thermostat, bornes de la
     consigne. Envoi à chaque changement, toutes les 5 minutes, au démarrage
     de Home Assistant et quand le panneau le demande (connexion). Exécute les
     commandes du panneau (allumer, couper, consigne, préréglage) seulement si elles
@@ -24,6 +24,13 @@ blueprint:
     thermometre:
       name: Thermomètre
       description: Température affichée en grand (séjour).
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+    thermometre_exterieur:
+      name: Thermomètre extérieur
+      description: Température extérieure affichée sous celle du séjour.
       selector:
         entity:
           filter:
@@ -62,6 +69,7 @@ max: 20
 variables:
   panneau: !input panneau
   thermometre: !input thermometre
+  thermometre_exterieur: !input thermometre_exterieur
   thermostat: !input thermostat
   consigne_min: !input consigne_min
   consigne_max: !input consigne_max
@@ -71,6 +79,8 @@ variables:
 triggers:
   - trigger: state
     entity_id: !input thermometre
+  - trigger: state
+    entity_id: !input thermometre_exterieur
   # Sans « to » : se déclenche aussi sur les changements d'attributs
   # (consigne, activité, préréglage, verrou).
   - trigger: state
@@ -166,6 +176,8 @@ actions:
           for_each:
             - cle: temperature
               valeur: "{{ states(thermometre) }}"
+            - cle: temperature_exterieure
+              valeur: "{{ states(thermometre_exterieur) }}"
             - cle: chauffage_mode
               valeur: "{{ etat }}"
             - cle: chauffage_action

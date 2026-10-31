@@ -96,26 +96,19 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       Assistant ») + navigation.
 - [ ] Blueprint D015 : réimporter dans HA et constater le refus de
       `chauffage_consigne` thermostat `off`.
-- [ ] Glissière (31 octobre 2026) : jugée peu lisible comme curseur ; le
-      propriétaire veut pouvoir toucher « Éteint » ou « Chauffage » (D014 avait
-      retenu le glissement contre les frôlements).
-- [ ] Température extérieure sur l'accueil : entité choisie dans le blueprint
-      (D012), `sensor.exterieur_temperature_humidite_temperature` au banc.
-- [ ] Icônes de préréglage en couleur : Hors-gel bleu, Éco vert, Confort
-      orange, Boost rouge, Manuel violet.
-- [ ] LED de face avant à la couleur du préréglage sélectionné (à concilier
-      avec l'idée « état du module » ci-dessous).
-- [ ] Écran éteint après un temps d'inactivité, seule la LED reste active
-      (à concilier avec P2 : connexion à HA toujours visible).
+- [ ] 0.4.0 (D016), à valider à l'écran : toucher sur la glissière,
+      température extérieure
+      (`sensor.exterieur_temperature_humidite_temperature` au banc, choisie
+      dans le blueprint), icônes de préréglage en couleur.
+- [ ] 0.5.0 (D017), spécifiée : LED à la couleur du préréglage, rouge
+      clignotant sur anomalie ; écran éteint après 60 s, premier toucher sans
+      commande. Relever d'abord broches et type de LED sur la carte.
 - [ ] Bouton de pied de page « Scénarios » : icône Material Design à
       choisir (par exemple `mdi:play-box-multiple` ou
       `mdi:script-text-play`), scénarios et commandes à définir.
 - [ ] Icône de pied de page « Météo » : prévisions sur 3 jours, zone
       paramétrable (entité `weather.*` choisie dans un blueprint, D012).
-- [ ] LED de face avant : état du module (connexion HA, anomalie) puis
-      autres informations (alerte météo…) ; broches et nature de la LED à
-      relever sur la carte réelle (`packages/hardware.yaml`, R6), jamais
-      supposées.
+- [ ] LED de face avant, autres informations (alerte météo…), après D017.
 - [ ] Photorésistance (LDR) de face avant : baisser la luminosité du
       rétroéclairage (déjà en PWM, `retroeclairage`) selon la lumière de la
       pièce. Broche à relever sur la carte réelle (R6) ; seuils, courbe,

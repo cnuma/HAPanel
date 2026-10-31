@@ -182,6 +182,15 @@ lvgl:
             y: 46
             text_font: police_grande
             text: "--,- °C"
+        # Temperature exterieure (D016), remplacee par la ligne du chauffage
+        # quand celui-ci est en anomalie.
+        - label:
+            id: lbl_acc_exterieur
+            align: TOP_LEFT
+            x: 12
+            y: 102
+            hidden: true
+            text: ""
         # Chauffage
         - label:
             id: lbl_acc_chauffage
@@ -346,11 +355,10 @@ lvgl:
               - script.execute:
                   id: accueil_regler_consigne
                   sens: 1
-        # Glissiere du chauffage (D014) : la pastille orange couvre le mode
-        # reel (Eteint a gauche, Chauffage a droite). Glisser le doigt d'au
-        # moins un tiers de la glissiere vers l'autre cote, depuis n'importe
-        # quel point de la glissiere, envoie l'autre mode ; un simple toucher
-        # ne fait rien.
+        # Glissiere du chauffage (D014, D016) : la pastille orange couvre le
+        # mode reel (Eteint a gauche, Chauffage a droite). Toucher le cote
+        # inactif, ou glisser le doigt d'au moins un tiers de la glissiere vers
+        # l'autre cote, envoie l'autre mode.
         - obj:
             id: obj_acc_glissiere
             align: TOP_MID
@@ -384,7 +392,12 @@ lvgl:
                     lambda: |-
                       if (!id(accueil_glisse_actif)) return false;
                       id(accueil_glisse_actif) = false;
-                      return abs(lv_obj_get_x(id(obj_acc_pastille)) - id(accueil_glisse_depart)) >= 36;
+                      if (abs(lv_obj_get_x(id(obj_acc_pastille)) - id(accueil_glisse_depart)) >= 36) return true;
+                      // Toucher : doigt relache du cote inactif (milieu de la
+                      // glissiere a x = 120).
+                      lv_point_t p;
+                      lv_indev_get_point(lv_indev_active(), &p);
+                      return id(accueil_glisse_depart) >= 54 ? p.x < 120 : p.x >= 120;
                   then:
                     - script.execute:
                         id: accueil_envoyer_mode
@@ -484,6 +497,19 @@ script:
           else if (mode != 0 && mode != 1) ligne = "Chauffage : indisponible";
           lv_label_set_text(id(lbl_acc_chauffage), ligne);
 
+          int ee = id(liaison_exterieure_etat);
+          if (ee == 1) {
+            snprintf(texte, sizeof(texte), "Extérieur %.1f °C", id(liaison_exterieure));
+            for (char *c = texte; *c; c++) if (*c == '.') *c = ',';
+          } else {
+            snprintf(texte, sizeof(texte), "Extérieur : %s",
+                     ee == 2 ? "indisponible" : ee == 3 ? "périmée" : "non reçue");
+          }
+          lv_label_set_text(id(lbl_acc_exterieur), texte);
+          lv_obj_set_style_text_color(id(lbl_acc_exterieur), lv_color_hex(ee == 1 ? 0xFFFFFF : 0xFF9800), 0);
+          if (ha && ligne[0] == '\0') lv_obj_remove_flag(id(lbl_acc_exterieur), LV_OBJ_FLAG_HIDDEN);
+          else lv_obj_add_flag(id(lbl_acc_exterieur), LV_OBJ_FLAG_HIDDEN);
+
           // Prereglage reel : indice dans l'ordre des boutons, -1 inconnu
           // ou absent de la liste.
           static const char *const prereglages[] = {"none", "frost", "eco", "comfort", "boost"};
@@ -516,18 +542,20 @@ script:
           id(accueil_mode_permis) = mode_ok;
           id(accueil_prereglage_permis) = pre_ok;
 
-          // Boutons de prereglage : bord orange sur le reel, orange attenue
-          // sur celui en attente de confirmation.
+          // Boutons de prereglage (D016) : chaque icone garde sa couleur (Manuel
+          // violet, Hors-gel bleu, Eco vert, Confort orange, Boost rouge), grise
+          // si interdit ; bord blanc sur le reel, gris sur celui en attente de
+          // confirmation.
+          static const uint32_t pre_couleurs[] = {0xAB47BC, 0x42A5F5, 0x66BB6A, 0xFF9800, 0xF44336};
           lv_obj_t *pre_boutons[] = {id(btn_acc_pre_none), id(btn_acc_pre_frost), id(btn_acc_pre_eco),
                                      id(btn_acc_pre_comfort), id(btn_acc_pre_boost)};
           int pre_cible = id(accueil_prereglage_cible);
           for (int i = 0; i < 5; i++) {
             bool marque = pre_cible != -1 ? i == pre_cible : i == pre;
-            uint32_t couleur = pre_cible != -1 ? 0x7A4A00 : 0xFF9800;
             lv_obj_set_style_border_width(pre_boutons[i], marque ? 3 : 0, 0);
-            lv_obj_set_style_border_color(pre_boutons[i], lv_color_hex(couleur), 0);
+            lv_obj_set_style_border_color(pre_boutons[i], lv_color_hex(pre_cible != -1 ? 0x757575 : 0xFFFFFF), 0);
             lv_obj_set_style_text_color(lv_obj_get_child(pre_boutons[i], 0),
-                                        lv_color_hex(marque ? couleur : 0xFFFFFF), 0);
+                                        lv_color_hex(pre_ok || pre_cible != -1 ? pre_couleurs[i] : 0x757575), 0);
             if (pre_ok) lv_obj_remove_state(pre_boutons[i], LV_STATE_DISABLED);
             else lv_obj_add_state(pre_boutons[i], LV_STATE_DISABLED);
           }
