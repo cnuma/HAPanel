@@ -13,14 +13,14 @@ font:
     glyphsets: [GF_Latin_Core]
   # Icones Material Design (celles de Home Assistant), glyphes limites (G6) :
   # maison, Manuel (circle-medium), Hors-gel (snowflake), Eco (leaf),
-  # Confort (sofa), Boost (rocket-launch).
+  # Confort (sofa), Boost (rocket-launch), wifi-off, lan-disconnect (D015).
   - file:
       type: web
       url: https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/fonts/materialdesignicons-webfont.ttf
     id: police_icones
     size: 24
     bpp: 4
-    glyphs: ["\U000F02DC", "\U000F09DE", "\U000F0717", "\U000F032A", "\U000F04B9", "\U000F14DE"]
+    glyphs: ["\U000F02DC", "\U000F09DE", "\U000F0717", "\U000F032A", "\U000F04B9", "\U000F14DE", "\U000F05AA", "\U000F0319"]
 
 globals:
   # Etat de connexion affiche : 0 non connecte, 1 connecte. Le libelle n'est

@@ -322,3 +322,7 @@ qui cite la précédente.
   (deux glyphes), blueprint `ecran_accueil.yaml` (refus de consigne
   chauffage éteint) ; mémoire à mesurer (G6) ; aucun identifiant existant
   renommé (G10).
+- Complément du 31 octobre 2026 : refus de `chauffage_consigne` thermostat
+  `off` côté blueprint confirmé par le propriétaire. L'écran HA déconnecté
+  s'applique dès le démarrage (rafraîchissement à `on_boot`) et le message
+  suit les changements de Wi-Fi (`on_connect`, `on_disconnect`).

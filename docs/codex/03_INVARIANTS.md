@@ -14,7 +14,7 @@ décision dans `02_DECISIONS.md`, des tests et un checkpoint.
 | G6 | **Marge mémoire :** chaque écran, widget lourd, image ou police ajouté réévalue la mémoire ; la mémoire libre et le plus grand bloc libre sont mesurés à chaque palier et consignés au checkpoint. | F15 |
 | G7 | **Artefacts vérifiés :** tout YAML, patch ou script livré est validé avec l'outil exact prévu (`esphome config`, `esphome compile`, `git apply --check`). | F16 |
 | G8 | **Noms de fichiers :** un fichier modifié ou livré conserve exactement son nom d'origine, sans suffixe ni renommage non demandé. | F11 |
-| G9 | **Aucun secret dans le dépôt :** Wi-Fi, clé de l'API, mot de passe OTA dans `secrets.yaml`, ignoré par Git. | I9 |
+| G9 | **Aucun secret dans le dépôt :** Wi-Fi et clé de l'API (qui protège aussi l'OTA, D010) dans `secrets.yaml`, ignoré par Git. | I9 |
 | G10 | **Identifiants stables :** le nom du nœud ESPHome, les `id` et les `name` des entités exposées à Home Assistant sont des contrats ; un renommage exige une décision et la mise à jour des tableaux de bord et automatisations concernés. | F5, F6 |
 
 ## Invariants propres au panneau

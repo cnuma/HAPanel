@@ -7,9 +7,10 @@ blueprint:
     de Home Assistant et quand le panneau le demande (connexion). Exécute les
     commandes du panneau (allumer, couper, consigne, préréglage) seulement si elles
     viennent de ce panneau, si le thermostat est disponible et non verrouillé
-    et si la consigne est dans les bornes. Le module doit être autorisé à
-    effectuer des actions Home Assistant (options de l'intégration ESPHome).
-    Décision D014 du dépôt cnuma/HAPanel.
+    et si la consigne est dans les bornes ; consigne et préréglage exigent un
+    chauffage allumé. Le module doit être autorisé à effectuer des actions Home
+    Assistant (options de l'intégration ESPHome). Décisions D014 et D015 du
+    dépôt cnuma/HAPanel.
   domain: automation
   source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/ecran_accueil.yaml
   input:
@@ -122,11 +123,12 @@ actions:
                       entity_id: "{{ thermostat }}"
                     data:
                       hvac_mode: "{{ valeur }}"
+              # Consigne : chauffage allumé seulement (D015).
               - conditions:
                   - condition: template
                     value_template: >-
                       {{ commande == 'chauffage_consigne' and valeur is number
-                         and etat in ['heat', 'off'] and not verrou
+                         and etat == 'heat' and not verrou
                          and borne_min <= valeur | float <= borne_max }}
                 sequence:
                   - action: climate.set_temperature

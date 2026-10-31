@@ -135,10 +135,11 @@ d'une ancienne session. Tant qu'ils ne sont pas confirmés, utiliser
 ### Cybersécurité
 
 - Le dépôt peut devenir public : aucun secret dans Git, un journal ou un
-  chat. Mots de passe Wi-Fi, clé de chiffrement de l'API et mot de passe OTA
-  vivent dans `secrets.yaml`, ignoré par Git ; `secrets.example.yaml` en
-  donne la forme sans valeur réelle.
-- API Home Assistant toujours chiffrée ; OTA toujours protégée.
+  chat. Mot de passe Wi-Fi et clé de chiffrement de l'API vivent dans
+  `secrets.yaml`, ignoré par Git ; `secrets.example.yaml` en donne la forme
+  sans valeur réelle.
+- API Home Assistant toujours chiffrée ; OTA toujours chiffrée par la clé de
+  l'API (D010).
 - Toute nouvelle surface (serveur Web, point d'accès de secours, action Home
   Assistant autorisée) est inscrite dans `docs/codex/08_RISKS_AND_DEBT.md`
   avant fusion.

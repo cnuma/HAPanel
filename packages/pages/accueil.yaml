@@ -76,8 +76,20 @@ sensor:
       - script.execute: accueil_wifi
 
 wifi:
+  on_connect:
+    # Message de l'ecran HA deconnecte : la cause change avec le Wi-Fi (D015).
+    - script.execute: accueil_rafraichir
   on_disconnect:
     - script.execute: accueil_wifi
+    - script.execute: accueil_rafraichir
+
+esphome:
+  # Sans HA au demarrage, aucun changement de connexion n'appelle le
+  # rafraichissement : l'ecran D015 s'affiche ici.
+  on_boot:
+    priority: -100
+    then:
+      - script.execute: accueil_rafraichir
 
 lvgl:
   pages:
@@ -411,6 +423,27 @@ lvgl:
                   clickable: false
                   text_color: 0x9E9E9E
                   text: "Chauffage"
+        # HA deconnecte (D015) : icone et message selon la cause, a la place
+        # de tout ce qui suit le bandeau.
+        - label:
+            id: lbl_acc_hs_icone
+            align: TOP_MID
+            y: 118
+            width: 60
+            text_align: CENTER
+            text_font: police_icones
+            text_color: 0xF44336
+            hidden: true
+            text: ""
+        - label:
+            id: lbl_acc_hs_message
+            align: TOP_MID
+            y: 150
+            width: 216
+            long_mode: WRAP
+            text_align: CENTER
+            hidden: true
+            text: ""
 
 script:
   # Redessine l'ecran d'accueil depuis les valeurs recues et recalcule les
@@ -468,13 +501,17 @@ script:
           if (id(accueil_mode_cible) != -1 && mode == id(accueil_mode_cible))
             id(accueil_mode_cible) = -1;
 
+          // Chauffage eteint, ou coupure en attente de confirmation (D015) :
+          // consigne et prereglages masques et interdits.
+          bool eteint = ha && ec == 1 && (mode == 0 || id(accueil_mode_cible) == 0);
+
           bool commun = ha && ec == 1 && id(liaison_chauffage_verrou) == 0;
-          bool cons_ok = commun && !isnan(consigne) && !isnan(id(liaison_consigne_min)) &&
+          bool cons_ok = commun && !eteint && !isnan(consigne) && !isnan(id(liaison_consigne_min)) &&
                          !isnan(id(liaison_consigne_max)) &&
                          id(liaison_consigne_min) <= id(liaison_consigne_max);
           bool mode_ok = commun && (mode == 0 || mode == 1) && id(accueil_mode_cible) == -1;
           // Prereglage : chauffage allume seulement (choix du proprietaire).
-          bool pre_ok = commun && mode == 1 && pre != -1 && id(accueil_prereglage_cible) == -1;
+          bool pre_ok = commun && !eteint && mode == 1 && pre != -1 && id(accueil_prereglage_cible) == -1;
           id(accueil_consigne_permise) = cons_ok;
           id(accueil_mode_permis) = mode_ok;
           id(accueil_prereglage_permis) = pre_ok;
@@ -534,6 +571,32 @@ script:
           for (int i = 0; i < 2; i++) {
             if (cons_ok) lv_obj_remove_state(boutons[i], LV_STATE_DISABLED);
             else lv_obj_add_state(boutons[i], LV_STATE_DISABLED);
+          }
+
+          // Accueil allege (D015) : aucun widget ne change de position.
+          lv_obj_t *principal[] = {id(lbl_acc_sejour), id(lbl_acc_temperature_etat), id(lbl_acc_temperature),
+                                   id(lbl_acc_chauffage), id(obj_acc_glissiere)};
+          for (auto *w : principal) {
+            if (ha) lv_obj_remove_flag(w, LV_OBJ_FLAG_HIDDEN);
+            else lv_obj_add_flag(w, LV_OBJ_FLAG_HIDDEN);
+          }
+          lv_obj_t *reglages[] = {id(btn_acc_pre_none), id(btn_acc_pre_frost), id(btn_acc_pre_eco),
+                                  id(btn_acc_pre_comfort), id(btn_acc_pre_boost), id(btn_acc_moins),
+                                  id(lbl_acc_consigne), id(btn_acc_plus)};
+          for (auto *w : reglages) {
+            if (ha && !eteint) lv_obj_remove_flag(w, LV_OBJ_FLAG_HIDDEN);
+            else lv_obj_add_flag(w, LV_OBJ_FLAG_HIDDEN);
+          }
+          if (ha) {
+            lv_obj_add_flag(id(lbl_acc_hs_icone), LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(id(lbl_acc_hs_message), LV_OBJ_FLAG_HIDDEN);
+          } else {
+            bool wifi_ok = wifi::global_wifi_component->is_connected();
+            lv_label_set_text(id(lbl_acc_hs_icone), wifi_ok ? "\U000F0319" : "\U000F05AA");
+            lv_label_set_text(id(lbl_acc_hs_message),
+                              wifi_ok ? "Pas de communication avec Home Assistant" : "Pas de Wi-Fi");
+            lv_obj_remove_flag(id(lbl_acc_hs_icone), LV_OBJ_FLAG_HIDDEN);
+            lv_obj_remove_flag(id(lbl_acc_hs_message), LV_OBJ_FLAG_HIDDEN);
           }
 
   # Un appui sur - ou + : consigne au pas de 0,5 °C dans les bornes, envoyee

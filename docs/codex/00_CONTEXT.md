@@ -48,7 +48,8 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 ## Environnement de développement
 
 ESPHome en ligne de commande, version figée dans `requirements.txt`, YAML
-dans le dépôt (D005). Nœud `hapanel`, framework `esp-idf` (D008).
+dans le dépôt (D005). Nœud `hapanel-xxxxxx` (D012), framework `esp-idf`
+(D008).
 
 ## Hors périmètre
 
