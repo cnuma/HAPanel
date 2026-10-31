@@ -11,6 +11,9 @@
 # Cles de l'ecran meteo (D019) : meteo_condition, meteo_temperature et, pour
 # N de 1 a 3, meteo_jN_jour, meteo_jN_condition, meteo_jN_max, meteo_jN_min.
 # Affichage : packages/pages/meteo.yaml (script meteo_rafraichir).
+#
+# Cles de l'ecran planning (D020), pour N de 1 a 4 : plan_N_nom, plan_N_creneaux.
+# Affichage : packages/pages/planning.yaml (script planning_rafraichir).
 substitutions:
   # Sans nouvelle valeur pendant ce delai, la valeur affichee est perimee
   # (le blueprint renvoie tout toutes les 5 min).
@@ -98,6 +101,19 @@ globals:
   - id: liaison_meteo_min
     type: std::array<float, 3>
     initial_value: "{{NAN, NAN, NAN}}"
+  # Planning (D020) : peremption sur le groupe. Nom vide : non recu ; « - » :
+  # pas de calendrier. Creneaux : « h » + 24 chiffres hexadecimaux ; « ? » :
+  # indisponible.
+  - id: liaison_planning_ms
+    type: uint32_t
+    initial_value: "0"
+  - id: liaison_planning_etat
+    type: int
+    initial_value: "0"
+  - id: liaison_planning_nom
+    type: std::array<std::string, 4>
+  - id: liaison_planning_creneaux
+    type: std::array<std::string, 4>
 
 api:
   actions:
@@ -109,7 +125,7 @@ api:
         - lambda: |-
             // cle et valeur pointent dans le tampon de reception, sans zero
             // terminal : copie bornee avant toute conversion.
-            char k[24], v[24];
+            char k[24], v[32];
             snprintf(k, sizeof(k), "%.*s", (int) cle.size(), cle.c_str());
             snprintf(v, sizeof(v), "%.*s", (int) valeur.size(), valeur.c_str());
             char *fin = nullptr;
@@ -149,6 +165,28 @@ api:
               id(liaison_meteo_ms) = id(liaison_meteo_etat) == 1 ? maintenant : 0;
               ESP_LOGI("hapanel.liaison", "%s %s", k, v);
               id(meteo_rafraichir).execute();
+              return;
+            }
+            // Planning : traite a part, comme la meteo (P3).
+            if (strncmp(k, "plan_", 5) == 0) {
+              int r = k[5] - '1';
+              if (r < 0 || r > 3 || k[6] != '_') {
+                ESP_LOGW("hapanel.liaison", "cle inconnue : %s", k);
+                return;
+              }
+              if (strcmp(k + 7, "nom") == 0) {
+                id(liaison_planning_nom)[r] = v;
+              } else if (strcmp(k + 7, "creneaux") == 0) {
+                bool ok = strlen(v) == 25 && v[0] == 'h' && strspn(v + 1, "0123456789abcdefABCDEF") == 24;
+                id(liaison_planning_creneaux)[r] = ok ? v : "?";
+              } else {
+                ESP_LOGW("hapanel.liaison", "cle inconnue : %s", k);
+                return;
+              }
+              id(liaison_planning_ms) = maintenant;
+              id(liaison_planning_etat) = 1;
+              ESP_LOGI("hapanel.liaison", "%s %s", k, v);
+              id(planning_rafraichir).execute();
               return;
             }
             if (strcmp(k, "temperature") == 0) {
@@ -194,6 +232,7 @@ script:
     then:
       - script.execute: accueil_rafraichir
       - script.execute: meteo_rafraichir
+      - script.execute: planning_rafraichir
       # Demande au blueprint de renvoyer toutes les valeurs. Exige
       # l'autorisation des actions Home Assistant pour ce module (08).
       - homeassistant.event:
@@ -216,6 +255,20 @@ script:
           id: liaison_meteo_effacer
           etat: 0
       - script.execute: meteo_rafraichir
+      - script.execute:
+          id: liaison_planning_effacer
+          etat: 0
+      - script.execute: planning_rafraichir
+  # Efface le planning ; etat 0 (non recu) ou 3 (perime).
+  - id: liaison_planning_effacer
+    parameters:
+      etat: int
+    then:
+      - lambda: |-
+          id(liaison_planning_ms) = 0;
+          id(liaison_planning_etat) = etat;
+          id(liaison_planning_nom).fill("");
+          id(liaison_planning_creneaux).fill("");
   # Efface les valeurs de la meteo ; etat 0 (non recue) ou 3 (perimee).
   - id: liaison_meteo_effacer
     parameters:
@@ -307,3 +360,17 @@ interval:
                 level: WARN
                 format: "meteo perimee"
             - script.execute: meteo_rafraichir
+      - if:
+          condition:
+            lambda: |-
+              uint32_t t = id(liaison_planning_ms);
+              return t != 0 && millis() - t > ${liaison_peremption_ms};
+          then:
+            - script.execute:
+                id: liaison_planning_effacer
+                etat: 3
+            - logger.log:
+                tag: hapanel.liaison
+                level: WARN
+                format: "planning perime"
+            - script.execute: planning_rafraichir

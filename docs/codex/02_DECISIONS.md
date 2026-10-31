@@ -419,3 +419,32 @@ qui cite la précédente.
     chauffage et aux températures (D017).
 - Limite : températures affichées avec « ° » seul, dans l'unité de l'entité.
   Blueprint non exécuté dans Home Assistant à ce stade.
+
+## D020 — Écran planning d'après les calendriers de Home Assistant
+
+- Date : 1er novembre 2026 — Statut : demandé par le propriétaire, implémenté
+  sur `feature/page-planning`, **non testé sur le panneau** ; disposition
+  proposée par l'agent, à valider à l'écran.
+- Contexte : le chauffage est programmé par des calendriers HA, un par zone
+  (maison, cuisine, baignoire, douche) ; les événements commencent au quart
+  d'heure (06:15) et peuvent se chevaucher.
+- Décision :
+  - un blueprint distinct, `ecran_planning.yaml`, lit de 1 à 4 entités
+    `calendar.*` choisies à l'import ; le panneau affiche une bande de 24 h par
+    calendrier pour le jour courant, avec un repère de l'heure ; consultation
+    seule ;
+  - **précision au quart d'heure**, pas à l'heure : 06:15 à 07:30 serait faux
+    sur 24 segments. Un événement qui commence ou finit en cours de quart
+    d'heure occupe tout ce quart d'heure ;
+  - **marche ou arrêt seulement**, en orange : un calendrier ne porte ni
+    préréglage ni consigne, et la variante à la couleur du préréglage est
+    abandonnée. Le titre des événements n'est pas affiché ;
+  - clés `plan_N_nom` et `plan_N_creneaux` (N de 1 à 4). Créneaux : « h » puis
+    24 chiffres hexadécimaux ; le préfixe empêche Home Assistant de lire un
+    nombre. `maj_valeur` accepte désormais 31 caractères ;
+  - « non reçu », « périmé » (15 min) et « HA non connecté » pour la page,
+    « indisponible » par calendrier (P2, P3) ; pas d'alerte de la LED ;
+  - barre de navigation à 4 boutons de 55 px, à valider au doigt.
+- Limites : la page montre le calendrier, pas l'état réel du chauffage. Jour de
+  changement d'heure : bande calculée sur 24 h, décalée après le changement.
+  Blueprint non exécuté dans Home Assistant à ce stade.

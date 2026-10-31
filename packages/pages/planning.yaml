@@ -1,0 +1,255 @@
+# Ecran planning (D020) : creneaux du jour de 1 a 4 calendriers de chauffage,
+# une bande de 24 h par calendrier, au quart d'heure. Valeurs recues par
+# packages/liaison_ha.yaml, poussees par le blueprint
+# blueprints/automation/hapanel/ecran_planning.yaml. Aucune commande.
+substitutions:
+  # Bande : 2 pixels par quart d'heure.
+  planning_x: "24"
+
+esphome:
+  # Sans HA au demarrage, aucun changement de connexion n'appelle le
+  # rafraichissement.
+  on_boot:
+    priority: -100
+    then:
+      - script.execute: planning_rafraichir
+
+lvgl:
+  pages:
+    - id: page_planning
+      bg_color: 0x000000
+      widgets:
+        - label:
+            id: lbl_pla_titre
+            align: TOP_LEFT
+            x: 8
+            y: 6
+            text: "Aujourd'hui"
+        # Largeur fixe : voir la regle des labels alignes a droite (04).
+        - label:
+            id: lbl_pla_etat
+            align: TOP_RIGHT
+            x: -8
+            y: 6
+            width: 130
+            text_align: RIGHT
+            text_color: 0xFF9800
+            text: ""
+        - label:
+            id: lbl_pla_nom_1
+            align: TOP_LEFT
+            x: ${planning_x}
+            y: 34
+            hidden: true
+            text: ""
+        - obj:
+            id: obj_pla_bande_1
+            align: TOP_LEFT
+            x: ${planning_x}
+            y: 54
+            width: 192
+            height: 14
+            radius: 0
+            border_width: 0
+            pad_all: 0
+            bg_color: 0x303030
+            scrollable: false
+            clickable: false
+            hidden: true
+        - label:
+            id: lbl_pla_nom_2
+            align: TOP_LEFT
+            x: ${planning_x}
+            y: 84
+            hidden: true
+            text: ""
+        - obj:
+            id: obj_pla_bande_2
+            align: TOP_LEFT
+            x: ${planning_x}
+            y: 104
+            width: 192
+            height: 14
+            radius: 0
+            border_width: 0
+            pad_all: 0
+            bg_color: 0x303030
+            scrollable: false
+            clickable: false
+            hidden: true
+        - label:
+            id: lbl_pla_nom_3
+            align: TOP_LEFT
+            x: ${planning_x}
+            y: 134
+            hidden: true
+            text: ""
+        - obj:
+            id: obj_pla_bande_3
+            align: TOP_LEFT
+            x: ${planning_x}
+            y: 154
+            width: 192
+            height: 14
+            radius: 0
+            border_width: 0
+            pad_all: 0
+            bg_color: 0x303030
+            scrollable: false
+            clickable: false
+            hidden: true
+        - label:
+            id: lbl_pla_nom_4
+            align: TOP_LEFT
+            x: ${planning_x}
+            y: 184
+            hidden: true
+            text: ""
+        - obj:
+            id: obj_pla_bande_4
+            align: TOP_LEFT
+            x: ${planning_x}
+            y: 204
+            width: 192
+            height: 14
+            radius: 0
+            border_width: 0
+            pad_all: 0
+            bg_color: 0x303030
+            scrollable: false
+            clickable: false
+            hidden: true
+        # Echelle des heures, centree sur 0, 6, 12, 18 et 24 h.
+        - label:
+            align: TOP_LEFT
+            x: 9
+            y: 226
+            width: 30
+            text_align: CENTER
+            text_color: 0x9E9E9E
+            text: "0"
+        - label:
+            align: TOP_LEFT
+            x: 57
+            y: 226
+            width: 30
+            text_align: CENTER
+            text_color: 0x9E9E9E
+            text: "6"
+        - label:
+            align: TOP_LEFT
+            x: 105
+            y: 226
+            width: 30
+            text_align: CENTER
+            text_color: 0x9E9E9E
+            text: "12"
+        - label:
+            align: TOP_LEFT
+            x: 153
+            y: 226
+            width: 30
+            text_align: CENTER
+            text_color: 0x9E9E9E
+            text: "18"
+        - label:
+            align: TOP_LEFT
+            x: 201
+            y: 226
+            width: 30
+            text_align: CENTER
+            text_color: 0x9E9E9E
+            text: "24"
+        # Repere de l'heure courante, au-dessus des bandes.
+        - obj:
+            id: obj_pla_maintenant
+            align: TOP_LEFT
+            x: ${planning_x}
+            y: 50
+            width: 2
+            height: 172
+            radius: 0
+            border_width: 0
+            pad_all: 0
+            bg_color: 0xFFFFFF
+            scrollable: false
+            clickable: false
+            hidden: true
+
+script:
+  # Redessine l'ecran planning depuis les valeurs recues. Appele a chaque valeur
+  # recue, a chaque changement de connexion et a la peremption. Les segments
+  # d'une bande ne sont recrees que si ses creneaux ont change (G6).
+  - id: planning_rafraichir
+    then:
+      - lambda: |-
+          static std::string traces[4];
+          lv_obj_t *noms[] = {id(lbl_pla_nom_1), id(lbl_pla_nom_2), id(lbl_pla_nom_3), id(lbl_pla_nom_4)};
+          lv_obj_t *bandes[] = {id(obj_pla_bande_1), id(obj_pla_bande_2), id(obj_pla_bande_3), id(obj_pla_bande_4)};
+
+          // Connexion toujours visible (P2), puis etat des valeurs (P3).
+          int e = id(liaison_planning_etat);
+          lv_label_set_text(id(lbl_pla_etat),
+                            id(ha_connecte_affiche) != 1 ? "HA non connecté"
+                            : e == 3 ? "périmé" : e == 0 ? "non reçu" : "");
+
+          for (int r = 0; r < 4; r++) {
+            const std::string &nom = id(liaison_planning_nom)[r];
+            const std::string &hex = id(liaison_planning_creneaux)[r];
+            bool visible = e == 1 && !nom.empty() && nom != "-";
+            bool indispo = hex == "?";
+            char texte[48];
+            snprintf(texte, sizeof(texte), "%s%s", nom.c_str(), indispo ? " : indisponible" : "");
+            lv_label_set_text(noms[r], texte);
+            lv_obj_set_style_text_color(noms[r], lv_color_hex(indispo ? 0xFF9800 : 0xFFFFFF), 0);
+            if (visible) {
+              lv_obj_remove_flag(noms[r], LV_OBJ_FLAG_HIDDEN);
+              lv_obj_remove_flag(bandes[r], LV_OBJ_FLAG_HIDDEN);
+            } else {
+              lv_obj_add_flag(noms[r], LV_OBJ_FLAG_HIDDEN);
+              lv_obj_add_flag(bandes[r], LV_OBJ_FLAG_HIDDEN);
+            }
+            if (hex == traces[r]) continue;
+            traces[r] = hex;
+            lv_obj_clean(bandes[r]);
+            if (hex.size() != 25) continue;
+            // « h » puis 24 chiffres hexadecimaux : 4 quarts d'heure chacun.
+            int debut = -1;
+            for (int q = 0; q <= 96; q++) {
+              bool actif = false;
+              if (q < 96) {
+                char c = hex[1 + q / 4];
+                int n = c <= '9' ? c - '0' : (c | 0x20) - 'a' + 10;
+                actif = n & (8 >> (q % 4));
+              }
+              if (actif && debut < 0) debut = q;
+              if (!actif && debut >= 0) {
+                lv_obj_t *segment = lv_obj_create(bandes[r]);
+                lv_obj_remove_style_all(segment);
+                lv_obj_remove_flag(segment, LV_OBJ_FLAG_CLICKABLE);
+                lv_obj_set_pos(segment, debut * 2, 0);
+                lv_obj_set_size(segment, (q - debut) * 2, 14);
+                lv_obj_set_style_bg_color(segment, lv_color_hex(0xFF9800), 0);
+                lv_obj_set_style_bg_opa(segment, LV_OPA_COVER, 0);
+                debut = -1;
+              }
+            }
+          }
+      - script.execute: planning_heure
+
+  # Repere de l'heure de Home Assistant ; masque sans heure ni planning valide.
+  - id: planning_heure
+    then:
+      - lambda: |-
+          auto t = id(heure_ha).now();
+          if (!t.is_valid() || id(liaison_planning_etat) != 1) {
+            lv_obj_add_flag(id(obj_pla_maintenant), LV_OBJ_FLAG_HIDDEN);
+            return;
+          }
+          lv_obj_set_x(id(obj_pla_maintenant), ${planning_x} + (t.hour * 60 + t.minute) * 2 / 15);
+          lv_obj_remove_flag(id(obj_pla_maintenant), LV_OBJ_FLAG_HIDDEN);
+
+interval:
+  - interval: 60s
+    then:
+      - script.execute: planning_heure

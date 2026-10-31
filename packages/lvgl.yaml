@@ -14,14 +14,14 @@ font:
   # Icones Material Design (celles de Home Assistant), glyphes limites (G6) :
   # maison, Manuel (circle-medium), Hors-gel (snowflake), Eco (leaf),
   # Confort (sofa), Boost (rocket-launch), wifi-off, lan-disconnect (D015),
-  # meteo (weather-partly-cloudy, D019).
+  # meteo (weather-partly-cloudy, D019), planning (calendar-clock, D020).
   - file:
       type: web
       url: https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/fonts/materialdesignicons-webfont.ttf
     id: police_icones
     size: 24
     bpp: 4
-    glyphs: ["\U000F02DC", "\U000F09DE", "\U000F0717", "\U000F032A", "\U000F04B9", "\U000F14DE", "\U000F05AA", "\U000F0319", "\U000F0595"]
+    glyphs: ["\U000F02DC", "\U000F09DE", "\U000F0717", "\U000F032A", "\U000F04B9", "\U000F14DE", "\U000F05AA", "\U000F0319", "\U000F0595", "\U000F00F0"]
 
 globals:
   # Etat de connexion affiche : 0 non connecte, 1 connecte. Le libelle n'est
@@ -90,11 +90,11 @@ lvgl:
           bg_color: 0x212121
           scrollable: false
           widgets:
-            # Icones : maison, meteo (Material Design) et « i ».
+            # Icones : maison, meteo, planning (Material Design) et « i ».
             - button:
                 id: btn_nav_accueil
                 align: LEFT_MID
-                width: 74
+                width: 55
                 height: 36
                 widgets:
                   - label:
@@ -107,8 +107,9 @@ lvgl:
                       animation: NONE
             - button:
                 id: btn_nav_meteo
-                align: CENTER
-                width: 74
+                align: LEFT_MID
+                x: 59
+                width: 55
                 height: 36
                 widgets:
                   - label:
@@ -120,9 +121,24 @@ lvgl:
                       id: page_meteo
                       animation: NONE
             - button:
+                id: btn_nav_planning
+                align: LEFT_MID
+                x: 118
+                width: 55
+                height: 36
+                widgets:
+                  - label:
+                      align: CENTER
+                      text_font: police_icones
+                      text: "\U000F00F0"
+                on_click:
+                  - lvgl.page.show:
+                      id: page_planning
+                      animation: NONE
+            - button:
                 id: btn_nav_apropos
                 align: RIGHT_MID
-                width: 74
+                width: 55
                 height: 36
                 widgets:
                   - label:

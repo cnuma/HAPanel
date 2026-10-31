@@ -1,0 +1,109 @@
+blueprint:
+  name: HAPanel — écran planning
+  description: >-
+    Alimente l'écran planning d'un panneau HAPanel : créneaux du jour de 1 à 4
+    calendriers de chauffage, au quart d'heure. Envoi à chaque changement, toutes
+    les 5 minutes, au démarrage de Home Assistant et quand le panneau le demande
+    (connexion). Le module doit être autorisé à effectuer des actions Home
+    Assistant (options de l'intégration ESPHome). Décision D020 du dépôt
+    cnuma/HAPanel.
+  domain: automation
+  source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/ecran_planning.yaml
+  input:
+    panneau:
+      name: Panneau
+      description: Module HAPanel destinataire.
+      selector:
+        device:
+          filter:
+            - integration: esphome
+    calendriers:
+      name: Calendriers
+      description: De 1 à 4 calendriers affichés, dans cet ordre ; les suivants sont ignorés.
+      selector:
+        entity:
+          multiple: true
+          filter:
+            - domain: calendar
+
+mode: queued
+max: 5
+
+variables:
+  panneau: !input panneau
+  calendriers: !input calendriers
+  # Action ESPHome du module : esphome.<nom du noeud>_maj_valeur.
+  action_maj: "esphome.{{ device_attr(panneau, 'name') | slugify }}_maj_valeur"
+
+triggers:
+  - trigger: state
+    entity_id: !input calendriers
+  # Aussi le passage à minuit et les événements modifiés à l'avance, qui ne
+  # changent pas l'état du calendrier.
+  - trigger: time_pattern
+    minutes: "/5"
+  - trigger: homeassistant
+    event: start
+  - trigger: event
+    id: demande
+    event_type: esphome.hapanel_demande_valeurs
+
+conditions:
+  # Une demande ne concerne que le panneau qui l'a émise.
+  - condition: template
+    value_template: >-
+      {{ trigger.id != 'demande' or trigger.event.data.get('device_id') == panneau }}
+
+actions:
+  # Calendrier indisponible : l'action échoue, le panneau reçoit « unknown » (P3).
+  - action: calendar.get_events
+    continue_on_error: true
+    target:
+      entity_id: "{{ calendriers }}"
+    data:
+      start_date_time: "{{ today_at('00:00') }}"
+      end_date_time: "{{ today_at('00:00') + timedelta(days=1) }}"
+    response_variable: agenda
+  - repeat:
+      for_each: [0, 1, 2, 3]
+      sequence:
+        - variables:
+            i: "{{ repeat.item }}"
+            cal: "{{ calendriers[i] if i < calendriers | length else '' }}"
+            evenements: >-
+              {{ agenda[cal].events if agenda is defined and cal in agenda else none }}
+        - repeat:
+            for_each:
+              # « Chauffage » est retiré : toute la page parle de chauffage.
+              - cle: "plan_{{ i + 1 }}_nom"
+                valeur: >-
+                  {{ ((state_attr(cal, 'friendly_name') or cal)
+                      | replace('Chauffage ', ''))[:14] if cal else '-' }}
+              # « h » puis 24 chiffres hexadécimaux, 4 quarts d'heure chacun. Le
+              # préfixe garde un texte : Home Assistant lirait sinon un nombre.
+              - cle: "plan_{{ i + 1 }}_creneaux"
+                valeur: >-
+                  {%- if evenements is none -%}unknown{%- else -%}
+                  {%- set minuit = today_at('00:00') -%}
+                  {%- set r = namespace(texte='h') -%}
+                  {%- for n in range(24) -%}
+                    {%- set v = namespace(x=0) -%}
+                    {%- for b in range(4) -%}
+                      {%- set q = n * 4 + b -%}
+                      {%- set a = namespace(actif=false) -%}
+                      {%- for e in evenements -%}
+                        {%- set d = ((e.start | as_datetime | as_local) - minuit).total_seconds() / 900 -%}
+                        {%- set f = ((e.end | as_datetime | as_local) - minuit).total_seconds() / 900 -%}
+                        {%- if d < q + 1 and f > q -%}{%- set a.actif = true -%}{%- endif -%}
+                      {%- endfor -%}
+                      {%- if a.actif -%}{%- set v.x = v.x + [8, 4, 2, 1][b] -%}{%- endif -%}
+                    {%- endfor -%}
+                    {%- set r.texte = r.texte ~ '0123456789abcdef'[v.x] -%}
+                  {%- endfor -%}
+                  {{- r.texte -}}
+                  {%- endif -%}
+            sequence:
+              - action: "{{ action_maj }}"
+                data:
+                  cle: "{{ repeat.item.cle }}"
+                  valeur: "{{ repeat.item.valeur }}"

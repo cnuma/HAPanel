@@ -127,13 +127,11 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       toucher, quelle que soit la page, revenir à la page d'accueil. Aujourd'hui
       l'écran s'éteint à 60 s sur la page en cours, et reste allumé sans HA
       (D017) : le retour doit aussi fonctionner dans ce cas (P5).
-- [ ] Planning du chauffage en vue simplifiée (idée du 31 octobre 2026) : les
-      24 h sous forme de petits points, plus hauts sur les créneaux en marche.
-      Variante à étudier : bande de 24 segments à la couleur du préréglage, avec
-      un repère de l'heure courante. Sur un écran supplémentaire, vu la taille
-      (choix du propriétaire). Source du planning dans HA, jour affiché et accès
-      à définir ; données poussées par un blueprint (D012), planning non reçu
-      affiché comme tel (P3) ; mémoire à mesurer (G6).
+- [ ] Écran « Planning » (D020), codé sur `feature/page-planning`, non testé sur
+      le panneau : importer le blueprint `ecran_planning.yaml`, choisir les
+      calendriers de chauffage, vérifier les créneaux face aux calendriers de HA,
+      « non reçu », « indisponible », « périmé » et HA déconnecté, passage à
+      minuit, boutons de navigation à 55 px, mémoire (G6).
 - [ ] LED de face avant, autres informations (alerte météo…), après D017.
 - [ ] Photorésistance (LDR) de face avant : baisser la luminosité du
       rétroéclairage (déjà en PWM, `retroeclairage`) selon la lumière de la

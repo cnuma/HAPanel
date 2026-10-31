@@ -17,6 +17,7 @@ packages:
   # premiere page est celle affichee au demarrage (accueil).
   accueil: !include packages/pages/accueil.yaml
   meteo: !include packages/pages/meteo.yaml
+  planning: !include packages/pages/planning.yaml
   lvgl: !include packages/lvgl.yaml
   liaison_ha: !include packages/liaison_ha.yaml
   led_veille: !include packages/led_veille.yaml
