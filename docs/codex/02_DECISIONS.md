@@ -353,15 +353,21 @@ qui cite la précédente.
 
 ## D017 — LED de face avant et écran éteint par inactivité
 
-- Date : 31 octobre 2026 — Statut : accepté (choix du propriétaire), spécifié,
-  non implémenté (0.5.0) ; broches et type de LED à relever sur la carte (R6)
+- Date : 31 octobre 2026 — Statut : accepté (choix du propriétaire),
+  implémenté en 0.5.0, à valider à l'écran
+- Relevé au banc : LED RVB allumée à l'état bas, GPIO4 rouge, GPIO16 vert,
+  GPIO17 bleu. Trois canaux à fond : violet, le vert étant dominé ; orange
+  obtenu avec rouge 10 % et vert 100 %, blanc avec rouge 10 %, vert 100 %,
+  bleu 20 %.
 - Décision, LED :
   - chauffage allumé, état normal : couleur du préréglage (D016) ; chauffage
     éteint : éteinte ; préréglage inconnu : blanc ;
-  - valeurs périmées ou indisponibles, ou HA déconnecté : rouge clignotant.
+  - valeur non reçue, périmée ou indisponible, ou HA déconnecté : rouge
+    clignotant (seul le clignotement le distingue de Boost).
 - Décision, écran :
   - extinction après 60 s sans toucher, délai réglable à la compilation ;
   - le premier toucher ne fait que rallumer l'écran, sans commande (P4) ;
   - HA déconnecté : l'écran se rallume avec son message (P2).
-- Conséquence : écran éteint, la LED porte seule l'état visible (P2) ; essai
-  au banc des broches et couleurs avant le code.
+- Conséquence : écran éteint, la LED porte seule l'état visible (P2).
+  Réveil au relâchement du doigt (`resume_on_input: false`) : LVGL en pause
+  ignore le toucher.

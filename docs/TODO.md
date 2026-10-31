@@ -100,9 +100,9 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       sur la glissière, température extérieure
       (`sensor.exterieur_temperature_humidite_temperature` au banc, choisie
       dans le blueprint), icônes de préréglage en couleur.
-- [ ] 0.5.0 (D017), spécifiée : LED à la couleur du préréglage, rouge
-      clignotant sur anomalie ; écran éteint après 60 s, premier toucher sans
-      commande. Relever d'abord broches et type de LED sur la carte.
+- [ ] 0.5.0 (D017), à valider à l'écran : LED à la couleur du préréglage,
+      rouge clignotant sur anomalie ; écran éteint après 60 s, premier toucher
+      sans commande.
 - [ ] Bouton de pied de page « Scénarios » : icône Material Design à
       choisir (par exemple `mdi:play-box-multiple` ou
       `mdi:script-text-play`), scénarios et commandes à définir.
@@ -111,6 +111,8 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [ ] LED de face avant, autres informations (alerte météo…), après D017.
 - [ ] Photorésistance (LDR) de face avant : baisser la luminosité du
       rétroéclairage (déjà en PWM, `retroeclairage`) selon la lumière de la
-      pièce. Broche à relever sur la carte réelle (R6) ; seuils, courbe,
-      lissage et luminosité minimale à définir ; l'écran reste lisible et
-      réactif sans HA (P5).
+      pièce. Relevé le 31 octobre 2026 : GPIO34, atténuation 0 dB, 0,075 V
+      (plancher) pièce éclairée et sous torche, 0,13 à 0,26 V capteur couvert,
+      signal instable : la tension monte dans le noir et ne distingue pas les
+      niveaux de lumière courants. Seuils, courbe, lissage et luminosité
+      minimale à définir ; l'écran reste lisible et réactif sans HA (P5).

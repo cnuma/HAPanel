@@ -627,6 +627,23 @@ script:
             lv_obj_remove_flag(id(lbl_acc_hs_message), LV_OBJ_FLAG_HIDDEN);
           }
 
+          // LED (D017) : etat reel, jamais la commande en attente. Alerte :
+          // rouge clignotant, pilote par packages/led_veille.yaml.
+          id(led_alerte) = !ha || et != 1 || ee != 1 || ec != 1 || (mode != 0 && mode != 1);
+          if (id(led_alerte)) {
+            id(sortie_led_vert).set_level(0.0f);
+            id(sortie_led_bleu).set_level(0.0f);
+          } else {
+            // Manuel, Hors-gel, Eco, Confort, Boost, puis prereglage inconnu.
+            static const float led_couleurs[][3] = {{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f},
+                                                    {0.10f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.10f, 1.0f, 0.20f}};
+            const float *l = led_couleurs[pre != -1 ? pre : 5];
+            bool allumee = mode == 1;
+            id(sortie_led_rouge).set_level(allumee ? l[0] : 0.0f);
+            id(sortie_led_vert).set_level(allumee ? l[1] : 0.0f);
+            id(sortie_led_bleu).set_level(allumee ? l[2] : 0.0f);
+          }
+
   # Un appui sur - ou + : consigne au pas de 0,5 °C dans les bornes, envoyee
   # apres accueil_envoi_consigne sans nouvel appui.
   - id: accueil_regler_consigne

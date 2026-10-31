@@ -16,6 +16,10 @@ substitutions:
   pin_i2c_scl: GPIO32
   pin_tactile_int: GPIO21  # non utilisee (D009)
   pin_tactile_rst: GPIO25
+  # LED RVB allumee a l'etat bas, confirmee au banc le 31 octobre 2026 (D017).
+  pin_led_rouge: GPIO4
+  pin_led_vert: GPIO16
+  pin_led_bleu: GPIO17
 
 spi:
   id: bus_spi_ecran
@@ -35,6 +39,21 @@ output:
   - platform: ledc
     id: sortie_retroeclairage
     pin: ${pin_retroeclairage}
+  - platform: ledc
+    id: sortie_led_rouge
+    pin:
+      number: ${pin_led_rouge}
+      inverted: true
+  - platform: ledc
+    id: sortie_led_vert
+    pin:
+      number: ${pin_led_vert}
+      inverted: true
+  - platform: ledc
+    id: sortie_led_bleu
+    pin:
+      number: ${pin_led_bleu}
+      inverted: true
 
 light:
   - platform: monochromatic

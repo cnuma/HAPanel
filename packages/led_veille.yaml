@@ -1,0 +1,59 @@
+# LED de face avant et ecran eteint par inactivite (D017). La couleur de la LED
+# est calculee par accueil_rafraichir (packages/pages/accueil.yaml).
+substitutions:
+  # Sans toucher pendant ce delai, l'ecran s'eteint.
+  veille_delai_ms: "60000"
+
+globals:
+  # LED en alerte : rouge clignotant (P2, P3).
+  - id: led_alerte
+    type: bool
+    initial_value: "true"
+  - id: led_allumee
+    type: bool
+    initial_value: "false"
+
+# En pause, LVGL ignore le toucher : reveiller au relachement du doigt empeche
+# le premier toucher d'envoyer une commande (P4).
+touchscreen:
+  - id: !extend tactile
+    on_release:
+      - if:
+          condition: lvgl.is_paused
+          then:
+            - script.execute: veille_reveiller
+
+script:
+  - id: veille_reveiller
+    then:
+      - lvgl.resume:
+      - lvgl.widget.redraw:
+      - light.turn_on:
+          id: retroeclairage
+          transition_length: 0s
+
+interval:
+  - interval: 1s
+    then:
+      # Jamais d'ecran noir sans Home Assistant : le message reste lisible (P2).
+      - if:
+          condition:
+            and:
+              - not: lvgl.is_paused
+              - lambda: return id(ha_connecte_affiche) == 1 && lv_display_get_inactive_time(nullptr) > ${veille_delai_ms};
+          then:
+            - light.turn_off: retroeclairage
+            - lvgl.pause:
+      - if:
+          condition:
+            and:
+              - lvgl.is_paused
+              - lambda: return id(ha_connecte_affiche) != 1;
+          then:
+            - script.execute: veille_reveiller
+  - interval: 500ms
+    then:
+      - lambda: |-
+          if (!id(led_alerte)) return;
+          id(led_allumee) = !id(led_allumee);
+          id(sortie_led_rouge).set_level(id(led_allumee) ? 1.0f : 0.0f);
