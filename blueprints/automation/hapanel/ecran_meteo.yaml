@@ -1,0 +1,104 @@
+blueprint:
+  name: HAPanel — écran météo
+  description: >-
+    Alimente l'écran météo d'un panneau HAPanel : conditions actuelles et
+    prévisions sur 3 jours. Pour la météo de la maison, choisir une entité dont
+    l'intégration suit la localisation de Home Assistant (par exemple Met.no
+    réglée sur « domicile »). Envoi à chaque changement, toutes les 5 minutes,
+    au démarrage de Home Assistant et quand le panneau le demande (connexion).
+    Le module doit être autorisé à effectuer des actions Home Assistant
+    (options de l'intégration ESPHome). Décision D019 du dépôt cnuma/HAPanel.
+  domain: automation
+  source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/ecran_meteo.yaml
+  input:
+    panneau:
+      name: Panneau
+      description: Module HAPanel destinataire.
+      selector:
+        device:
+          filter:
+            - integration: esphome
+    meteo:
+      name: Météo
+      description: Entité météo affichée (localisation de la maison).
+      selector:
+        entity:
+          filter:
+            - domain: weather
+
+mode: queued
+max: 5
+
+variables:
+  panneau: !input panneau
+  meteo: !input meteo
+  # Action ESPHome du module : esphome.<nom du noeud>_maj_valeur.
+  action_maj: "esphome.{{ device_attr(panneau, 'name') | slugify }}_maj_valeur"
+
+triggers:
+  # Sans « to » : se déclenche aussi sur les changements d'attributs.
+  - trigger: state
+    entity_id: !input meteo
+  - trigger: time_pattern
+    minutes: "/5"
+  - trigger: homeassistant
+    event: start
+  - trigger: event
+    id: demande
+    event_type: esphome.hapanel_demande_valeurs
+
+conditions:
+  # Une demande ne concerne que le panneau qui l'a émise.
+  - condition: template
+    value_template: >-
+      {{ trigger.id != 'demande' or trigger.event.data.get('device_id') == panneau }}
+
+actions:
+  # Entité indisponible : l'action échoue, le panneau reçoit « unknown » (P3).
+  - action: weather.get_forecasts
+    continue_on_error: true
+    target:
+      entity_id: "{{ meteo }}"
+    data:
+      type: daily
+    response_variable: previsions
+  - variables:
+      jours: >-
+        {{ previsions[meteo].forecast
+           if previsions is defined and meteo in previsions else [] }}
+  # La condition d'abord : c'est elle qui donne l'état du groupe au panneau.
+  - repeat:
+      for_each:
+        - cle: meteo_condition
+          valeur: "{{ states(meteo) }}"
+        - cle: meteo_temperature
+          valeur: "{{ state_attr(meteo, 'temperature') | default('unknown', true) }}"
+      sequence:
+        - action: "{{ action_maj }}"
+          data:
+            cle: "{{ repeat.item.cle }}"
+            valeur: "{{ repeat.item.valeur }}"
+  - repeat:
+      for_each: [0, 1, 2]
+      sequence:
+        - variables:
+            j: "{{ repeat.item }}"
+            p: "{{ jours[j] if j < jours | length else {} }}"
+        - repeat:
+            for_each:
+              # Lundi = 0 ; le jour vient de la prévision, pas de l'horloge.
+              - cle: "meteo_j{{ j + 1 }}_jour"
+                valeur: >-
+                  {{ (p.datetime | as_datetime | as_local).weekday()
+                     if p.datetime is defined else 'unknown' }}
+              - cle: "meteo_j{{ j + 1 }}_condition"
+                valeur: "{{ p.condition | default('unknown', true) }}"
+              - cle: "meteo_j{{ j + 1 }}_max"
+                valeur: "{{ p.temperature if p.temperature is defined and p.temperature is not none else 'unknown' }}"
+              - cle: "meteo_j{{ j + 1 }}_min"
+                valeur: "{{ p.templow if p.templow is defined and p.templow is not none else 'unknown' }}"
+            sequence:
+              - action: "{{ action_maj }}"
+                data:
+                  cle: "{{ repeat.item.cle }}"
+                  valeur: "{{ repeat.item.valeur }}"

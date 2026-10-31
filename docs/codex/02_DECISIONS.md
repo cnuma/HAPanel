@@ -375,8 +375,9 @@ qui cite la précédente.
 ## D018 — Respiration de la LED selon la lumière de la pièce
 
 - Date : 31 octobre 2026 — Statut : demandé par le propriétaire, implémenté
-  en 0.6.0-dev, **non testé sur le panneau** ; niveaux choisis par l'agent, à
-  ajuster au banc.
+  en 0.6.0-dev ; respiration, intensité en pièce éclairée et orange de Confort
+  validés à l'œil par le propriétaire le 31 octobre 2026 ; **pièce sombre,
+  alerte face à Boost et blanc non testés**.
 - Décision :
   - état normal, chauffage allumé : respiration de 6 s, du plancher (20 % du
     plafond, jamais éteinte) au plafond ; un même facteur sur les trois canaux
@@ -394,3 +395,27 @@ qui cite la précédente.
   n'alimente pas Home Assistant ; elle paraît dans les journaux de banc
   (`hapanel.led`).
 - À vérifier au banc : influence du rétroéclairage et de la LED sur la LDR.
+
+## D019 — Écran météo, localisation portée par Home Assistant
+
+- Date : 1er novembre 2026 — Statut : demandé par le propriétaire, implémenté
+  sur `feature/page-meteo`, **non testé sur le panneau** ; disposition proposée
+  par l'agent, à valider à l'écran.
+- Décision :
+  - le panneau ne connaît ni la position de la maison ni aucun service météo
+    (D007, D012) : un blueprint distinct, `ecran_meteo.yaml`, lit l'entité
+    `weather.*` choisie à l'import, qui doit suivre la localisation de Home
+    Assistant ; le blueprint de l'accueil n'est pas modifié ;
+  - contenu : condition et température actuelles, puis pour 3 jours le jour, la
+    condition, la maximale et la minimale ; troisième bouton dans la barre de
+    navigation ; aucune commande ;
+  - clés `meteo_condition`, `meteo_temperature`, `meteo_jN_jour`,
+    `meteo_jN_condition`, `meteo_jN_max`, `meteo_jN_min` (N de 1 à 3). Elles
+    sont traitées à part dans `maj_valeur` : une clé inconnue de la liste du
+    chauffage y rafraîchirait sinon la date de réception du chauffage (P3) ;
+  - « non reçue », « indisponible », « périmée » (15 min, sur tout le groupe)
+    et « HA non connecté » affichés sur la page, valeurs effacées (P2, P3) ;
+  - une panne de la météo ne déclenche pas l'alerte de la LED, réservée au
+    chauffage et aux températures (D017).
+- Limite : températures affichées avec « ° » seul, dans l'unité de l'entité.
+  Blueprint non exécuté dans Home Assistant à ce stade.

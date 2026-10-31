@@ -1,0 +1,195 @@
+# Ecran meteo (D019) : conditions actuelles et previsions sur 3 jours. Valeurs
+# recues par packages/liaison_ha.yaml, poussees par le blueprint
+# blueprints/automation/hapanel/ecran_meteo.yaml. Aucune commande.
+font:
+  # Icones Material Design des conditions de Home Assistant, puis condition
+  # inconnue (help-circle-outline) ; meme ordre que meteo_rafraichir (G6).
+  - file:
+      type: web
+      url: https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/fonts/materialdesignicons-webfont.ttf
+    id: police_meteo
+    size: 32
+    bpp: 4
+    glyphs: ["\U000F0594", "\U000F0590", "\U000F0F2F", "\U000F0591", "\U000F0592", "\U000F0593", "\U000F067E", "\U000F0595", "\U000F0596", "\U000F0597", "\U000F0598", "\U000F067F", "\U000F0599", "\U000F059D", "\U000F059E", "\U000F0625"]
+
+esphome:
+  # Sans HA au demarrage, aucun changement de connexion n'appelle le
+  # rafraichissement.
+  on_boot:
+    priority: -100
+    then:
+      - script.execute: meteo_rafraichir
+
+lvgl:
+  pages:
+    - id: page_meteo
+      bg_color: 0x000000
+      widgets:
+        - label:
+            id: lbl_met_titre
+            align: TOP_LEFT
+            x: 8
+            y: 6
+            text: "Météo"
+        # Largeur fixe : voir la regle des labels alignes a droite (04).
+        - label:
+            id: lbl_met_etat
+            align: TOP_RIGHT
+            x: -8
+            y: 6
+            width: 160
+            text_align: RIGHT
+            text_color: 0xFF9800
+            text: ""
+        - label:
+            id: lbl_met_icone
+            align: TOP_LEFT
+            x: 12
+            y: 40
+            text_font: police_meteo
+            text_color: 0x9E9E9E
+            text: "\U000F0625"
+        - label:
+            id: lbl_met_temperature
+            align: TOP_RIGHT
+            x: -12
+            y: 26
+            width: 170
+            text_align: RIGHT
+            text_font: police_grande
+            text: "--,-°"
+        - label:
+            id: lbl_met_condition
+            align: TOP_LEFT
+            x: 12
+            y: 82
+            width: 216
+            text: ""
+        # Previsions : jour, icone, maximale / minimale.
+        - label:
+            id: lbl_met_j1_jour
+            align: TOP_LEFT
+            x: 12
+            y: 124
+            text: "--"
+        - label:
+            id: lbl_met_j1_icone
+            align: TOP_LEFT
+            x: 76
+            y: 116
+            text_font: police_meteo
+            text_color: 0x9E9E9E
+            text: "\U000F0625"
+        - label:
+            id: lbl_met_j1_temp
+            align: TOP_RIGHT
+            x: -12
+            y: 120
+            width: 110
+            text_align: RIGHT
+            text_font: police_titre
+            text: "-- / --"
+        - label:
+            id: lbl_met_j2_jour
+            align: TOP_LEFT
+            x: 12
+            y: 176
+            text: "--"
+        - label:
+            id: lbl_met_j2_icone
+            align: TOP_LEFT
+            x: 76
+            y: 168
+            text_font: police_meteo
+            text_color: 0x9E9E9E
+            text: "\U000F0625"
+        - label:
+            id: lbl_met_j2_temp
+            align: TOP_RIGHT
+            x: -12
+            y: 172
+            width: 110
+            text_align: RIGHT
+            text_font: police_titre
+            text: "-- / --"
+        - label:
+            id: lbl_met_j3_jour
+            align: TOP_LEFT
+            x: 12
+            y: 228
+            text: "--"
+        - label:
+            id: lbl_met_j3_icone
+            align: TOP_LEFT
+            x: 76
+            y: 220
+            text_font: police_meteo
+            text_color: 0x9E9E9E
+            text: "\U000F0625"
+        - label:
+            id: lbl_met_j3_temp
+            align: TOP_RIGHT
+            x: -12
+            y: 224
+            width: 110
+            text_align: RIGHT
+            text_font: police_titre
+            text: "-- / --"
+
+script:
+  # Redessine l'ecran meteo depuis les valeurs recues. Appele a chaque valeur
+  # recue, a chaque changement de connexion et a la peremption.
+  - id: meteo_rafraichir
+    then:
+      - lambda: |-
+          // Meme ordre que les conditions de packages/liaison_ha.yaml.
+          static const char *const icones[] = {"\U000F0594", "\U000F0590", "\U000F0F2F", "\U000F0591",
+                                                "\U000F0592", "\U000F0593", "\U000F067E", "\U000F0595",
+                                                "\U000F0596", "\U000F0597", "\U000F0598", "\U000F067F",
+                                                "\U000F0599", "\U000F059D", "\U000F059E"};
+          static const char *const textes[] = {"Nuit claire", "Nuageux", "Exceptionnel", "Brouillard",
+                                               "Grêle", "Orage", "Orage et pluie", "Éclaircies",
+                                               "Forte pluie", "Pluie", "Neige", "Neige et pluie",
+                                               "Ensoleillé", "Venteux", "Vent et nuages"};
+          static const char *const jours[] = {"lun.", "mar.", "mer.", "jeu.", "ven.", "sam.", "dim."};
+          static const char *const inconnue = "\U000F0625";
+
+          // Connexion toujours visible (P2), puis etat des valeurs (P3).
+          int e = id(liaison_meteo_etat);
+          lv_label_set_text(id(lbl_met_etat),
+                            id(ha_connecte_affiche) != 1 ? "HA non connecté"
+                            : e == 2 ? "indisponible" : e == 3 ? "périmée" : e == 0 ? "non reçue" : "");
+
+          char texte[32];
+          int c = id(liaison_meteo_condition);
+          lv_label_set_text(id(lbl_met_icone), c >= 0 ? icones[c] : inconnue);
+          lv_obj_set_style_text_color(id(lbl_met_icone), lv_color_hex(c >= 0 ? 0xFFFFFF : 0x9E9E9E), 0);
+          lv_label_set_text(id(lbl_met_condition), c >= 0 ? textes[c] : "");
+          float t = id(liaison_meteo_temperature);
+          if (isnan(t)) {
+            snprintf(texte, sizeof(texte), "--,-°");
+          } else {
+            snprintf(texte, sizeof(texte), "%.1f°", t);
+            for (char *p = texte; *p; p++) if (*p == '.') *p = ',';
+          }
+          lv_label_set_text(id(lbl_met_temperature), texte);
+
+          lv_obj_t *l_jours[] = {id(lbl_met_j1_jour), id(lbl_met_j2_jour), id(lbl_met_j3_jour)};
+          lv_obj_t *l_icones[] = {id(lbl_met_j1_icone), id(lbl_met_j2_icone), id(lbl_met_j3_icone)};
+          lv_obj_t *l_temps[] = {id(lbl_met_j1_temp), id(lbl_met_j2_temp), id(lbl_met_j3_temp)};
+          for (int j = 0; j < 3; j++) {
+            int jour = id(liaison_meteo_jour)[j];
+            lv_label_set_text(l_jours[j], jour >= 0 ? jours[jour] : "--");
+            int cj = id(liaison_meteo_jour_condition)[j];
+            lv_label_set_text(l_icones[j], cj >= 0 ? icones[cj] : inconnue);
+            lv_obj_set_style_text_color(l_icones[j], lv_color_hex(cj >= 0 ? 0xFFFFFF : 0x9E9E9E), 0);
+            char haut[8], bas[8];
+            float h = id(liaison_meteo_max)[j];
+            float b = id(liaison_meteo_min)[j];
+            if (isnan(h)) snprintf(haut, sizeof(haut), "--");
+            else snprintf(haut, sizeof(haut), "%.0f°", h);
+            if (isnan(b)) snprintf(bas, sizeof(bas), "--");
+            else snprintf(bas, sizeof(bas), "%.0f°", b);
+            snprintf(texte, sizeof(texte), "%s / %s", haut, bas);
+            lv_label_set_text(l_temps[j], texte);
+          }

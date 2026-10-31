@@ -104,7 +104,7 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       couleur du préréglage, rouge clignotant sur anomalie ; écran éteint après
       60 s, premier toucher sans commande.
 - [ ] LED un peu trop lumineuse (retour du 31 octobre 2026) : respiration selon
-      la lumière de la pièce (D018), codée sur `feature/led-respiration`, à
+      la lumière de la pièce (D018), fusionnée dans `main` (`d441d31`), reste à
       tester au banc : pièce sombre, blanc, Boost / alerte, influence du
       rétroéclairage sur la LDR. Validé à l'œil le 31 octobre 2026 : respiration,
       intensité en pièce éclairée, orange de Confort (rouge 30 %) distinct du
@@ -118,8 +118,15 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [ ] Bouton de pied de page « Scénarios » : icône Material Design à
       choisir (par exemple `mdi:play-box-multiple` ou
       `mdi:script-text-play`), scénarios et commandes à définir.
-- [ ] Icône de pied de page « Météo » : prévisions sur 3 jours, zone
-      paramétrable (entité `weather.*` choisie dans un blueprint, D012).
+- [ ] Écran « Météo » (D019), codé sur `feature/page-meteo`, non testé sur le
+      panneau : importer le blueprint `ecran_meteo.yaml`, choisir l'entité
+      `weather.*` qui suit la localisation de la maison, vérifier les valeurs,
+      « non reçue », « indisponible », « périmée » et HA déconnecté, mesurer la
+      mémoire (G6).
+- [ ] Retour à l'accueil (demande du 1er novembre 2026) : après 1 min sans
+      toucher, quelle que soit la page, revenir à la page d'accueil. Aujourd'hui
+      l'écran s'éteint à 60 s sur la page en cours, et reste allumé sans HA
+      (D017) : le retour doit aussi fonctionner dans ce cas (P5).
 - [ ] Planning du chauffage en vue simplifiée (idée du 31 octobre 2026) : les
       24 h sous forme de petits points, plus hauts sur les créneaux en marche.
       Variante à étudier : bande de 24 segments à la couleur du préréglage, avec
