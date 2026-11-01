@@ -77,7 +77,8 @@ action sensible.
 
 ![Trajet d'un scénario](images/schema_scenario.png)
 
-Le module n'envoie qu'un numéro. Il ne peut donc lancer que les entités choisies ici.
+Le bouton n'envoie qu'un numéro : ce chemin ne lance que les entités choisies ici.
+Protégez aussi la clé d'API, car l'autorisation de l'étape 1 est plus large.
 
 ## Quand les changements arrivent
 
