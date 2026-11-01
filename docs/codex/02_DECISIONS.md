@@ -468,8 +468,8 @@ qui cite la précédente.
 
 ## D022 — Retour à l'accueil après une minute sans toucher
 
-- Date : 1er novembre 2026 — Statut : accepté (demande du propriétaire), à
-  tester sur le module.
+- Date : 1er novembre 2026 — Statut : accepté (demande du propriétaire), validé
+  par lui le 1er novembre 2026, cas sans HA non confirmé.
 - Décision : après `veille_delai_ms` (60 s, le délai de D017) sans toucher,
   toute autre page cède la place à l'accueil, juste avant l'extinction. Sans
   HA, l'écran reste allumé (D017) et le retour a lieu quand même.
@@ -494,8 +494,8 @@ qui cite la précédente.
 
 ## D024 — Écran scénarios, choisis dans le blueprint du module
 
-- Date : 1er novembre 2026 — Statut : demandé par le propriétaire, non testé sur
-  le module ; nombre de boutons et disposition choisis par l'agent.
+- Date : 1er novembre 2026 — Statut : demandé par le propriétaire, validé par lui sur
+  le module le 1er novembre 2026, états dégradés non confirmés ; nombre de boutons et disposition choisis par l'agent.
 - Décision :
   - jusqu'à 6 scènes, scripts ou automatisations, un champ et un nom facultatif par bouton dans le blueprint
     `module.yaml`. Grille de 2 boutons sur 3 lignes, au nom saisi, sinon à celui de
@@ -515,8 +515,8 @@ qui cite la précédente.
 
 ## D025 — Page Menu et barre de navigation à deux boutons
 
-- Date : 1er novembre 2026 — Statut : choix du propriétaire (option B), non testé
-  sur le module ; remplace la barre à une icône par page (D014, D019, D020).
+- Date : 1er novembre 2026 — Statut : choix du propriétaire (option B), validé par lui
+  sur le module le 1er novembre 2026 ; remplace la barre à une icône par page (D014, D019, D020).
 - Contexte : avec les scénarios, 5 boutons de 43 px, jugés trop petits.
 - Décision : barre avec Accueil (68 px) et Menu (160 px). La page Menu donne accès
   à toutes les pages par de grandes tuiles, avec une place libre. L'accueil reste

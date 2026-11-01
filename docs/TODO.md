@@ -115,11 +115,10 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       environ 1 500 fichiers (environ 10 min). Option recommandée :
       `build_path: build/hapanel_banc` dans `hapanel_banc.yaml` (première
       compilation complète, environ 430 Mo de plus, gain à mesurer).
-- [ ] Page « Scénarios » (D024) : codée, à tester sur le module après réimport
-      du blueprint : lancement, « Lancé », « Refusé par HA », « Pas de réponse
-      de HA », entité indisponible, HA déconnecté, noms longs, nom personnalisé.
-- [ ] Page « Menu » (D025) : codée, à tester sur le module : barre Accueil + Menu,
-      accès à chaque page, sans HA, retour à l'accueil après 1 min.
+- [x] Page « Scénarios » (D024) et page « Menu » (D025) : validées par le
+      propriétaire le 1er novembre 2026 (« tout marche »), fusionnées dans `main`.
+- [ ] Scénarios et menu, cas non confirmés séparément : « Refusé par HA », « Pas
+      de réponse de HA », entité indisponible, HA déconnecté, noms longs.
 - [x] Écran « Météo » (D019), écran « Planning » (D020) et blueprint unique
       `module.yaml` (D021) : validés par le propriétaire le 1er novembre 2026
       (« tout marche »), fusionnés dans `main`. Mémoire : 173 Ko libres, plus
@@ -128,9 +127,8 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       « indisponible », « périmé », HA déconnecté, planning hors créneau
       (« Prochain à », « Plus rien aujourd'hui »), passage à minuit, jour de
       changement d'heure, 3 ou 4 calendriers.
-- [ ] Retour à l'accueil (D022) : codé, à tester sur le module. Après 1 min
-      sans toucher, depuis météo, planning et « À propos », avec HA (l'accueil
-      s'affiche au réveil) et sans HA (écran resté allumé).
+- [ ] Retour à l'accueil (D022) : « tout marche » du propriétaire le 1er novembre
+      2026 ; le cas sans HA (écran resté allumé) n'est pas confirmé séparément.
 - [ ] LED de face avant, autres informations (alerte météo…), après D017.
 - [ ] Rétroéclairage selon la lumière de la pièce (D023) : codé, à tester sur
       le module. Vérifier la lisibilité en pièce sombre (niveau `retro_nuit`),
