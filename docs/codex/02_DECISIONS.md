@@ -526,7 +526,7 @@ qui cite la précédente.
 ## D026 — Icône et couleur des boutons de scénarios
 
 - Date : 1er novembre 2026 — Statut : choix du propriétaire (couleurs en liste,
-  option A), non testé sur le module.
+  option A), fusionné à sa demande le 1er novembre 2026 ; rendu de chaque icône et couleur non confirmé séparément.
 - Décision :
   - chaque scénario du blueprint gagne une liste « Icône » (facultative) et une liste
     « Couleur » (bleu par défaut), clés `scen_N_icone` et `scen_N_couleur` ;
