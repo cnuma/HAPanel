@@ -1,7 +1,7 @@
 # Ecran planning (D020) : resume et frise du jour du premier calendrier, puis une
 # ligne par calendrier suivant (3 au plus), au quart d'heure. Valeurs recues par
 # packages/liaison_ha.yaml, poussees par le blueprint
-# blueprints/automation/hapanel/ecran_planning.yaml. Aucune commande.
+# blueprints/automation/hapanel/module.yaml. Aucune commande.
 esphome:
   # Sans HA au demarrage, aucun changement de connexion n'appelle le
   # rafraichissement.

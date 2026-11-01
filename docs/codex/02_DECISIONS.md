@@ -403,9 +403,9 @@ qui cite la précédente.
   par l'agent, à valider à l'écran.
 - Décision :
   - le panneau ne connaît ni la position de la maison ni aucun service météo
-    (D007, D012) : un blueprint distinct, `ecran_meteo.yaml`, lit l'entité
+    (D007, D012) : le blueprint (`module.yaml`, D021) lit l'entité
     `weather.*` choisie à l'import, qui doit suivre la localisation de Home
-    Assistant ; le blueprint de l'accueil n'est pas modifié ;
+    Assistant ;
   - contenu : condition et température actuelles, puis pour 3 jours le jour, la
     condition, la maximale et la minimale ; troisième bouton dans la barre de
     navigation ; aucune commande ;
@@ -429,7 +429,7 @@ qui cite la précédente.
   (maison, cuisine, baignoire, douche) ; les événements commencent au quart
   d'heure (06:15) et peuvent se chevaucher.
 - Décision :
-  - un blueprint distinct, `ecran_planning.yaml`, lit de 1 à 4 entités
+  - le blueprint (`module.yaml`, D021) lit de 1 à 4 entités
     `calendar.*` choisies à l'import ; consultation seule, jour courant ;
   - **disposition « résumé + frise »**, choisie par le propriétaire sur maquette
     le 1er novembre 2026 : pour le premier calendrier, « Prévu jusqu'à 22:00 » ou
@@ -450,4 +450,19 @@ qui cite la précédente.
   - barre de navigation à 4 boutons de 55 px, à valider au doigt.
 - Limites : la page montre le calendrier, pas l'état réel du chauffage. Jour de
   changement d'heure : bande calculée sur 24 h, décalée après le changement.
-  Blueprint non exécuté dans Home Assistant à ce stade.
+
+## D021 — Un seul blueprint par module
+
+- Date : 1er novembre 2026 — Statut : accepté (choix du propriétaire), **non
+  exécuté dans Home Assistant** ; remplace les blueprints distincts de D019 et
+  D020 et, une fois validé, `ecran_accueil.yaml` (D014).
+- Contexte : 5 modules prévus ; un blueprint par page imposerait 15
+  automatisations.
+- Décision : `blueprints/automation/hapanel/module.yaml` alimente toutes les
+  pages, avec une automatisation par module. Ajouter une page modifie ce
+  blueprint. Les commandes de D014 et D015 sont reprises sans changement.
+  Un changement de météo ou de calendrier n'envoie que les valeurs de sa page ;
+  l'envoi périodique, le démarrage de HA et la demande du panneau envoient tout.
+- Conséquence : l'automatisation créée depuis `ecran_accueil.yaml` doit être
+  supprimée dès la création de la nouvelle, sinon chaque commande de chauffage
+  s'exécute deux fois.

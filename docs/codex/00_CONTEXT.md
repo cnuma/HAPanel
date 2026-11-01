@@ -22,8 +22,8 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Écran | Entités lues | Actions | État |
 |---|---|---|---|
 | Accueil (page de démarrage) | Températures du séjour et de l'extérieur ; mode, activité, consigne, préréglage et verrou du thermostat ; bornes ; heure de HA (entités choisies dans le blueprint `ecran_accueil.yaml`, D012, D014) | Allumer / couper le chauffage (glissière Éteint / Chauffage), préréglage (icônes Manuel, Hors-gel, Éco, Confort, Boost, chauffage allumé), consigne ±0,5 °C entre les bornes (15 à 25 °C par défaut), chauffage allumé seulement (D015) | Implémenté (`packages/pages/accueil.yaml`, D014, D015) ; validé au banc le 30 octobre 2026 : usage nominal, préréglages, redémarrage, HA déconnecté, « indisponible » (0.2.1) ; accueil allégé (0.3.0), toucher sur la glissière, température extérieure et icônes en couleur (0.4.0, D016), LED et écran éteint par inactivité (0.5.0, D017) validés le 31 octobre 2026 ; « périmée » non vérifiée (`docs/TODO.md`) |
-| Météo | Entité `weather.*` choisie dans le blueprint `ecran_meteo.yaml` : condition et température actuelles, prévisions quotidiennes sur 3 jours (`weather.get_forecasts`) ; clés `meteo_*` (D019) | Aucune | Implémenté (`packages/pages/meteo.yaml`), compilé, non testé sur le panneau |
-| Planning | 1 à 4 entités `calendar.*` choisies dans le blueprint `ecran_planning.yaml` : créneaux du jour (`calendar.get_events`) ; clés `plan_*` (D020) | Aucune | Implémenté (`packages/pages/planning.yaml`), compilé, non testé sur le panneau |
+| Météo | Entité `weather.*` choisie dans le blueprint `module.yaml` : condition et température actuelles, prévisions quotidiennes sur 3 jours (`weather.get_forecasts`) ; clés `meteo_*` (D019) | Aucune | Implémenté (`packages/pages/meteo.yaml`) ; valeurs reçues sur le panneau le 1er novembre 2026, rendu à valider par le propriétaire |
+| Planning | 1 à 4 entités `calendar.*` choisies dans le blueprint `module.yaml` : créneaux du jour (`calendar.get_events`) ; clés `plan_*` (D020) | Aucune | Implémenté (`packages/pages/planning.yaml`) ; valeurs reçues sur le panneau le 1er novembre 2026, rendu « résumé + frise » à valider par le propriétaire |
 | À propos (version, SHA, connexion, mémoire) | Internes | Aucune | Validé au banc le 28 octobre 2026, y compris connecté / non connecté (`packages/lvgl.yaml`) |
 
 ## Home Assistant
@@ -34,7 +34,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Version | Core 2026.9.4, Supervisor 2026.10.4, OS 18.3 (relevé le 27 octobre 2026) |
 | Intégration | ESPHome, API native chiffrée (D005) |
 | Modules | Plusieurs prévus, un seul binaire : nœud `hapanel-xxxxxx` (D012) |
-| Liaison | Valeurs poussées par le blueprint `blueprints/automation/hapanel/ecran_accueil.yaml` (action `maj_valeur`, clés listées en D014) ; demande de renvoi par l'événement `esphome.hapanel_demande_valeurs` (D012) ; commandes par l'événement `esphome.hapanel_commande` (D014). Le blueprint générique `envoyer_valeur.yaml` reste disponible |
+| Liaison | Valeurs poussées par le blueprint unique `blueprints/automation/hapanel/module.yaml`, une automatisation par module (D021 ; action `maj_valeur`, clés listées en D014, D019, D020) ; demande de renvoi par l'événement `esphome.hapanel_demande_valeurs` (D012) ; commandes par l'événement `esphome.hapanel_commande` (D014). Le blueprint générique `envoyer_valeur.yaml` reste disponible |
 
 ## Matériel de référence
 

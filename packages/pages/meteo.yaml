@@ -1,6 +1,6 @@
 # Ecran meteo (D019) : conditions actuelles et previsions sur 3 jours. Valeurs
 # recues par packages/liaison_ha.yaml, poussees par le blueprint
-# blueprints/automation/hapanel/ecran_meteo.yaml. Aucune commande.
+# blueprints/automation/hapanel/module.yaml. Aucune commande.
 font:
   # Icones Material Design des conditions de Home Assistant, puis condition
   # inconnue (help-circle-outline) ; meme ordre que meteo_rafraichir (G6).

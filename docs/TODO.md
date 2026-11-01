@@ -119,17 +119,21 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       choisir (par exemple `mdi:play-box-multiple` ou
       `mdi:script-text-play`), scénarios et commandes à définir.
 - [ ] Écran « Météo » (D019), codé sur `feature/page-meteo`, non testé sur le
-      panneau : importer le blueprint `ecran_meteo.yaml`, choisir l'entité
-      `weather.*` qui suit la localisation de la maison, vérifier les valeurs,
+      panneau pour le rendu : entité `weather.*` choisie dans `module.yaml` (D021),
+      qui suit la localisation de la maison ; valeurs reçues, à vérifier :
       « non reçue », « indisponible », « périmée » et HA déconnecté, mesurer la
       mémoire (G6).
+- [ ] Blueprint unique `module.yaml` (D021), non testé : créer l'automatisation,
+      supprimer les trois anciennes, tester accueil, météo, planning et les
+      commandes (consigne, préréglage, marche/arrêt), puis retirer
+      `ecran_accueil.yaml` du dépôt.
 - [ ] Retour à l'accueil (demande du 1er novembre 2026) : après 1 min sans
       toucher, quelle que soit la page, revenir à la page d'accueil. Aujourd'hui
       l'écran s'éteint à 60 s sur la page en cours, et reste allumé sans HA
       (D017) : le retour doit aussi fonctionner dans ce cas (P5).
 - [ ] Écran « Planning » (D020), codé sur `feature/page-planning`, non testé sur
-      le panneau : importer le blueprint `ecran_planning.yaml`, choisir les
-      calendriers de chauffage, vérifier les créneaux face aux calendriers de HA,
+      le panneau pour le rendu : calendriers choisis dans `module.yaml` (D021),
+      à vérifier : créneaux face aux calendriers de HA,
       « non reçu », « indisponible », « périmé » et HA déconnecté, passage à
       minuit, boutons de navigation à 55 px, mémoire (G6).
 - [ ] LED de face avant, autres informations (alerte météo…), après D017.

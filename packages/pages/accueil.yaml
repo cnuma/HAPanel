@@ -2,7 +2,7 @@
 # Assistant), temperature du sejour, chauffage (mode, activite, prereglage,
 # consigne) et commandes. Valeurs recues par packages/liaison_ha.yaml ;
 # commandes par l'evenement esphome.hapanel_commande, traduit par le
-# blueprint blueprints/automation/hapanel/ecran_accueil.yaml.
+# blueprint blueprints/automation/hapanel/module.yaml.
 #
 # Ce package doit etre inclus avant packages/lvgl.yaml dans hapanel.yaml :
 # la premiere page est celle affichee au demarrage.
