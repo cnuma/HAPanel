@@ -430,9 +430,12 @@ qui cite la précédente.
   d'heure (06:15) et peuvent se chevaucher.
 - Décision :
   - un blueprint distinct, `ecran_planning.yaml`, lit de 1 à 4 entités
-    `calendar.*` choisies à l'import ; le panneau affiche une bande de 24 h par
-    calendrier pour le jour courant, avec un repère de l'heure ; consultation
-    seule ;
+    `calendar.*` choisies à l'import ; consultation seule, jour courant ;
+  - **disposition « résumé + frise »**, choisie par le propriétaire sur maquette
+    le 1er novembre 2026 : pour le premier calendrier, « Prévu jusqu'à 22:00 » ou
+    « Prochain à 17:00 » et une frise de 24 h avec repère de l'heure ; pour les
+    suivants, une ligne avec le créneau en cours ou le suivant. « Prévu » et non
+    « En marche » : le calendrier ne dit pas ce que fait le chauffage ;
   - **précision au quart d'heure**, pas à l'heure : 06:15 à 07:30 serait faux
     sur 24 segments. Un événement qui commence ou finit en cours de quart
     d'heure occupe tout ce quart d'heure ;

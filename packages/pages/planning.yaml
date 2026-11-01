@@ -1,11 +1,7 @@
-# Ecran planning (D020) : creneaux du jour de 1 a 4 calendriers de chauffage,
-# une bande de 24 h par calendrier, au quart d'heure. Valeurs recues par
+# Ecran planning (D020) : resume et frise du jour du premier calendrier, puis une
+# ligne par calendrier suivant (3 au plus), au quart d'heure. Valeurs recues par
 # packages/liaison_ha.yaml, poussees par le blueprint
 # blueprints/automation/hapanel/ecran_planning.yaml. Aucune commande.
-substitutions:
-  # Bande : 2 pixels par quart d'heure.
-  planning_x: "24"
-
 esphome:
   # Sans HA au demarrage, aucun changement de connexion n'appelle le
   # rafraichissement.
@@ -22,152 +18,109 @@ lvgl:
         - label:
             id: lbl_pla_titre
             align: TOP_LEFT
-            x: 8
-            y: 6
+            x: 12
+            y: 8
             text: "Aujourd'hui"
-        # Largeur fixe : voir la regle des labels alignes a droite (04).
+        # Heure, ou etat de la page. Largeur fixe : voir la regle des labels
+        # alignes a droite (04).
         - label:
             id: lbl_pla_etat
             align: TOP_RIGHT
-            x: -8
-            y: 6
+            x: -12
+            y: 8
             width: 130
             text_align: RIGHT
-            text_color: 0xFF9800
+            text_color: 0x9E9E9E
             text: ""
+        # Calendrier principal : nom, resume, frise et echelle.
         - label:
             id: lbl_pla_nom_1
             align: TOP_LEFT
-            x: ${planning_x}
-            y: 34
-            hidden: true
-            text: ""
-        - obj:
-            id: obj_pla_bande_1
-            align: TOP_LEFT
-            x: ${planning_x}
-            y: 54
-            width: 192
-            height: 14
-            radius: 0
-            border_width: 0
-            pad_all: 0
-            bg_color: 0x303030
-            scrollable: false
-            clickable: false
-            hidden: true
-        - label:
-            id: lbl_pla_nom_2
-            align: TOP_LEFT
-            x: ${planning_x}
-            y: 84
-            hidden: true
-            text: ""
-        - obj:
-            id: obj_pla_bande_2
-            align: TOP_LEFT
-            x: ${planning_x}
-            y: 104
-            width: 192
-            height: 14
-            radius: 0
-            border_width: 0
-            pad_all: 0
-            bg_color: 0x303030
-            scrollable: false
-            clickable: false
-            hidden: true
-        - label:
-            id: lbl_pla_nom_3
-            align: TOP_LEFT
-            x: ${planning_x}
-            y: 134
-            hidden: true
-            text: ""
-        - obj:
-            id: obj_pla_bande_3
-            align: TOP_LEFT
-            x: ${planning_x}
-            y: 154
-            width: 192
-            height: 14
-            radius: 0
-            border_width: 0
-            pad_all: 0
-            bg_color: 0x303030
-            scrollable: false
-            clickable: false
-            hidden: true
-        - label:
-            id: lbl_pla_nom_4
-            align: TOP_LEFT
-            x: ${planning_x}
-            y: 184
-            hidden: true
-            text: ""
-        - obj:
-            id: obj_pla_bande_4
-            align: TOP_LEFT
-            x: ${planning_x}
-            y: 204
-            width: 192
-            height: 14
-            radius: 0
-            border_width: 0
-            pad_all: 0
-            bg_color: 0x303030
-            scrollable: false
-            clickable: false
-            hidden: true
-        # Echelle des heures, centree sur 0, 6, 12, 18 et 24 h.
-        - label:
-            align: TOP_LEFT
-            x: 9
-            y: 226
-            width: 30
-            text_align: CENTER
+            x: 12
+            y: 36
+            width: 216
             text_color: 0x9E9E9E
+            hidden: true
+            text: ""
+        - label:
+            id: lbl_pla_resume
+            align: TOP_LEFT
+            x: 12
+            y: 58
+            width: 216
+            text_font: police_titre
+            hidden: true
+            text: ""
+        - obj:
+            id: obj_pla_bande
+            align: TOP_LEFT
+            x: 12
+            y: 92
+            width: 216
+            height: 18
+            radius: 6
+            border_width: 0
+            pad_all: 0
+            bg_color: 0x303030
+            scrollable: false
+            clickable: false
+            hidden: true
+        - label:
+            id: lbl_pla_h0
+            align: TOP_LEFT
+            x: 12
+            y: 114
+            text_color: 0x9E9E9E
+            hidden: true
             text: "0"
         - label:
+            id: lbl_pla_h6
             align: TOP_LEFT
-            x: 57
-            y: 226
+            x: 51
+            y: 114
             width: 30
             text_align: CENTER
             text_color: 0x9E9E9E
+            hidden: true
             text: "6"
         - label:
+            id: lbl_pla_h12
             align: TOP_LEFT
             x: 105
-            y: 226
+            y: 114
             width: 30
             text_align: CENTER
             text_color: 0x9E9E9E
+            hidden: true
             text: "12"
         - label:
+            id: lbl_pla_h18
             align: TOP_LEFT
-            x: 153
-            y: 226
+            x: 159
+            y: 114
             width: 30
             text_align: CENTER
             text_color: 0x9E9E9E
+            hidden: true
             text: "18"
         - label:
-            align: TOP_LEFT
-            x: 201
-            y: 226
+            id: lbl_pla_h24
+            align: TOP_RIGHT
+            x: -12
+            y: 114
             width: 30
-            text_align: CENTER
+            text_align: RIGHT
             text_color: 0x9E9E9E
+            hidden: true
             text: "24"
-        # Repere de l'heure courante, au-dessus des bandes.
+        # Repere de l'heure courante, au-dessus de la frise.
         - obj:
             id: obj_pla_maintenant
             align: TOP_LEFT
-            x: ${planning_x}
-            y: 50
+            x: 12
+            y: 88
             width: 2
-            height: 172
+            height: 26
             radius: 0
             border_width: 0
             pad_all: 0
@@ -175,81 +128,246 @@ lvgl:
             scrollable: false
             clickable: false
             hidden: true
+        # Calendriers suivants : point orange pendant un creneau, nom, creneau en
+        # cours ou suivant.
+        - obj:
+            id: obj_pla_point_2
+            align: TOP_LEFT
+            x: 12
+            y: 150
+            width: 8
+            height: 8
+            radius: 4
+            border_width: 0
+            pad_all: 0
+            scrollable: false
+            clickable: false
+            hidden: true
+        - label:
+            id: lbl_pla_nom_2
+            align: TOP_LEFT
+            x: 28
+            y: 144
+            width: 104
+            long_mode: DOT
+            hidden: true
+            text: ""
+        - label:
+            id: lbl_pla_horaire_2
+            align: TOP_RIGHT
+            x: -12
+            y: 144
+            width: 104
+            text_align: RIGHT
+            hidden: true
+            text: ""
+        - obj:
+            id: obj_pla_point_3
+            align: TOP_LEFT
+            x: 12
+            y: 190
+            width: 8
+            height: 8
+            radius: 4
+            border_width: 0
+            pad_all: 0
+            scrollable: false
+            clickable: false
+            hidden: true
+        - label:
+            id: lbl_pla_nom_3
+            align: TOP_LEFT
+            x: 28
+            y: 184
+            width: 104
+            long_mode: DOT
+            hidden: true
+            text: ""
+        - label:
+            id: lbl_pla_horaire_3
+            align: TOP_RIGHT
+            x: -12
+            y: 184
+            width: 104
+            text_align: RIGHT
+            hidden: true
+            text: ""
+        - obj:
+            id: obj_pla_point_4
+            align: TOP_LEFT
+            x: 12
+            y: 230
+            width: 8
+            height: 8
+            radius: 4
+            border_width: 0
+            pad_all: 0
+            scrollable: false
+            clickable: false
+            hidden: true
+        - label:
+            id: lbl_pla_nom_4
+            align: TOP_LEFT
+            x: 28
+            y: 224
+            width: 104
+            long_mode: DOT
+            hidden: true
+            text: ""
+        - label:
+            id: lbl_pla_horaire_4
+            align: TOP_RIGHT
+            x: -12
+            y: 224
+            width: 104
+            text_align: RIGHT
+            hidden: true
+            text: ""
 
 script:
-  # Redessine l'ecran planning depuis les valeurs recues. Appele a chaque valeur
-  # recue, a chaque changement de connexion et a la peremption. Les segments
-  # d'une bande ne sont recrees que si ses creneaux ont change (G6).
+  # Redessine l'ecran planning depuis les valeurs recues et l'heure de Home
+  # Assistant. Appele a chaque valeur recue, a chaque changement de connexion, a
+  # la peremption et toutes les 30 s. Les segments de la frise ne sont recrees
+  # que si les creneaux ont change (G6).
   - id: planning_rafraichir
     then:
       - lambda: |-
-          static std::string traces[4];
-          lv_obj_t *noms[] = {id(lbl_pla_nom_1), id(lbl_pla_nom_2), id(lbl_pla_nom_3), id(lbl_pla_nom_4)};
-          lv_obj_t *bandes[] = {id(obj_pla_bande_1), id(obj_pla_bande_2), id(obj_pla_bande_3), id(obj_pla_bande_4)};
+          static std::string trace;
+          const uint32_t ORANGE = 0xFF9800, GRIS = 0x9E9E9E, BLANC = 0xFFFFFF;
+          auto montrer = [](lv_obj_t *w, bool oui) {
+            if (oui) lv_obj_remove_flag(w, LV_OBJ_FLAG_HIDDEN);
+            else lv_obj_add_flag(w, LV_OBJ_FLAG_HIDDEN);
+          };
+          // « h » puis 24 chiffres hexadecimaux : 4 quarts d'heure chacun.
+          auto actif = [](const std::string &hex, int q) -> bool {
+            if (q < 0 || q >= 96) return false;
+            char c = hex[1 + q / 4];
+            int n = c <= '9' ? c - '0' : (c | 0x20) - 'a' + 10;
+            return n & (8 >> (q % 4));
+          };
+          // Creneau en cours, sinon suivant : false s'il n'y en a plus.
+          auto creneau = [&actif](const std::string &hex, int q, int &debut, int &fin) -> bool {
+            debut = q;
+            while (debut < 96 && !actif(hex, debut)) debut++;
+            if (debut >= 96) return false;
+            if (debut == q) while (debut > 0 && actif(hex, debut - 1)) debut--;
+            fin = q > debut ? q : debut;
+            while (fin < 96 && actif(hex, fin)) fin++;
+            return true;
+          };
 
-          // Connexion toujours visible (P2), puis etat des valeurs (P3).
-          int e = id(liaison_planning_etat);
-          lv_label_set_text(id(lbl_pla_etat),
-                            id(ha_connecte_affiche) != 1 ? "HA non connecté"
-                            : e == 3 ? "périmé" : e == 0 ? "non reçu" : "");
-
-          for (int r = 0; r < 4; r++) {
-            const std::string &nom = id(liaison_planning_nom)[r];
-            const std::string &hex = id(liaison_planning_creneaux)[r];
-            bool visible = e == 1 && !nom.empty() && nom != "-";
-            bool indispo = hex == "?";
-            char texte[48];
-            snprintf(texte, sizeof(texte), "%s%s", nom.c_str(), indispo ? " : indisponible" : "");
-            lv_label_set_text(noms[r], texte);
-            lv_obj_set_style_text_color(noms[r], lv_color_hex(indispo ? 0xFF9800 : 0xFFFFFF), 0);
-            if (visible) {
-              lv_obj_remove_flag(noms[r], LV_OBJ_FLAG_HIDDEN);
-              lv_obj_remove_flag(bandes[r], LV_OBJ_FLAG_HIDDEN);
-            } else {
-              lv_obj_add_flag(noms[r], LV_OBJ_FLAG_HIDDEN);
-              lv_obj_add_flag(bandes[r], LV_OBJ_FLAG_HIDDEN);
-            }
-            if (hex == traces[r]) continue;
-            traces[r] = hex;
-            lv_obj_clean(bandes[r]);
-            if (hex.size() != 25) continue;
-            // « h » puis 24 chiffres hexadecimaux : 4 quarts d'heure chacun.
-            int debut = -1;
-            for (int q = 0; q <= 96; q++) {
-              bool actif = false;
-              if (q < 96) {
-                char c = hex[1 + q / 4];
-                int n = c <= '9' ? c - '0' : (c | 0x20) - 'a' + 10;
-                actif = n & (8 >> (q % 4));
-              }
-              if (actif && debut < 0) debut = q;
-              if (!actif && debut >= 0) {
-                lv_obj_t *segment = lv_obj_create(bandes[r]);
-                lv_obj_remove_style_all(segment);
-                lv_obj_remove_flag(segment, LV_OBJ_FLAG_CLICKABLE);
-                lv_obj_set_pos(segment, debut * 2, 0);
-                lv_obj_set_size(segment, (q - debut) * 2, 14);
-                lv_obj_set_style_bg_color(segment, lv_color_hex(0xFF9800), 0);
-                lv_obj_set_style_bg_opa(segment, LV_OPA_COVER, 0);
-                debut = -1;
-              }
-            }
-          }
-      - script.execute: planning_heure
-
-  # Repere de l'heure de Home Assistant ; masque sans heure ni planning valide.
-  - id: planning_heure
-    then:
-      - lambda: |-
           auto t = id(heure_ha).now();
-          if (!t.is_valid() || id(liaison_planning_etat) != 1) {
-            lv_obj_add_flag(id(obj_pla_maintenant), LV_OBJ_FLAG_HIDDEN);
-            return;
+          bool heure_ok = t.is_valid();
+          int q = heure_ok ? (t.hour * 60 + t.minute) / 15 : 0;
+
+          // Connexion toujours visible (P2), puis etat des valeurs (P3), sinon
+          // l'heure.
+          int e = id(liaison_planning_etat);
+          char texte[48];
+          const char *etat = id(ha_connecte_affiche) != 1 ? "HA non connecté"
+                             : e == 3 ? "périmé" : e == 0 ? "non reçu" : "";
+          if (etat[0] == '\0' && heure_ok) snprintf(texte, sizeof(texte), "%02d:%02d", t.hour, t.minute);
+          else snprintf(texte, sizeof(texte), "%s", etat);
+          lv_label_set_text(id(lbl_pla_etat), texte);
+          lv_obj_set_style_text_color(id(lbl_pla_etat), lv_color_hex(etat[0] ? ORANGE : GRIS), 0);
+
+          // Calendrier principal.
+          const std::string &nom = id(liaison_planning_nom)[0];
+          const std::string &hex = id(liaison_planning_creneaux)[0];
+          bool principal = e == 1 && !nom.empty() && nom != "-";
+          bool valide = hex.size() == 25;
+          lv_obj_t *cadre[] = {id(lbl_pla_nom_1), id(lbl_pla_resume), id(obj_pla_bande), id(lbl_pla_h0),
+                               id(lbl_pla_h6), id(lbl_pla_h12), id(lbl_pla_h18), id(lbl_pla_h24)};
+          for (auto *w : cadre) montrer(w, principal);
+          lv_label_set_text(id(lbl_pla_nom_1), nom.c_str());
+
+          uint32_t couleur = GRIS;
+          if (hex == "?") {
+            snprintf(texte, sizeof(texte), "Indisponible");
+            couleur = ORANGE;
+          } else if (!valide) {
+            snprintf(texte, sizeof(texte), "Non reçu");
+            couleur = ORANGE;
+          } else if (!heure_ok) {
+            snprintf(texte, sizeof(texte), "Heure non reçue");
+            couleur = ORANGE;
+          } else {
+            int debut, fin;
+            if (!creneau(hex, q, debut, fin)) {
+              snprintf(texte, sizeof(texte), "Plus rien aujourd'hui");
+            } else if (debut <= q) {
+              snprintf(texte, sizeof(texte), "Prévu jusqu'à %02d:%02d", fin / 4, fin % 4 * 15);
+              couleur = ORANGE;
+            } else {
+              snprintf(texte, sizeof(texte), "Prochain à %02d:%02d", debut / 4, debut % 4 * 15);
+              couleur = BLANC;
+            }
           }
-          lv_obj_set_x(id(obj_pla_maintenant), ${planning_x} + (t.hour * 60 + t.minute) * 2 / 15);
-          lv_obj_remove_flag(id(obj_pla_maintenant), LV_OBJ_FLAG_HIDDEN);
+          lv_label_set_text(id(lbl_pla_resume), texte);
+          lv_obj_set_style_text_color(id(lbl_pla_resume), lv_color_hex(couleur), 0);
+
+          if (hex != trace) {
+            trace = hex;
+            lv_obj_clean(id(obj_pla_bande));
+            if (valide) {
+              int debut = -1;
+              for (int i = 0; i <= 96; i++) {
+                bool a = actif(hex, i);
+                if (a && debut < 0) debut = i;
+                if (!a && debut >= 0) {
+                  // 216 pixels pour 96 quarts d'heure.
+                  int x = debut * 9 / 4;
+                  lv_obj_t *segment = lv_obj_create(id(obj_pla_bande));
+                  lv_obj_remove_style_all(segment);
+                  lv_obj_remove_flag(segment, LV_OBJ_FLAG_CLICKABLE);
+                  lv_obj_set_pos(segment, x, 0);
+                  lv_obj_set_size(segment, i * 9 / 4 - x, 18);
+                  lv_obj_set_style_radius(segment, 6, 0);
+                  lv_obj_set_style_bg_color(segment, lv_color_hex(ORANGE), 0);
+                  lv_obj_set_style_bg_opa(segment, LV_OPA_COVER, 0);
+                  debut = -1;
+                }
+              }
+            }
+          }
+          lv_obj_set_x(id(obj_pla_maintenant), 12 + (heure_ok ? (t.hour * 60 + t.minute) * 3 / 20 : 0));
+          montrer(id(obj_pla_maintenant), principal && valide && heure_ok);
+
+          // Calendriers suivants.
+          lv_obj_t *points[] = {id(obj_pla_point_2), id(obj_pla_point_3), id(obj_pla_point_4)};
+          lv_obj_t *noms[] = {id(lbl_pla_nom_2), id(lbl_pla_nom_3), id(lbl_pla_nom_4)};
+          lv_obj_t *horaires[] = {id(lbl_pla_horaire_2), id(lbl_pla_horaire_3), id(lbl_pla_horaire_4)};
+          for (int r = 0; r < 3; r++) {
+            const std::string &n = id(liaison_planning_nom)[r + 1];
+            const std::string &h = id(liaison_planning_creneaux)[r + 1];
+            bool visible = e == 1 && !n.empty() && n != "-";
+            montrer(points[r], visible);
+            montrer(noms[r], visible);
+            montrer(horaires[r], visible);
+            lv_label_set_text(noms[r], n.c_str());
+            bool en_cours = false;
+            couleur = GRIS;
+            if (h.size() != 25) {
+              snprintf(texte, sizeof(texte), "%s", h == "?" ? "indisponible" : "non reçu");
+              couleur = ORANGE;
+            } else if (!heure_ok) {
+              snprintf(texte, sizeof(texte), "--:--");
+            } else {
+              int debut, fin;
+              if (creneau(h, q, debut, fin)) {
+                snprintf(texte, sizeof(texte), "%02d:%02d - %02d:%02d", debut / 4, debut % 4 * 15, fin / 4, fin % 4 * 15);
+                en_cours = debut <= q;
+                if (en_cours) couleur = ORANGE;
+              } else {
+                snprintf(texte, sizeof(texte), "terminé");
+              }
+            }
+            lv_label_set_text(horaires[r], texte);
+            lv_obj_set_style_text_color(horaires[r], lv_color_hex(couleur), 0);
+            lv_obj_set_style_bg_color(points[r], lv_color_hex(en_cours ? ORANGE : 0x424242), 0);
+          }
 
 interval:
-  - interval: 60s
+  - interval: 30s
     then:
-      - script.execute: planning_heure
+      - script.execute: planning_rafraichir
