@@ -126,15 +126,12 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       « indisponible », « périmé », HA déconnecté, planning hors créneau
       (« Prochain à », « Plus rien aujourd'hui »), passage à minuit, jour de
       changement d'heure, 3 ou 4 calendriers.
-- [ ] Retour à l'accueil (demande du 1er novembre 2026) : après 1 min sans
-      toucher, quelle que soit la page, revenir à la page d'accueil. Aujourd'hui
-      l'écran s'éteint à 60 s sur la page en cours, et reste allumé sans HA
-      (D017) : le retour doit aussi fonctionner dans ce cas (P5).
+- [ ] Retour à l'accueil (D022) : codé, à tester sur le module. Après 1 min
+      sans toucher, depuis météo, planning et « À propos », avec HA (l'accueil
+      s'affiche au réveil) et sans HA (écran resté allumé).
 - [ ] LED de face avant, autres informations (alerte météo…), après D017.
-- [ ] Photorésistance (LDR) de face avant : baisser la luminosité du
-      rétroéclairage (déjà en PWM, `retroeclairage`) selon la lumière de la
-      pièce. Relevé le 31 octobre 2026 : GPIO34, atténuation 0 dB, 0,075 V
-      (plancher) pièce éclairée et sous torche, 0,13 à 0,26 V capteur couvert,
-      signal instable : la tension monte dans le noir et ne distingue pas les
-      niveaux de lumière courants. Seuils, courbe, lissage et luminosité
-      minimale à définir ; l'écran reste lisible et réactif sans HA (P5).
+- [ ] Rétroéclairage selon la lumière de la pièce (D023) : codé, à tester sur
+      le module. Vérifier la lisibilité en pièce sombre (niveau `retro_nuit`),
+      l'absence de variations gênantes et l'influence de l'écran sur la LDR.
+      Relevé du 31 octobre 2026 : 0,075 V (plancher) pièce éclairée et sous
+      torche, 0,13 à 0,26 V capteur couvert, signal instable.

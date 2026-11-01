@@ -465,3 +465,29 @@ qui cite la précédente.
 - Conséquence : l'automatisation créée depuis `ecran_accueil.yaml` doit être
   supprimée dès la création de la nouvelle, sinon chaque commande de chauffage
   s'exécute deux fois.
+
+## D022 — Retour à l'accueil après une minute sans toucher
+
+- Date : 1er novembre 2026 — Statut : accepté (demande du propriétaire), à
+  tester sur le module.
+- Décision : après `veille_delai_ms` (60 s, le délai de D017) sans toucher,
+  toute autre page cède la place à l'accueil, juste avant l'extinction. Sans
+  HA, l'écran reste allumé (D017) et le retour a lieu quand même.
+- Le retour n'envoie aucune commande (P1). Ni écran éteint ni navigation
+  n'interrompent la réception des valeurs.
+
+## D023 — Rétroéclairage selon la lumière de la pièce
+
+- Date : 1er novembre 2026 — Statut : demandé par le propriétaire, niveaux
+  choisis par l'agent, à ajuster et tester sur le module.
+- Décision :
+  - la LDR donne une obscurité de 0 à 1 (0,09 à 0,20 V, D018), commune à la LED
+    et au rétroéclairage, recalculée toutes les 10 s sur la moyenne de 1 min ;
+  - luminosité : 100 % pièce éclairée, 40 % pièce sombre (avant correction
+    gamma), interpolée ; transition de 2 s, seulement à partir de 5 points d'écart ;
+  - écran éteint : le niveau est appliqué au réveil, sans rallumer l'écran ;
+  - sans mesure de la LDR : pleine luminosité, écran lisible. Aucune dépendance
+    à Home Assistant.
+- Limite : si l'écran éclaire la LDR, baisser sa luminosité assombrit la mesure
+  et accentue la baisse. Effet borné par `retro_nuit`, à vérifier au banc, comme
+  la pièce sombre, jamais testée.

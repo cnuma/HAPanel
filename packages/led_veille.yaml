@@ -1,7 +1,7 @@
 # LED de face avant et ecran eteint par inactivite (D017). La couleur de la LED
 # est calculee par accueil_rafraichir (packages/pages/accueil.yaml).
 substitutions:
-  # Sans toucher pendant ce delai, l'ecran s'eteint.
+  # Sans toucher pendant ce delai, retour a l'accueil et ecran eteint.
   veille_delai_ms: "60000"
   # Respiration de la LED (D018) : niveaux a ajuster au banc. Plafond interpole
   # entre piece eclairee et piece sombre selon la tension de la LDR, qui monte
@@ -12,8 +12,21 @@ substitutions:
   led_plafond_nuit: "0.05"
   ldr_tension_jour: "0.09"
   ldr_tension_nuit: "0.20"
+  # Luminosite du retroeclairage (D023), a ajuster au banc. La correction gamma
+  # de la lumiere reduit fortement les bas niveaux : 0.40 donne environ 8 % de PWM.
+  retro_jour: "1.0"
+  retro_nuit: "0.40"
+  retro_ecart_min: "0.05"
 
 globals:
+  # Obscurite de la piece selon la LDR, de 0 (eclairee) a 1 (sombre).
+  - id: ldr_obscurite
+    type: float
+    initial_value: "0.0f"
+  # Luminosite appliquee au retroeclairage.
+  - id: retro_niveau
+    type: float
+    initial_value: "${retro_jour}f"
   # Couleur du prereglage, calculee par accueil_rafraichir ; 0 : eteinte.
   - id: led_rouge
     type: float
@@ -47,13 +60,47 @@ script:
     then:
       - lvgl.resume:
       - lvgl.widget.redraw:
+      - lambda: id(retro_niveau) = ${retro_jour} + id(ldr_obscurite) * (${retro_nuit} - ${retro_jour});
       - light.turn_on:
           id: retroeclairage
+          brightness: !lambda return id(retro_niveau);
           transition_length: 0s
 
 interval:
+  # Meme periode que la moyenne de la LDR. Sans mesure : piece eclairee, ecran
+  # lisible et LED visible (P2). Ecran eteint : applique au reveil.
+  - interval: 10s
+    then:
+      - lambda: |-
+          float v = id(ldr_tension).state;
+          float t = isnan(v) ? 0.0f : (v - ${ldr_tension_jour}) / (${ldr_tension_nuit} - ${ldr_tension_jour});
+          id(ldr_obscurite) = t < 0.0f ? 0.0f : (t > 1.0f ? 1.0f : t);
+      - if:
+          condition:
+            and:
+              - not: lvgl.is_paused
+              # Ecart minimal : le signal instable de la LDR ne fait pas varier l'ecran.
+              - lambda: return fabs(${retro_jour} + id(ldr_obscurite) * (${retro_nuit} - ${retro_jour}) - id(retro_niveau)) >= ${retro_ecart_min};
+          then:
+            - lambda: |-
+                id(retro_niveau) = ${retro_jour} + id(ldr_obscurite) * (${retro_nuit} - ${retro_jour});
+                ESP_LOGD("hapanel.led", "Retroeclairage %.2f", id(retro_niveau));
+            - light.turn_on:
+                id: retroeclairage
+                brightness: !lambda return id(retro_niveau);
+                transition_length: 2s
   - interval: 1s
     then:
+      # Retour a l'accueil (D022), avant la pause et meme sans Home Assistant.
+      - if:
+          condition:
+            and:
+              - not: lvgl.is_paused
+              - lambda: return lv_display_get_inactive_time(nullptr) > ${veille_delai_ms} && lv_screen_active() != id(page_accueil).obj;
+          then:
+            - lvgl.page.show:
+                id: page_accueil
+                animation: NONE
       # Jamais d'ecran noir sans Home Assistant : le message reste lisible (P2).
       - if:
           condition:
@@ -81,14 +128,7 @@ interval:
     then:
       - lambda: |-
           if (id(led_alerte)) return;
-          // LDR sans mesure : plafond de jour, la LED reste visible (P2).
-          float plafond = ${led_plafond_jour};
-          float v = id(ldr_tension).state;
-          if (!isnan(v)) {
-            float t = (v - ${ldr_tension_jour}) / (${ldr_tension_nuit} - ${ldr_tension_jour});
-            t = t < 0.0f ? 0.0f : (t > 1.0f ? 1.0f : t);
-            plafond += t * (${led_plafond_nuit} - ${led_plafond_jour});
-          }
+          float plafond = ${led_plafond_jour} + id(ldr_obscurite) * (${led_plafond_nuit} - ${led_plafond_jour});
           float s = 0.5f - 0.5f * cos(2.0f * M_PI * (millis() % ${led_periode_ms}) / ${led_periode_ms});
           float k = plafond * (${led_plancher} + (1.0f - ${led_plancher}) * s * s);
           id(sortie_led_rouge).set_level(id(led_rouge) * k);
