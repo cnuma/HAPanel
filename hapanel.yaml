@@ -18,6 +18,7 @@ packages:
   accueil: !include packages/pages/accueil.yaml
   meteo: !include packages/pages/meteo.yaml
   planning: !include packages/pages/planning.yaml
+  scenarios: !include packages/pages/scenarios.yaml
   lvgl: !include packages/lvgl.yaml
   liaison_ha: !include packages/liaison_ha.yaml
   led_veille: !include packages/led_veille.yaml

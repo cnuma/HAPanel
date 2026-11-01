@@ -14,6 +14,9 @@
 #
 # Cles de l'ecran planning (D020), pour N de 1 a 4 : plan_N_nom, plan_N_creneaux.
 # Affichage : packages/pages/planning.yaml (script planning_rafraichir).
+#
+# Cles de l'ecran scenarios (D024) : scen_N_nom pour N de 1 a 6, scen_resultat.
+# Affichage : packages/pages/scenarios.yaml (script scenarios_rafraichir).
 substitutions:
   # Sans nouvelle valeur pendant ce delai, la valeur affichee est perimee
   # (le blueprint renvoie tout toutes les 5 min).
@@ -114,6 +117,16 @@ globals:
     type: std::array<std::string, 4>
   - id: liaison_planning_creneaux
     type: std::array<std::string, 4>
+  # Scenarios (D024) : peremption sur le groupe. Nom vide : non recu ; « - » : pas
+  # de scenario ; « ? » : indisponible.
+  - id: liaison_scenarios_ms
+    type: uint32_t
+    initial_value: "0"
+  - id: liaison_scenarios_etat
+    type: int
+    initial_value: "0"
+  - id: liaison_scenarios_nom
+    type: std::array<std::string, 6>
 
 api:
   actions:
@@ -189,6 +202,27 @@ api:
               id(planning_rafraichir).execute();
               return;
             }
+            // Scenarios : traites a part, comme la meteo (P3).
+            if (strncmp(k, "scen_", 5) == 0) {
+              int r = k[5] - '1';
+              if (strcmp(k + 5, "resultat") == 0) {
+                // Reponse tardive ignoree : « pas de reponse » reste affiche.
+                if (id(scenarios_retour) == 1) {
+                  id(scenarios_retour) = strcmp(v, "ok") == 0 ? 2 : 4;
+                  id(scenarios_retour_ms) = maintenant;
+                }
+              } else if (r >= 0 && r <= 5 && strcmp(k + 6, "_nom") == 0) {
+                id(liaison_scenarios_nom)[r] = v;
+                id(liaison_scenarios_ms) = maintenant;
+                id(liaison_scenarios_etat) = 1;
+              } else {
+                ESP_LOGW("hapanel.liaison", "cle inconnue : %s", k);
+                return;
+              }
+              ESP_LOGI("hapanel.liaison", "%s %s", k, v);
+              id(scenarios_rafraichir).execute();
+              return;
+            }
             if (strcmp(k, "temperature") == 0) {
               id(liaison_temperature) = nombre ? f : NAN;
               id(liaison_temperature_etat) = nombre ? 1 : 2;
@@ -233,6 +267,7 @@ script:
       - script.execute: accueil_rafraichir
       - script.execute: meteo_rafraichir
       - script.execute: planning_rafraichir
+      - script.execute: scenarios_rafraichir
       # Demande au blueprint de renvoyer toutes les valeurs. Exige
       # l'autorisation des actions Home Assistant pour ce module (08).
       - homeassistant.event:
@@ -259,6 +294,20 @@ script:
           id: liaison_planning_effacer
           etat: 0
       - script.execute: planning_rafraichir
+      - script.execute:
+          id: liaison_scenarios_effacer
+          etat: 0
+      - script.execute: scenarios_rafraichir
+  # Efface les scenarios ; etat 0 (non recus) ou 3 (perimes).
+  - id: liaison_scenarios_effacer
+    parameters:
+      etat: int
+    then:
+      - lambda: |-
+          id(liaison_scenarios_ms) = 0;
+          id(liaison_scenarios_etat) = etat;
+          id(liaison_scenarios_nom).fill("");
+          id(scenarios_retour) = 0;
   # Efface le planning ; etat 0 (non recu) ou 3 (perime).
   - id: liaison_planning_effacer
     parameters:
@@ -374,3 +423,17 @@ interval:
                 level: WARN
                 format: "planning perime"
             - script.execute: planning_rafraichir
+      - if:
+          condition:
+            lambda: |-
+              uint32_t t = id(liaison_scenarios_ms);
+              return t != 0 && millis() - t > ${liaison_peremption_ms};
+          then:
+            - script.execute:
+                id: liaison_scenarios_effacer
+                etat: 3
+            - logger.log:
+                tag: hapanel.liaison
+                level: WARN
+                format: "scenarios perimes"
+            - script.execute: scenarios_rafraichir

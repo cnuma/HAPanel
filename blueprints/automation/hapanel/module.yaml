@@ -5,14 +5,15 @@ blueprint:
     module. Accueil : températures du séjour et de l'extérieur, mode, activité,
     consigne, préréglage et verrou du thermostat, bornes de la consigne. Météo :
     conditions actuelles et prévisions sur 3 jours. Planning : créneaux du jour
-    de 1 à 4 calendriers. Envoi à chaque changement, toutes les 5 minutes, au
+    de 1 à 4 calendriers. Scénarios : 6 scènes, scripts ou automatisations au
+    plus, lancés depuis le panneau. Envoi à chaque changement, toutes les 5 minutes, au
     démarrage de Home Assistant et quand le panneau le demande (connexion).
     Exécute les commandes du panneau (allumer, couper, consigne, préréglage)
     seulement si elles viennent de ce panneau, si le thermostat est disponible
     et non verrouillé et si la consigne est dans les bornes ; consigne et
     préréglage exigent un chauffage allumé. Le module doit être autorisé à
     effectuer des actions Home Assistant (options de l'intégration ESPHome).
-    Décisions D014, D015, D019, D020 et D021 du dépôt cnuma/HAPanel.
+    Décisions D014, D015, D019, D020, D021 et D024 du dépôt cnuma/HAPanel.
   domain: automation
   source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/module.yaml
   input:
@@ -84,6 +85,21 @@ blueprint:
           multiple: true
           filter:
             - domain: calendar
+    scenarios:
+      name: Scénarios
+      description: >-
+        Jusqu'à 6 scènes, scripts ou automatisations, dans l'ordre d'affichage ;
+        les suivants sont ignorés. Le bouton porte le nom de l'entité. Une
+        automatisation est lancée sans vérifier ses conditions.
+      default: []
+      selector:
+        entity:
+          multiple: true
+          filter:
+            - domain:
+                - scene
+                - script
+                - automation
 
 mode: queued
 max: 20
@@ -97,6 +113,7 @@ variables:
   consigne_max: !input consigne_max
   meteo: !input meteo
   calendriers: !input calendriers
+  scenarios: !input scenarios
   # Action ESPHome du module : esphome.<nom du noeud>_maj_valeur.
   action_maj: "esphome.{{ device_attr(panneau, 'name') | slugify }}_maj_valeur"
 
@@ -156,6 +173,40 @@ actions:
               commande: "{{ trigger.event.data.get('commande', '') }}"
               valeur: "{{ trigger.event.data.get('valeur', '') }}"
           - choose:
+              # Scénario : le panneau n'envoie qu'un numéro, seules les entités
+              # choisies ici peuvent être lancées (D024).
+              - conditions:
+                  - condition: template
+                    value_template: "{{ commande == 'scenario' }}"
+                sequence:
+                  - variables:
+                      n: "{{ valeur | int(0) }}"
+                      cible: "{{ scenarios[n - 1] if 1 <= n <= [scenarios | length, 6] | min else '' }}"
+                  - if:
+                      # Une scène jamais activée est « unknown » : elle reste lançable.
+                      - condition: template
+                        value_template: >-
+                          {{ cible != '' and states[cible] is not none
+                             and states(cible) != 'unavailable' }}
+                    then:
+                      - action: >-
+                          {{ cible.split('.')[0] }}.{{ 'trigger' if cible.startswith('automation.') else 'turn_on' }}
+                        target:
+                          entity_id: "{{ cible }}"
+                      - action: "{{ action_maj }}"
+                        data:
+                          cle: scen_resultat
+                          valeur: ok
+                    else:
+                      - action: "{{ action_maj }}"
+                        data:
+                          cle: scen_resultat
+                          valeur: refus
+                      - action: system_log.write
+                        data:
+                          level: warning
+                          logger: hapanel.blueprint
+                          message: "HAPanel : scénario refusé ({{ valeur }})"
               - conditions:
                   - condition: template
                     value_template: >-
@@ -243,6 +294,23 @@ actions:
                   data:
                     cle: "{{ repeat.item.cle }}"
                     valeur: "{{ repeat.item.valeur }}"
+      # Scénarios.
+      - if:
+          - condition: template
+            value_template: "{{ trigger.id in ['periodique', 'demarrage', 'demande'] }}"
+        then:
+          - repeat:
+              for_each: [0, 1, 2, 3, 4, 5]
+              sequence:
+                - variables:
+                    i: "{{ repeat.item }}"
+                    s: "{{ scenarios[i] if i < scenarios | length else '' }}"
+                - action: "{{ action_maj }}"
+                  data:
+                    cle: "scen_{{ i + 1 }}_nom"
+                    valeur: >-
+                      {{ '-' if not s else '?' if states(s) == 'unavailable'
+                         else (state_attr(s, 'friendly_name') or s)[:24] }}
       # Météo.
       - if:
           - condition: template

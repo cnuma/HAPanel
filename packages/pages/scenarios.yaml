@@ -1,0 +1,256 @@
+# Ecran scenarios (D024) : 6 boutons au plus, qui lancent les scenes, scripts et
+# automatisations choisis dans le blueprint blueprints/automation/hapanel/module.yaml.
+# Noms recus par packages/liaison_ha.yaml. Le panneau n'envoie qu'un numero : seul
+# le blueprint connait les entites (P1).
+substitutions:
+  # Sans reponse de Home Assistant dans ce delai, le panneau le signale (P2).
+  scenarios_attente_ms: "10000"
+  # Duree d'affichage du resultat.
+  scenarios_message_ms: "5000"
+
+esphome:
+  # Sans HA au demarrage, aucun changement de connexion n'appelle le
+  # rafraichissement.
+  on_boot:
+    priority: -100
+    then:
+      - script.execute: scenarios_rafraichir
+
+globals:
+  # Lancement : 0 aucun, 1 attente de HA, 2 lance, 3 pas de reponse, 4 refuse.
+  - id: scenarios_retour
+    type: int
+    initial_value: "0"
+  - id: scenarios_retour_ms
+    type: uint32_t
+    initial_value: "0"
+  - id: scenarios_indice
+    type: int
+    initial_value: "0"
+
+lvgl:
+  pages:
+    - id: page_scenarios
+      bg_color: 0x000000
+      widgets:
+        - label:
+            id: lbl_sce_titre
+            align: TOP_LEFT
+            x: 12
+            y: 6
+            text: "Scénarios"
+        - label:
+            id: lbl_sce_etat
+            align: TOP_LEFT
+            x: 12
+            y: 28
+            width: 216
+            long_mode: DOT
+            text_color: 0xFF9800
+            text: ""
+        - button:
+            id: btn_sce_1
+            align: TOP_LEFT
+            x: 8
+            y: 52
+            width: 108
+            height: 68
+            pad_all: 4
+            hidden: true
+            widgets:
+              - label:
+                  id: lbl_sce_1
+                  align: CENTER
+                  width: 100
+                  text_align: CENTER
+                  text: ""
+            on_click:
+              - script.execute:
+                  id: scenarios_lancer
+                  indice: 0
+        - button:
+            id: btn_sce_2
+            align: TOP_LEFT
+            x: 124
+            y: 52
+            width: 108
+            height: 68
+            pad_all: 4
+            hidden: true
+            widgets:
+              - label:
+                  id: lbl_sce_2
+                  align: CENTER
+                  width: 100
+                  text_align: CENTER
+                  text: ""
+            on_click:
+              - script.execute:
+                  id: scenarios_lancer
+                  indice: 1
+        - button:
+            id: btn_sce_3
+            align: TOP_LEFT
+            x: 8
+            y: 126
+            width: 108
+            height: 68
+            pad_all: 4
+            hidden: true
+            widgets:
+              - label:
+                  id: lbl_sce_3
+                  align: CENTER
+                  width: 100
+                  text_align: CENTER
+                  text: ""
+            on_click:
+              - script.execute:
+                  id: scenarios_lancer
+                  indice: 2
+        - button:
+            id: btn_sce_4
+            align: TOP_LEFT
+            x: 124
+            y: 126
+            width: 108
+            height: 68
+            pad_all: 4
+            hidden: true
+            widgets:
+              - label:
+                  id: lbl_sce_4
+                  align: CENTER
+                  width: 100
+                  text_align: CENTER
+                  text: ""
+            on_click:
+              - script.execute:
+                  id: scenarios_lancer
+                  indice: 3
+        - button:
+            id: btn_sce_5
+            align: TOP_LEFT
+            x: 8
+            y: 200
+            width: 108
+            height: 68
+            pad_all: 4
+            hidden: true
+            widgets:
+              - label:
+                  id: lbl_sce_5
+                  align: CENTER
+                  width: 100
+                  text_align: CENTER
+                  text: ""
+            on_click:
+              - script.execute:
+                  id: scenarios_lancer
+                  indice: 4
+        - button:
+            id: btn_sce_6
+            align: TOP_LEFT
+            x: 124
+            y: 200
+            width: 108
+            height: 68
+            pad_all: 4
+            hidden: true
+            widgets:
+              - label:
+                  id: lbl_sce_6
+                  align: CENTER
+                  width: 100
+                  text_align: CENTER
+                  text: ""
+            on_click:
+              - script.execute:
+                  id: scenarios_lancer
+                  indice: 5
+
+script:
+  # Sans connexion, valeur a jour ou reponse attendue, aucune commande (P2, P4).
+  - id: scenarios_lancer
+    parameters:
+      indice: int
+    then:
+      - if:
+          condition:
+            lambda: |-
+              const std::string &nom = id(liaison_scenarios_nom)[indice];
+              return id(ha_connecte_affiche) == 1 && id(liaison_scenarios_etat) == 1
+                     && id(scenarios_retour) != 1 && !nom.empty() && nom != "-" && nom != "?";
+          then:
+            - lambda: |-
+                id(scenarios_indice) = indice;
+                id(scenarios_retour) = 1;
+                id(scenarios_retour_ms) = millis();
+            - script.execute: scenarios_rafraichir
+            - homeassistant.event:
+                event: esphome.hapanel_commande
+                data:
+                  commande: scenario
+                  valeur: !lambda return std::to_string(indice + 1);
+            - logger.log:
+                tag: hapanel.scenarios
+                level: INFO
+                format: "scenario envoye %d"
+                args: ["indice + 1"]
+  # Redessine l'ecran scenarios. Appele a chaque valeur recue, a chaque changement
+  # de connexion, a la peremption et a chaque etape d'un lancement.
+  - id: scenarios_rafraichir
+    then:
+      - lambda: |-
+          lv_obj_t *boutons[] = {id(btn_sce_1), id(btn_sce_2), id(btn_sce_3),
+                                 id(btn_sce_4), id(btn_sce_5), id(btn_sce_6)};
+          lv_obj_t *labels[] = {id(lbl_sce_1), id(lbl_sce_2), id(lbl_sce_3),
+                                id(lbl_sce_4), id(lbl_sce_5), id(lbl_sce_6)};
+          bool connecte = id(ha_connecte_affiche) == 1;
+          int e = id(liaison_scenarios_etat);
+          int retour = id(scenarios_retour);
+          bool aucun = true;
+          for (int i = 0; i < 6; i++) {
+            const std::string &nom = id(liaison_scenarios_nom)[i];
+            bool visible = e == 1 && !nom.empty() && nom != "-";
+            bool dispo = nom != "?";
+            if (visible) {
+              aucun = false;
+              lv_obj_remove_flag(boutons[i], LV_OBJ_FLAG_HIDDEN);
+            } else {
+              lv_obj_add_flag(boutons[i], LV_OBJ_FLAG_HIDDEN);
+            }
+            lv_label_set_text(labels[i], dispo ? nom.c_str() : "Indisponible");
+            if (connecte && dispo && retour != 1) lv_obj_remove_state(boutons[i], LV_STATE_DISABLED);
+            else lv_obj_add_state(boutons[i], LV_STATE_DISABLED);
+          }
+          // Connexion toujours visible (P2), puis etat des valeurs (P3), puis
+          // resultat du lancement.
+          char texte[48];
+          const std::string &nom = id(liaison_scenarios_nom)[id(scenarios_indice)];
+          if (!connecte) snprintf(texte, sizeof(texte), "HA non connecté");
+          else if (e == 3) snprintf(texte, sizeof(texte), "périmés");
+          else if (e == 0) snprintf(texte, sizeof(texte), "non reçus");
+          else if (retour == 1) snprintf(texte, sizeof(texte), "Envoi en cours");
+          else if (retour == 2) snprintf(texte, sizeof(texte), "Lancé : %s", nom.c_str());
+          else if (retour == 3) snprintf(texte, sizeof(texte), "Pas de réponse de HA");
+          else if (retour == 4) snprintf(texte, sizeof(texte), "Refusé par HA");
+          else if (aucun) snprintf(texte, sizeof(texte), "Aucun scénario choisi");
+          else texte[0] = '\0';
+          lv_label_set_text(id(lbl_sce_etat), texte);
+          lv_obj_set_style_text_color(id(lbl_sce_etat), lv_color_hex(connecte && retour == 2 ? 0x4CAF50 : 0xFF9800), 0);
+
+interval:
+  - interval: 1s
+    then:
+      - if:
+          condition:
+            lambda: |-
+              int r = id(scenarios_retour);
+              if (r == 0) return false;
+              return millis() - id(scenarios_retour_ms) > (r == 1 ? ${scenarios_attente_ms} : ${scenarios_message_ms});
+          then:
+            - lambda: |-
+                id(scenarios_retour) = id(scenarios_retour) == 1 ? 3 : 0;
+                id(scenarios_retour_ms) = millis();
+            - script.execute: scenarios_rafraichir

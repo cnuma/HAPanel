@@ -115,9 +115,10 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       environ 1 500 fichiers (environ 10 min). Option recommandée :
       `build_path: build/hapanel_banc` dans `hapanel_banc.yaml` (première
       compilation complète, environ 430 Mo de plus, gain à mesurer).
-- [ ] Bouton de pied de page « Scénarios » : icône Material Design à
-      choisir (par exemple `mdi:play-box-multiple` ou
-      `mdi:script-text-play`), scénarios et commandes à définir.
+- [ ] Page « Scénarios » (D024) : codée, à tester sur le module après réimport
+      du blueprint : lancement, « Lancé », « Refusé par HA », « Pas de réponse
+      de HA », entité indisponible, HA déconnecté, noms longs, barre à 5 boutons
+      de 43 px au doigt.
 - [x] Écran « Météo » (D019), écran « Planning » (D020) et blueprint unique
       `module.yaml` (D021) : validés par le propriétaire le 1er novembre 2026
       (« tout marche »), fusionnés dans `main`. Mémoire : 173 Ko libres, plus

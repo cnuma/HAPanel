@@ -491,3 +491,24 @@ qui cite la précédente.
 - Limite : si l'écran éclaire la LDR, baisser sa luminosité assombrit la mesure
   et accentue la baisse. Effet borné par `retro_nuit`, à vérifier au banc, comme
   la pièce sombre, jamais testée.
+
+## D024 — Écran scénarios, choisis dans le blueprint du module
+
+- Date : 1er novembre 2026 — Statut : demandé par le propriétaire, non testé sur
+  le module ; nombre de boutons et disposition choisis par l'agent.
+- Décision :
+  - jusqu'à 6 scènes, scripts ou automatisations, choisis dans le blueprint
+    `module.yaml` (champ facultatif). Grille de 2 boutons sur 3 lignes, au nom de
+    l'entité (24 caractères au plus) ;
+  - le panneau envoie `scenario` et un numéro par `esphome.hapanel_commande` :
+    seul le blueprint connaît les entités et il refuse tout numéro hors liste ou
+    entité indisponible ;
+  - le panneau affiche ce qui est vrai : « Envoi en cours », puis « Lancé » ou
+    « Refusé par HA » selon la clé `scen_resultat`, ou « Pas de réponse de HA »
+    après 10 s. Pas de second lancement pendant l'attente. « Lancé » signifie que
+    HA a accepté l'action, pas que le scénario a abouti ;
+  - HA déconnecté, noms non reçus ou périmés (15 min) : aucune commande (P2, P4) ;
+  - barre de navigation à 5 boutons de 43 px, à valider au doigt.
+- Limites : les noms et la disponibilité sont renvoyés toutes les 5 min et à la
+  connexion, pas à chaque changement. Une automatisation est lancée sans ses
+  conditions (`automation.trigger`). Un seul toucher suffit : pas de confirmation.
