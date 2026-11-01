@@ -399,8 +399,8 @@ qui cite la précédente.
 ## D019 — Écran météo, localisation portée par Home Assistant
 
 - Date : 1er novembre 2026 — Statut : demandé par le propriétaire, implémenté
-  sur `feature/page-meteo`, **non testé sur le panneau** ; disposition proposée
-  par l'agent, à valider à l'écran.
+  et validé par le propriétaire le 1er novembre 2026 (« tout marche ») ; états
+  dégradés non confirmés séparément (`docs/TODO.md`).
 - Décision :
   - le panneau ne connaît ni la position de la maison ni aucun service météo
     (D007, D012) : le blueprint (`module.yaml`, D021) lit l'entité
@@ -418,13 +418,12 @@ qui cite la précédente.
   - une panne de la météo ne déclenche pas l'alerte de la LED, réservée au
     chauffage et aux températures (D017).
 - Limite : températures affichées avec « ° » seul, dans l'unité de l'entité.
-  Blueprint non exécuté dans Home Assistant à ce stade.
 
 ## D020 — Écran planning d'après les calendriers de Home Assistant
 
 - Date : 1er novembre 2026 — Statut : demandé par le propriétaire, implémenté
-  sur `feature/page-planning`, **non testé sur le panneau** ; disposition
-  proposée par l'agent, à valider à l'écran.
+  et validé par le propriétaire le 1er novembre 2026 (« tout marche ») ; états
+  dégradés non confirmés séparément (`docs/TODO.md`).
 - Contexte : le chauffage est programmé par des calendriers HA, un par zone
   (maison, cuisine, baignoire, douche) ; les événements commencent au quart
   d'heure (06:15) et peuvent se chevaucher.
@@ -453,9 +452,9 @@ qui cite la précédente.
 
 ## D021 — Un seul blueprint par module
 
-- Date : 1er novembre 2026 — Statut : accepté (choix du propriétaire), **non
-  exécuté dans Home Assistant** ; remplace les blueprints distincts de D019 et
-  D020 et, une fois validé, `ecran_accueil.yaml` (D014).
+- Date : 1er novembre 2026 — Statut : accepté (choix du propriétaire), validé
+  dans Home Assistant par le propriétaire le 1er novembre 2026 ; remplace
+  `ecran_accueil.yaml` (D014), retiré du dépôt.
 - Contexte : 5 modules prévus ; un blueprint par page imposerait 15
   automatisations.
 - Décision : `blueprints/automation/hapanel/module.yaml` alimente toutes les
