@@ -1,0 +1,117 @@
+# Ecran menu (D025) : acces a toutes les pages depuis la barre de navigation.
+# Une place reste libre pour la prochaine page. Fonctionne sans Home Assistant (P5).
+lvgl:
+  pages:
+    - id: page_menu
+      bg_color: 0x000000
+      widgets:
+        - button:
+            id: btn_men_accueil
+            align: TOP_LEFT
+            x: 8
+            y: 8
+            width: 108
+            height: 80
+            pad_all: 4
+            widgets:
+              - label:
+                  align: TOP_MID
+                  y: 8
+                  text_font: police_icones
+                  text: "\U000F02DC"
+              - label:
+                  align: BOTTOM_MID
+                  y: -8
+                  text: "Accueil"
+            on_click:
+              - lvgl.page.show:
+                  id: page_accueil
+                  animation: NONE
+        - button:
+            id: btn_men_meteo
+            align: TOP_LEFT
+            x: 124
+            y: 8
+            width: 108
+            height: 80
+            pad_all: 4
+            widgets:
+              - label:
+                  align: TOP_MID
+                  y: 8
+                  text_font: police_icones
+                  text: "\U000F0595"
+              - label:
+                  align: BOTTOM_MID
+                  y: -8
+                  text: "Météo"
+            on_click:
+              - lvgl.page.show:
+                  id: page_meteo
+                  animation: NONE
+        - button:
+            id: btn_men_planning
+            align: TOP_LEFT
+            x: 8
+            y: 96
+            width: 108
+            height: 80
+            pad_all: 4
+            widgets:
+              - label:
+                  align: TOP_MID
+                  y: 8
+                  text_font: police_icones
+                  text: "\U000F00F0"
+              - label:
+                  align: BOTTOM_MID
+                  y: -8
+                  text: "Planning"
+            on_click:
+              - lvgl.page.show:
+                  id: page_planning
+                  animation: NONE
+        - button:
+            id: btn_men_scenarios
+            align: TOP_LEFT
+            x: 124
+            y: 96
+            width: 108
+            height: 80
+            pad_all: 4
+            widgets:
+              - label:
+                  align: TOP_MID
+                  y: 8
+                  text_font: police_icones
+                  text: "\U000F0D19"
+              - label:
+                  align: BOTTOM_MID
+                  y: -8
+                  text: "Scénarios"
+            on_click:
+              - lvgl.page.show:
+                  id: page_scenarios
+                  animation: NONE
+        - button:
+            id: btn_men_apropos
+            align: TOP_LEFT
+            x: 8
+            y: 184
+            width: 108
+            height: 80
+            pad_all: 4
+            widgets:
+              - label:
+                  align: TOP_MID
+                  y: 8
+                  text_font: police_icones
+                  text: "\U000F02FD"
+              - label:
+                  align: BOTTOM_MID
+                  y: -8
+                  text: "À propos"
+            on_click:
+              - lvgl.page.show:
+                  id: page_apropos
+                  animation: NONE

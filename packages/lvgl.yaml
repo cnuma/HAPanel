@@ -15,14 +15,14 @@ font:
   # maison, Manuel (circle-medium), Hors-gel (snowflake), Eco (leaf),
   # Confort (sofa), Boost (rocket-launch), wifi-off, lan-disconnect (D015),
   # meteo (weather-partly-cloudy, D019), planning (calendar-clock, D020),
-  # scenarios (play-box-multiple, D024).
+  # scenarios (play-box-multiple, D024), menu et a propos (information-outline, D025).
   - file:
       type: web
       url: https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/fonts/materialdesignicons-webfont.ttf
     id: police_icones
     size: 24
     bpp: 4
-    glyphs: ["\U000F02DC", "\U000F09DE", "\U000F0717", "\U000F032A", "\U000F04B9", "\U000F14DE", "\U000F05AA", "\U000F0319", "\U000F0595", "\U000F00F0", "\U000F0D19"]
+    glyphs: ["\U000F02DC", "\U000F09DE", "\U000F0717", "\U000F032A", "\U000F04B9", "\U000F14DE", "\U000F05AA", "\U000F0319", "\U000F0595", "\U000F00F0", "\U000F0D19", "\U000F035C", "\U000F02FD"]
 
 globals:
   # Etat de connexion affiche : 0 non connecte, 1 connecte. Le libelle n'est
@@ -77,7 +77,7 @@ lvgl:
             long_mode: WRAP
             width: 216
             text: "Mémoire : mesure en cours"
-  # Barre de navigation, commune a toutes les pages (D014).
+  # Barre de navigation, commune a toutes les pages (D014, D025).
   top_layer:
     widgets:
       - obj:
@@ -91,11 +91,10 @@ lvgl:
           bg_color: 0x212121
           scrollable: false
           widgets:
-            # Icones : maison, meteo, planning, scenarios (Material Design) et « i ».
             - button:
                 id: btn_nav_accueil
                 align: LEFT_MID
-                width: 43
+                width: 68
                 height: 36
                 widgets:
                   - label:
@@ -107,63 +106,24 @@ lvgl:
                       id: page_accueil
                       animation: NONE
             - button:
-                id: btn_nav_meteo
-                align: LEFT_MID
-                x: 47
-                width: 43
-                height: 36
-                widgets:
-                  - label:
-                      align: CENTER
-                      text_font: police_icones
-                      text: "\U000F0595"
-                on_click:
-                  - lvgl.page.show:
-                      id: page_meteo
-                      animation: NONE
-            - button:
-                id: btn_nav_planning
-                align: LEFT_MID
-                x: 94
-                width: 43
-                height: 36
-                widgets:
-                  - label:
-                      align: CENTER
-                      text_font: police_icones
-                      text: "\U000F00F0"
-                on_click:
-                  - lvgl.page.show:
-                      id: page_planning
-                      animation: NONE
-            - button:
-                id: btn_nav_scenarios
-                align: LEFT_MID
-                x: 141
-                width: 43
-                height: 36
-                widgets:
-                  - label:
-                      align: CENTER
-                      text_font: police_icones
-                      text: "\U000F0D19"
-                on_click:
-                  - lvgl.page.show:
-                      id: page_scenarios
-                      animation: NONE
-            - button:
-                id: btn_nav_apropos
+                id: btn_nav_menu
                 align: RIGHT_MID
-                width: 43
+                width: 160
                 height: 36
                 widgets:
                   - label:
                       align: CENTER
+                      x: -30
+                      text_font: police_icones
+                      text: "\U000F035C"
+                  - label:
+                      align: CENTER
+                      x: 14
                       text_font: police_titre
-                      text: "i"
+                      text: "Menu"
                 on_click:
                   - lvgl.page.show:
-                      id: page_apropos
+                      id: page_menu
                       animation: NONE
 
 interval:

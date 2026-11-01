@@ -117,8 +117,9 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       compilation complète, environ 430 Mo de plus, gain à mesurer).
 - [ ] Page « Scénarios » (D024) : codée, à tester sur le module après réimport
       du blueprint : lancement, « Lancé », « Refusé par HA », « Pas de réponse
-      de HA », entité indisponible, HA déconnecté, noms longs, barre à 5 boutons
-      de 43 px au doigt.
+      de HA », entité indisponible, HA déconnecté, noms longs, nom personnalisé.
+- [ ] Page « Menu » (D025) : codée, à tester sur le module : barre Accueil + Menu,
+      accès à chaque page, sans HA, retour à l'accueil après 1 min.
 - [x] Écran « Météo » (D019), écran « Planning » (D020) et blueprint unique
       `module.yaml` (D021) : validés par le propriétaire le 1er novembre 2026
       (« tout marche »), fusionnés dans `main`. Mémoire : 173 Ko libres, plus

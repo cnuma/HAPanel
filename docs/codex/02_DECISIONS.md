@@ -497,8 +497,8 @@ qui cite la précédente.
 - Date : 1er novembre 2026 — Statut : demandé par le propriétaire, non testé sur
   le module ; nombre de boutons et disposition choisis par l'agent.
 - Décision :
-  - jusqu'à 6 scènes, scripts ou automatisations, choisis dans le blueprint
-    `module.yaml` (champ facultatif). Grille de 2 boutons sur 3 lignes, au nom de
+  - jusqu'à 6 scènes, scripts ou automatisations, un champ et un nom facultatif par bouton dans le blueprint
+    `module.yaml`. Grille de 2 boutons sur 3 lignes, au nom saisi, sinon à celui de
     l'entité (24 caractères au plus) ;
   - le panneau envoie `scenario` et un numéro par `esphome.hapanel_commande` :
     seul le blueprint connaît les entités et il refuse tout numéro hors liste ou
@@ -508,7 +508,17 @@ qui cite la précédente.
     après 10 s. Pas de second lancement pendant l'attente. « Lancé » signifie que
     HA a accepté l'action, pas que le scénario a abouti ;
   - HA déconnecté, noms non reçus ou périmés (15 min) : aucune commande (P2, P4) ;
-  - barre de navigation à 5 boutons de 43 px, à valider au doigt.
+  - accès par la page Menu (D025).
 - Limites : les noms et la disponibilité sont renvoyés toutes les 5 min et à la
   connexion, pas à chaque changement. Une automatisation est lancée sans ses
   conditions (`automation.trigger`). Un seul toucher suffit : pas de confirmation.
+
+## D025 — Page Menu et barre de navigation à deux boutons
+
+- Date : 1er novembre 2026 — Statut : choix du propriétaire (option B), non testé
+  sur le module ; remplace la barre à une icône par page (D014, D019, D020).
+- Contexte : avec les scénarios, 5 boutons de 43 px, jugés trop petits.
+- Décision : barre avec Accueil (68 px) et Menu (160 px). La page Menu donne accès
+  à toutes les pages par de grandes tuiles, avec une place libre. L'accueil reste
+  à un toucher, les autres pages à deux. Navigation sans HA ni Wi-Fi (P5) ; retour
+  à l'accueil après 1 min depuis le Menu aussi (D022).

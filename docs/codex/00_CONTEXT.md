@@ -25,6 +25,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Météo | Entité `weather.*` choisie dans le blueprint `module.yaml` : condition et température actuelles, prévisions quotidiennes sur 3 jours (`weather.get_forecasts`) ; clés `meteo_*` (D019) | Aucune | Implémenté (`packages/pages/meteo.yaml`), validé par le propriétaire le 1er novembre 2026 ; états dégradés non confirmés (`docs/TODO.md`) |
 | Planning | 1 à 4 entités `calendar.*` choisies dans le blueprint `module.yaml` : créneaux du jour (`calendar.get_events`) ; clés `plan_*` (D020) | Aucune | Implémenté (`packages/pages/planning.yaml`), validé par le propriétaire le 1er novembre 2026 ; états dégradés non confirmés (`docs/TODO.md`) |
 | Scénarios | Noms de 6 scènes, scripts ou automatisations au plus, choisis dans le blueprint `module.yaml` ; clés `scen_*` (D024) | Lancer un scénario par son numéro, avec réponse de HA (`esphome.hapanel_commande`) | Implémenté (`packages/pages/scenarios.yaml`), non testé sur le module (`docs/TODO.md`) |
+| Menu | Aucune | Navigation vers toutes les pages (D025) | Implémenté (`packages/pages/menu.yaml`), non testé sur le module (`docs/TODO.md`) |
 | À propos (version, SHA, connexion, mémoire) | Internes | Aucune | Validé au banc le 28 octobre 2026, y compris connecté / non connecté (`packages/lvgl.yaml`) |
 
 ## Home Assistant

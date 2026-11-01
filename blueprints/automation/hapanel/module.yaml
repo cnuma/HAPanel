@@ -88,18 +88,56 @@ blueprint:
     scenarios:
       name: Scénarios
       description: >-
-        Jusqu'à 6 scènes, scripts ou automatisations, dans l'ordre d'affichage ;
-        les suivants sont ignorés. Le bouton porte le nom de l'entité. Une
+        Jusqu'à 6 scènes, scripts ou automatisations, chacun à sa place sur l'écran.
+        Sans nom, le bouton porte celui de l'entité ; 24 caractères au plus. Une
         automatisation est lancée sans vérifier ses conditions.
-      default: []
-      selector:
-        entity:
-          multiple: true
-          filter:
-            - domain:
-                - scene
-                - script
-                - automation
+      collapsed: true
+      input:
+        scenario_1: &scenario
+          name: Scénario 1
+          default: ""
+          selector:
+            entity:
+              filter:
+                - domain:
+                    - scene
+                    - script
+                    - automation
+        nom_1: &nom
+          name: Nom du bouton 1
+          default: ""
+          selector:
+            text:
+        scenario_2:
+          <<: *scenario
+          name: Scénario 2
+        nom_2:
+          <<: *nom
+          name: Nom du bouton 2
+        scenario_3:
+          <<: *scenario
+          name: Scénario 3
+        nom_3:
+          <<: *nom
+          name: Nom du bouton 3
+        scenario_4:
+          <<: *scenario
+          name: Scénario 4
+        nom_4:
+          <<: *nom
+          name: Nom du bouton 4
+        scenario_5:
+          <<: *scenario
+          name: Scénario 5
+        nom_5:
+          <<: *nom
+          name: Nom du bouton 5
+        scenario_6:
+          <<: *scenario
+          name: Scénario 6
+        nom_6:
+          <<: *nom
+          name: Nom du bouton 6
 
 mode: queued
 max: 20
@@ -113,7 +151,20 @@ variables:
   consigne_max: !input consigne_max
   meteo: !input meteo
   calendriers: !input calendriers
-  scenarios: !input scenarios
+  scenarios:
+    - !input scenario_1
+    - !input scenario_2
+    - !input scenario_3
+    - !input scenario_4
+    - !input scenario_5
+    - !input scenario_6
+  noms:
+    - !input nom_1
+    - !input nom_2
+    - !input nom_3
+    - !input nom_4
+    - !input nom_5
+    - !input nom_6
   # Action ESPHome du module : esphome.<nom du noeud>_maj_valeur.
   action_maj: "esphome.{{ device_attr(panneau, 'name') | slugify }}_maj_valeur"
 
@@ -181,7 +232,7 @@ actions:
                 sequence:
                   - variables:
                       n: "{{ valeur | int(0) }}"
-                      cible: "{{ scenarios[n - 1] if 1 <= n <= [scenarios | length, 6] | min else '' }}"
+                      cible: "{{ (scenarios[n - 1] or '') if 1 <= n <= 6 else '' }}"
                   - if:
                       # Une scène jamais activée est « unknown » : elle reste lançable.
                       - condition: template
@@ -304,13 +355,13 @@ actions:
               sequence:
                 - variables:
                     i: "{{ repeat.item }}"
-                    s: "{{ scenarios[i] if i < scenarios | length else '' }}"
+                    s: "{{ scenarios[i] or '' }}"
                 - action: "{{ action_maj }}"
                   data:
                     cle: "scen_{{ i + 1 }}_nom"
                     valeur: >-
                       {{ '-' if not s else '?' if states(s) == 'unavailable'
-                         else (state_attr(s, 'friendly_name') or s)[:24] }}
+                         else ((noms[i] or '') | trim or state_attr(s, 'friendly_name') or s)[:24] }}
       # Météo.
       - if:
           - condition: template
