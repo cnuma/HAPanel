@@ -117,6 +117,8 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       compilation complète, environ 430 Mo de plus, gain à mesurer).
 - [x] Page « Scénarios » (D024) et page « Menu » (D025) : validées par le
       propriétaire le 1er novembre 2026 (« tout marche »), fusionnées dans `main`.
+- [ ] Icône et couleur des boutons de scénarios (D026) : codées, à tester sur le
+      module après réimport du blueprint : 25 icônes, 8 couleurs, nom sur 2 lignes.
 - [ ] Scénarios et menu, cas non confirmés séparément : « Refusé par HA », « Pas
       de réponse de HA », entité indisponible, HA déconnecté, noms longs.
 - [x] Écran « Météo » (D019), écran « Planning » (D020) et blueprint unique

@@ -13,7 +13,7 @@ blueprint:
     et non verrouillé et si la consigne est dans les bornes ; consigne et
     préréglage exigent un chauffage allumé. Le module doit être autorisé à
     effectuer des actions Home Assistant (options de l'intégration ESPHome).
-    Décisions D014, D015, D019, D020, D021 et D024 du dépôt cnuma/HAPanel.
+    Décisions D014, D015, D019, D020, D021, D024 et D026 du dépôt cnuma/HAPanel.
   domain: automation
   source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/module.yaml
   input:
@@ -89,7 +89,8 @@ blueprint:
       name: Scénarios
       description: >-
         Jusqu'à 6 scènes, scripts ou automatisations, chacun à sa place sur l'écran.
-        Sans nom, le bouton porte celui de l'entité ; 24 caractères au plus. Une
+        Sans nom, le bouton porte celui de l'entité ; 24 caractères au plus, 2 lignes
+        avec une icône. Une
         automatisation est lancée sans vérifier ses conditions.
       collapsed: true
       input:
@@ -108,36 +109,148 @@ blueprint:
           default: ""
           selector:
             text:
+        icone_1: &icone
+          name: Icône du bouton 1
+          default: aucune
+          selector:
+            select:
+              mode: dropdown
+              options:
+                - label: Aucune
+                  value: aucune
+                - label: Lumière
+                  value: lumiere
+                - label: Lumière éteinte
+                  value: lumiere_eteinte
+                - label: Soleil
+                  value: soleil
+                - label: Lune
+                  value: lune
+                - label: Maison
+                  value: maison
+                - label: Départ
+                  value: depart
+                - label: Retour
+                  value: retour
+                - label: Canapé
+                  value: canape
+                - label: Film
+                  value: film
+                - label: Musique
+                  value: musique
+                - label: Télévision
+                  value: television
+                - label: Lit
+                  value: lit
+                - label: Réveil
+                  value: reveil
+                - label: Repas
+                  value: repas
+                - label: Café
+                  value: cafe
+                - label: Chauffage
+                  value: chauffage
+                - label: Hors-gel
+                  value: hors_gel
+                - label: Ventilateur
+                  value: ventilateur
+                - label: Volets
+                  value: volets
+                - label: Prise
+                  value: prise
+                - label: Alarme
+                  value: alarme
+                - label: Verrou
+                  value: verrou
+                - label: Arrosage
+                  value: arrosage
+                - label: Vacances
+                  value: vacances
+                - label: Scénario
+                  value: scenario
+        couleur_1: &couleur
+          name: Couleur du bouton 1
+          default: bleu
+          selector:
+            select:
+              mode: dropdown
+              options:
+                - label: Bleu
+                  value: bleu
+                - label: Vert
+                  value: vert
+                - label: Orange
+                  value: orange
+                - label: Rouge
+                  value: rouge
+                - label: Violet
+                  value: violet
+                - label: Turquoise
+                  value: turquoise
+                - label: Rose
+                  value: rose
+                - label: Gris
+                  value: gris
         scenario_2:
           <<: *scenario
           name: Scénario 2
         nom_2:
           <<: *nom
           name: Nom du bouton 2
+        icone_2:
+          <<: *icone
+          name: Icône du bouton 2
+        couleur_2:
+          <<: *couleur
+          name: Couleur du bouton 2
         scenario_3:
           <<: *scenario
           name: Scénario 3
         nom_3:
           <<: *nom
           name: Nom du bouton 3
+        icone_3:
+          <<: *icone
+          name: Icône du bouton 3
+        couleur_3:
+          <<: *couleur
+          name: Couleur du bouton 3
         scenario_4:
           <<: *scenario
           name: Scénario 4
         nom_4:
           <<: *nom
           name: Nom du bouton 4
+        icone_4:
+          <<: *icone
+          name: Icône du bouton 4
+        couleur_4:
+          <<: *couleur
+          name: Couleur du bouton 4
         scenario_5:
           <<: *scenario
           name: Scénario 5
         nom_5:
           <<: *nom
           name: Nom du bouton 5
+        icone_5:
+          <<: *icone
+          name: Icône du bouton 5
+        couleur_5:
+          <<: *couleur
+          name: Couleur du bouton 5
         scenario_6:
           <<: *scenario
           name: Scénario 6
         nom_6:
           <<: *nom
           name: Nom du bouton 6
+        icone_6:
+          <<: *icone
+          name: Icône du bouton 6
+        couleur_6:
+          <<: *couleur
+          name: Couleur du bouton 6
 
 mode: queued
 max: 20
@@ -165,6 +278,20 @@ variables:
     - !input nom_4
     - !input nom_5
     - !input nom_6
+  icones:
+    - !input icone_1
+    - !input icone_2
+    - !input icone_3
+    - !input icone_4
+    - !input icone_5
+    - !input icone_6
+  couleurs:
+    - !input couleur_1
+    - !input couleur_2
+    - !input couleur_3
+    - !input couleur_4
+    - !input couleur_5
+    - !input couleur_6
   # Action ESPHome du module : esphome.<nom du noeud>_maj_valeur.
   action_maj: "esphome.{{ device_attr(panneau, 'name') | slugify }}_maj_valeur"
 
@@ -356,12 +483,21 @@ actions:
                 - variables:
                     i: "{{ repeat.item }}"
                     s: "{{ scenarios[i] or '' }}"
-                - action: "{{ action_maj }}"
-                  data:
-                    cle: "scen_{{ i + 1 }}_nom"
-                    valeur: >-
-                      {{ '-' if not s else '?' if states(s) == 'unavailable'
-                         else ((noms[i] or '') | trim or state_attr(s, 'friendly_name') or s)[:24] }}
+                - repeat:
+                    for_each:
+                      - cle: "scen_{{ i + 1 }}_icone"
+                        valeur: "{{ icones[i] or 'aucune' }}"
+                      - cle: "scen_{{ i + 1 }}_couleur"
+                        valeur: "{{ couleurs[i] or 'bleu' }}"
+                      - cle: "scen_{{ i + 1 }}_nom"
+                        valeur: >-
+                          {{ '-' if not s else '?' if states(s) == 'unavailable'
+                             else ((noms[i] or '') | trim or state_attr(s, 'friendly_name') or s)[:24] }}
+                    sequence:
+                      - action: "{{ action_maj }}"
+                        data:
+                          cle: "{{ repeat.item.cle }}"
+                          valeur: "{{ repeat.item.valeur }}"
       # Météo.
       - if:
           - condition: template

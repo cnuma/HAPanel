@@ -522,3 +522,17 @@ qui cite la précédente.
   à toutes les pages par de grandes tuiles, avec une place libre. L'accueil reste
   à un toucher, les autres pages à deux. Navigation sans HA ni Wi-Fi (P5) ; retour
   à l'accueil après 1 min depuis le Menu aussi (D022).
+
+## D026 — Icône et couleur des boutons de scénarios
+
+- Date : 1er novembre 2026 — Statut : choix du propriétaire (couleurs en liste,
+  option A), non testé sur le module.
+- Décision :
+  - chaque scénario du blueprint gagne une liste « Icône » (facultative) et une liste
+    « Couleur » (bleu par défaut), clés `scen_N_icone` et `scen_N_couleur` ;
+  - 25 icônes compilées (toutes celles de HA ne tiendraient pas en flash, G6) et
+    8 couleurs lisibles avec un texte blanc ;
+  - icône au-dessus du nom, limité alors à 2 lignes ; bouton inactif en gris quelle
+    que soit sa couleur.
+- Ajouter une icône ou une couleur modifie le blueprint et
+  `packages/pages/scenarios.yaml`, puis demande de reflasher le module.
