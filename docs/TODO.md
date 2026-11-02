@@ -146,3 +146,14 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [ ] Usurpation de `device_id`, à évaluer puis à inscrire au `08` : HA écrit son
       `device_id`, puis les données de l'événement, qui peuvent l'écraser. Un firmware
       modifié, avec la clé d'API, pourrait se faire passer pour un autre panneau.
+
+## P4 — Idées du propriétaire (2 novembre 2026), à spécifier avant tout code
+
+- [ ] Message d'accueil quand quelqu'un arrive : écran allumé, LED en arc-en-ciel
+      rapide. Déclencheur choisi dans le blueprint (contact de porte, lumière
+      d'une pièce…), seulement après une période sans déclenchement réglable.
+      Message selon la saison et l'heure, tiré d'une bibliothèque facile à
+      modifier ; messages temporaires affichés une seule fois. Éventuellement
+      météo du moment et saint du jour. Piste proposée le 2 novembre 2026 :
+      bibliothèque dans des listes de tâches de HA, saint du jour dans le
+      firmware ; questions ouvertes à trancher avec le propriétaire.
