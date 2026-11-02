@@ -44,6 +44,27 @@ lvgl:
           bg_color: 0x000000
           scrollable: false
           widgets:
+            # Croix dans un cercle : montre que le message se ferme a la main.
+            - button:
+                id: btn_msg_fermer
+                align: TOP_RIGHT
+                x: -10
+                y: 10
+                width: 44
+                height: 44
+                radius: 22
+                pad_all: 0
+                bg_color: 0x000000
+                border_width: 2
+                border_color: 0xFFFFFF
+                shadow_width: 0
+                widgets:
+                  - label:
+                      align: CENTER
+                      text_font: police_icones
+                      text: "\U000F0156"
+                on_click:
+                  - script.execute: message_fermer
             - label:
                 id: lbl_msg_texte
                 align: CENTER

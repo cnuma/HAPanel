@@ -129,8 +129,8 @@ désactivée : seul l'écran montre alors une anomalie.
 
 Quand quelqu'un arrive après une absence, le panneau peut afficher un message de
 bienvenue en plein écran, avec la météo. La LED change alors de couleur en continu.
-Le message disparaît après 3 minutes ; **un toucher le ferme** sans rien déclencher
-d'autre.
+Le message disparaît après 3 minutes. Pour le fermer avant, touchez **la croix** en
+haut à droite, ou n'importe où sur l'écran : rien d'autre n'est déclenché.
 
 ## Textes orange
 

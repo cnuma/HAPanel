@@ -593,8 +593,8 @@ qui cite la précédente.
     facultative ; le saint du jour viendra sur cette même ligne, sans changer le
     firmware ;
   - module : action `message_accueil(texte, infos)` (240 octets au plus par
-    texte), plein écran par-dessus la barre de navigation, fermé par un toucher
-    ou après 3 min, écran allumé pendant l'affichage ; fermé à la déconnexion de
+    texte), plein écran par-dessus la barre de navigation, fermé par la croix
+    en haut à droite (demande du propriétaire), par un toucher ailleurs ou après 3 min, écran allumé pendant l'affichage ; fermé à la déconnexion de
     HA pour que l'état de la liaison redevienne visible (P2) ;
   - LED en arc-en-ciel (un tour en 2 s) au plafond de D018 × « Intensité LED » ;
     rien si « LED » est sur Éteinte ; l'alerte rouge reste prioritaire (P2) ;
