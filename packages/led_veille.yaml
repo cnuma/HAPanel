@@ -5,11 +5,15 @@ substitutions:
   veille_delai_ms: "60000"
   # Respiration de la LED (D018) : niveaux a ajuster au banc. Plafond interpole
   # entre piece eclairee et piece sombre selon la tension de la LDR, qui monte
-  # dans le noir. Le plancher garde l'etat visible, ecran eteint (P2).
+  # dans le noir, puis multiplie par le reglage « Intensite LED » (D027). Plancher
+  # nul : la LED s'eteint au creux de chaque respiration.
   led_periode_ms: "6000"
-  led_plancher: "0.20"
+  led_plancher: "0.0"
   led_plafond_jour: "0.25"
   led_plafond_nuit: "0.05"
+  # 20 % des plafonds : 5 % de jour, 1 % de nuit (retour du proprietaire,
+  # 2 novembre 2026).
+  led_intensite_defaut: "20"
   ldr_tension_jour: "0.09"
   ldr_tension_nuit: "0.20"
   # Luminosite du retroeclairage (D023), a ajuster au banc. La correction gamma
@@ -44,6 +48,49 @@ globals:
   - id: led_allumee
     type: bool
     initial_value: "false"
+
+# Reglages de la LED par module (D027), sur la page de l'appareil dans Home
+# Assistant ou imposes par le blueprint (cles led_*, packages/liaison_ha.yaml).
+# Gardes en flash, ecrits seulement quand ils changent (G3).
+select:
+  - platform: template
+    id: led_mode
+    name: LED
+    icon: mdi:led-on
+    entity_category: config
+    options:
+      - Respiration
+      - Éteinte
+    initial_option: Respiration
+    optimistic: true
+    restore_value: true
+
+number:
+  - platform: template
+    id: led_intensite
+    name: Intensité LED
+    icon: mdi:brightness-6
+    entity_category: config
+    min_value: 0
+    max_value: 100
+    step: 5
+    unit_of_measurement: "%"
+    mode: slider
+    initial_value: ${led_intensite_defaut}
+    optimistic: true
+    restore_value: true
+
+switch:
+  - platform: template
+    id: led_alerte_active
+    name: Alerte LED
+    icon: mdi:alert-circle-outline
+    entity_category: config
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_ON
+    # Desactivee : le clignotement en cours s'arrete aussitot.
+    on_turn_off:
+      - lambda: if (id(led_alerte)) id(sortie_led_rouge).set_level(0.0f);
 
 # En pause, LVGL ignore le toucher : reveiller au relachement du doigt empeche
 # le premier toucher d'envoyer une commande (P4).
@@ -120,7 +167,8 @@ interval:
   - interval: 500ms
     then:
       - lambda: |-
-          if (!id(led_alerte)) return;
+          // Alerte desactivee (D027) : LED eteinte, l'ecran montre le probleme.
+          if (!id(led_alerte) || !id(led_alerte_active).state) return;
           id(led_allumee) = !id(led_allumee);
           id(sortie_led_rouge).set_level(id(led_allumee) ? 1.0f : 0.0f);
   # Meme facteur sur les trois canaux : les melanges sont conserves (D018).
@@ -128,7 +176,11 @@ interval:
     then:
       - lambda: |-
           if (id(led_alerte)) return;
-          float plafond = ${led_plafond_jour} + id(ldr_obscurite) * (${led_plafond_nuit} - ${led_plafond_jour});
+          // LED « Eteinte » (index 1) ou intensite nulle : facteur nul (D027).
+          auto mode = id(led_mode).active_index();
+          float intensite = mode.has_value() && *mode == 1 ? 0.0f : id(led_intensite).state / 100.0f;
+          if (isnan(intensite)) intensite = ${led_intensite_defaut} / 100.0f;
+          float plafond = intensite * (${led_plafond_jour} + id(ldr_obscurite) * (${led_plafond_nuit} - ${led_plafond_jour}));
           float s = 0.5f - 0.5f * cos(2.0f * M_PI * (millis() % ${led_periode_ms}) / ${led_periode_ms});
           float k = plafond * (${led_plancher} + (1.0f - ${led_plancher}) * s * s);
           id(sortie_led_rouge).set_level(id(led_rouge) * k);

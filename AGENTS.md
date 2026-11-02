@@ -198,6 +198,9 @@ complets ou un package, avec l'emplacement exact de chacun dans le dépôt.
   signaler : ne jamais poursuivre la séquence sur `main`.
 - Commits petits, explicites, testables ; pas de configuration qui ne
   compile pas poussée.
+- Pousser une branche de travail (`feature/…`, `fix/…`, `docs/…`, `chore/…`)
+  ne demande pas d'accord (propriétaire, 2 novembre 2026) : la signaler dans
+  la réponse. Fusionner ou pousser sur `main` reste soumis à son accord.
 - Ne jamais réécrire une branche publiée sans accord explicite du
   propriétaire ; si accordé, `git push --force-with-lease=<branche>:<sha>`.
 

@@ -27,6 +27,7 @@ avant fusion.
 | Actions Home Assistant autorisées pour le panneau | API native | Autorisation dans l'intégration ESPHome | Requise dès le prototype D012 pour l'événement `esphome.hapanel_demande_valeurs` |
 | Portée de l'autorisation des actions HA | API native | Clé de chiffrement de l'API | Un firmware modifié pourrait appeler d'autres actions que les événements du panneau ; la liste de scénarios (D024) ne limite que le chemin normal |
 | Action ESPHome `maj_valeur(cle, valeur)` | API native | Clé de chiffrement de l'API | D012 : n'importe quel client muni de la clé peut changer ce qu'affiche le panneau |
+| Entités de configuration « LED », « Intensité LED », « Alerte LED » et clés `led_*` | API native | Clé de chiffrement de l'API ; utilisateurs et automatisations de HA | D027 : peuvent éteindre la LED ou son alerte, rien d'autre ; l'écran montre toujours l'état réel (P2) |
 | Événement `esphome.hapanel_commande` (commande du chauffage et scénarios choisis dans le blueprint, D024) | API native, puis blueprint | Autorisation des actions HA du module ; le blueprint n'accepte que l'événement de son panneau, thermostat disponible et non verrouillé, consigne dans les bornes ; consigne et préréglage chauffage allumé seulement (D015) | D014 : le panneau ne peut qu'allumer, couper, régler la consigne ou le préréglage du thermostat choisi dans le blueprint |
 
 ## Dette technique

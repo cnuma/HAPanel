@@ -6,7 +6,8 @@ blueprint:
     consigne, préréglage et verrou du thermostat, bornes de la consigne. Météo :
     conditions actuelles et prévisions sur 3 jours. Planning : créneaux du jour
     de 1 à 4 calendriers. Scénarios : 6 scènes, scripts ou automatisations au
-    plus, lancés depuis le panneau. Envoi à chaque changement, toutes les 5 minutes, au
+    plus, lancés depuis le panneau. LED : réglages facultatifs, imposés au
+    module. Envoi à chaque changement, toutes les 5 minutes, au
     démarrage de Home Assistant et quand le panneau le demande (connexion).
     Exécute les commandes du panneau (allumer, couper, consigne, préréglage)
     seulement si elles viennent de ce panneau, si le thermostat est disponible
@@ -251,6 +252,72 @@ blueprint:
         couleur_6:
           <<: *couleur
           name: Couleur du bouton 6
+    led:
+      name: LED
+      description: >-
+        Réglages de la LED du module, aussi modifiables sur la page de l'appareil.
+        « Ne pas imposer » laisse la page de l'appareil décider ; une valeur
+        choisie ici la remplace à la connexion et toutes les 5 minutes (D027).
+      collapsed: true
+      input:
+        led_mode:
+          name: LED
+          default: ne_pas_imposer
+          selector:
+            select:
+              mode: dropdown
+              options:
+                - label: Ne pas imposer
+                  value: ne_pas_imposer
+                - label: Respiration
+                  value: respiration
+                - label: Éteinte
+                  value: eteinte
+        led_intensite:
+          name: Intensité LED
+          description: 100 % est le maximum ; 20 % par défaut sur le module.
+          default: ne_pas_imposer
+          selector:
+            select:
+              mode: dropdown
+              options:
+                - label: Ne pas imposer
+                  value: ne_pas_imposer
+                - { label: "0 %", value: "0" }
+                - { label: "5 %", value: "5" }
+                - { label: "10 %", value: "10" }
+                - { label: "15 %", value: "15" }
+                - { label: "20 %", value: "20" }
+                - { label: "25 %", value: "25" }
+                - { label: "30 %", value: "30" }
+                - { label: "35 %", value: "35" }
+                - { label: "40 %", value: "40" }
+                - { label: "45 %", value: "45" }
+                - { label: "50 %", value: "50" }
+                - { label: "55 %", value: "55" }
+                - { label: "60 %", value: "60" }
+                - { label: "65 %", value: "65" }
+                - { label: "70 %", value: "70" }
+                - { label: "75 %", value: "75" }
+                - { label: "80 %", value: "80" }
+                - { label: "85 %", value: "85" }
+                - { label: "90 %", value: "90" }
+                - { label: "95 %", value: "95" }
+                - { label: "100 %", value: "100" }
+        led_alerte:
+          name: Alerte LED
+          description: Clignotement rouge quand l'état du chauffage n'est pas sûr.
+          default: ne_pas_imposer
+          selector:
+            select:
+              mode: dropdown
+              options:
+                - label: Ne pas imposer
+                  value: ne_pas_imposer
+                - label: Activée
+                  value: "on"
+                - label: Désactivée
+                  value: "off"
 
 mode: queued
 max: 20
@@ -292,6 +359,13 @@ variables:
     - !input couleur_4
     - !input couleur_5
     - !input couleur_6
+  led_reglages:
+    - cle: led_mode
+      valeur: !input led_mode
+    - cle: led_intensite
+      valeur: !input led_intensite
+    - cle: led_alerte
+      valeur: !input led_alerte
   # Action ESPHome du module : esphome.<nom du noeud>_maj_valeur.
   action_maj: "esphome.{{ device_attr(panneau, 'name') | slugify }}_maj_valeur"
 
@@ -498,6 +572,19 @@ actions:
                         data:
                           cle: "{{ repeat.item.cle }}"
                           valeur: "{{ repeat.item.valeur }}"
+      # LED : seulement les réglages imposés (D027).
+      - if:
+          - condition: template
+            value_template: "{{ trigger.id in ['periodique', 'demarrage', 'demande'] }}"
+        then:
+          - repeat:
+              for_each: >-
+                {{ led_reglages | rejectattr('valeur', 'eq', 'ne_pas_imposer') | list }}
+              sequence:
+                - action: "{{ action_maj }}"
+                  data:
+                    cle: "{{ repeat.item.cle }}"
+                    valeur: "{{ repeat.item.valeur }}"
       # Météo.
       - if:
           - condition: template

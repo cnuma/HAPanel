@@ -36,7 +36,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Version | Core 2026.9.4, Supervisor 2026.10.4, OS 18.3 (relevé le 27 octobre 2026) |
 | Intégration | ESPHome, API native chiffrée (D005) |
 | Modules | Plusieurs prévus, un seul binaire : nœud `hapanel-xxxxxx` (D012) |
-| Liaison | Valeurs poussées par le blueprint unique `blueprints/automation/hapanel/module.yaml`, une automatisation par module (D021 ; action `maj_valeur`, clés listées en D014, D019, D020) ; demande de renvoi par l'événement `esphome.hapanel_demande_valeurs` (D012) ; commandes par l'événement `esphome.hapanel_commande` (D014). Le blueprint générique `envoyer_valeur.yaml` reste disponible |
+| Liaison | Valeurs poussées par le blueprint unique `blueprints/automation/hapanel/module.yaml`, une automatisation par module (D021 ; action `maj_valeur`, clés listées en D014, D019, D020, D024, D026, D027) ; demande de renvoi par l'événement `esphome.hapanel_demande_valeurs` (D012) ; commandes par l'événement `esphome.hapanel_commande` (D014). Le blueprint générique `envoyer_valeur.yaml` reste disponible |
 
 ## Matériel de référence
 
@@ -45,7 +45,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Carte | ESP32-2432S024C (D004) : ESP32 classique (module WROOM, double cœur), sans PSRAM |
 | Écran | 2,4", 240 × 320, contrôleur ILI9341 (confirmé au banc le 28 octobre 2026) |
 | Tactile | Capacitif CST820, bus I²C (adresse `0x15`), composant ESPHome `cst816`, lecture périodique 50 ms (D009) ; coordonnées conformes à l'écran sans calibrage |
-| LED | RVB de face avant, allumée à l'état bas : GPIO4 rouge, GPIO16 vert, GPIO17 bleu (D017) |
+| LED | RVB de face avant, allumée à l'état bas : GPIO4 rouge, GPIO16 vert, GPIO17 bleu (D017) ; mode, intensité et alerte réglables par module (D027) |
 | LDR | GPIO34, relevée le 31 octobre 2026, règle l'intensité de la LED (D018) et le rétroéclairage (D023), pièce sombre non testée |
 | Flash | 4 Mo (détectée au premier flash) ; ESP32 rev 3.1 |
 | Alimentation | Bloc secteur externe 1 A validé au banc ; port USB du PC insuffisant (R7) |
