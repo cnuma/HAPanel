@@ -133,6 +133,10 @@ toujours. Un message est tiré au hasard parmi ceux qui conviennent. Cochez une 
 pour la mettre de côté. Sans liste ou sans message possible : « Bonjour » ou
 « Bonsoir, bienvenue à la maison ! ».
 
+Pour démarrer, [exemples/messages_accueil.yaml](exemples/messages_accueil.yaml) est un
+script à coller dans Home Assistant : il ajoute 27 messages à la liste (mode d'emploi
+en tête du fichier).
+
 **Messages uniques.** Dans une seconde liste, la première tâche non cochée passe avant
 tout le reste, puis le blueprint la coche : elle ne s'affiche qu'une fois.
 
