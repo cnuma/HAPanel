@@ -28,18 +28,164 @@ Trois idées structurent tout le reste :
 | Événement `esphome.hapanel_commande` | API native | Module vers HA | Toutes les commandes |
 | OTA | Réseau local chiffré | PC vers module | Mise à jour du firmware |
 
-## Organisation du code
+## Organisation du YAML
+
+### Du YAML au firmware
+
+Le YAML ne s'exécute pas sur le module : c'est la description d'un firmware. ESPHome lit les
+fichiers, les assemble en une seule configuration, génère du C++ et le compile. Les blocs
+s'appliquent donc à deux moments :
+
+| Moment | Éléments | Exemple |
+|---|---|---|
+| Compilation | `!include`, `!secret`, `substitutions`, `packages`, `!extend` | `${retro_nuit}` devient `0.40` dans le code généré |
+| Exécution | `lambda`, `script`, `interval`, `on_click`, `api.actions` | `maj_valeur` traite une valeur reçue |
+
+Tout s'exécute dans la boucle principale d'ESPHome. Une attente dans une lambda bloque donc l'écran,
+le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dans le code généré.
+
+### Les fichiers
 
 ![Organisation des packages](images/architecture/02_packages.png)
 
-- **Assemblage :** `hapanel.yaml` ne contient que des inclusions et des substitutions.
-  `hapanel_banc.yaml` y ajoute le suivi mémoire et les journaux DEBUG.
-- **Ordre d'inclusion :** ESPHome garde l'ordre des packages pour les pages, et la
-  première page est affichée au démarrage. `accueil.yaml` doit donc rester avant
-  `lvgl.yaml`.
-- **Matériel :** seul `hardware.yaml` déclare broches et bus (G2).
-- **Couplage :** les packages partagent des identifiants ESPHome globaux, sans
-  encapsulation. Renommer un `id` ou une entité exposée exige une décision (G10).
+| Fichier | Lignes | Responsabilité |
+|---|---|---|
+| `hapanel.yaml` | 25 | Production : inclusions et substitutions seulement |
+| `hapanel_banc.yaml` | 27 | Banc : production, plus mémoire mesurée et journaux DEBUG |
+| `packages/base.yaml` | 61 | Nœud, ESP32, Wi-Fi, API, OTA, journaux, identité de build |
+| `packages/hardware.yaml` | 109 | Broches, bus, écran, tactile, sorties PWM, LDR (G2) |
+| `packages/lvgl.yaml` | 178 | Polices communes, À propos, barre de navigation, suivi de la connexion |
+| `packages/liaison_ha.yaml` | 451 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
+| `packages/led_veille.yaml` | 136 | Veille, retour à l'accueil, LED, rétroéclairage |
+| `packages/pages/accueil.yaml` | 818 | Température, chauffage, commandes, couleur de la LED |
+| `packages/pages/meteo.yaml` | 195 | Conditions et prévisions |
+| `packages/pages/planning.yaml` | 373 | Résumé et frises |
+| `packages/pages/scenarios.yaml` | 366 | Boutons et lancement |
+| `packages/pages/menu.yaml` | 117 | Tuiles de navigation |
+| `secrets.yaml` | | Wi-Fi et clé d'API, hors de Git (G9) |
+
+**Pour lire le projet :** `hapanel.yaml`, puis `liaison_ha.yaml`, puis `scenarios.yaml`, qui est la
+page la plus simple à commander. `accueil.yaml` est la plus dense et se lit en dernier.
+
+### Comment les fichiers s'assemblent
+
+`hapanel.yaml` les liste, et ESPHome les fusionne en une seule configuration :
+
+```yaml
+substitutions:
+  node_name: hapanel
+  version: "0.0.0-non-injectee"
+packages:
+  base: !include packages/base.yaml
+  hardware: !include packages/hardware.yaml
+  accueil: !include packages/pages/accueil.yaml
+  # autres pages, puis lvgl, liaison, led_veille
+```
+
+Un même bloc peut donc apparaître dans plusieurs fichiers. Chaque package y ajoute sa part :
+
+![Blocs déclarés par chaque package](images/architecture/20_yaml_matrice.png)
+
+- **Listes :** `script`, `globals`, `interval`, `sensor` ou `lvgl.pages` s'additionnent.
+- **Ordre d'inclusion :** il fixe l'ordre des pages, et la première est affichée au démarrage.
+  `accueil.yaml` doit donc rester avant `lvgl.yaml`.
+- **Substitutions :** celles du fichier principal priment. `hapanel_banc.yaml` passe ainsi `log_level`
+  à DEBUG, et `tools/build.ps1` impose `version` et `git_sha`.
+- **`!extend` :** complète un composant déclaré ailleurs, sans modifier son fichier. `led_veille.yaml`
+  ajoute le réveil à `tactile`, déclaré dans `hardware.yaml`.
+- **Couplage :** tous les `id` sont globaux, sans encapsulation. Renommer un `id` ou une entité
+  exposée exige une décision (G10).
+
+Pour voir le résultat de la fusion, sans publier cette sortie :
+
+```powershell
+.\tools\build.ps1 config
+```
+
+### Anatomie d'un package de page
+
+Les pages suivent le même plan, chacune ne déclarant que les blocs utiles. Par exemple,
+`scenarios.yaml` :
+
+```yaml
+substitutions:        # délais réglables
+font:                 # icônes, glyphes limités (G6)
+esphome:
+  on_boot:            # premier affichage, sans HA
+globals:              # état propre à la page
+lvgl:
+  pages:
+    - id: page_scenarios
+      widgets:        # disposition et on_click
+script:
+  - id: scenarios_lancer      # commande
+  - id: scenarios_rafraichir  # redessine la page
+interval:             # délais d'attente
+```
+
+**Règle centrale :** une page qui reçoit des valeurs a un seul script `*_rafraichir`, qui recalcule ses
+widgets à partir des `globals`. Les autres blocs modifient l'état puis l'appellent. Seuls des éléments
+indépendants des valeurs font exception, comme l'heure, le Wi-Fi ou la page À propos.
+
+| Bloc | Rôle | Dans le projet |
+|---|---|---|
+| `substitutions` | Constante remplacée à la compilation | `pin_ldr`, `veille_delai_ms` |
+| `globals` | Variable C++ partagée entre packages | `liaison_chauffage_etat` |
+| `lvgl.pages` | Widgets d'un écran | `page_meteo` |
+| `lvgl.top_layer` | Widgets au-dessus de toutes les pages | Barre de navigation |
+| `api.actions` | Fonction appelable par HA | `maj_valeur` |
+| `script` | Fonction interne, avec paramètres possibles | `scenarios_lancer(indice)` |
+| `mode: restart` | Un nouvel appel annule le précédent | Attente de 2 s de la consigne |
+| `interval` | Tâche périodique | Péremption |
+| `homeassistant.event` | Événement vers HA | `esphome.hapanel_commande` |
+
+### Le fonctionnement à l'exécution
+
+![Motif d'exécution](images/architecture/21_yaml_execution.png)
+
+Les tâches périodiques donnent le rythme du module :
+
+| Période | Fichier | Tâche |
+|---|---|---|
+| 50 ms | `led_veille.yaml` | Respiration de la LED |
+| 500 ms | `led_veille.yaml` | Clignotement d'alerte |
+| 1 s | `led_veille.yaml` | Retour à l'accueil, veille, réveil sans HA |
+| 1 s | `scenarios.yaml` | Délais de réponse et de message |
+| 2 s | `lvgl.yaml` | Connexion à HA |
+| 10 s | `led_veille.yaml` | Obscurité et rétroéclairage |
+| 10 s | `lvgl.yaml` | Mémoire affichée dans À propos |
+| 30 s | `liaison_ha.yaml` | Péremption des valeurs |
+| 30 s | `planning.yaml` | Redessin du planning |
+
+S'y ajoutent des lectures matérielles déclarées dans `hardware.yaml` : tactile toutes les 50 ms et LDR
+toutes les 2 s.
+
+### Conventions de nommage
+
+| Forme | Sert à | Exemple |
+|---|---|---|
+| `page_<nom>` | Page | `page_accueil` |
+| `btn_`, `lbl_`, `ico_` + zone | Bouton, texte, icône | `btn_sce_1`, `lbl_apropos_sha` |
+| `liaison_<valeur>` | Valeur reçue de HA | `liaison_meteo_etat` |
+| `<page>_<fonction>` | Script ou état d'une page | `accueil_envoyer_mode` |
+| `police_<usage>` | Police | `police_titre` |
+| `pin_<fonction>` | Broche | `pin_led_rouge` |
+| `sortie_<fonction>` | Sortie PWM | `sortie_led_bleu` |
+
+### Où modifier quoi
+
+| Besoin | Fichier |
+|---|---|
+| Broche ou composant matériel | `hardware.yaml` |
+| Disposition ou texte d'une page | `lvgl.pages` de `pages/<page>.yaml` |
+| Logique d'affichage | Script `*_rafraichir` de la page |
+| Nouvelle clé reçue de HA | `liaison_ha.yaml` et le blueprint |
+| Nouvelle commande | Script de la page et blueprint |
+| Délai réglable | `substitutions` du fichier concerné |
+| Barre de navigation | `top_layer` de `lvgl.yaml` |
+| Nouvelle page | Voir [Navigation et interface](#navigation-et-interface) |
+
+Le second blueprint, `envoyer_valeur.yaml`, reste un outil générique : `module.yaml` ne s'en sert pas.
 
 ## Matériel
 
@@ -51,6 +197,237 @@ et confirmé au banc (R6). Deux particularités :
 - Aucune interruption n'arrive sur GPIO21 : le tactile est lu toutes les 50 ms (D009, dette T1).
 - Un pic de courant au démarrage du Wi-Fi peut faire redémarrer la carte sur un port
   USB de PC et provoquer un retour silencieux au binaire précédent (R7).
+
+## Le blueprint
+
+### Qu'est-ce qu'un blueprint ?
+
+Un blueprint est un **modèle d'automatisation paramétrable** de Home Assistant. Une
+automatisation classique écrit ses entités en dur. Le blueprint les remplace par des
+questions : l'administrateur y répond dans un formulaire, sans écrire de YAML.
+
+![Principe d'un blueprint](images/architecture/15_blueprint_principe.png)
+
+Le fichier a deux parties : l'en-tête `blueprint:` déclare le nom et les saisies, le reste
+est le corps d'une automatisation. Exemple générique, sans lien avec HAPanel :
+
+```yaml
+blueprint:
+  name: Lumière sur mouvement
+  domain: automation
+  input:
+    capteur:
+      name: Détecteur
+      selector:
+        entity:
+          filter:
+            - domain: binary_sensor
+    lampe:
+      name: Lampe
+      selector:
+        entity:
+          filter:
+            - domain: light
+
+triggers:
+  - trigger: state
+    entity_id: !input capteur
+    to: "on"
+actions:
+  - action: light.turn_on
+    target:
+      entity_id: !input lampe
+```
+
+Trois propriétés à retenir :
+
+- **Il n'est jamais exécuté.** Un blueprint n'a ni entité, ni déclencheur actif, ni trace :
+  seules les automatisations créées à partir de lui en ont.
+- **`!input` est résolu au chargement.** HA remplace la balise par la saisie avant de
+  démarrer l'automatisation, ce qui permet de l'utiliser dans un déclencheur.
+- **`{{ ... }}` est évalué à l'exécution.** Un modèle Jinja lit l'état du moment, mais ne
+  voit pas `!input` : il faut d'abord copier la saisie dans `variables:`.
+
+### Comment l'utiliser
+
+![Cycle de vie d'un blueprint](images/architecture/16_blueprint_cycle.png)
+
+- **Importer :** HA télécharge le fichier depuis son URL. Depuis GitHub, il propose par
+  défaut le chemin `<propriétaire>/<fichier>`, soit `cnuma/module.yaml` ici.
+- **Créer l'automatisation :** HA construit le formulaire à partir des saisies.
+- **Enregistrer :** HA n'écrit dans `automations.yaml` que la référence et les réponses,
+  pas le corps de l'automatisation.
+
+```yaml
+- alias: Lumière du couloir
+  use_blueprint:
+    path: exemple/lumiere.yaml
+    input:
+      capteur: binary_sensor.couloir
+      lampe: light.couloir
+```
+
+**On n'appelle pas un blueprint.** Rien ne le lance directement : ce sont les déclencheurs de
+ses automatisations qui démarrent leur exécution, comme pour toute automatisation.
+
+**Mettre à jour :** réimporter remplace le fichier local et recharge les automatisations qui
+l'utilisent, sans modifier leurs saisies. Une nouvelle saisie obligatoire doit donc être
+remplie à la main.
+
+**Observer :** chaque exécution laisse une trace, consultable depuis l'automatisation, avec le
+déclencheur, les conditions et les actions suivies. Le fichier du blueprint n'en a pas.
+
+### Comment le personnaliser
+
+Il y a deux niveaux : répondre au formulaire, ou modifier le modèle.
+
+**Le formulaire** est le cas normal. Chaque saisie porte un `selector` qui fixe son champ :
+
+| Selector | Champ | Valeur obtenue | Dans HAPanel |
+|---|---|---|---|
+| `device` | Liste d'appareils | Identifiant de l'appareil | `panneau` |
+| `entity` | Liste d'entités, filtrée par domaine | `entity_id` | Thermomètres, thermostat, météo, scénarios |
+| `entity` avec `multiple` | Plusieurs entités | Liste d'`entity_id` | `calendriers` |
+| `number` | Nombre borné | Nombre | `consigne_min`, `consigne_max` |
+| `text` | Texte libre | Texte | `nom_N` |
+| `select` | Liste de choix | Valeur du choix | `icone_N`, `couleur_N` |
+
+- **Obligatoire ou non :** une saisie sans `default` est obligatoire.
+- **Section :** `collapsed: true` replie un groupe dans le formulaire. Les noms de saisies
+  restent à plat : on écrit `!input scenario_1`, sans la section.
+- **Répétition :** `&scenario` et `<<: *scenario` sont des ancres YAML, résolues à la lecture
+  du fichier. Elles évitent de répéter six fois chaque champ.
+
+**Modifier le modèle** est nécessaire quand le formulaire ne suffit plus :
+
+| Besoin | Où agir | Recompiler le module ? |
+|---|---|---|
+| Changer d'entité, de bornes, de nom, d'icône choisie | Formulaire de l'automatisation | Non |
+| Équiper un module de plus | Nouvelle automatisation | Non |
+| Changer un calcul ou un contrôle, mêmes clés | Blueprint, puis réimport | Non |
+| Ajouter une valeur affichée ou une commande | Blueprint et firmware | Oui |
+| Ajouter une icône ou une couleur | Blueprint et `scenarios.yaml` | Oui |
+| Changer un délai du module | Firmware | Oui |
+
+Le dépôt reste la source : un fichier modifié directement dans `config/blueprints/` sera écrasé
+par le prochain réimport. **Prendre le contrôle**, dans le menu de l'automatisation, la convertit en
+automatisation autonome : elle devient modifiable, mais ne suit plus les évolutions du blueprint.
+
+### Structure du YAML
+
+Tout blueprint d'automatisation suit le même plan. Seul l'en-tête `blueprint:` lui est propre ; le
+reste est le corps d'une automatisation ordinaire.
+
+| Bloc | Fonction | Quand HA l'utilise |
+|---|---|---|
+| `blueprint:` | Décrit le modèle et déclare ses saisies | À l'import et dans le formulaire |
+| `mode:`, `max:` | Règle les exécutions simultanées | À chaque déclenchement |
+| `variables:` | Calcule des valeurs communes à toute l'exécution | Après le déclencheur, avant les conditions |
+| `triggers:` | Dit quand démarrer | En permanence, automatisation active |
+| `conditions:` | Dit s'il faut continuer | Après `variables:` |
+| `actions:` | Dit quoi faire | Si les conditions sont remplies |
+
+`blueprints/automation/hapanel/module.yaml` s'organise ainsi :
+
+![Structure de module.yaml](images/architecture/19_blueprint_structure.png)
+
+```yaml
+blueprint:            # nom, source_url, saisies
+  input:
+    panneau:          # puis les autres saisies
+    scenarios:        # section repliée
+      input:          # 6 groupes de 4 champs
+mode: queued          # une exécution à la fois
+max: 20
+variables:            # saisies + action_maj
+triggers:             # états, horloge, événements
+conditions:           # événement de ce panneau ?
+actions:
+  - variables:        # état du thermostat, bornes
+  - choose:
+      - conditions:   # trigger.id == commande
+        sequence:
+          - choose:   # une branche par commande
+            default:  # journal de refus
+    default:          # tout autre déclencheur
+      - if:           # envoi Accueil
+      - if:           # envoi Scénarios
+      - if:           # envoi Météo
+      - if:           # envoi Planning
+```
+
+Trois choix structurent le fichier :
+
+- **`trigger.id` aiguille tout.** Il n'y a qu'une automatisation : l'identifiant du déclencheur
+  sélectionne soit une commande, soit les groupes de valeurs à envoyer. Les déclencheurs de
+  température et de thermostat n'ont pas d'identifiant et n'envoient que l'accueil.
+- **Commande et envoi s'excluent.** Une commande n'envoie pas de valeurs ; sa confirmation revient
+  par le changement d'état de l'entité. Seul le scénario répond directement, avec `scen_resultat`.
+- **Chaque groupe d'envoi suit le même motif.** Un `repeat` parcourt une liste de paires
+  `cle` et `valeur`, et appelle `action_maj` pour chacune. Ajouter une valeur revient donc à ajouter
+  une paire, puis à la traiter dans le firmware.
+
+### Son rôle dans HAPanel
+
+Le blueprint est la seule pièce qui connaît à la fois les entités de la maison et les clés du
+firmware. Il traduit dans les deux sens.
+
+```yaml
+- alias: HAPanel salon
+  use_blueprint:
+    path: cnuma/module.yaml
+    input:
+      panneau: <identifiant de l'appareil>
+      thermometre: sensor.temperature_sejour
+      thermostat: climate.sejour
+      meteo: weather.maison
+      calendriers:
+        - calendar.chauffage_sejour
+      scenario_1: scene.soiree
+      nom_1: Soirée
+      icone_1: film
+      couleur_1: violet
+```
+
+*Exemple : les entités sont fictives, et les autres saisies suivent le même principe.*
+
+![Exécution de l'automatisation d'un module](images/architecture/17_blueprint_execution.png)
+
+Chaque élément de HA y joue un rôle précis :
+
+| Élément de HA | Rôle dans HAPanel | Usage dans le blueprint |
+|---|---|---|
+| Registre des appareils | Identifie le module | `panneau`, `device_attr` |
+| Intégration ESPHome | Relie HA au module | Publie l'action `maj_valeur`, relaie les événements en ajoutant `device_id` |
+| Bus d'événements | Reçoit les demandes du module | Déclencheurs `event` |
+| `sensor` | Températures | État lu avec `states()` |
+| `climate` | Thermostat | Attributs lus, puis `climate.set_hvac_mode`, `set_temperature`, `set_preset_mode` |
+| `weather` | Météo | État, puis `weather.get_forecasts` |
+| `calendar` | Planning | `calendar.get_events` sur la journée, converti en 96 bits |
+| `scene`, `script` | Scénarios | `turn_on` |
+| `automation` | Scénarios, et l'automatisation du module elle-même | `automation.trigger`, qui ignore les conditions |
+| Journal système | Refus de commande | `system_log.write`, journal `hapanel.blueprint` |
+
+![Plusieurs modules](images/architecture/18_blueprint_modules.png)
+
+**Plusieurs modules :** les conditions sont évaluées avant le lancement des actions. Un événement
+d'un autre panneau s'arrête donc là et n'occupe pas la file d'attente. Chaque module a sa propre file.
+
+**Types de valeurs :** HA convertit le résultat d'un modèle en type natif. Un `valeur` égal à `21.5`
+devient un nombre, d'où le test `valeur is number` sur la consigne. C'est aussi pourquoi les créneaux
+portent le préfixe `h` (D020).
+
+**Pièges propres au projet :**
+
+- **Nom de l'action :** il est reconstruit à partir du nom de l'appareil dans `action_maj`. HA donne
+  à l'appareil le `friendly_name`, et ESPHome nomme l'action d'après le nœud. Les deux coïncident
+  aujourd'hui : modifier `friendly_name` ou `name` peut donc couper tous les envois (G10).
+- **Remplacement d'un module :** le nouvel appareil a un autre identifiant. Il faut choisir de
+  nouveau `panneau` dans le formulaire.
+- **Enregistrement du formulaire :** il ne déclenche aucun envoi. Un nouveau nom de scénario arrive au
+  prochain cycle de 5 min, ou à la reconnexion du module.
+- **Verrou :** un thermostat sans attribut `is_locked` est considéré comme non verrouillé.
+- **Deux automatisations pour un module :** chaque commande est alors exécutée deux fois.
 
 ## Flux des valeurs
 

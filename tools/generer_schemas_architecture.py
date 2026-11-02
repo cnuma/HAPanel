@@ -308,7 +308,161 @@ def memoire():
     s.sauver("14_memoire.png")
 
 
+def blueprint_principe():
+    s = S(1100, 640)
+    s.boite(30, 150, 300, 280, "Blueprint", "un fichier YAML\nsaisies déclarées\ndéclencheurs\nconditions\nactions avec !input\njamais exécuté", ORANGE, B_ORANGE)
+    for i, t in enumerate("ABC"):
+        y = 50 + i * 170
+        s.boite(420, y, 250, 130, "Saisies " + t, "réponses au formulaire\nentités, nombres, textes", JAUNE)
+        s.boite(790, y, 280, 130, "Automatisation " + t, "entité automation.*\ntraces, activable", VERT, B_VERT)
+        s.fleche([(330, 290), (420, y + 65)], B_ORANGE)
+        s.fleche([(670, y + 65), (790, y + 65)], B_VERT)
+    s.etiquette((550, 580), "Un modèle, autant d'automatisations que de jeux de saisies. Un blueprint ressemble à une classe,\nune automatisation à une instance. Corriger le modèle corrige toutes ses automatisations.", DOUX, taille=20)
+    s.sauver("15_blueprint_principe.png")
+
+
+def blueprint_execution():
+    s = S(1100, 1110)
+    s.zone(20, 15, 1060, 180, "Déclencheurs")
+    for x, t, d in [(40, "État d'entité", "capteur, thermostat,\nmétéo, calendrier"), (295, "Horloge, démarrage", "toutes les 5 min,\nstart de HA"),
+                    (550, "Demande", "esphome.hapanel_\ndemande_valeurs"), (805, "Commande", "esphome.hapanel_\ncommande")]:
+        s.boite(x, 55, 245, 125, t, d, BLEU, B_BLEU)
+    s.boite(150, 240, 800, 90, "variables", "évaluées à chaque exécution : action_maj, scenarios, noms...", GRIS)
+    s.fleche([(550, 195), (550, 240)])
+    s.boite(150, 375, 800, 90, "conditions", "une demande ou une commande vient-elle de ce panneau ?", ORANGE, B_ORANGE)
+    s.fleche([(550, 330), (550, 375)])
+    s.fleche([(950, 420), (1050, 420), (1050, 510)], B_ROUGE)
+    s.etiquette((1000, 530), "non : fin,\nhors file", B_ROUGE)
+    s.boite(150, 510, 800, 80, "mode: queued", "une exécution à la fois, 20 au plus en attente", GRIS)
+    s.fleche([(550, 465), (550, 510)], B_VERT, "oui", (585, 487))
+    s.fleche([(350, 590), (250, 650)], B_BLEU, "commande", (250, 615))
+    s.fleche([(750, 590), (810, 650)], B_VERT, "tout le reste", (850, 615))
+    s.boite(30, 650, 480, 190, "Vérifier, puis exécuter", "thermostat : disponible, verrou, bornes\nscénario : numéro connu, entité disponible\nrefus : journal hapanel.blueprint", ORANGE, B_ORANGE)
+    s.boite(570, 650, 500, 190, "Calculer et envoyer", "accueil : 9 valeurs\nscénarios : 18 valeurs\nmétéo : 14 valeurs\nplanning : 8 valeurs", VERT, B_VERT)
+    s.boite(30, 900, 480, 130, "Actions sur les entités", "climate.set_*, scene/script.turn_on,\nautomation.trigger", VERT, B_VERT)
+    s.fleche([(270, 840), (270, 900)], B_ORANGE)
+    s.boite(570, 900, 500, 130, "esphome.<noeud>_maj_valeur", "une action par clé, vers ce seul module", BLEU, B_BLEU)
+    s.fleche([(820, 840), (820, 900)], B_ORANGE)
+    s.fleche([(510, 800), (540, 800), (540, 965), (570, 965)], B_ROUGE)
+    s.etiquette((550, 1070), "Scénario : le résultat revient aussi par maj_valeur (scen_resultat). Chaque envoi complet compte 49 valeurs.", DOUX)
+    s.sauver("17_blueprint_execution.png")
+
+
+def blueprint_modules():
+    s = S(1100, 650)
+    s.boite(30, 90, 250, 130, "Module A", "hapanel-aaaaaa", BLEU, B_BLEU)
+    s.boite(30, 370, 250, 130, "Module B", "hapanel-bbbbbb", BLEU, B_BLEU)
+    s.boite(400, 215, 240, 160, "Bus d'événements", "hapanel_commande\ndevice_id = A", GRIS)
+    s.boite(790, 90, 280, 130, "Automatisation A", "panneau = A", ORANGE, B_ORANGE)
+    s.boite(790, 370, 280, 130, "Automatisation B", "panneau = B", ORANGE, B_ORANGE)
+    s.fleche([(280, 180), (400, 255)], B_BLEU, "événement", (385, 190))
+    s.fleche([(640, 255), (790, 180)], B_VERT, "accepté", (670, 190))
+    s.fleche([(640, 335), (790, 410)], B_ROUGE, "écarté :\nA différent de B", (680, 425))
+    s.fleche([(930, 90), (930, 40), (155, 40), (155, 90)], B_ORANGE, "esphome.hapanel_aaaaaa_maj_valeur : ce module seulement", (540, 40))
+    s.etiquette((550, 590), "Toutes les automatisations reçoivent chaque événement : seule la condition sur device_id les sépare.\nDans l'autre sens, le nom de l'action désigne directement un module.", DOUX, taille=20)
+    s.sauver("18_blueprint_modules.png")
+
+
+def blueprint_structure():
+    s = S(1100, 1240)
+    blocs = [
+        (20, 250, "blueprint:", "lu à l'import et au formulaire", ORANGE, B_ORANGE, [
+            (0, 66, "métadonnées", "name, description, domain, source_url"),
+            (72, 100, "input: champs principaux", "panneau, thermomètres, thermostat,\nbornes, météo, calendriers"),
+            (178, 72, "input: section Scénarios", "scenario_N, nom_N, icone_N, couleur_N")]),
+        (290, 90, "mode: / max:", "file d'exécution", GRIS, TRAIT, [(5, 80, "queued, 20", "une exécution à la fois par module")]),
+        (400, 90, "variables:", "à chaque déclenchement", GRIS, TRAIT, [(5, 80, "saisies, action_maj", "rend les saisies visibles des modèles")]),
+        (510, 110, "triggers:", "toujours actifs", BLEU, B_BLEU, [(0, 110, "9 déclencheurs", "états ; meteo, planning, periodique,\ndemarrage, demande, commande")]),
+        (640, 90, "conditions:", "filtre", ORANGE, B_ORANGE, [(5, 80, "un seul test", "demande ou commande de ce panneau")]),
+    ]
+    for y, h, t, d, fond, bord, lignes in blocs:
+        s.boite(20, y, 300, h, t, d, fond, bord)
+        for dy, hl, a, b in lignes:
+            s.boite(390, y + dy, 690, hl, a, b, "#FFFFFF")
+        s.fleche([(320, y + h / 2), (390, y + h / 2)])
+    s.boite(20, 750, 300, 470, "actions:", "selon trigger.id", VERT, B_VERT)
+    s.boite(390, 750, 690, 80, "variables communes", "etat, disponible, verrou, borne_min, borne_max", "#FFFFFF")
+    s.zone(390, 845, 335, 375, "choose : commande", B_BLEU)
+    for i, t in enumerate(["scenario", "chauffage_mode", "chauffage_consigne", "chauffage_prereglage", "default : journal de refus"]):
+        s.boite(405, 890 + i * 64, 305, 54, t, "", BLEU if i < 4 else ROUGE, B_BLEU if i < 4 else B_ROUGE)
+    s.zone(745, 845, 335, 375, "default : envois", B_VERT)
+    for i, (t, d) in enumerate([("Accueil", "sauf meteo, planning"), ("Scénarios", "périodique, démarrage, demande"), ("Météo", "weather.get_forecasts"), ("Planning", "calendar.get_events")]):
+        s.boite(760, 890 + i * 80, 305, 70, t, d, VERT, B_VERT)
+    s.fleche([(320, 985), (390, 985)])
+    s.sauver("19_blueprint_structure.png")
+
+
+def yaml_matrice():
+    colonnes = ["subst.", "esphome", "wifi", "api", "font", "globals", "lvgl", "script", "interval", "sensor", "tactile", "autres"]
+    lignes = [("base", "esphome wifi api sensor autres", GRIS, "#607D8B"),
+              ("hardware", "subst. sensor tactile autres", GRIS, "#607D8B"),
+              ("accueil", "subst. esphome wifi font globals lvgl script sensor autres", ORANGE, B_ORANGE),
+              ("meteo", "esphome font lvgl script", ORANGE, B_ORANGE),
+              ("planning", "esphome lvgl script interval", ORANGE, B_ORANGE),
+              ("scenarios", "subst. esphome font globals lvgl script interval", ORANGE, B_ORANGE),
+              ("menu", "lvgl", ORANGE, B_ORANGE),
+              ("lvgl", "font globals lvgl interval", BLEU, B_BLEU),
+              ("liaison_ha", "subst. api globals script interval", VERT, B_VERT),
+              ("led_veille", "subst. globals script interval tactile", VERT, B_VERT)]
+    s = S(1100, 760)
+    x0, y0, lc, hl = 180, 70, 76, 52
+    for i, c in enumerate(colonnes):
+        s.d.text((x0 + i * lc + lc / 2, 45), c, fill=ENCRE, font=f(17, True), anchor="mm")
+    for j, (nom, blocs, fond, bord) in enumerate(lignes):
+        y = y0 + j * hl
+        s.d.line([(20, y), (x0 + 12 * lc, y)], fill="#CFD8DC", width=1)
+        s.d.text((165, y + hl / 2), nom, fill=ENCRE, font=f(22, True), anchor="rm")
+        for i, c in enumerate(colonnes):
+            if c in blocs.split():
+                cx = x0 + i * lc
+                s.d.rounded_rectangle([cx + 8, y + 9, cx + lc - 8, y + hl - 9], 7, fill=fond, outline=bord, width=2)
+    s.d.line([(20, y0 + 10 * hl), (x0 + 12 * lc, y0 + 10 * hl)], fill="#CFD8DC", width=1)
+    s.etiquette((550, 680), "Socle en gris, pages en orange, graphisme en bleu, services en vert. subst. : substitutions ; tactile : touchscreen.\nautres : esp32, ota, logger, text_sensor (base) ; spi, i2c, output, light, display (hardware) ; time (accueil).", DOUX)
+    s.sauver("20_yaml_matrice.png")
+
+
+def yaml_execution():
+    s = S(1100, 760)
+    s.zone(20, 20, 1060, 390, "Entrée : une valeur arrive")
+    y = 70
+    s.boite(35, y, 220, 130, "maj_valeur", "liaison_ha.yaml\naiguillage par préfixe", BLEU, B_BLEU)
+    s.boite(310, y, 220, 130, "globals", "liaison_*\nvaleur, état, instant", VERT, B_VERT)
+    s.boite(585, y, 240, 130, "*_rafraichir", "un script par page\nrecalcule tout", ORANGE, B_ORANGE)
+    s.boite(875, y, 190, 130, "Widgets", "visibles ou non", GRIS)
+    s.fleche([(255, y + 65), (310, y + 65)])
+    s.fleche([(530, y + 65), (585, y + 65)])
+    s.fleche([(825, y + 65), (875, y + 65)])
+    s.boite(310, 270, 220, 120, "Péremption", "interval 30 s\nefface le groupe", ROUGE, B_ROUGE)
+    s.fleche([(420, 270), (420, 200)], B_ROUGE)
+    s.boite(585, 270, 240, 120, "Connexion", "interval 2 s\nliaison_connectee\nliaison_deconnectee", ORANGE, B_ORANGE)
+    s.fleche([(705, 270), (705, 200)], B_ORANGE)
+    s.zone(20, 440, 1060, 200, "Sortie : l'utilisateur touche l'écran")
+    y = 490
+    s.boite(35, y, 220, 130, "on_click", "bouton LVGL", BLEU, B_BLEU)
+    s.boite(310, y, 220, 130, "Script de la page", "*_lancer, *_envoyer_*\nvérifie état et connexion", ORANGE, B_ORANGE)
+    s.boite(585, y, 240, 130, "homeassistant.event", "esphome.hapanel_\ncommande", VERT, B_VERT)
+    s.boite(875, y, 190, 130, "Blueprint", "vérifie, exécute", GRIS)
+    s.fleche([(255, y + 65), (310, y + 65)])
+    s.fleche([(530, y + 65), (585, y + 65)])
+    s.fleche([(825, y + 65), (875, y + 65)])
+    s.etiquette((550, 695), "La boucle se referme par HA : l'entité change, le blueprint envoie maj_valeur, la page se redessine.\nEn général, un script met à jour l'état puis appelle *_rafraichir, sans modifier lui-même les widgets.", DOUX)
+    s.sauver("21_yaml_execution.png")
+
+
 def sequences():
+    sequence("16_blueprint_cycle.png", ["Administrateur", "Blueprint local", "Automatisation", "Moteur HA"], [
+        ("Administrateur", "Blueprint local", "importe l'URL", B_BLEU),
+        ("Blueprint local", None, "Fichier copié dans config/blueprints/automation/", JAUNE),
+        ("Administrateur", "Automatisation", "remplit le formulaire", B_BLEU),
+        ("Automatisation", None, "automations.yaml : use_blueprint, chemin et saisies", JAUNE),
+        ("Automatisation", "Moteur HA", "modèle + saisies : !input remplacés", B_ORANGE),
+        ("Moteur HA", None, "Écoute les déclencheurs,\ngarde une trace par exécution", VERT),
+        (None, None, "Mise à jour", None),
+        ("Administrateur", "Blueprint local", "réimporte", B_BLEU),
+        ("Blueprint local", "Moteur HA", "fichier remplacé, automatisations rechargées", B_ORANGE),
+        (None, None, "Suppression", None),
+        ("Blueprint local", None, "Refusée tant qu'une automatisation l'utilise", ROUGE),
+    ])
     sequence("05_connexion.png", ["Module", "API ESPHome", "Home Assistant", "Blueprint"], [
         ("Module", None, "Contrôle toutes les 2 s : un client dont le nom commence par « Home Assistant » (D013)", JAUNE),
         ("Home Assistant", "API ESPHome", "connexion chiffrée", B_ORANGE),
@@ -359,5 +513,11 @@ navigation()
 build()
 securite()
 memoire()
+blueprint_principe()
+blueprint_execution()
+blueprint_modules()
+blueprint_structure()
+yaml_matrice()
+yaml_execution()
 for fichier in sorted(SORTIE.glob("*.png")):
     print(fichier.name, fichier.stat().st_size // 1024, "Ko")
