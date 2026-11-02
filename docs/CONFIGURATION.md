@@ -80,6 +80,27 @@ action sensible.
 Le bouton n'envoie qu'un numéro : ce chemin ne lance que les entités choisies ici.
 Protégez aussi la clé d'API, car l'autorisation de l'étape 1 est plus large.
 
+## 5. Régler la LED
+
+Chaque module a trois réglages, sur sa page d'appareil (**Paramètres › Appareils et
+services › ESPHome**, le module, rubrique **Configuration**) :
+
+| Réglage | Valeurs | Par défaut |
+|---|---|---|
+| LED | Respiration, Éteinte | Respiration |
+| Intensité LED | 0 à 100 % ; 100 % est le maximum | 20 % |
+| Alerte LED | Activée, désactivée : clignotement rouge en cas d'anomalie | Activée |
+
+L'effet est immédiat et le module garde ses réglages après un redémarrage, même sans
+Home Assistant. L'intensité baisse d'elle-même dans une pièce sombre. Alerte
+désactivée, une anomalie ne se voit plus que sur l'écran.
+
+La section **LED** du blueprint, repliée, propose les mêmes réglages, sur « Ne pas
+imposer » par défaut. Une valeur choisie dans le blueprint est envoyée au module à la
+connexion et toutes les 5 minutes : elle **l'emporte** sur la page de l'appareil, où un
+changement est remplacé sous 5 minutes. Pour régler depuis la page de l'appareil,
+laissez « Ne pas imposer ».
+
 ## Quand les changements arrivent
 
 | Événement | Délai |
@@ -102,7 +123,8 @@ téléverser le module.
 | `retro_jour` | `packages/led_veille.yaml` | 1.0 | Luminosité de l'écran, pièce éclairée |
 | `retro_nuit` | `packages/led_veille.yaml` | 0.40 | Luminosité, pièce sombre (après gamma : environ 8 %) |
 | `retro_ecart_min` | `packages/led_veille.yaml` | 0.05 | Écart minimal avant de changer la luminosité |
-| `led_plafond_jour` / `led_plafond_nuit` | `packages/led_veille.yaml` | 0.25 / 0.05 | Intensité maximale de la LED |
+| `led_plafond_jour` / `led_plafond_nuit` | `packages/led_veille.yaml` | 0.25 / 0.05 | Intensité de la LED à 100 % du réglage « Intensité LED » |
+| `led_intensite_defaut` | `packages/led_veille.yaml` | 20 | « Intensité LED » d'un module neuf |
 | `ldr_tension_jour` / `ldr_tension_nuit` | `packages/led_veille.yaml` | 0.09 / 0.20 | Tensions qui définissent pièce éclairée et pièce sombre |
 | `accueil_envoi_consigne` | `packages/pages/accueil.yaml` | 2s | Attente avant l'envoi de la consigne |
 | `accueil_attente_confirmation` | `packages/pages/accueil.yaml` | 10s | Attente de la confirmation du chauffage |
@@ -145,5 +167,6 @@ Après une compilation, qui fournit les polices :
 | « Aucun scénario choisi » | Champs vides | Remplir la section Scénarios et enregistrer |
 | « Refusé par HA » | Entité indisponible ou supprimée | Vérifier l'entité ; voir aussi le journal de Home Assistant (`hapanel.blueprint`) |
 | « Pas de réponse de HA » | Automatisation absente ou action en échec | Consulter les traces de l'automatisation |
+| Réglage de la LED qui revient tout seul | Valeur imposée par le blueprint | Choisir « Ne pas imposer » dans la section LED, ou régler dans le blueprint |
 | Écran trop sombre la nuit | `retro_nuit` trop bas | Augmenter la valeur et recompiler |
 | Point rouge et « Pas de communication » | Home Assistant arrêté, module retiré ou clé d'API différente | Vérifier l'intégration ESPHome |

@@ -111,6 +111,10 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       vert d'Éco. Révisé le 2 novembre 2026 (respiration trop haute) : de 0 à
       l'ancien niveau bas (plafond 5 % de jour, 1 % de nuit), à valider à l'œil,
       y compris la lisibilité des couleurs à ce niveau.
+- [ ] Réglages de la LED par module (D027), à tester sur le module : entités
+      « LED », « Intensité LED », « Alerte LED » sur la page de l'appareil ;
+      conservation après redémarrage ; valeurs imposées par le blueprint
+      reflétées sur la page ; alerte désactivée (HA déconnecté, LED muette).
 - [ ] Outillage, reporté par le propriétaire le 31 octobre 2026 (à reprendre
       devant le module) : `hapanel.yaml` et `hapanel_banc.yaml` partagent
       `.esphome/build/hapanel` ; chaque changement de configuration recompile

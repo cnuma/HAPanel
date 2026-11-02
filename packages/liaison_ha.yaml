@@ -18,6 +18,10 @@
 # Cles de l'ecran scenarios (D024, D026), pour N de 1 a 6 : scen_N_nom, scen_N_icone,
 # scen_N_couleur ; et scen_resultat.
 # Affichage : packages/pages/scenarios.yaml (script scenarios_rafraichir).
+#
+# Reglages de la LED (D027), envoyes seulement si le blueprint les impose :
+# led_mode (respiration, eteinte), led_intensite (0 a 100), led_alerte (on, off).
+# Entites : packages/led_veille.yaml.
 substitutions:
   # Sans nouvelle valeur pendant ce delai, la valeur affichee est perimee
   # (le blueprint renvoie tout toutes les 5 min).
@@ -184,6 +188,28 @@ api:
               id(liaison_meteo_ms) = id(liaison_meteo_etat) == 1 ? maintenant : 0;
               ESP_LOGI("hapanel.liaison", "%s %s", k, v);
               id(meteo_rafraichir).execute();
+              return;
+            }
+            // Reglages de la LED imposes par le blueprint (D027) : appliques aux
+            // entites du module, que HA affiche aussitot. Rien ne change s'ils
+            // sont deja en place, pas d'ecriture en flash toutes les 5 min (G3).
+            if (strncmp(k, "led_", 4) == 0) {
+              if (strcmp(k, "led_mode") == 0 && (strcmp(v, "respiration") == 0 || strcmp(v, "eteinte") == 0)) {
+                size_t i = v[0] == 'e' ? 1 : 0;
+                auto actuel = id(led_mode).active_index();
+                if (!actuel.has_value() || *actuel != i) id(led_mode).make_call().set_index(i).perform();
+              } else if (strcmp(k, "led_intensite") == 0 && nombre && f >= 0 && f <= 100) {
+                if (id(led_intensite).state != f) id(led_intensite).make_call().set_value(f).perform();
+              } else if (strcmp(k, "led_alerte") == 0 && (strcmp(v, "on") == 0 || strcmp(v, "off") == 0)) {
+                bool on = v[1] == 'n';
+                if (id(led_alerte_active).state != on) {
+                  if (on) id(led_alerte_active).turn_on(); else id(led_alerte_active).turn_off();
+                }
+              } else {
+                ESP_LOGW("hapanel.liaison", "cle ou valeur inconnue : %s %s", k, v);
+                return;
+              }
+              ESP_LOGI("hapanel.liaison", "%s %s", k, v);
               return;
             }
             // Planning : traite a part, comme la meteo (P3).

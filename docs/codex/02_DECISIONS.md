@@ -382,10 +382,11 @@ qui cite la précédente.
   - état normal, chauffage allumé : respiration de 6 s, de 0 (LED éteinte au
     creux) au plafond ; un même facteur sur les trois canaux conserve les
     mélanges de D017 ;
-  - plafond : 5 % pièce éclairée, 1 % pièce sombre, interpolé selon la LDR
-    (0,09 à 0,20 V, moyenne sur 1 min) ; sans mesure, plafond de jour ;
+  - plafond : 25 % pièce éclairée, 5 % pièce sombre, interpolé selon la LDR
+    (0,09 à 0,20 V, moyenne sur 1 min), multiplié par le réglage « Intensité
+    LED » (D027, 20 % par défaut : 5 % et 1 %) ; sans mesure, plafond de jour ;
   - révision du 2 novembre 2026 (retour du propriétaire : respiration trop
-    haute) : le plafond devient l'ancien niveau bas (20 % de 25 % et de 5 %)
+    haute) : le maximum devient l'ancien niveau bas (20 % de 25 % et de 5 %)
     et le plancher passe de 20 % à 0 ; ce n'est plus la LED qui montre que
     le chauffage est allumé quand elle est au creux, l'alerte reste un
     clignotement franc ;
@@ -541,3 +542,27 @@ qui cite la précédente.
     que soit sa couleur.
 - Ajouter une icône ou une couleur modifie le blueprint et
   `packages/pages/scenarios.yaml`, puis demande de reflasher le module.
+
+## D027 — Réglages de la LED par module, dans HA et dans le blueprint
+
+- Date : 2 novembre 2026 — Statut : demandé par le propriétaire (« A et B,
+  alignés »), qui a choisi l'alerte réglable, le curseur et la règle
+  d'alignement ; à valider sur le module.
+- Contexte : selon la pièce (une chambre), la LED doit pouvoir être atténuée ou
+  éteinte, module par module, alors que le firmware est unique (D012).
+- Décision :
+  - trois entités de configuration du module, gardées en flash :
+    « LED » (Respiration, Éteinte), « Intensité LED » (0 à 100 % par pas de 5,
+    100 % = plafonds de D018, 20 % par défaut) et « Alerte LED » (activée par
+    défaut) ;
+  - alerte désactivée : plus de clignotement rouge, l'écran montre toujours le
+    problème (bandeau, « non reçu », « indisponible »). Elle ne dépend pas du
+    réglage « LED » ;
+  - le blueprint propose les mêmes réglages, « Ne pas imposer » par défaut ; une
+    valeur choisie est envoyée (clés `led_*`) à la connexion, au démarrage de HA
+    et toutes les 5 min, et le module l'applique à ses entités ;
+  - alignement : une valeur imposée par le blueprint l'emporte, un changement
+    sur la page de l'appareil est remplacé sous 5 min ; écriture en flash
+    seulement si la valeur change (G3).
+- Conséquences : nouvelles entités exposées, à ne plus renommer (G10) ; surface
+  inscrite au `08`.

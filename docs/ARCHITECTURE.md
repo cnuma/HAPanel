@@ -444,6 +444,7 @@ tampon de réception sans zéro terminal.
 | `meteo_*` | condition, température, `meteo_jN_*` (N de 1 à 3) | `meteo_rafraichir` |
 | `plan_*` | `plan_N_nom`, `plan_N_creneaux` (N de 1 à 4) | `planning_rafraichir` |
 | `scen_*` | `scen_N_nom`, `scen_N_icone`, `scen_N_couleur` (N de 1 à 6), `scen_resultat` | `scenarios_rafraichir` |
+| `led_*` | `led_mode`, `led_intensite`, `led_alerte`, seulement si le blueprint les impose | Entités de configuration du module (D027) |
 
 **Traitement à part :** météo, planning et scénarios ne redessinent que leur page, pour ne
 pas rafraîchir le chauffage et sa logique de commande à chaque valeur.
@@ -530,6 +531,12 @@ Une même grandeur, `ldr_obscurite`, pilote le rétroéclairage (D023) et la LED
 distingue mal les niveaux courants : c'est en pratique un réglage jour / nuit. Son comportement
 en pièce sombre et l'influence de l'écran sur la mesure restent à confirmer au banc.
 
+**Réglages de la LED (D027) :** trois entités de configuration du module, « LED », « Intensité
+LED » et « Alerte LED », gardées en flash. Elles se règlent sur la page de l'appareil dans HA
+ou sont imposées par le blueprint par les clés `led_*`. `maj_valeur` les applique aux mêmes
+entités, que HA affiche aussitôt, et seulement si la valeur change : pas d'écriture en flash
+toutes les 5 minutes (G3).
+
 ## Compilation et déploiement
 
 ![Chaîne de compilation](images/architecture/12_build.png)
@@ -552,6 +559,7 @@ en pièce sombre et l'influence de l'écran sur la mesure restent à confirmer a
 |---|---|
 | Clé d'API commune aux modules (R8) | Accepté : la clé d'un module ouvre l'API et l'OTA de tous |
 | `maj_valeur` accessible à tout détenteur de la clé | Peut changer l'affichage, pas commander un appareil |
+| Réglages de la LED modifiables depuis HA (D027) | Peuvent éteindre la LED ou son alerte ; l'écran montre toujours l'état réel |
 | Autorisation des actions HA du module | Nécessaire aux événements ; un firmware modifié pourrait s'en servir pour d'autres actions. La liste de scénarios ne remplace donc pas la protection de la clé |
 | Secrets dans le dépôt (R3, G9) | `secrets.yaml` est ignoré par Git |
 | Commande sur état inconnu (R4) | Refus côté module et côté blueprint |

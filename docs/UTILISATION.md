@@ -121,6 +121,10 @@ pièce est éclairée. Le changement est progressif et peut prendre environ une 
 
 Boost est un rouge qui respire doucement, l'anomalie un rouge qui clignote franchement.
 
+La respiration s'éteint un instant au creux de chaque cycle. Selon les réglages du
+module (une chambre par exemple), la LED peut être éteinte en permanence et l'alerte
+désactivée : seul l'écran montre alors une anomalie.
+
 ## Textes orange
 
 | Texte | Signification |
