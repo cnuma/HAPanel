@@ -95,6 +95,12 @@ lvgl:
   pages:
     - id: page_accueil
       bg_color: 0x000000
+      # Bouton Accueil masque sur l'accueil, ou il ne fait rien (D025, retour
+      # du proprietaire du 2 novembre 2026).
+      on_load:
+        - lvgl.widget.hide: btn_nav_accueil
+      on_unload:
+        - lvgl.widget.show: btn_nav_accueil
       widgets:
         # Bandeau
         - label:

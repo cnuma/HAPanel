@@ -94,6 +94,8 @@ lvgl:
             - button:
                 id: btn_nav_accueil
                 align: LEFT_MID
+                # Page de demarrage : l'accueil (packages/pages/accueil.yaml).
+                hidden: true
                 width: 68
                 height: 36
                 widgets:
