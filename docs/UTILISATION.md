@@ -125,6 +125,13 @@ La respiration s'éteint un instant au creux de chaque cycle. Selon les réglage
 module (une chambre par exemple), la LED peut être éteinte en permanence et l'alerte
 désactivée : seul l'écran montre alors une anomalie.
 
+## Message d'accueil
+
+Quand quelqu'un arrive après une absence, le panneau peut afficher un message de
+bienvenue en plein écran, avec la météo. La LED change alors de couleur en continu.
+Le message disparaît après 3 minutes ; **un toucher le ferme** sans rien déclencher
+d'autre.
+
 ## Textes orange
 
 | Texte | Signification |

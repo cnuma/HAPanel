@@ -160,7 +160,14 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 
 ## P4 — Idées du propriétaire (2 novembre 2026), à spécifier avant tout code
 
-- [ ] Message d'accueil quand quelqu'un arrive : écran allumé, LED en arc-en-ciel
+- [ ] Message d'accueil (D028), codé sur `feature/message-accueil`, à tester sur le
+      module et dans HA : déclenchement après la période sans déclenchement et
+      dans la plage horaire, tirage selon saison et moment, message unique coché,
+      ligne météo, fermeture au toucher et après 3 min, arc-en-ciel soumis à
+      D027, entité « Message d'accueil » désactivée. Saint du jour reporté.
+- [ ] Saint du jour : choisir la source (calendrier dans le blueprint, ou service
+      en ligne téléchargé par HA) ; il s'affichera sur la ligne de la météo.
+- [ ] Spécification d'origine du message d'accueil, quand quelqu'un arrive : écran allumé, LED en arc-en-ciel
       rapide. Déclencheur choisi dans le blueprint (contact de porte, lumière
       d'une pièce…), seulement après une période sans déclenchement réglable.
       Message selon la saison et l'heure, tiré d'une bibliothèque facile à

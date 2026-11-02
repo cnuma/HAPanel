@@ -23,3 +23,5 @@ packages:
   lvgl: !include packages/lvgl.yaml
   liaison_ha: !include packages/liaison_ha.yaml
   led_veille: !include packages/led_veille.yaml
+  # Apres lvgl : le message se dessine par-dessus la barre de navigation.
+  message_accueil: !include packages/message_accueil.yaml

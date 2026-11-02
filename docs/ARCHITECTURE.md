@@ -26,6 +26,7 @@ Trois idées structurent tout le reste :
 | Action `maj_valeur(cle, valeur)` | API native chiffrée | HA vers module | Toutes les valeurs affichées |
 | Événement `esphome.hapanel_demande_valeurs` | API native | Module vers HA | Demande un envoi complet à la connexion |
 | Événement `esphome.hapanel_commande` | API native | Module vers HA | Toutes les commandes |
+| Action `message_accueil(texte, infos)` | API native chiffrée | HA vers module | Message d'accueil (D028), blueprint `message_accueil.yaml` |
 | OTA | Réseau local chiffré | PC vers module | Mise à jour du firmware |
 
 ## Organisation du YAML
@@ -50,13 +51,14 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 
 | Fichier | Lignes | Responsabilité |
 |---|---|---|
-| `hapanel.yaml` | 25 | Production : inclusions et substitutions seulement |
+| `hapanel.yaml` | 27 | Production : inclusions et substitutions seulement |
 | `hapanel_banc.yaml` | 27 | Banc : production, plus mémoire mesurée et journaux DEBUG |
 | `packages/base.yaml` | 61 | Nœud, ESP32, Wi-Fi, API, OTA, journaux, identité de build |
 | `packages/hardware.yaml` | 109 | Broches, bus, écran, tactile, sorties PWM, LDR (G2) |
 | `packages/lvgl.yaml` | 178 | Polices communes, À propos, barre de navigation, suivi de la connexion |
-| `packages/liaison_ha.yaml` | 451 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
-| `packages/led_veille.yaml` | 136 | Veille, retour à l'accueil, LED, rétroéclairage |
+| `packages/liaison_ha.yaml` | 479 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
+| `packages/led_veille.yaml` | 210 | Veille, retour à l'accueil, LED, rétroéclairage |
+| `packages/message_accueil.yaml` | 131 | Action `message_accueil`, message plein écran, entité « Message d'accueil » |
 | `packages/pages/accueil.yaml` | 818 | Température, chauffage, commandes, couleur de la LED |
 | `packages/pages/meteo.yaml` | 195 | Conditions et prévisions |
 | `packages/pages/planning.yaml` | 373 | Résumé et frises |
@@ -147,10 +149,11 @@ Les tâches périodiques donnent le rythme du module :
 
 | Période | Fichier | Tâche |
 |---|---|---|
-| 50 ms | `led_veille.yaml` | Respiration de la LED |
+| 50 ms | `led_veille.yaml` | Respiration de la LED, arc-en-ciel du message d'accueil |
 | 500 ms | `led_veille.yaml` | Clignotement d'alerte |
 | 1 s | `led_veille.yaml` | Retour à l'accueil, veille, réveil sans HA |
 | 1 s | `scenarios.yaml` | Délais de réponse et de message |
+| 1 s | `message_accueil.yaml` | Fermeture du message d'accueil après 3 min |
 | 2 s | `lvgl.yaml` | Connexion à HA |
 | 10 s | `led_veille.yaml` | Obscurité et rétroéclairage |
 | 10 s | `lvgl.yaml` | Mémoire affichée dans À propos |
@@ -537,6 +540,12 @@ ou sont imposées par le blueprint par les clés `led_*`. `maj_valeur` les appli
 entités, que HA affiche aussitôt, et seulement si la valeur change : pas d'écriture en flash
 toutes les 5 minutes (G3).
 
+**Message d'accueil (D028) :** le blueprint de la maison `message_accueil.yaml` choisit le
+texte et la ligne de météo, puis appelle `message_accueil` sur chaque panneau dont l'entité
+« Message d'accueil » est activée. Le module l'affiche par-dessus la barre de navigation,
+garde l'écran allumé, passe la LED en arc-en-ciel (l'alerte reste prioritaire) et ferme le
+message au toucher, après 3 minutes ou à la déconnexion de HA (P2).
+
 ## Compilation et déploiement
 
 ![Chaîne de compilation](images/architecture/12_build.png)
@@ -560,6 +569,7 @@ toutes les 5 minutes (G3).
 | Clé d'API commune aux modules (R8) | Accepté : la clé d'un module ouvre l'API et l'OTA de tous |
 | `maj_valeur` accessible à tout détenteur de la clé | Peut changer l'affichage, pas commander un appareil |
 | Réglages de la LED modifiables depuis HA (D027) | Peuvent éteindre la LED ou son alerte ; l'écran montre toujours l'état réel |
+| Message d'accueil (D028) | Texte borné à 240 octets, sans commande ; fermé à la déconnexion de HA |
 | Autorisation des actions HA du module | Inutile aux événements (testé le 2 novembre 2026). Activée, elle permettrait à un firmware modifié d'appeler d'autres actions ; désactivée, il ne peut qu'émettre des événements. La liste de scénarios ne remplace pas la protection de la clé |
 | Secrets dans le dépôt (R3, G9) | `secrets.yaml` est ignoré par Git |
 | Commande sur état inconnu (R4) | Refus côté module et côté blueprint |

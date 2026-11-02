@@ -311,6 +311,7 @@ script:
           event: esphome.hapanel_demande_valeurs
   - id: liaison_deconnectee
     then:
+      - script.execute: message_fermer
       # Sans Home Assistant, plus rien ne garantit les valeurs (P2, P3).
       - lambda: |-
           id(liaison_temperature_ms) = 0;
