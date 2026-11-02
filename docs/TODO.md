@@ -154,6 +154,19 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       d'une pièce…), seulement après une période sans déclenchement réglable.
       Message selon la saison et l'heure, tiré d'une bibliothèque facile à
       modifier ; messages temporaires affichés une seule fois. Éventuellement
-      météo du moment et saint du jour. Piste proposée le 2 novembre 2026 :
-      bibliothèque dans des listes de tâches de HA, saint du jour dans le
-      firmware ; questions ouvertes à trancher avec le propriétaire.
+      météo du moment et saint du jour. Réponses du propriétaire (2 novembre
+      2026) :
+      - arc-en-ciel soumis aux réglages « LED » et « Intensité LED » (D027) ;
+      - plage horaire réglable dans le blueprint (par exemple rien de 23 h à 6 h) ;
+      - message affiché 3 min, fermé par un toucher ;
+      - tous les modules, accueil activable par module depuis HA ;
+      - message générique, selon la saison et l'heure ;
+      - bibliothèque : deux listes de tâches de HA, « messages » (étiquettes de
+        saison et de moment dans la description) et « message unique » (coché
+        après affichage) ;
+      - saint du jour fourni par HA, pas par le firmware : sans HA, pas de saint.
+        Proposition de l'agent : calendrier des saints dans le blueprint, sans
+        Internet ni configuration en plus.
+- [ ] Évolution du message d'accueil : citer la personne qui arrive (présence
+      des téléphones dans HA), quand tous les téléphones de la maison seront
+      connus.
