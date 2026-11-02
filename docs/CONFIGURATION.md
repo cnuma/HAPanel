@@ -13,14 +13,15 @@ Chaque module utilise le même logiciel et ne connaît aucune entité de votre m
 Tout se choisit dans Home Assistant, avec **un blueprint unique et une automatisation
 par module** : 5 modules, 5 automatisations.
 
-## 1. Autoriser le module
+## 1. Ajouter le module
 
-Dans Home Assistant : **Paramètres › Appareils et services › ESPHome**, ouvrez les
-options du module, puis activez l'autorisation d'effectuer des actions Home Assistant.
+Le module apparaît dans **Paramètres › Appareils et services › ESPHome** ; ajoutez-le
+avec la clé de chiffrement de l'API.
 
-Sans cette autorisation, le module ne peut pas demander ses valeurs à la connexion :
-elles n'arrivent qu'à l'envoi suivant, toutes les 5 minutes. Surtout, ses commandes
-n'atteignent pas Home Assistant.
+L'option « Autoriser l'appareil à effectuer des actions Home Assistant » **n'est pas
+nécessaire** : le module n'envoie que des événements (demande de valeurs, commandes),
+que Home Assistant reçoit sans elle (testé le 2 novembre 2026). La laisser désactivée
+réduit ce qu'un module modifié pourrait faire dans Home Assistant.
 
 ## 2. Importer le blueprint
 
@@ -78,7 +79,8 @@ action sensible.
 ![Trajet d'un scénario](images/schema_scenario.png)
 
 Le bouton n'envoie qu'un numéro : ce chemin ne lance que les entités choisies ici.
-Protégez aussi la clé d'API, car l'autorisation de l'étape 1 est plus large.
+Protégez aussi la clé d'API : avec elle, un module modifié pourrait émettre d'autres
+événements.
 
 ## 5. Régler la LED
 
@@ -161,7 +163,7 @@ Après une compilation, qui fournit les polices :
 | Symptôme | Cause probable | Que faire |
 |---|---|---|
 | « non reçu » partout, point vert | Automatisation absente, désactivée ou incomplète | Vérifier l'automatisation du module et ses traces |
-| Commandes sans effet, valeurs lentes à la connexion | Actions Home Assistant non autorisées | Reprendre l'étape 1 |
+| Commandes sans effet, valeurs lentes à la connexion | Automatisation absente, désactivée ou pour un autre panneau | Vérifier le champ Panneau de l'automatisation et ses traces |
 | Chaque commande s'exécute deux fois | Deux automatisations pour le module | En supprimer une |
 | Page Scénarios sur « non reçus » | Ancienne version du blueprint | Réimporter, puis redémarrer le module |
 | « Aucun scénario choisi » | Champs vides | Remplir la section Scénarios et enregistrer |

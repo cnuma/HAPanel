@@ -560,7 +560,7 @@ toutes les 5 minutes (G3).
 | Clé d'API commune aux modules (R8) | Accepté : la clé d'un module ouvre l'API et l'OTA de tous |
 | `maj_valeur` accessible à tout détenteur de la clé | Peut changer l'affichage, pas commander un appareil |
 | Réglages de la LED modifiables depuis HA (D027) | Peuvent éteindre la LED ou son alerte ; l'écran montre toujours l'état réel |
-| Autorisation des actions HA du module | Nécessaire aux événements ; un firmware modifié pourrait s'en servir pour d'autres actions. La liste de scénarios ne remplace donc pas la protection de la clé |
+| Autorisation des actions HA du module | Inutile aux événements (testé le 2 novembre 2026). Activée, elle permettrait à un firmware modifié d'appeler d'autres actions ; désactivée, il ne peut qu'émettre des événements. La liste de scénarios ne remplace pas la protection de la clé |
 | Secrets dans le dépôt (R3, G9) | `secrets.yaml` est ignoré par Git |
 | Commande sur état inconnu (R4) | Refus côté module et côté blueprint |
 

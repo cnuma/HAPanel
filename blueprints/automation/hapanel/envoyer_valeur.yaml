@@ -4,8 +4,6 @@ blueprint:
     Envoie l'état d'une entité à un panneau HAPanel sous une clé (par exemple
     « temperature ») : à chaque changement, toutes les 5 minutes, au
     démarrage de Home Assistant et quand le panneau le demande (connexion).
-    Le module doit être autorisé à effectuer des actions Home Assistant
-    (options de l'intégration ESPHome) pour que sa demande soit reçue.
     Décision D012 du dépôt cnuma/HAPanel.
   domain: automation
   source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/envoyer_valeur.yaml

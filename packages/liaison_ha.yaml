@@ -304,8 +304,9 @@ script:
       - script.execute: meteo_rafraichir
       - script.execute: planning_rafraichir
       - script.execute: scenarios_rafraichir
-      # Demande au blueprint de renvoyer toutes les valeurs. Exige
-      # l'autorisation des actions Home Assistant pour ce module (08).
+      # Demande au blueprint de renvoyer toutes les valeurs. Un evenement ne
+      # demande pas l'autorisation des actions Home Assistant (teste le
+      # 2 novembre 2026, 08).
       - homeassistant.event:
           event: esphome.hapanel_demande_valeurs
   - id: liaison_deconnectee

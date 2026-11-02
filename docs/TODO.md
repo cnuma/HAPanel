@@ -111,10 +111,15 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       vert d'Éco. Révisé le 2 novembre 2026 (respiration trop haute) : de 0 à
       l'ancien niveau bas (plafond 5 % de jour, 1 % de nuit), à valider à l'œil,
       y compris la lisibilité des couleurs à ce niveau.
-- [ ] Réglages de la LED par module (D027), à tester sur le module : entités
-      « LED », « Intensité LED », « Alerte LED » sur la page de l'appareil ;
-      conservation après redémarrage ; valeurs imposées par le blueprint
-      reflétées sur la page ; alerte désactivée (HA déconnecté, LED muette).
+- [ ] Réglages de la LED par module (D027) et bouton Accueil masqué sur l'accueil
+      (D025) : fusionnés dans `main` à la demande du propriétaire le 2 novembre
+      2026 (binaire de banc `966fb2d` flashé, démarrage sain, 161,7 Ko libres,
+      bloc 110,6 Ko) ; résultats des tests sur le module non rapportés. À
+      confirmer : entités « LED », « Intensité LED », « Alerte LED » sur la page
+      de l'appareil ; conservation après redémarrage ; valeurs imposées par le
+      blueprint reflétées sur la page ; alerte désactivée (HA déconnecté, LED
+      muette) ; bouton maison absent de l'accueil, y compris après le retour
+      automatique.
 - [ ] Outillage, reporté par le propriétaire le 31 octobre 2026 (à reprendre
       devant le module) : `hapanel.yaml` et `hapanel_banc.yaml` partagent
       `.esphome/build/hapanel` ; chaque changement de configuration recompile
@@ -143,11 +148,36 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       l'absence de variations gênantes et l'influence de l'écran sur la LDR.
       Relevé du 31 octobre 2026 : 0,075 V (plancher) pièce éclairée et sous
       torche, 0,13 à 0,26 V capteur couvert, signal instable.
-- [ ] Autorisation des actions HA, à tester sur le module : le code de HA (branche
-      `dev`, lu le 1er novembre 2026) émet les événements `esphome.*` sans vérifier
-      cette option, alors que `CONFIGURATION.md`, `ARCHITECTURE.md`, `04` et `08` la
-      disent nécessaire. Désactiver l'option, redémarrer le module, lancer une
-      commande et un scénario, puis corriger ces documents selon le résultat.
+- [x] Autorisation des actions HA : inutile. Testé par le propriétaire le
+      2 novembre 2026 (option désactivée, module redémarré, consigne et scénario
+      exécutés), puis option réactivée ; version de HA Core non relevée. Documents
+      corrigés.
+- [ ] Décider : laisser l'autorisation des actions HA activée ou la désactiver
+      sur chaque module (surface plus petite, `08`).
 - [ ] Usurpation de `device_id`, à évaluer puis à inscrire au `08` : HA écrit son
       `device_id`, puis les données de l'événement, qui peuvent l'écraser. Un firmware
       modifié, avec la clé d'API, pourrait se faire passer pour un autre panneau.
+
+## P4 — Idées du propriétaire (2 novembre 2026), à spécifier avant tout code
+
+- [ ] Message d'accueil quand quelqu'un arrive : écran allumé, LED en arc-en-ciel
+      rapide. Déclencheur choisi dans le blueprint (contact de porte, lumière
+      d'une pièce…), seulement après une période sans déclenchement réglable.
+      Message selon la saison et l'heure, tiré d'une bibliothèque facile à
+      modifier ; messages temporaires affichés une seule fois. Éventuellement
+      météo du moment et saint du jour. Réponses du propriétaire (2 novembre
+      2026) :
+      - arc-en-ciel soumis aux réglages « LED » et « Intensité LED » (D027) ;
+      - plage horaire réglable dans le blueprint (par exemple rien de 23 h à 6 h) ;
+      - message affiché 3 min, fermé par un toucher ;
+      - tous les modules, accueil activable par module depuis HA ;
+      - message générique, selon la saison et l'heure ;
+      - bibliothèque : deux listes de tâches de HA, « messages » (étiquettes de
+        saison et de moment dans la description) et « message unique » (coché
+        après affichage) ;
+      - saint du jour fourni par HA, pas par le firmware : sans HA, pas de saint.
+        Proposition de l'agent : calendrier des saints dans le blueprint, sans
+        Internet ni configuration en plus.
+- [ ] Évolution du message d'accueil : citer la personne qui arrive (présence
+      des téléphones dans HA), quand tous les téléphones de la maison seront
+      connus.

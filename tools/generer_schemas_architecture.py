@@ -283,7 +283,7 @@ def securite():
     s = S(1100, 780)
     s.zone(20, 20, 1060, 300, "Zone de confiance : Home Assistant, décide et vérifie")
     s.boite(50, 70, 450, 220, "Blueprint module.yaml", "accepte seulement l'événement de son panneau\nthermostat disponible et non verrouillé\nconsigne dans les bornes\nscénario : numéro dans la liste, entité disponible", ORANGE, B_ORANGE)
-    s.boite(600, 70, 450, 220, "Autorisation ESPHome", "le module peut émettre des événements\nsans quoi aucune commande n'arrive", ORANGE, B_ORANGE)
+    s.boite(600, 70, 450, 220, "Autorisation ESPHome", "inutile aux événements du panneau\n(testé le 2 novembre 2026)\nactivée : un firmware modifié\npourrait appeler d'autres actions", ORANGE, B_ORANGE)
     s.zone(20, 410, 1060, 330, "Module : affiche et demande, ne décide pas")
     s.boite(50, 460, 450, 240, "Garde-fous locaux", "aucune commande si HA déconnecté (P2)\nni sur état inconnu ou périmé (P4)\nle premier toucher ne fait que réveiller\nvaleur en attente jusqu'à confirmation", BLEU, B_BLEU)
     s.boite(600, 460, 450, 240, "Secrets", "clé d'API commune aux modules (R8)\nprotège API et OTA\nWi-Fi et clé dans secrets.yaml\nce fichier reste hors de Git", ROUGE, B_ROUGE)
