@@ -379,11 +379,16 @@ qui cite la précédente.
   validés à l'œil par le propriétaire le 31 octobre 2026 ; **pièce sombre,
   alerte face à Boost et blanc non testés**.
 - Décision :
-  - état normal, chauffage allumé : respiration de 6 s, du plancher (20 % du
-    plafond, jamais éteinte) au plafond ; un même facteur sur les trois canaux
-    conserve les mélanges de D017 ;
-  - plafond : 25 % pièce éclairée, 5 % pièce sombre, interpolé selon la LDR
+  - état normal, chauffage allumé : respiration de 6 s, de 0 (LED éteinte au
+    creux) au plafond ; un même facteur sur les trois canaux conserve les
+    mélanges de D017 ;
+  - plafond : 5 % pièce éclairée, 1 % pièce sombre, interpolé selon la LDR
     (0,09 à 0,20 V, moyenne sur 1 min) ; sans mesure, plafond de jour ;
+  - révision du 2 novembre 2026 (retour du propriétaire : respiration trop
+    haute) : le plafond devient l'ancien niveau bas (20 % de 25 % et de 5 %)
+    et le plancher passe de 20 % à 0 ; ce n'est plus la LED qui montre que
+    le chauffage est allumé quand elle est au creux, l'alerte reste un
+    clignotement franc ;
   - alerte inchangée (D017) : rouge clignotant franc à pleine intensité, qui la
     distingue de Boost, rouge respirant et atténué ;
   - chauffage éteint : LED éteinte, inchangé ;

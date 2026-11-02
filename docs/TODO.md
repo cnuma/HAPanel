@@ -108,7 +108,9 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       tester au banc : pièce sombre, blanc, Boost / alerte, influence du
       rétroéclairage sur la LDR. Validé à l'œil le 31 octobre 2026 : respiration,
       intensité en pièce éclairée, orange de Confort (rouge 30 %) distinct du
-      vert d'Éco.
+      vert d'Éco. Révisé le 2 novembre 2026 (respiration trop haute) : de 0 à
+      l'ancien niveau bas (plafond 5 % de jour, 1 % de nuit), à valider à l'œil,
+      y compris la lisibilité des couleurs à ce niveau.
 - [ ] Outillage, reporté par le propriétaire le 31 octobre 2026 (à reprendre
       devant le module) : `hapanel.yaml` et `hapanel_banc.yaml` partagent
       `.esphome/build/hapanel` ; chaque changement de configuration recompile

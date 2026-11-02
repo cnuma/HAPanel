@@ -5,11 +5,12 @@ substitutions:
   veille_delai_ms: "60000"
   # Respiration de la LED (D018) : niveaux a ajuster au banc. Plafond interpole
   # entre piece eclairee et piece sombre selon la tension de la LDR, qui monte
-  # dans le noir. Le plancher garde l'etat visible, ecran eteint (P2).
+  # dans le noir. Plancher nul : la LED s'eteint au creux de chaque respiration ;
+  # le plafond est l'ancien niveau bas (retour du proprietaire, 2 novembre 2026).
   led_periode_ms: "6000"
-  led_plancher: "0.20"
-  led_plafond_jour: "0.25"
-  led_plafond_nuit: "0.05"
+  led_plancher: "0.0"
+  led_plafond_jour: "0.05"
+  led_plafond_nuit: "0.01"
   ldr_tension_jour: "0.09"
   ldr_tension_nuit: "0.20"
   # Luminosite du retroeclairage (D023), a ajuster au banc. La correction gamma
