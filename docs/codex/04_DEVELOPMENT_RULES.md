@@ -54,9 +54,10 @@ du C++ au YAML.
   connexion ou péremption, qui calcule aussi les commandes autorisées.
 - Toute clé ou tout événement ajouté est documenté dans le blueprint et dans
   `00_CONTEXT.md`, dans le même lot que le firmware.
-- L'autorisation « actions Home Assistant » du panneau est activée dans
-  l'intégration ESPHome de Home Assistant et consignée comme surface dans
-  `08_RISKS_AND_DEBT.md`.
+- Le panneau ne passe que par des événements (`homeassistant.event`), qui ne
+  demandent pas l'autorisation « actions Home Assistant » de l'intégration
+  ESPHome (testé le 2 novembre 2026). Toute action HA appelée directement par le
+  firmware (`homeassistant.action`) l'exigerait : décision et ligne au `08`.
 - Chaque entité lue ou action appelée est inscrite dans le tableau des
   écrans de `00_CONTEXT.md`.
 

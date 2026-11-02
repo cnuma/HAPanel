@@ -24,10 +24,10 @@ avant fusion.
 |---|---|---|---|
 | API native ESPHome | TCP local | Clé de chiffrement (`secrets.yaml`) | `04_DEVELOPMENT_RULES.md` |
 | Mise à jour OTA | Réseau local, chiffré (Noise) | Clé de chiffrement de l'API (`secrets.yaml`, D010) | `04_DEVELOPMENT_RULES.md` |
-| Actions Home Assistant autorisées pour le panneau | API native | Autorisation dans l'intégration ESPHome | Requise dès le prototype D012 pour l'événement `esphome.hapanel_demande_valeurs` |
-| Portée de l'autorisation des actions HA | API native | Clé de chiffrement de l'API | Un firmware modifié pourrait appeler d'autres actions que les événements du panneau ; la liste de scénarios (D024) ne limite que le chemin normal |
+| Actions Home Assistant autorisées pour le panneau | API native | Autorisation dans l'intégration ESPHome | Inutile : le 2 novembre 2026, option désactivée, une commande du chauffage et un scénario ont été exécutés (HA émet les événements `esphome.*` sans elle). Activée sur le module de banc à la date du test |
+| Portée de l'autorisation des actions HA | API native | Clé de chiffrement de l'API | Option activée : un firmware modifié pourrait appeler d'autres actions que les événements du panneau. Désactivée : il ne peut qu'émettre des événements. La liste de scénarios (D024) ne limite que le chemin normal |
 | Action ESPHome `maj_valeur(cle, valeur)` | API native | Clé de chiffrement de l'API | D012 : n'importe quel client muni de la clé peut changer ce qu'affiche le panneau |
-| Événement `esphome.hapanel_commande` (commande du chauffage et scénarios choisis dans le blueprint, D024) | API native, puis blueprint | Autorisation des actions HA du module ; le blueprint n'accepte que l'événement de son panneau, thermostat disponible et non verrouillé, consigne dans les bornes ; consigne et préréglage chauffage allumé seulement (D015) | D014 : le panneau ne peut qu'allumer, couper, régler la consigne ou le préréglage du thermostat choisi dans le blueprint |
+| Événement `esphome.hapanel_commande` (commande du chauffage et scénarios choisis dans le blueprint, D024) | API native, puis blueprint | Clé de chiffrement de l'API ; le blueprint n'accepte que l'événement de son panneau, thermostat disponible et non verrouillé, consigne dans les bornes ; consigne et préréglage chauffage allumé seulement (D015) | D014 : le panneau ne peut qu'allumer, couper, régler la consigne ou le préréglage du thermostat choisi dans le blueprint |
 
 ## Dette technique
 

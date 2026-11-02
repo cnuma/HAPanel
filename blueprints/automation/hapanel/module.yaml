@@ -11,8 +11,8 @@ blueprint:
     Exécute les commandes du panneau (allumer, couper, consigne, préréglage)
     seulement si elles viennent de ce panneau, si le thermostat est disponible
     et non verrouillé et si la consigne est dans les bornes ; consigne et
-    préréglage exigent un chauffage allumé. Le module doit être autorisé à
-    effectuer des actions Home Assistant (options de l'intégration ESPHome).
+    préréglage exigent un chauffage allumé. Le module n'a pas besoin d'être
+    autorisé à effectuer des actions Home Assistant.
     Décisions D014, D015, D019, D020, D021, D024 et D026 du dépôt cnuma/HAPanel.
   domain: automation
   source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/module.yaml

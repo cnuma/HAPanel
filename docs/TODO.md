@@ -137,11 +137,12 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       l'absence de variations gênantes et l'influence de l'écran sur la LDR.
       Relevé du 31 octobre 2026 : 0,075 V (plancher) pièce éclairée et sous
       torche, 0,13 à 0,26 V capteur couvert, signal instable.
-- [ ] Autorisation des actions HA, à tester sur le module : le code de HA (branche
-      `dev`, lu le 1er novembre 2026) émet les événements `esphome.*` sans vérifier
-      cette option, alors que `CONFIGURATION.md`, `ARCHITECTURE.md`, `04` et `08` la
-      disent nécessaire. Désactiver l'option, redémarrer le module, lancer une
-      commande et un scénario, puis corriger ces documents selon le résultat.
+- [x] Autorisation des actions HA : inutile. Testé par le propriétaire le
+      2 novembre 2026 (option désactivée, module redémarré, consigne et scénario
+      exécutés), puis option réactivée ; version de HA Core non relevée. Documents
+      corrigés.
+- [ ] Décider : laisser l'autorisation des actions HA activée ou la désactiver
+      sur chaque module (surface plus petite, `08`).
 - [ ] Usurpation de `device_id`, à évaluer puis à inscrire au `08` : HA écrit son
       `device_id`, puis les données de l'événement, qui peuvent l'écraser. Un firmware
       modifié, avec la clé d'API, pourrait se faire passer pour un autre panneau.
