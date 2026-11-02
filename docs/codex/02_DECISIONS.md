@@ -522,6 +522,9 @@ qui cite la précédente.
   à toutes les pages par de grandes tuiles, avec une place libre. L'accueil reste
   à un toucher, les autres pages à deux. Navigation sans HA ni Wi-Fi (P5) ; retour
   à l'accueil après 1 min depuis le Menu aussi (D022).
+- Révision du 2 novembre 2026 (retour du propriétaire : les utilisateurs ne
+  comprennent pas un bouton qui ne réagit pas) : le bouton Accueil est masqué
+  sur la page d'accueil ; seul Menu reste, à sa place.
 
 ## D026 — Icône et couleur des boutons de scénarios
 

@@ -10,7 +10,7 @@ peut légèrement différer.*
 ## L'essentiel
 
 - La barre du bas est présente sur toutes les pages : **la maison** ramène à
-  l'accueil, **Menu** ouvre la liste des pages.
+  l'accueil (elle n'apparaît pas sur l'accueil), **Menu** ouvre la liste des pages.
 - Après **1 minute sans toucher**, le panneau revient à l'accueil et l'écran
   s'éteint.
 - Quand l'écran est éteint, **le premier toucher ne fait que le rallumer** : il ne
