@@ -64,6 +64,12 @@ Chaque ligne fusionne un fichier dans la configuration. **L'ordre compte** :
 Un seul package, `production`, qui inclut `hapanel.yaml` entier : le banc exécute
 exactement le logiciel de production, avec quelques ajouts.
 
+### Bloc `esphome`
+
+| Clé | Valeur | Rôle |
+|---|---|---|
+| `build_path` | `.esphome/build/hapanel_banc` | Dossier de compilation propre au banc. Sans lui, banc et production partagent `.esphome/build/hapanel`, et passer de l'un à l'autre recompile tout (environ 10 min). Coût : environ 430 Mo de plus sur le disque. |
+
 ### Bloc `debug` et capteurs de mémoire
 
 Le composant `debug` d'ESPHome mesure la mémoire toutes les 30 s (`update_interval`).

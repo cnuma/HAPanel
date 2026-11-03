@@ -55,9 +55,16 @@ git -c core.whitespace=cr-at-eol diff --check
 - Lancer ESPHome depuis PowerShell, pas depuis Git Bash : l'installation
   d'ESP-IDF refuse les environnements MSys/Mingw. La première compilation
   télécharge ESP-IDF (plusieurs minutes).
-- `hapanel.yaml` et `hapanel_banc.yaml` partagent le répertoire de
-  compilation `.esphome/build/hapanel` : alterner entre les deux recompile
-  tout (environ 10 minutes).
+- Dossiers de compilation séparés (3 novembre 2026) : `.esphome/build/hapanel`
+  pour la production, `.esphome/build/hapanel_banc` pour le banc
+  (`build_path` de `hapanel_banc.yaml`). Alterner entre les deux ne
+  recompile plus tout ; la première compilation de chacun reste longue
+  (environ 10 minutes).
+- Avant une fusion dans `main`, ne compiler que la configuration pas encore
+  compilée avec ce YAML (propriétaire, 3 novembre 2026). Si
+  `git diff <commit du binaire validé> main -- "*.yaml"` est vide, le
+  binaire validé au banc couvre le banc ; seule la production reste à
+  compiler.
 
 ## Vérification du binaire exécuté
 

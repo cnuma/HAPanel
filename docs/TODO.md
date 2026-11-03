@@ -120,12 +120,11 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       blueprint reflétées sur la page ; alerte désactivée (HA déconnecté, LED
       muette) ; bouton maison absent de l'accueil, y compris après le retour
       automatique.
-- [ ] Outillage, reporté par le propriétaire le 31 octobre 2026 (à reprendre
-      devant le module) : `hapanel.yaml` et `hapanel_banc.yaml` partagent
-      `.esphome/build/hapanel` ; chaque changement de configuration recompile
-      environ 1 500 fichiers (environ 10 min). Option recommandée :
-      `build_path: build/hapanel_banc` dans `hapanel_banc.yaml` (première
-      compilation complète, environ 430 Mo de plus, gain à mesurer).
+- [ ] Outillage, accepté par le propriétaire le 3 novembre 2026 :
+      `build_path: .esphome/build/hapanel_banc` dans `hapanel_banc.yaml` et
+      règle « ne compiler que la configuration pas encore compilée » avant une
+      fusion (`05_BUILD_AND_TEST.md`). Gain à mesurer au prochain passage de la
+      production au banc.
 - [x] Page « Scénarios » (D024) et page « Menu » (D025) : validées par le
       propriétaire le 1er novembre 2026 (« tout marche »), fusionnées dans `main`.
 - [ ] Icône et couleur des boutons de scénarios (D026) : fusionnées à la demande du propriétaire ; à confirmer sur le
