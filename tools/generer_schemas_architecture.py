@@ -405,10 +405,13 @@ def yaml_matrice():
               ("liaison_ha", "subst. api globals script interval", VERT, B_VERT),
               ("led_veille", "subst. globals script interval switch tactile autres", VERT, B_VERT),
               ("message_accueil", "subst. api globals lvgl script interval switch", ORANGE, B_ORANGE)]
-    s = S(1210, 820)
-    x0, y0, lc, hl = 205, 70, 76, 52
+    s = S(1210, 900)
+    x0, y0, lc, hl = 205, 110, 76, 52
+    # Axes : fichiers en lignes, blocs YAML en colonnes.
+    s.d.text((x0 + len(colonnes) * lc / 2, 30), "En colonnes : les blocs YAML (script:, sensor:…)", fill=ENCRE, font=f(20, True), anchor="mm")
+    s.d.text((20, 30), "En lignes : les\nfichiers de packages/", fill=ENCRE, font=f(17, True), anchor="la")
     for i, c in enumerate(colonnes):
-        s.d.text((x0 + i * lc + lc / 2, 45), c, fill=ENCRE, font=f(17, True), anchor="mm")
+        s.d.text((x0 + i * lc + lc / 2, 85), c, fill=ENCRE, font=f(17, True), anchor="mm")
     for j, (nom, blocs, fond, bord) in enumerate(lignes):
         y = y0 + j * hl
         s.d.line([(20, y), (x0 + len(colonnes) * lc, y)], fill="#CFD8DC", width=1)
@@ -419,7 +422,15 @@ def yaml_matrice():
                 s.d.rounded_rectangle([cx + 8, y + 9, cx + lc - 8, y + hl - 9], 7, fill=fond, outline=bord, width=2)
     yf = y0 + len(lignes) * hl
     s.d.line([(20, yf), (x0 + len(colonnes) * lc, yf)], fill="#CFD8DC", width=1)
-    s.etiquette((605, yf + 70), "Une ligne par fichier, une colonne par bloc YAML : une case indique que le fichier déclare ce bloc.\nSocle en gris, écrans en orange, graphisme en bleu, services en vert. subst. : substitutions ; tactile : touchscreen.\nautres : ota, logger, text_sensor (base) ; spi, output, light, display (hardware) ; time (accueil) ; select, number (led_veille).", DOUX)
+    # Legende : une case = le fichier declare ce bloc ; couleur = role du fichier.
+    s.d.text((20, yf + 40), "Légende : une case = ce fichier déclare ce bloc. La couleur donne le rôle du fichier :", fill=ENCRE, font=f(19, True), anchor="lm")
+    roles = [(GRIS, "#607D8B", "socle : carte, Wi-Fi, API"), (ORANGE, B_ORANGE, "écran affiché"),
+             (BLEU, B_BLEU, "graphisme commun, navigation"), (VERT, B_VERT, "service sans écran")]
+    for cx, (fond, bord, texte) in zip([30, 320, 530, 880], roles):
+        s.d.rounded_rectangle([cx, yf + 68, cx + 46, yf + 100], 7, fill=fond, outline=bord, width=2)
+        s.d.text((cx + 56, yf + 84), texte, fill=ENCRE, font=f(18), anchor="lm")
+    s.d.text((20, yf + 135), "Abréviations : subst. = substitutions ; tactile = touchscreen.", fill=DOUX, font=f(17), anchor="lm")
+    s.d.text((20, yf + 162), "autres : ota, logger, text_sensor (base) ; spi, output, light, display (hardware) ; time (accueil) ; select, number (led_veille).", fill=DOUX, font=f(17), anchor="lm")
     s.sauver("20_yaml_matrice.png")
 
 
