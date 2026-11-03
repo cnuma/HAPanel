@@ -12,6 +12,16 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 - **Rapport :** donner les numéros KO (par exemple « A7 KO : … ») ; les tests non faits
   restent vides.
 
+## Résultats
+
+| Date | Binaire | Partie | Résultat | Suite |
+|---|---|---|---|---|
+| 3 novembre 2026 | `6ec8bc4` | A | OK, sauf texte gris sombre sur noir, illisible | Corrigé (`5134e69`) : texte blanc ; à revoir après flash |
+| 3 novembre 2026 | `6ec8bc4` | B | OK, même défaut de couleur | Idem |
+| 3 novembre 2026 | `6ec8bc4` | C | KO : « pas de menu de réglage sur le module » | À préciser : les réglages D027 sont sur la page de l'appareil dans HA, pas sur l'écran du module |
+| 3 novembre 2026 | `6ec8bc4` | D | OK | |
+| 3 novembre 2026 | `6ec8bc4` | E | KO, sans détail | Numéros et constats à préciser |
+
 | Partie | Sujet | Bloque la fusion |
 |---|---|---|
 | A | Message d'accueil, côté module (D028) | Oui |
