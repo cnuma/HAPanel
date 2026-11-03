@@ -4,7 +4,7 @@ Tous les tests lancés et pas encore confirmés, en un seul endroit, pour n'en o
 aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a été vu
 (et l'heure, pour retrouver les journaux).
 
-- **Module :** `hapanel-a85bfc`, binaire de banc `0.6.0-dev (6ec8bc4)`, flashé le
+- **Module :** `hapanel-a85bfc`, binaire de banc `0.6.0-dev (dec159c)`, flashé le
   3 novembre 2026. Vérifier l'entité « Version » sur la page de l'appareil avant de
   commencer.
 - **Ordre :** la partie A bloque la fusion dans `main` ; les parties B à G se font
@@ -21,6 +21,8 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 3 novembre 2026 | `6ec8bc4` | C | KO : « pas de menu de réglage sur le module » | À préciser : les réglages D027 sont sur la page de l'appareil dans HA, pas sur l'écran du module |
 | 3 novembre 2026 | `6ec8bc4` | D | OK | |
 | 3 novembre 2026 | `6ec8bc4` | E | KO, sans détail | Numéros et constats à préciser |
+| 3 novembre 2026 | `d67b9c0` | A1 | Couleur OK ; accent de « écran » absent du pied de page | Corrigé (`bade90a`) : police du projet sur tout le message |
+| 3 novembre 2026 | `dec159c` | A1 | OK : **A et B validés**, fusion dans `main` | |
 
 | Partie | Sujet | Bloque la fusion |
 |---|---|---|
@@ -39,7 +41,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | P1 | Page de l'appareil `hapanel-a85bfc`, rubrique Configuration | Entité **Message d'accueil** présente et activée | |
 | P2 | Créer la liste « Messages d'accueil » et exécuter **une fois** le script `docs/exemples/messages_accueil.yaml` (voir `CONFIGURATION.md` § 6) | 27 tâches dans la liste | |
 | P3 | Créer la liste « Messages uniques » (vide pour l'instant) | Liste présente | |
-| P4 | Importer le blueprint depuis la branche : `https://github.com/cnuma/HAPanel/blob/feature/message-accueil/blueprints/automation/hapanel/message_accueil.yaml` | Blueprint « HAPanel — message d'accueil » listé | |
+| P4 | Importer le blueprint (lien de `CONFIGURATION.md` § 6) ; s'il a été importé depuis la branche `feature/message-accueil`, le réimporter depuis `main` | Blueprint « HAPanel — message d'accueil » listé | |
 | P5 | Créer l'automatisation : Panneaux = le module ; Déclencheurs = `binary_sensor.entree_capteur_porte_entree` ; Période sans déclenchement = **1 min** pour les tests ; les deux listes ; Météo = l'entité `weather` | Automatisation enregistrée, sans erreur | |
 
 ## A — Message d'accueil, côté module

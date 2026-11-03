@@ -160,12 +160,11 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 
 ## P4 — Idées du propriétaire (2 novembre 2026), à spécifier avant tout code
 
-- [ ] Message d'accueil (D028), codé sur `feature/message-accueil`, à tester sur le
-      module et dans HA : déclenchement après la période sans déclenchement et
-      dans la plage horaire, tirage selon saison et moment, message unique coché,
-      ligne météo, fermeture au toucher et après 3 min, arc-en-ciel soumis à
-      D027, entité « Message d'accueil » désactivée. Saint du jour reporté.
-      Tous les tests en attente : `docs/CAHIER_DE_TESTS.md`.
+- [x] Message d'accueil (D028) : validé par le propriétaire sur le module et dans
+      HA le 3 novembre 2026 (cahier de tests, parties A et B, binaire `dec159c`,
+      après correction de la couleur et de la police du texte), fusionné dans
+      `main`. Saint du jour reporté. Autres tests en attente :
+      `docs/CAHIER_DE_TESTS.md`.
 - [ ] Saint du jour : choisir la source (calendrier dans le blueprint, ou service
       en ligne téléchargé par HA) ; il s'affichera sur la ligne de la météo.
 - [ ] Spécification d'origine du message d'accueil, quand quelqu'un arrive : écran allumé, LED en arc-en-ciel

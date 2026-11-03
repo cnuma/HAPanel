@@ -576,8 +576,9 @@ qui cite la précédente.
 ## D028 — Message d'accueil à l'arrivée
 
 - Date : 2 novembre 2026 — Statut : demandé par le propriétaire, qui a répondu
-  aux questions de cadrage (TODO P4) ; à valider sur le module et dans HA. Le
-  saint du jour est reporté (source à choisir).
+  aux questions de cadrage (TODO P4) ; validé par lui sur le module et dans HA le
+  3 novembre 2026 (texte blanc et police du projet ajoutés au banc). Le saint du
+  jour est reporté (source à choisir).
 - Contexte : quand quelqu'un arrive après une absence, les panneaux affichent un
   message selon la saison et l'heure, tiré d'une bibliothèque facile à modifier.
 - Décision :

@@ -189,7 +189,7 @@ Relancer le script après toute modification du YAML.
 | `police_icones` | font | packages/lvgl.yaml | packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/menu.yaml |
 | `police_meteo` | font | packages/pages/meteo.yaml | — |
 | `police_scenarios` | font | packages/pages/scenarios.yaml | — |
-| `police_texte` | font | packages/lvgl.yaml | — |
+| `police_texte` | font | packages/lvgl.yaml | packages/message_accueil.yaml |
 | `police_titre` | font | packages/lvgl.yaml | packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml |
 | `retro_niveau` | globals | packages/led_veille.yaml | — |
 | `retroeclairage` | light (monochromatic) | packages/hardware.yaml | packages/led_veille.yaml |
