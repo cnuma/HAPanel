@@ -14,6 +14,8 @@ substitutions:
   # 20 % des plafonds : 5 % de jour, 1 % de nuit (retour du proprietaire,
   # 2 novembre 2026).
   led_intensite_defaut: "20"
+  # Arc-en-ciel du message d'accueil (D028) : un tour de couleurs.
+  led_arc_periode_ms: "2000"
   ldr_tension_jour: "0.09"
   ldr_tension_nuit: "0.20"
   # Luminosite du retroeclairage (D023), a ajuster au banc. La correction gamma
@@ -149,11 +151,12 @@ interval:
                 id: page_accueil
                 animation: NONE
       # Jamais d'ecran noir sans Home Assistant : le message reste lisible (P2).
+      # Message d'accueil affiche : l'ecran reste allume (D028).
       - if:
           condition:
             and:
               - not: lvgl.is_paused
-              - lambda: return id(ha_connecte_affiche) == 1 && lv_display_get_inactive_time(nullptr) > ${veille_delai_ms};
+              - lambda: return id(ha_connecte_affiche) == 1 && id(message_ms) == 0 && lv_display_get_inactive_time(nullptr) > ${veille_delai_ms};
           then:
             - light.turn_off: retroeclairage
             - lvgl.pause:
@@ -181,7 +184,26 @@ interval:
           float intensite = mode.has_value() && *mode == 1 ? 0.0f : id(led_intensite).state / 100.0f;
           if (isnan(intensite)) intensite = ${led_intensite_defaut} / 100.0f;
           float plafond = intensite * (${led_plafond_jour} + id(ldr_obscurite) * (${led_plafond_nuit} - ${led_plafond_jour}));
-          float s = 0.5f - 0.5f * cos(2.0f * M_PI * (millis() % ${led_periode_ms}) / ${led_periode_ms});
+          // Message d'accueil (D028) : arc-en-ciel au plafond, sans respiration.
+          // L'alerte reste prioritaire (P2).
+          if (id(message_ms) != 0) {
+            float h = (millis() % ${led_arc_periode_ms}) * 6.0f / ${led_arc_periode_ms};
+            float x = 1.0f - fabs(fmod(h, 2.0f) - 1.0f);
+            float r = 0.0f, g = 0.0f, b = 0.0f;
+            switch ((int) h) {
+              case 0: r = 1.0f; g = x; break;
+              case 1: r = x; g = 1.0f; break;
+              case 2: g = 1.0f; b = x; break;
+              case 3: g = x; b = 1.0f; break;
+              case 4: r = x; b = 1.0f; break;
+              default: r = 1.0f; b = x; break;
+            }
+            id(sortie_led_rouge).set_level(r * plafond);
+            id(sortie_led_vert).set_level(g * plafond);
+            id(sortie_led_bleu).set_level(b * plafond);
+            return;
+          }
+          float s =0.5f - 0.5f * cos(2.0f * M_PI * (millis() % ${led_periode_ms}) / ${led_periode_ms});
           float k = plafond * (${led_plancher} + (1.0f - ${led_plancher}) * s * s);
           id(sortie_led_rouge).set_level(id(led_rouge) * k);
           id(sortie_led_vert).set_level(id(led_vert) * k);

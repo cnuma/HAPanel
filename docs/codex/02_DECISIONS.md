@@ -569,3 +569,39 @@ qui cite la précédente.
     seulement si la valeur change (G3).
 - Conséquences : nouvelles entités exposées, à ne plus renommer (G10) ; surface
   inscrite au `08`.
+
+## D028 — Message d'accueil à l'arrivée
+
+- Date : 2 novembre 2026 — Statut : demandé par le propriétaire, qui a répondu
+  aux questions de cadrage (TODO P4) ; à valider sur le module et dans HA. Le
+  saint du jour est reporté (source à choisir).
+- Contexte : quand quelqu'un arrive après une absence, les panneaux affichent un
+  message selon la saison et l'heure, tiré d'une bibliothèque facile à modifier.
+- Décision :
+  - un blueprint de la maison, `message_accueil.yaml`, distinct de `module.yaml`
+    (D021) : l'arrivée concerne toute la maison, un seul tirage pour tous les
+    panneaux, un message unique coché une seule fois ;
+  - déclencheurs choisis (contact, lumière, interrupteur), passage de « off » à
+    « on » ; il faut que le déclencheur et tous les autres soient restés au repos
+    pendant la période choisie (30 min par défaut), dans une plage horaire
+    (6 h à 23 h par défaut) ;
+  - bibliothèque : deux listes de tâches de HA. « Messages uniques » d'abord (la
+    première tâche non cochée, cochée après l'envoi), sinon un message au hasard
+    de « Messages » dont les mots de la description (saison, moment) conviennent ;
+    sinon « Bonjour » ou « Bonsoir, bienvenue à la maison ! » ;
+  - ligne de météo composée par HA (« Dehors : 12 °C, nuageux »), entité météo
+    facultative ; le saint du jour viendra sur cette même ligne, sans changer le
+    firmware ;
+  - module : action `message_accueil(texte, infos)` (240 octets au plus par
+    texte), plein écran par-dessus la barre de navigation, fermé par la croix
+    en haut à droite (demande du propriétaire), par un toucher ailleurs ou après 3 min, écran allumé pendant l'affichage ; fermé à la déconnexion de
+    HA pour que l'état de la liaison redevienne visible (P2) ;
+  - LED en arc-en-ciel (un tour en 2 s) au plafond de D018 × « Intensité LED » ;
+    rien si « LED » est sur Éteinte ; l'alerte rouge reste prioritaire (P2) ;
+  - entité de configuration « Message d'accueil » (activée par défaut) : le module
+    ignore le message si elle est désactivée, et le blueprint ne vise que les
+    panneaux où elle est activée, donc connectés.
+- Conséquences : nouvelle entité exposée (G10 : le blueprint la retrouve par son
+  nom, `switch.*message_d_accueil`) ; surface inscrite au `08`. Après un
+  redémarrage de HA, pas d'accueil avant la période choisie (dernier changement
+  remis à zéro).

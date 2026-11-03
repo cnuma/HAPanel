@@ -393,7 +393,7 @@ def blueprint_structure():
 
 
 def yaml_matrice():
-    colonnes = ["subst.", "esphome", "wifi", "api", "font", "globals", "lvgl", "script", "interval", "sensor", "tactile", "autres"]
+    colonnes = ["subst.", "esphome", "wifi", "api", "font", "globals", "lvgl", "script", "interval", "sensor", "switch", "tactile", "autres"]
     lignes = [("base", "esphome wifi api sensor autres", GRIS, "#607D8B"),
               ("hardware", "subst. sensor tactile autres", GRIS, "#607D8B"),
               ("accueil", "subst. esphome wifi font globals lvgl script sensor autres", ORANGE, B_ORANGE),
@@ -403,21 +403,43 @@ def yaml_matrice():
               ("menu", "lvgl", ORANGE, B_ORANGE),
               ("lvgl", "font globals lvgl interval", BLEU, B_BLEU),
               ("liaison_ha", "subst. api globals script interval", VERT, B_VERT),
-              ("led_veille", "subst. globals script interval tactile", VERT, B_VERT)]
-    s = S(1100, 760)
-    x0, y0, lc, hl = 180, 70, 76, 52
+              ("led_veille", "subst. globals script interval switch tactile autres", VERT, B_VERT),
+              ("message_accueil", "subst. api globals lvgl script interval switch", ORANGE, B_ORANGE)]
+    s = S(1260, 900)
+    x0, y0, lc, hl = 255, 110, 76, 52
+    yf = y0 + len(lignes) * hl
+    xf = x0 + len(colonnes) * lc
+    # Axes : titre des colonnes centre au-dessus d'elles, titre des lignes
+    # vertical a leur gauche, centre sur leur hauteur ; un trait montre l'etendue.
+    s.d.text(((x0 + xf) / 2, 28), "Colonnes : les blocs YAML (script:, sensor:…)", fill=ENCRE, font=f(21, True), anchor="mm")
+    s.d.line([(x0 + 8, 52), (xf - 8, 52)], fill=ENCRE, width=2)
+    titre = "Lignes : les fichiers de packages/"
+    police = f(21, True)
+    lt = int(s.d.textlength(titre, font=police)) + 10
+    tampon = Image.new("RGB", (lt, 30), "#FFFFFF")
+    ImageDraw.Draw(tampon).text((lt / 2, 15), titre, fill=ENCRE, font=police, anchor="mm")
+    s.im.paste(tampon.rotate(90, expand=True), (14, int((y0 + yf) / 2 - lt / 2)))
+    s.d.line([(52, y0 + 8), (52, yf - 8)], fill=ENCRE, width=2)
     for i, c in enumerate(colonnes):
-        s.d.text((x0 + i * lc + lc / 2, 45), c, fill=ENCRE, font=f(17, True), anchor="mm")
+        s.d.text((x0 + i * lc + lc / 2, 85), c, fill=ENCRE, font=f(17, True), anchor="mm")
     for j, (nom, blocs, fond, bord) in enumerate(lignes):
         y = y0 + j * hl
-        s.d.line([(20, y), (x0 + 12 * lc, y)], fill="#CFD8DC", width=1)
-        s.d.text((165, y + hl / 2), nom, fill=ENCRE, font=f(22, True), anchor="rm")
+        s.d.line([(70, y), (xf, y)], fill="#CFD8DC", width=1)
+        s.d.text((245, y + hl / 2), nom, fill=ENCRE, font=f(22, True), anchor="rm")
         for i, c in enumerate(colonnes):
             if c in blocs.split():
                 cx = x0 + i * lc
                 s.d.rounded_rectangle([cx + 8, y + 9, cx + lc - 8, y + hl - 9], 7, fill=fond, outline=bord, width=2)
-    s.d.line([(20, y0 + 10 * hl), (x0 + 12 * lc, y0 + 10 * hl)], fill="#CFD8DC", width=1)
-    s.etiquette((550, 680), "Socle en gris, pages en orange, graphisme en bleu, services en vert. subst. : substitutions ; tactile : touchscreen.\nautres : esp32, ota, logger, text_sensor (base) ; spi, i2c, output, light, display (hardware) ; time (accueil).", DOUX)
+    s.d.line([(70, yf), (xf, yf)], fill="#CFD8DC", width=1)
+    # Legende : une case = le fichier declare ce bloc ; couleur = role du fichier.
+    s.d.text((20, yf + 40), "Légende : une case = ce fichier déclare ce bloc. La couleur donne le rôle du fichier :", fill=ENCRE, font=f(19, True), anchor="lm")
+    roles = [(GRIS, "#607D8B", "socle : carte, Wi-Fi, API"), (ORANGE, B_ORANGE, "écran affiché"),
+             (BLEU, B_BLEU, "graphisme commun, navigation"), (VERT, B_VERT, "service sans écran")]
+    for cx, (fond, bord, texte) in zip([30, 320, 530, 880], roles):
+        s.d.rounded_rectangle([cx, yf + 68, cx + 46, yf + 100], 7, fill=fond, outline=bord, width=2)
+        s.d.text((cx + 56, yf + 84), texte, fill=ENCRE, font=f(18), anchor="lm")
+    s.d.text((20, yf + 135), "Abréviations : subst. = substitutions ; tactile = touchscreen.", fill=DOUX, font=f(17), anchor="lm")
+    s.d.text((20, yf + 162), "autres : ota, logger, text_sensor (base) ; spi, output, light, display (hardware) ; time (accueil) ; select, number (led_veille).", fill=DOUX, font=f(17), anchor="lm")
     s.sauver("20_yaml_matrice.png")
 
 

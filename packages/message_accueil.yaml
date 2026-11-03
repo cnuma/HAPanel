@@ -1,0 +1,157 @@
+# Message d'accueil (D028) : texte choisi par le blueprint
+# blueprints/automation/hapanel/message_accueil.yaml quand quelqu'un arrive.
+# Plein ecran par-dessus la barre de navigation, ferme par un toucher ou apres
+# 3 min. LED en arc-en-ciel pendant l'affichage (packages/led_veille.yaml).
+substitutions:
+  message_duree_ms: "180000"
+  # Taille maximale d'un texte recu, en octets (un accent en compte deux).
+  message_max_octets: "240"
+
+globals:
+  # Instant (millis) de l'affichage du message ; 0 : aucun message.
+  - id: message_ms
+    type: uint32_t
+    initial_value: "0"
+
+# Accueil active ou non pour ce module, sur la page de l'appareil dans Home
+# Assistant (entite de configuration, gardee en flash, G3).
+switch:
+  - platform: template
+    id: message_actif
+    name: Message d'accueil
+    icon: mdi:message-text-outline
+    entity_category: config
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_ON
+    on_turn_off:
+      - script.execute: message_fermer
+
+lvgl:
+  top_layer:
+    widgets:
+      # Apres la barre de navigation : dessine par-dessus. Le toucher ferme le
+      # message sans atteindre la page en dessous (aucune commande, P4).
+      - obj:
+          id: obj_message
+          hidden: true
+          clickable: true
+          align: TOP_LEFT
+          width: 240
+          height: 320
+          radius: 0
+          border_width: 0
+          pad_all: 0
+          bg_color: 0x000000
+          # Le top_layer n'herite ni du blanc ni de la police des pages
+          # (lvgl.yaml) : sans eux, texte gris sombre sur noir et accents
+          # absents (police par defaut de LVGL).
+          text_color: 0xFFFFFF
+          text_font: police_texte
+          scrollable: false
+          widgets:
+            # Croix dans un cercle : montre que le message se ferme a la main.
+            - button:
+                id: btn_msg_fermer
+                align: TOP_RIGHT
+                x: -10
+                y: 10
+                width: 44
+                height: 44
+                radius: 22
+                pad_all: 0
+                bg_color: 0x000000
+                border_width: 2
+                border_color: 0xFFFFFF
+                shadow_width: 0
+                widgets:
+                  - label:
+                      align: CENTER
+                      text_font: police_icones
+                      text: "\U000F0156"
+                on_click:
+                  - script.execute: message_fermer
+            - label:
+                id: lbl_msg_texte
+                align: CENTER
+                y: -30
+                width: 216
+                long_mode: WRAP
+                text_align: CENTER
+                text_font: police_titre
+                text: ""
+            - label:
+                id: lbl_msg_infos
+                align: BOTTOM_MID
+                y: -48
+                width: 216
+                long_mode: WRAP
+                text_align: CENTER
+                text_color: 0xB0BEC5
+                text: ""
+            - label:
+                align: BOTTOM_MID
+                y: -12
+                text_color: 0x9E9E9E
+                text: "Touchez l'écran pour fermer"
+          on_click:
+            - script.execute: message_fermer
+
+api:
+  actions:
+    # Appelee par le blueprint : texte principal et ligne d'informations
+    # (meteo), deja composes par Home Assistant.
+    - action: message_accueil
+      variables:
+        texte: string
+        infos: string
+      then:
+        - lambda: |-
+            if (!id(message_actif).state) {
+              ESP_LOGI("hapanel.message", "message ignore : accueil desactive");
+              return;
+            }
+            // texte et infos pointent dans le tampon de reception : copie
+            // bornee, coupee avant un caractere UTF-8 incomplet.
+            auto borner = [](const char *s, size_t n) {
+              if (n > ${message_max_octets}) {
+                n = ${message_max_octets};
+                while (n > 0 && (s[n] & 0xC0) == 0x80) n--;
+              }
+              return std::string(s, n);
+            };
+            std::string t = borner(texte.c_str(), texte.size());
+            std::string i = borner(infos.c_str(), infos.size());
+            if (t.empty()) return;
+            lv_label_set_text(id(lbl_msg_texte), t.c_str());
+            lv_label_set_text(id(lbl_msg_infos), i.c_str());
+            lv_obj_remove_flag(id(obj_message), LV_OBJ_FLAG_HIDDEN);
+            uint32_t maintenant = millis();
+            id(message_ms) = maintenant == 0 ? 1 : maintenant;
+            ESP_LOGI("hapanel.message", "message affiche (%u octets)", (unsigned) t.size());
+        - if:
+            condition:
+              and:
+                - lvgl.is_paused
+                - lambda: return id(message_ms) != 0;
+            then:
+              - script.execute: veille_reveiller
+
+script:
+  # Aussi appele a la deconnexion de HA : l'etat de la liaison redevient
+  # visible (P2).
+  - id: message_fermer
+    then:
+      - lambda: |-
+          if (id(message_ms) == 0) return;
+          id(message_ms) = 0;
+          lv_obj_add_flag(id(obj_message), LV_OBJ_FLAG_HIDDEN);
+          ESP_LOGI("hapanel.message", "message ferme");
+
+interval:
+  - interval: 1s
+    then:
+      - if:
+          condition:
+            lambda: return id(message_ms) != 0 && millis() - id(message_ms) > ${message_duree_ms};
+          then:
+            - script.execute: message_fermer

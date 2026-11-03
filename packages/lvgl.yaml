@@ -15,14 +15,15 @@ font:
   # maison, Manuel (circle-medium), Hors-gel (snowflake), Eco (leaf),
   # Confort (sofa), Boost (rocket-launch), wifi-off, lan-disconnect (D015),
   # meteo (weather-partly-cloudy, D019), planning (calendar-clock, D020),
-  # scenarios (play-box-multiple, D024), menu et a propos (information-outline, D025).
+  # scenarios (play-box-multiple, D024), menu et a propos (information-outline, D025),
+  # fermeture du message d'accueil (close, D028).
   - file:
       type: web
       url: https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/fonts/materialdesignicons-webfont.ttf
     id: police_icones
     size: 24
     bpp: 4
-    glyphs: ["\U000F02DC", "\U000F09DE", "\U000F0717", "\U000F032A", "\U000F04B9", "\U000F14DE", "\U000F05AA", "\U000F0319", "\U000F0595", "\U000F00F0", "\U000F0D19", "\U000F035C", "\U000F02FD"]
+    glyphs: ["\U000F02DC", "\U000F09DE", "\U000F0717", "\U000F032A", "\U000F04B9", "\U000F14DE", "\U000F05AA", "\U000F0319", "\U000F0595", "\U000F00F0", "\U000F0D19", "\U000F035C", "\U000F02FD", "\U000F0156"]
 
 globals:
   # Etat de connexion affiche : 0 non connecte, 1 connecte. Le libelle n'est

@@ -10,8 +10,9 @@ sa version.*
 ## Principe
 
 Chaque module utilise le même logiciel et ne connaît aucune entité de votre maison.
-Tout se choisit dans Home Assistant, avec **un blueprint unique et une automatisation
-par module** : 5 modules, 5 automatisations.
+Tout se choisit dans Home Assistant, avec **un blueprint et une automatisation par
+module** : 5 modules, 5 automatisations. Seul le message d'accueil a son propre
+blueprint, avec une automatisation pour toute la maison (section 6).
 
 ## 1. Ajouter le module
 
@@ -103,6 +104,122 @@ connexion et toutes les 5 minutes : elle **l'emporte** sur la page de l'appareil
 changement est remplacé sous 5 minutes. Pour régler depuis la page de l'appareil,
 laissez « Ne pas imposer ».
 
+## 6. Message d'accueil
+
+Quand quelqu'un arrive après une absence, les modules affichent un message pendant
+3 minutes, LED en arc-en-ciel. La croix en haut à droite, ou un toucher ailleurs, le
+ferme.
+
+**Une seule automatisation pour toute la maison**, depuis un second blueprint.
+
+### Avant de commencer
+
+- **Modules :** un logiciel qui comprend le message d'accueil (D028) ; chaque module
+  a alors une entité **Message d'accueil** dans sa rubrique **Configuration**.
+- **Déclencheurs :** au moins une entité qui passe à « on » à l'arrivée : contact de
+  la porte d'entrée, lumière de l'entrée, interrupteur.
+- **Facultatif :** une liste de messages, une liste de messages uniques et une entité
+  `weather` pour la météo sous le message.
+
+### Créer les listes de messages (facultatif)
+
+Sans liste, le module affiche « Bonjour » ou « Bonsoir, bienvenue à la maison ! ».
+
+1. **Paramètres › Appareils et services › Ajouter une intégration**, puis **Liste de
+   tâches locale**. Nom : « Messages d'accueil ».
+2. **Paramètres › Appareils et services › Entités** : vérifier que l'entité créée est
+   `todo.messages_d_accueil`.
+3. Remplir la liste :
+   - **d'un coup :** le script
+     [exemples/messages_accueil.yaml](exemples/messages_accueil.yaml) ajoute
+     27 messages. **Paramètres › Automatisations et scènes › Scripts › Créer un
+     script**, menu **⋮ › Modifier en YAML**, remplacer tout le contenu par le
+     fichier, enregistrer, puis **Exécuter** une seule fois : chaque exécution
+     ajoute de nouveau les 27 messages. Supprimer ensuite le script. Si l'entité de
+     l'étape 2 est différente, corriger `entity_id` dans le script avant de
+     l'exécuter ;
+   - **à la main :** **Listes de tâches** dans la barre latérale, la liste, puis
+     **Ajouter une tâche**.
+4. Pour des messages uniques, créer de la même façon une seconde liste, par exemple
+   « Messages uniques ».
+
+**Écrire les messages.** Chaque tâche non cochée est un message. Dans sa description,
+des mots le réservent à une saison (printemps, été, automne, hiver) ou à un moment
+(matin, après-midi, soir, nuit) ; sans ces mots, il convient toujours. Un message est
+tiré au hasard parmi ceux qui conviennent. Cochez une tâche pour la mettre de côté.
+Les textes longs sont coupés : visez 100 caractères au plus.
+
+**Messages uniques.** Dans la seconde liste, la première tâche non cochée passe avant
+tout le reste, puis le blueprint la coche : elle ne s'affiche qu'une fois.
+
+### Importer le blueprint
+
+**Paramètres › Automatisations et scènes › Blueprints › Importer un blueprint**, puis
+collez ce lien :
+
+```
+https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/message_accueil.yaml
+```
+
+Pour une mise à jour : menu **⋮** du blueprint, puis **Réimporter le blueprint**.
+
+### Créer l'automatisation
+
+Créez **une seule** automatisation depuis **HAPanel — message d'accueil**, pour toute
+la maison.
+
+| Champ | À choisir | Par défaut |
+|---|---|---|
+| Panneaux | Les modules qui affichent le message | |
+| Déclencheurs | Contacts de porte, lumières, interrupteurs : l'arrivée est leur passage à « on » | |
+| Période sans déclenchement | Aucun déclencheur ne doit avoir changé pendant ce temps | 30 min |
+| Accueil à partir de / jusqu'à | Plage horaire ; elle peut passer minuit | 6 h à 23 h |
+| Liste des messages | Liste de tâches de HA | Facultatif |
+| Liste des messages uniques | Liste de tâches de HA, prioritaire | Facultatif |
+| Météo | Entité `weather` : « Dehors : 12 °C, nuageux » sous le message | Facultatif |
+
+### Comment le message se déclenche
+
+Le message part quand un déclencheur passe de « off » à « on » (pour un contact de
+porte : l'ouverture) et que :
+
+1. l'heure est dans la plage choisie ;
+2. ce déclencheur était au repos depuis la période choisie (30 min par défaut) ;
+3. aucun autre déclencheur n'est à « on » ni n'a changé pendant cette période : la
+   maison était inoccupée ;
+4. au moins un module est connecté, avec son entité « Message d'accueil » activée.
+
+Un passage par « indisponible » ne déclenche rien. Après un redémarrage de Home
+Assistant, l'accueil attend la période choisie.
+
+**Choisir les déclencheurs.** Le blueprint ne distingue pas une arrivée d'un départ :
+avec le seul contact de porte, une personne restée à la maison plus de 30 min qui sort
+voit le message. Ajouter les lumières principales réduit ces cas : si l'une est
+allumée ou a changé pendant la période, la maison est jugée occupée. Chaque entité
+ajoutée peut en revanche déclencher le message elle-même. Éviter les détecteurs de
+mouvement : une personne immobile 30 min verrait le message à son premier geste.
+
+**Capteur en panne.** Un contact de porte dont la pile est morte peut garder son
+dernier état sans rien signaler (Z-Wave sur pile notamment) : l'accueil ne se
+déclenche plus jamais. Le blueprint
+[HASurveillance](https://github.com/cnuma/HASurveillance) détecte ces pannes.
+
+### Vérifier
+
+1. **Affichage :** menu **⋮** de l'automatisation, **Exécuter les actions**. Le
+   déclencheur et les conditions sont sautés : le message part aussitôt vers les
+   modules connectés.
+2. **Chaîne complète :** régler la période à 5 minutes, laisser les déclencheurs au
+   repos 5 minutes, puis ouvrir la porte. Remettre ensuite la période voulue.
+3. **Si rien ne s'affiche :** menu **⋮** de l'automatisation, **Traces** : la trace
+   indique la condition qui a bloqué.
+
+### Par module
+
+L'entité **Message d'accueil**, rubrique **Configuration** de la page de l'appareil,
+désactive l'accueil sur ce module (une chambre par exemple). La LED suit les réglages
+« LED » et « Intensité LED ».
+
 ## Quand les changements arrivent
 
 | Événement | Délai |
@@ -133,6 +250,8 @@ téléverser le module.
 | `scenarios_attente_ms` | `packages/pages/scenarios.yaml` | 10000 | Attente de la réponse à un scénario |
 | `scenarios_message_ms` | `packages/pages/scenarios.yaml` | 5000 | Durée d'affichage du résultat |
 | `liaison_peremption_ms` | `packages/liaison_ha.yaml` | 900000 | Délai avant « périmé » |
+| `message_duree_ms` | `packages/message_accueil.yaml` | 180000 | Durée d'affichage du message d'accueil |
+| `led_arc_periode_ms` | `packages/led_veille.yaml` | 2000 | Un tour de l'arc-en-ciel |
 
 La lumière de la pièce est lue par un capteur peu précis : attendez-vous plutôt à un
 réglage jour / nuit qu'à une variation fine.
@@ -170,5 +289,6 @@ Après une compilation, qui fournit les polices :
 | « Refusé par HA » | Entité indisponible ou supprimée | Vérifier l'entité ; voir aussi le journal de Home Assistant (`hapanel.blueprint`) |
 | « Pas de réponse de HA » | Automatisation absente ou action en échec | Consulter les traces de l'automatisation |
 | Réglage de la LED qui revient tout seul | Valeur imposée par le blueprint | Choisir « Ne pas imposer » dans la section LED, ou régler dans le blueprint |
+| Pas de message d'accueil | Période sans déclenchement non écoulée, hors plage horaire, entité « Message d'accueil » désactivée ou module déconnecté | Consulter les traces de l'automatisation du message d'accueil |
 | Écran trop sombre la nuit | `retro_nuit` trop bas | Augmenter la valeur et recompiler |
 | Point rouge et « Pas de communication » | Home Assistant arrêté, module retiré ou clé d'API différente | Vérifier l'intégration ESPHome |

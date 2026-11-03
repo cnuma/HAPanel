@@ -1,0 +1,57 @@
+# Script Home Assistant : remplit la liste « Messages d'accueil » (D028).
+#
+# 1. Créer la liste (intégration « Liste de tâches locale »), puis vérifier que
+#    son entité est bien todo.messages_d_accueil ; sinon, corriger entity_id
+#    plus bas.
+# 2. Paramètres › Automatisations et scènes › Scripts › Créer un script ›
+#    menu ⋮ › Modifier en YAML : remplacer tout le contenu par ce fichier.
+# 3. Enregistrer, puis Exécuter une seule fois : chaque exécution ajoute de
+#    nouveau tous les messages. Le script peut ensuite être supprimé.
+#
+# « tags » devient la description de la tâche : saison (printemps, été,
+# automne, hiver) et moment (matin, après-midi, soir, nuit). Vide : toujours.
+alias: HAPanel — importer les messages d'accueil
+mode: single
+sequence:
+  - repeat:
+      for_each:
+        # Toute l'année, à toute heure.
+        - { texte: "Bienvenue à la maison !", tags: "" }
+        - { texte: "Content de te revoir !", tags: "" }
+        - { texte: "Bon retour à la maison !", tags: "" }
+        - { texte: "Pose tes affaires, tu es chez toi.", tags: "" }
+        - { texte: "La maison t'attendait.", tags: "" }
+        # Selon le moment.
+        - { texte: "Bonjour ! Belle journée qui commence.", tags: "matin" }
+        - { texte: "Déjà de retour ? Bonne fin de matinée !", tags: "matin" }
+        - { texte: "Bon après-midi ! Une petite pause s'impose ?", tags: "après-midi" }
+        - { texte: "Le goûter n'attend que toi.", tags: "après-midi" }
+        - { texte: "Bonsoir ! La journée est finie, place au repos.", tags: "soir" }
+        - { texte: "Bonsoir ! Qu'est-ce qu'on mange ce soir ?", tags: "soir" }
+        - { texte: "Bonne soirée à la maison !", tags: "soir" }
+        - { texte: "Il se fait tard : bonne nuit !", tags: "nuit" }
+        # Printemps.
+        - { texte: "Le printemps est là, bienvenue !", tags: "printemps" }
+        - { texte: "Bonjour ! Les oiseaux chantent ce matin.", tags: "printemps matin" }
+        - { texte: "Les jours rallongent, profite de la soirée !", tags: "printemps soir" }
+        # Été.
+        - { texte: "Bienvenue au frais !", tags: "été" }
+        - { texte: "Bonjour ! Pense à fermer les volets avant la chaleur.", tags: "été matin" }
+        - { texte: "Un verre bien frais pour se désaltérer ?", tags: "été après-midi" }
+        - { texte: "Belle soirée d'été, profite de la douceur !", tags: "été soir" }
+        # Automne.
+        - { texte: "Les feuilles tombent, la maison t'attend.", tags: "automne" }
+        - { texte: "Un thé bien chaud pour se réchauffer ?", tags: "automne après-midi" }
+        - { texte: "Bonsoir ! Une bonne soupe pour ce soir ?", tags: "automne soir" }
+        # Hiver.
+        - { texte: "Il fait froid dehors, ici il fait bon.", tags: "hiver" }
+        - { texte: "Bienvenue au chaud !", tags: "hiver" }
+        - { texte: "Un chocolat chaud pour se réchauffer ?", tags: "hiver après-midi" }
+        - { texte: "Bonsoir ! Une soirée au coin du feu ?", tags: "hiver soir" }
+      sequence:
+        - action: todo.add_item
+          target:
+            entity_id: todo.messages_d_accueil
+          data:
+            item: "{{ repeat.item.texte }}"
+            description: "{{ repeat.item.tags }}"
