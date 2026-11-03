@@ -94,8 +94,8 @@ l'attend.
 |---|---|---|
 | `attenuation` | `0db` | Plage de mesure la plus fine de l'ESP32, jusqu'à environ 1 V. Les tensions relevées vont de 0,09 V (pièce éclairée) à 0,20 V (pièce sombre). |
 | `samples` | `8` | Chaque mesure est la moyenne de 8 lectures. |
-| `update_interval` | `2s` | Une mesure toutes les 2 s. |
-| `sliding_window_moving_average` | `window_size: 30`, `send_every: 5`, `send_first_at: 1` | Moyenne des 30 dernières mesures, soit 1 minute, publiée toutes les 5 mesures, soit 10 s. La première mesure est publiée dès le démarrage. Le signal est instable : la moyenne évite que la LED et l'écran varient sans cesse (D018). |
+| `update_interval` | `1s` | Une mesure par seconde. |
+| `sliding_window_moving_average` | `window_size: 5`, `send_every: 2`, `send_first_at: 1` | Moyenne des 5 dernières mesures, soit 5 s, publiée toutes les 2 mesures, soit 2 s. La première mesure est publiée dès le démarrage. Le signal est instable : la moyenne lisse les à-coups, et l'écart minimal de `led_veille.yaml` évite que l'écran varie sans cesse. Une minute auparavant : l'écran baissait trop lentement en éteignant une chambre (D023). |
 | `on_value` | `logger.log` | Journalise la tension, tag `hapanel.led`, niveau `DEBUG` : visible sur le banc seulement. |
 
 Les seuils jour et nuit (`ldr_tension_jour`, `ldr_tension_nuit`) ne sont pas ici : ils
@@ -149,7 +149,7 @@ effet pour un panneau alimenté en permanence. Cette dette est notée T1.
 | Tactile décalé ou inversé | Ajouter `transform` (`swap_xy`, `mirror_x`, `mirror_y`) ou `calibration` sous `tactile`. Vérifier avec le journal des touchers du banc. |
 | Couleurs de l'écran fausses | Options `invert_colors` ou `color_order` sous `ecran`. |
 | LDR trop réactive ou trop lente | `window_size` (durée de la moyenne) et `send_every` (fréquence). Les seuils sont dans `led_veille.yaml`. |
-| Exposer la LDR à Home Assistant | Lui donner un `name`. Une entité mise à jour toutes les 10 s : inutile en temps normal. |
+| Exposer la LDR à Home Assistant | Lui donner un `name`. Une entité mise à jour toutes les 2 s : inutile en temps normal, et chargerait l'historique de HA. |
 
 **Pièges :**
 - Ne déclarer une broche ou un bus dans aucun autre fichier (G2) : utiliser `!extend`

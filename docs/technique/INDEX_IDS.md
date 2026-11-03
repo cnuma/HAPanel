@@ -31,7 +31,6 @@ Relancer le script après toute modification du YAML.
 | `btn_acc_pre_eco` | widget button | packages/pages/accueil.yaml | — |
 | `btn_acc_pre_frost` | widget button | packages/pages/accueil.yaml | — |
 | `btn_acc_pre_none` | widget button | packages/pages/accueil.yaml | — |
-| `btn_men_accueil` | widget button | packages/pages/menu.yaml | — |
 | `btn_men_apropos` | widget button | packages/pages/menu.yaml | — |
 | `btn_men_meteo` | widget button | packages/pages/menu.yaml | — |
 | `btn_men_planning` | widget button | packages/pages/menu.yaml | — |
@@ -52,6 +51,10 @@ Relancer le script après toute modification du YAML.
 | `ecran_intensite` | number (template) | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `ha_connecte_affiche` | globals | packages/lvgl.yaml | packages/led_veille.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/scenarios.yaml |
 | `heure_ha` | time (homeassistant) | packages/pages/accueil.yaml | packages/pages/planning.yaml |
+| `ico_reg_ecran_intensite_verrou` | widget label | packages/pages/reglages.yaml | — |
+| `ico_reg_led_alerte_verrou` | widget label | packages/pages/reglages.yaml | — |
+| `ico_reg_led_intensite_verrou` | widget label | packages/pages/reglages.yaml | — |
+| `ico_reg_led_verrou` | widget label | packages/pages/reglages.yaml | — |
 | `ico_sce_1` | widget label | packages/pages/scenarios.yaml | — |
 | `ico_sce_2` | widget label | packages/pages/scenarios.yaml | — |
 | `ico_sce_3` | widget label | packages/pages/scenarios.yaml | — |
@@ -107,7 +110,6 @@ Relancer le script après toute modification du YAML.
 | `lbl_pla_resume` | widget label | packages/pages/planning.yaml | — |
 | `lbl_pla_titre` | widget label | packages/pages/planning.yaml | — |
 | `lbl_reg_ecran_intensite` | widget label | packages/pages/reglages.yaml | — |
-| `lbl_reg_impose` | widget label | packages/pages/reglages.yaml | — |
 | `lbl_reg_led_intensite` | widget label | packages/pages/reglages.yaml | — |
 | `lbl_sce_1` | widget label | packages/pages/scenarios.yaml | — |
 | `lbl_sce_2` | widget label | packages/pages/scenarios.yaml | — |
@@ -183,7 +185,8 @@ Relancer le script après toute modification du YAML.
 | `obj_pla_point_2` | widget obj | packages/pages/planning.yaml | — |
 | `obj_pla_point_3` | widget obj | packages/pages/planning.yaml | — |
 | `obj_pla_point_4` | widget obj | packages/pages/planning.yaml | — |
-| `page_accueil` | page LVGL | packages/pages/accueil.yaml | packages/led_veille.yaml, packages/lvgl.yaml, packages/pages/menu.yaml |
+| `obj_reg_impose` | widget obj | packages/pages/reglages.yaml | — |
+| `page_accueil` | page LVGL | packages/pages/accueil.yaml | packages/led_veille.yaml, packages/lvgl.yaml |
 | `page_apropos` | page LVGL | packages/lvgl.yaml | packages/pages/menu.yaml |
 | `page_menu` | page LVGL | packages/pages/menu.yaml | packages/lvgl.yaml |
 | `page_meteo` | page LVGL | packages/pages/meteo.yaml | packages/pages/menu.yaml |
@@ -192,7 +195,7 @@ Relancer le script après toute modification du YAML.
 | `page_scenarios` | page LVGL | packages/pages/scenarios.yaml | packages/pages/menu.yaml |
 | `planning_rafraichir` | script | packages/pages/planning.yaml | packages/liaison_ha.yaml |
 | `police_grande` | font | packages/pages/accueil.yaml | packages/pages/meteo.yaml |
-| `police_icones` | font | packages/lvgl.yaml | packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/menu.yaml |
+| `police_icones` | font | packages/lvgl.yaml | packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/menu.yaml, packages/pages/reglages.yaml |
 | `police_meteo` | font | packages/pages/meteo.yaml | — |
 | `police_scenarios` | font | packages/pages/scenarios.yaml | — |
 | `police_texte` | font | packages/lvgl.yaml | packages/message_accueil.yaml |

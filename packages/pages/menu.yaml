@@ -5,37 +5,16 @@ lvgl:
     - id: page_menu
       bg_color: 0x000000
       # Sur le menu, le bouton Menu ne ferait rien : seul Accueil reste (D025).
+      # Pas de tuile Accueil, doublon du bouton de la barre.
       on_load:
         - lvgl.widget.hide: btn_nav_menu
       on_unload:
         - lvgl.widget.show: btn_nav_menu
       widgets:
         - button:
-            id: btn_men_accueil
-            align: TOP_LEFT
-            x: 8
-            y: 8
-            width: 108
-            height: 80
-            pad_all: 4
-            widgets:
-              - label:
-                  align: TOP_MID
-                  y: 8
-                  text_font: police_icones
-                  text: "\U000F02DC"
-              - label:
-                  align: BOTTOM_MID
-                  y: -8
-                  text: "Accueil"
-            on_click:
-              - lvgl.page.show:
-                  id: page_accueil
-                  animation: NONE
-        - button:
             id: btn_men_meteo
             align: TOP_LEFT
-            x: 124
+            x: 8
             y: 8
             width: 108
             height: 80
@@ -57,8 +36,8 @@ lvgl:
         - button:
             id: btn_men_planning
             align: TOP_LEFT
-            x: 8
-            y: 96
+            x: 124
+            y: 8
             width: 108
             height: 80
             pad_all: 4
@@ -79,7 +58,7 @@ lvgl:
         - button:
             id: btn_men_scenarios
             align: TOP_LEFT
-            x: 124
+            x: 8
             y: 96
             width: 108
             height: 80
@@ -124,7 +103,7 @@ lvgl:
             id: btn_men_reglages
             align: TOP_LEFT
             x: 124
-            y: 184
+            y: 96
             width: 108
             height: 80
             pad_all: 4

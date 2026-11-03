@@ -60,17 +60,19 @@ output:
       inverted: true
 
 sensor:
-  # Interne (pas d'entite HA) ; signal instable, moyenne sur 1 min (D018).
+  # Interne (pas d'entite HA) ; signal instable, moyenne sur 5 s, publiee
+  # toutes les 2 s : l'ecran baisse vite quand on eteint la lumiere (D023,
+  # retour du proprietaire, 3 novembre 2026 ; 1 min auparavant).
   - platform: adc
     id: ldr_tension
     pin: ${pin_ldr}
     attenuation: 0db
     samples: 8
-    update_interval: 2s
+    update_interval: 1s
     filters:
       - sliding_window_moving_average:
-          window_size: 30
-          send_every: 5
+          window_size: 5
+          send_every: 2
           send_first_at: 1
     on_value:
       - logger.log:

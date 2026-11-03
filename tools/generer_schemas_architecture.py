@@ -164,7 +164,7 @@ def materiel():
     s.fleche([(320, 480), (400, 480)], double=True)
     s.boite(780, 120, 290, 170, "LED RVB", "active à l'état bas, PWM\nR 4, V 16, B 17", VIOLET, B_VIOLET)
     s.fleche([(700, 230), (780, 200)])
-    s.boite(780, 340, 290, 200, "LDR", "GPIO34, ADC 0 dB\n8 échantillons toutes les 2 s\nmoyenne glissante de 30,\npublie toutes les 10 s", JAUNE)
+    s.boite(780, 340, 290, 200, "LDR", "GPIO34, ADC 0 dB\n8 échantillons chaque seconde\nmoyenne glissante de 5,\npublie toutes les 2 s", JAUNE)
     s.fleche([(780, 440), (700, 440)])
     s.boite(400, 630, 300, 100, "Alimentation", "bloc 1 A recommandé (R7)", ROUGE, B_ROUGE)
     s.fleche([(550, 630), (550, 580)], B_ROUGE)
@@ -229,7 +229,7 @@ def veille():
 
 def lumiere():
     s = S(1100, 650)
-    s.boite(30, 240, 220, 130, "LDR", "tension moyenne\nsur 1 min", JAUNE)
+    s.boite(30, 240, 220, 130, "LDR", "tension moyenne\nsur 5 s", JAUNE)
     s.boite(330, 240, 270, 130, "ldr_obscurite", "(V - 0,09) / (0,20 - 0,09)\nbornée de 0 à 1, 10 s\nsans mesure : 0", BLEU, B_BLEU)
     s.fleche([(250, 305), (330, 305)])
     s.boite(690, 60, 380, 170, "Rétroéclairage", "de 1,0 à 0,40 (gamma : environ 8 %)\nchange à partir de 5 points d'écart\ntransition de 2 s\nécran éteint : appliqué au réveil", ORANGE, B_ORANGE)

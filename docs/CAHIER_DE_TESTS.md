@@ -162,16 +162,17 @@ l'enregistrer.
 | N° | Action | Attendu | OK / KO |
 |---|---|---|---|
 | H1 | Toucher brièvement, comme sur un téléphone, les boutons de la barre et des tuiles | Chaque toucher bref est pris en compte, sans laisser le doigt | |
-| H2 | Ouvrir le Menu | Seul le bouton maison reste dans la barre ; une tuile **Réglages** à la place libre | |
+| H2 | Ouvrir le Menu | Seul le bouton maison reste dans la barre ; pas de tuile Accueil ; tuiles Météo, Planning, Scénarios, **Réglages**, À propos | |
 | H3 | Quitter le Menu par une tuile | Le bouton Menu revient sur la nouvelle page | |
-| H4 | Ouvrir Réglages, blueprint sur « Ne pas imposer » partout | 4 réglages actifs, mêmes valeurs que la page de l'appareil dans HA ; pas de « Grisé : imposé par HA » | |
+| H4 | Ouvrir Réglages, blueprint sur « Ne pas imposer » partout | 4 réglages actifs, mêmes valeurs que la page de l'appareil dans HA ; aucun cadenas ; interrupteur à l'arrêt lisible (fond sombre bordé, bouton blanc) | |
 | H5 | Basculer « LED » | La LED s'éteint ou reprend sa respiration ; « LED » change aussi sur la page de l'appareil | |
 | H6 | Glisser « Intensité LED », relâcher | Valeur affichée pendant le glissement, par pas de 5 ; LED et page de l'appareil suivent au relâchement | |
 | H7 | Basculer « Alerte LED » | Même valeur sur la page de l'appareil | |
 | H8 | Glisser « Intensité écran » jusqu'à 20 % | L'écran baisse aussitôt sans devenir illisible (plancher) | |
 | H9 | Changer « Intensité écran » sur la page de l'appareil | Le curseur de la page Réglages suit | |
 | H10 | Redémarrer le module | Les 4 réglages sont conservés | |
-| H11 | Dans le blueprint, imposer « Alerte LED », enregistrer | Sur l'écran, Alerte LED grisée et non modifiable, « Grisé : imposé par HA » affiché | |
-| H12 | Remettre « Ne pas imposer », enregistrer | Alerte LED de nouveau modifiable, mention disparue | |
+| H11 | Dans le blueprint, imposer « Alerte LED », enregistrer | Sur l'écran, cadenas devant Alerte LED, qui ne réagit plus ; « imposé par HA » avec un cadenas en bas | |
+| H12 | Remettre « Ne pas imposer », enregistrer | Alerte LED de nouveau modifiable, cadenas et mention disparus | |
+| H15 | Éteindre la lumière d'une pièce éclairée | L'écran baisse en moins de 10 s, sans clignoter ensuite | |
 | H13 | Rester 1 min sur Réglages sans toucher | Retour à l'accueil, puis écran éteint | |
 | H14 | HA coupé (comme A13), ouvrir Réglages | La page marche, réglages modifiables | |

@@ -43,7 +43,7 @@ globals:
   - id: retro_cible
     type: float
     initial_value: "${retro_jour}f"
-  # Reglages imposes par le blueprint (D031) : grises sur la page Reglages.
+  # Reglages imposes par le blueprint (D031) : cadenas sur la page Reglages.
   # Mis a jour par les cles led_* et ecran_intensite (packages/liaison_ha.yaml).
   - id: reglage_impose_led_mode
     type: bool
@@ -186,9 +186,9 @@ script:
           transition_length: 0s
 
 interval:
-  # Meme periode que la moyenne de la LDR. Sans mesure : piece eclairee, ecran
-  # lisible et LED visible (P2). Ecran eteint : applique au reveil.
-  - interval: 10s
+  # Meme periode que la publication de la LDR. Sans mesure : piece eclairee,
+  # ecran lisible et LED visible (P2). Ecran eteint : applique au reveil.
+  - interval: 2s
     then:
       - lambda: |-
           float v = id(ldr_tension).state;
@@ -208,7 +208,7 @@ interval:
             - light.turn_on:
                 id: retroeclairage
                 brightness: !lambda return id(retro_niveau);
-                transition_length: 2s
+                transition_length: 1s
   - interval: 1s
     then:
       # Retour a l'accueil (D022), avant la pause et meme sans Home Assistant.

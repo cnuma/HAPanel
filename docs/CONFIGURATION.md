@@ -140,8 +140,9 @@ désactivée, une anomalie ne se voit plus que sur l'écran.
 La section **LED et écran** du blueprint, repliée, propose les mêmes réglages, sur
 « Ne pas imposer » par défaut. Une valeur choisie dans le blueprint est envoyée au
 module à la connexion et toutes les 5 minutes : elle **l'emporte** sur la page de
-l'appareil, où un changement est remplacé sous 5 minutes, et elle apparaît **grisée**
-sur la page Réglages de l'écran, avec « Grisé : imposé par HA ». Pour régler depuis
+l'appareil, où un changement est remplacé sous 5 minutes. Sur la page Réglages de
+l'écran, elle porte un **cadenas** et ne réagit pas ; un cadenas suivi de « imposé
+par HA » le rappelle en bas de la page. Pour régler depuis
 la page de l'appareil ou depuis l'écran, laissez « Ne pas imposer ».
 
 Après une mise à jour du module qui ajoute « Intensité écran », **réimportez le

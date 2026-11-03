@@ -386,7 +386,7 @@ qui cite la précédente.
     creux) au plafond ; un même facteur sur les trois canaux conserve les
     mélanges de D017 ;
   - plafond : 25 % pièce éclairée, 5 % pièce sombre, interpolé selon la LDR
-    (0,09 à 0,20 V, moyenne sur 1 min), multiplié par le réglage « Intensité
+    (0,09 à 0,20 V, moyenne sur 5 s depuis le 3 novembre 2026, D023), multiplié par le réglage « Intensité
     LED » (D027, 20 % par défaut : 5 % et 1 %) ; sans mesure, plafond de jour ;
   - révision du 2 novembre 2026 (retour du propriétaire : respiration trop
     haute) : le maximum devient l'ancien niveau bas (20 % de 25 % et de 5 %)
@@ -491,12 +491,18 @@ qui cite la précédente.
   choisis par l'agent, à ajuster et tester sur le module.
 - Décision :
   - la LDR donne une obscurité de 0 à 1 (0,09 à 0,20 V, D018), commune à la LED
-    et au rétroéclairage, recalculée toutes les 10 s sur la moyenne de 1 min ;
+    et au rétroéclairage, recalculée toutes les 10 s sur la moyenne de 1 min (2 s et 5 s depuis la
+    révision ci-dessous) ;
   - luminosité : 100 % pièce éclairée, 40 % pièce sombre (avant correction
     gamma), interpolée ; transition de 2 s, seulement à partir de 5 points d'écart ;
   - écran éteint : le niveau est appliqué au réveil, sans rallumer l'écran ;
   - sans mesure de la LDR : pleine luminosité, écran lisible. Aucune dépendance
     à Home Assistant.
+- Révision du 3 novembre 2026 (retour du propriétaire : l'écran baissait trop
+  lentement en éteignant une chambre) : moyenne sur 5 s publiée toutes les 2 s,
+  obscurité recalculée toutes les 2 s, transition de 1 s ; l'écart minimal de
+  5 points reste le seul rempart contre un écran qui varie sans cesse. Codé sur
+  `feature/reglages-ecran`, à valider sur le module.
 - Limite : si l'écran éclaire la LDR, baisser sa luminosité assombrit la mesure
   et accentue la baisse. Effet borné par `retro_nuit`, à vérifier au banc, comme
   la pièce sombre, jamais testée.
@@ -535,8 +541,9 @@ qui cite la précédente.
   comprennent pas un bouton qui ne réagit pas) : le bouton Accueil est masqué
   sur la page d'accueil ; seul Menu reste, à sa place.
 - Révision du 3 novembre 2026 (demande du propriétaire, même raison) : le bouton
-  Menu est masqué sur la page Menu ; seul Accueil reste, à sa place. Codé sur
-  `feature/reglages-ecran`, à valider sur le module.
+  Menu est masqué sur la page Menu ; seul Accueil reste, à sa place. Après essai,
+  la tuile Accueil du Menu, doublon de ce bouton, est retirée ; les cinq tuiles
+  restantes remontent. Codé sur `feature/reglages-ecran`, à valider sur le module.
 
 ## D026 — Icône et couleur des boutons de scénarios
 
@@ -665,8 +672,12 @@ qui cite la précédente.
     blueprint « module », « Ne pas imposer » par défaut, comme D027 ;
   - un changement à l'écran met à jour l'entité dans HA, et inversement : une
     seule valeur, écrite en flash seulement si elle change (G3) ;
-  - réglage imposé par le blueprint : grisé à l'écran, avec « imposé par HA » ;
-    le blueprint envoie désormais chaque réglage, avec la valeur `libre` quand il
-    ne l'impose pas (clés `led_*` et `ecran_intensite`).
+  - réglage imposé par le blueprint : cadenas devant la commande, qui ne réagit
+    pas, et cadenas suivi de « imposé par HA » en bas de la page ; le blueprint
+    envoie désormais chaque réglage, avec la valeur `libre` quand il ne l'impose
+    pas (clés `led_*` et `ecran_intensite`) ;
+  - révision après le premier essai (3 novembre 2026) : le gris seul se confondait
+    avec un interrupteur à l'arrêt, d'où le cadenas ; interrupteur à l'arrêt sur
+    fond sombre bordé, le bouton blanc sur gris clair étant peu lisible.
 - Conséquences : nouvelle entité exposée, à ne plus renommer (G10) ; surface
   inscrite au `08` ; mémoire à mesurer (G6).
