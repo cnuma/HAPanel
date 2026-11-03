@@ -225,9 +225,9 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       D004, `docs/technique/hardware.md`, `docs/technique/README.md` dans un même
       commit, et rechercher les broches libres de ce modèle pour la diode.
 - [ ] Points en suspens pour l'infrarouge, à fournir par le propriétaire :
-      modèle de la carte (point ci-dessus), photo des connecteurs, bloc
-      `remote_transmitter` et en-tête du YAML de l'ESP-01, marque et modèle des
-      clims, emplacement des panneaux par rapport aux clims.
+      modèle de la carte (point ci-dessus), photo des connecteurs, marque et
+      modèle des clims (Midea ou compatible pour la chambre des parents),
+      emplacement des panneaux par rapport aux clims.
 - [ ] Orientation du propriétaire (3 novembre 2026) : un panneau sera placé en
       vue de chaque clim, diode sur le module. Sinon, une automatisation de HA
       relaiera la commande vers l'émetteur ESP-01 de la pièce.
