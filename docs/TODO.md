@@ -237,3 +237,5 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       de l'écran, réglable des deux côtés, HA et module. Spécifié : D031 (choix
       1A, 2A, 3A, 4A du propriétaire). À coder après la fusion du message
       d'accueil.
+- [ ] Bouton Menu masqué sur la page Menu, seul Accueil reste (révision de D025
+      du 3 novembre 2026). À coder après la fusion du message d'accueil.

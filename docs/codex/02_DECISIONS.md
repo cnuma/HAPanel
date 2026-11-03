@@ -531,6 +531,9 @@ qui cite la précédente.
 - Révision du 2 novembre 2026 (retour du propriétaire : les utilisateurs ne
   comprennent pas un bouton qui ne réagit pas) : le bouton Accueil est masqué
   sur la page d'accueil ; seul Menu reste, à sa place.
+- Révision du 3 novembre 2026 (demande du propriétaire, même raison) : le bouton
+  Menu est masqué sur la page Menu ; seul Accueil reste, à sa place. À coder après
+  la fusion du message d'accueil.
 
 ## D026 — Icône et couleur des boutons de scénarios
 
