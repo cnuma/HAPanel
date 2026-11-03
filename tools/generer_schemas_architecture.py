@@ -393,7 +393,7 @@ def blueprint_structure():
 
 
 def yaml_matrice():
-    colonnes = ["subst.", "esphome", "wifi", "api", "font", "globals", "lvgl", "script", "interval", "sensor", "tactile", "autres"]
+    colonnes = ["subst.", "esphome", "wifi", "api", "font", "globals", "lvgl", "script", "interval", "sensor", "switch", "tactile", "autres"]
     lignes = [("base", "esphome wifi api sensor autres", GRIS, "#607D8B"),
               ("hardware", "subst. sensor tactile autres", GRIS, "#607D8B"),
               ("accueil", "subst. esphome wifi font globals lvgl script sensor autres", ORANGE, B_ORANGE),
@@ -403,21 +403,23 @@ def yaml_matrice():
               ("menu", "lvgl", ORANGE, B_ORANGE),
               ("lvgl", "font globals lvgl interval", BLEU, B_BLEU),
               ("liaison_ha", "subst. api globals script interval", VERT, B_VERT),
-              ("led_veille", "subst. globals script interval tactile", VERT, B_VERT)]
-    s = S(1100, 760)
-    x0, y0, lc, hl = 180, 70, 76, 52
+              ("led_veille", "subst. globals script interval switch tactile autres", VERT, B_VERT),
+              ("message_accueil", "subst. api globals lvgl script interval switch", ORANGE, B_ORANGE)]
+    s = S(1210, 820)
+    x0, y0, lc, hl = 205, 70, 76, 52
     for i, c in enumerate(colonnes):
         s.d.text((x0 + i * lc + lc / 2, 45), c, fill=ENCRE, font=f(17, True), anchor="mm")
     for j, (nom, blocs, fond, bord) in enumerate(lignes):
         y = y0 + j * hl
-        s.d.line([(20, y), (x0 + 12 * lc, y)], fill="#CFD8DC", width=1)
-        s.d.text((165, y + hl / 2), nom, fill=ENCRE, font=f(22, True), anchor="rm")
+        s.d.line([(20, y), (x0 + len(colonnes) * lc, y)], fill="#CFD8DC", width=1)
+        s.d.text((195, y + hl / 2), nom, fill=ENCRE, font=f(22, True), anchor="rm")
         for i, c in enumerate(colonnes):
             if c in blocs.split():
                 cx = x0 + i * lc
                 s.d.rounded_rectangle([cx + 8, y + 9, cx + lc - 8, y + hl - 9], 7, fill=fond, outline=bord, width=2)
-    s.d.line([(20, y0 + 10 * hl), (x0 + 12 * lc, y0 + 10 * hl)], fill="#CFD8DC", width=1)
-    s.etiquette((550, 680), "Socle en gris, pages en orange, graphisme en bleu, services en vert. subst. : substitutions ; tactile : touchscreen.\nautres : esp32, ota, logger, text_sensor (base) ; spi, i2c, output, light, display (hardware) ; time (accueil).", DOUX)
+    yf = y0 + len(lignes) * hl
+    s.d.line([(20, yf), (x0 + len(colonnes) * lc, yf)], fill="#CFD8DC", width=1)
+    s.etiquette((605, yf + 70), "Une ligne par fichier, une colonne par bloc YAML : une case indique que le fichier déclare ce bloc.\nSocle en gris, écrans en orange, graphisme en bleu, services en vert. subst. : substitutions ; tactile : touchscreen.\nautres : ota, logger, text_sensor (base) ; spi, output, light, display (hardware) ; time (accueil) ; select, number (led_veille).", DOUX)
     s.sauver("20_yaml_matrice.png")
 
 

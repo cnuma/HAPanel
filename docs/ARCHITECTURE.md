@@ -88,6 +88,12 @@ Un même bloc peut donc apparaître dans plusieurs fichiers. Chaque package y aj
 
 ![Blocs déclarés par chaque package](images/architecture/20_yaml_matrice.png)
 
+**Lecture :** une ligne par fichier, une colonne par bloc YAML (`script:`, `sensor:`…) ; une
+case indique que le fichier déclare ce bloc. Une colonne qui a plusieurs cases est un bloc
+réparti : la colonne `script` montre que les scripts sont écrits dans 7 fichiers, et ESPHome
+les réunit en une seule liste. Pour retrouver un script ou un `id`, il faut donc chercher dans
+tous les fichiers de sa colonne.
+
 - **Listes :** `script`, `globals`, `interval`, `sensor` ou `lvgl.pages` s'additionnent.
 - **Ordre d'inclusion :** il fixe l'ordre des pages, et la première est affichée au démarrage.
   `accueil.yaml` doit donc rester avant `lvgl.yaml`.
