@@ -2,7 +2,8 @@
 
 Document pour les ingénieurs qui reprennent ou font évoluer le projet. Il explique le
 fonctionnement global ; le détail et l'historique des choix sont dans
-[02_DECISIONS.md](codex/02_DECISIONS.md), notés `Dnnn` ci-dessous.
+[02_DECISIONS.md](codex/02_DECISIONS.md), notés `Dnnn` ci-dessous. Le détail de chaque
+fichier YAML, bloc par bloc, est dans [technique/](technique/README.md).
 
 État décrit : version `0.6.0-dev`, commit `dc83077`, ESPHome 2026.10.1.
 
