@@ -234,8 +234,6 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [ ] Réglages sur l'écran du module (demande du propriétaire, rappelée le
       3 novembre 2026 ; D027 ne les avait mis que dans HA) : LED (Respiration,
       Éteinte), Intensité LED, Alerte LED, et **nouvelle demande** : luminosité
-      de l'écran, réglable des deux côtés, HA et module. Questions de cadrage :
-      accès (tuile libre de la page Menu, D025) ; luminosité de l'écran en
-      plus de l'adaptation automatique (D023) ou à sa place ; valeur imposée par
-      le blueprint (D027) : réglage verrouillé à l'écran ou modifiable ;
-      protection contre les manipulations (enfants, invités).
+      de l'écran, réglable des deux côtés, HA et module. Spécifié : D031 (choix
+      1A, 2A, 3A, 4A du propriétaire). À coder après la fusion du message
+      d'accueil.
