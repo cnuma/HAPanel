@@ -585,3 +585,20 @@ qui cite la précédente.
   (cnuma/HASurveillance : `docs/INSTALLATION.md`).
 - Conséquences : pour HAPanel, la procédure est `docs/CONFIGURATION.md` ; toute
   évolution d'un blueprint la met à jour dans le même lot.
+
+## D030 — Moment de la mise à jour documentaire (invariant G12)
+
+- Date : 3 novembre 2026 — Statut : validé par le propriétaire (HAP-R024).
+- Contexte : un commit de branche précède les tests du propriétaire (G5 impose
+  même de committer avant de compiler) ; l'état stable n'est atteint qu'à la
+  validation sur le module et à la fusion dans `main`.
+- Décision : invariant G12 (`03_INVARIANTS.md`), en deux temps :
+  - documentation de fonctionnement, d'installation et d'utilisation : dans le
+    même commit que la modification ; jamais regroupée après plusieurs commits ;
+  - statut du projet (`TODO.md` « validé », `VERSION`, checkpoint) : après
+    validation par le propriétaire, à la fusion dans `main`, éventuellement pour
+    plusieurs fonctions à la fois.
+  La règle vaut pour tous les dépôts du propriétaire.
+- Conséquences : à tout commit, code et documentation concordent ; une branche
+  abandonnée n'emporte que sa propre documentation ; `main` ne déclare stable
+  que ce qui a été testé.
