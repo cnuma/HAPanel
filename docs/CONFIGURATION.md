@@ -15,8 +15,26 @@ par module** : 5 modules, 5 automatisations.
 
 ## 1. Ajouter le module
 
-Le module apparaît dans **Paramètres › Appareils et services › ESPHome** ; ajoutez-le
-avec la clé de chiffrement de l'API.
+**Avant de commencer**, il faut :
+
+- **le module :** compilé, téléversé et relié au Wi-Fi (voir
+  [Compiler et téléverser](#compiler-et-téléverser)) ;
+- **la clé de chiffrement de l'API :** la valeur `api_encryption_key` de
+  `secrets.yaml`, demandée à l'ajout ;
+- **dans Home Assistant, les entités que le module affichera :**
+  - un thermostat (`climate`, modes `heat` et `off`) ;
+  - les capteurs de température de la pièce et de l'extérieur ;
+  - une météo (`weather`) avec prévisions quotidiennes ;
+  - 1 à 4 calendriers ;
+  - en option, des scènes, scripts ou automatisations pour la page Scénarios.
+
+**Ajouter le module :**
+
+1. **Paramètres › Appareils et services.** Le module découvert apparaît sous
+   « Nouveaux appareils découverts » : **Ajouter**.
+2. Sinon : **Ajouter une intégration › ESPHome**, puis l'adresse IP du module (port
+   6053).
+3. Saisir la clé de chiffrement de l'API.
 
 L'option « Autoriser l'appareil à effectuer des actions Home Assistant » **n'est pas
 nécessaire** : le module n'envoie que des événements (demande de valeurs, commandes),
@@ -54,6 +72,21 @@ Les préréglages affichés sont `none`, `frost`, `eco`, `comfort` et `boost`. U
 préréglage que le thermostat ne connaît pas est refusé.
 
 Dans le nom d'un calendrier, le mot « Chauffage » est retiré à l'affichage.
+
+**Vérifier le raccordement :**
+
+1. Enregistrer l'automatisation. Les valeurs arrivent au plus tard 5 minutes après,
+   ou aussitôt après une reconnexion du module : **Paramètres › Appareils et
+   services › ESPHome**, menu **⋮** du module, **Recharger**.
+2. Sur le module, page **À propos** : « Home Assistant : connecté ».
+3. Sur l'accueil : températures, préréglage et consigne affichés, sans « non reçu ».
+4. Changer la consigne sur le module : 2 secondes après le dernier toucher, le
+   thermostat suit dans Home Assistant. Sans confirmation en 10 secondes, le module
+   revient à l'ancienne valeur.
+5. Pages Météo, Planning et Scénarios : valeurs présentes. Lancer un scénario sans
+   conséquence pour vérifier le retour « Lancé ».
+6. En cas de « non reçu » persistant : menu **⋮** de l'automatisation, **Traces**,
+   puis le [Dépannage](#dépannage).
 
 ## 4. Choisir les scénarios
 
