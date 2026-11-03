@@ -231,3 +231,11 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [ ] Orientation du propriétaire (3 novembre 2026) : un panneau sera placé en
       vue de chaque clim, diode sur le module. Sinon, une automatisation de HA
       relaiera la commande vers l'émetteur ESP-01 de la pièce.
+- [ ] Réglages sur l'écran du module (demande du propriétaire, rappelée le
+      3 novembre 2026 ; D027 ne les avait mis que dans HA) : LED (Respiration,
+      Éteinte), Intensité LED, Alerte LED, et **nouvelle demande** : luminosité
+      de l'écran, réglable des deux côtés, HA et module. Questions de cadrage :
+      accès (tuile libre de la page Menu, D025) ; luminosité de l'écran en
+      plus de l'adaptation automatique (D023) ou à sa place ; valeur imposée par
+      le blueprint (D027) : réglage verrouillé à l'écran ou modifiable ;
+      protection contre les manipulations (enfants, invités).
