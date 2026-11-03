@@ -188,3 +188,22 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [ ] Évolution du message d'accueil : citer la personne qui arrive (présence
       des téléphones dans HA), quand tous les téléphones de la maison seront
       connus.
+
+## P5 — Idées du propriétaire (3 novembre 2026), à spécifier avant tout code
+
+- [ ] Piloter les clims par infrarouge depuis le module : diode émettrice sur une
+      broche libre, composant `remote_transmitter` et plateforme `climate` d'ESPHome
+      selon la marque (HeatpumpIR exclu : Arduino seulement, D008). Infrarouge à
+      vue : seules les clims visibles depuis le panneau. Broches candidates, à
+      confirmer sur la carte S024C (inscriptions de P3 et CN1, photo, essai au
+      banc) : GPIO22 pour émettre, GPIO35 (entrée seulement) pour un récepteur qui
+      apprend les codes. GPIO21 (tactile) et GPIO27 (rétroéclairage) exclus.
+      À fournir par le propriétaire : marque et modèle des clims, nombre visibles
+      depuis le panneau.
+- [ ] Préparer le schéma électronique de la diode infrarouge : diode, transistor
+      de commande, résistances de base et de limitation, alimentation, branchement
+      sur le connecteur choisi.
+- [ ] Référence : le propriétaire a déjà réalisé, dans un autre chat, une solution
+      autonome avec un ESP-01 pré-câblé avec une diode infrarouge, qui marche très
+      bien. À reprendre (codes, plateforme `climate`, portée) avant de choisir
+      entre la diode sur le module et un émetteur autonome par pièce.
