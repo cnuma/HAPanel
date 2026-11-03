@@ -165,6 +165,7 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       dans la plage horaire, tirage selon saison et moment, message unique coché,
       ligne météo, fermeture au toucher et après 3 min, arc-en-ciel soumis à
       D027, entité « Message d'accueil » désactivée. Saint du jour reporté.
+      Tous les tests en attente : `docs/CAHIER_DE_TESTS.md`.
 - [ ] Saint du jour : choisir la source (calendrier dans le blueprint, ou service
       en ligne téléchargé par HA) ; il s'affichera sur la ligne de la météo.
 - [ ] Spécification d'origine du message d'accueil, quand quelqu'un arrive : écran allumé, LED en arc-en-ciel
