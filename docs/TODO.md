@@ -211,6 +211,19 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       chambre parents »), récepteur de test sur GPIO14. Manquent le bloc
       `remote_transmitter` (broche, `carrier_duty_percent`) et l'en-tête
       (carte, framework).
+- [ ] **À confirmer : modèle exact de la carte.** Le propriétaire pense avoir une
+      2,8 pouces capacitive ; le projet suppose l'ESP32-2432S024C, 2,4 pouces
+      (D004). Le brochage de `hardware.yaml` est validé au banc quel que soit le
+      nom ; le rétroéclairage sur GPIO27 fait plutôt penser à une 2,4 pouces, sans
+      certitude. Vérifier la diagonale de l'affichage (environ 6,1 cm pour
+      2,4 pouces, 7,1 cm pour 2,8 pouces) et l'inscription au dos de la carte,
+      avec une photo des connecteurs (P3, CN1…). Si c'est une 2,8 pouces : corriger
+      D004, `docs/technique/hardware.md`, `docs/technique/README.md` dans un même
+      commit, et rechercher les broches libres de ce modèle pour la diode.
+- [ ] Points en suspens pour l'infrarouge, à fournir par le propriétaire :
+      modèle de la carte (point ci-dessus), photo des connecteurs, bloc
+      `remote_transmitter` et en-tête du YAML de l'ESP-01, marque et modèle des
+      clims, emplacement des panneaux par rapport aux clims.
 - [ ] Orientation du propriétaire (3 novembre 2026) : un panneau sera placé en
       vue de chaque clim, diode sur le module. Sinon, une automatisation de HA
       relaiera la commande vers l'émetteur ESP-01 de la pièce.
