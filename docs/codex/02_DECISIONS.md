@@ -569,3 +569,19 @@ qui cite la précédente.
     seulement si la valeur change (G3).
 - Conséquences : nouvelles entités exposées, à ne plus renommer (G10) ; surface
   inscrite au `08`.
+
+## D029 — Procédure d'installation versionnée dans chaque dépôt (invariant G11)
+
+- Date : 3 novembre 2026 — Statut : demandé par le propriétaire (« il faut
+  systématiquement ajouter dans Git la procédure pour installer les blueprints,
+  quel que soit le dépôt ; à ajouter dans les invariants des projets »).
+- Contexte : des procédures données seulement dans la conversation (activer
+  l'entité « Last seen » de Z-Wave, importer un blueprint, remplir une liste de
+  tâches) se perdent avec elle.
+- Décision : invariant G11 (`03_INVARIANTS.md`). Tout blueprint ou élément à
+  installer dans Home Assistant est livré avec sa procédure complète dans le
+  dépôt, dans le même commit ; une explication donnée dans la conversation y est
+  reportée. La règle vaut aussi pour les autres dépôts du propriétaire
+  (cnuma/HASurveillance : `docs/INSTALLATION.md`).
+- Conséquences : pour HAPanel, la procédure est `docs/CONFIGURATION.md` ; toute
+  évolution d'un blueprint la met à jour dans le même lot.

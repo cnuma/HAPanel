@@ -210,3 +210,7 @@ complets ou un package, avec l'emplacement exact de chacun dans le dépôt.
 - Ne jamais masquer une régression sous une simplification.
 - Documenter toute dette technique introduite volontairement.
 - Mettre à jour la documentation dans le même lot que la configuration.
+- Toute procédure d'installation ou de réglage dans Home Assistant (blueprint,
+  entité à activer, liste à créer) est écrite dans le dépôt, y compris celle
+  donnée dans la conversation (invariant G11, D029). La règle vaut pour tous les
+  dépôts du propriétaire.
