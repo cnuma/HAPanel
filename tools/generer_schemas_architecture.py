@@ -139,11 +139,12 @@ def packages():
     s.boite(40, 345, 220, 150, "base.yaml", "nœud, Wi-Fi, API,\nOTA, journaux,\nidentité de build", GRIS)
     s.boite(40, 515, 220, 150, "hardware.yaml", "seul propriétaire\ndes broches et bus\n(G2)", GRIS)
     s.zone(300, 300, 500, 390, "Écran : pages dans l'ordre d'inclusion")
-    pages = [("accueil", 320, 350), ("météo", 560, 350), ("planning", 320, 430), ("scénarios", 560, 430), ("menu", 320, 510)]
+    pages = [("accueil", 320, 350), ("météo", 560, 350), ("planning", 320, 430), ("scénarios", 560, 430),
+             ("menu", 320, 510), ("réglages", 560, 510)]
     for t, x, y in pages:
         s.boite(x, y, 220, 65, t + ".yaml", "", ORANGE, B_ORANGE)
-    s.boite(560, 510, 220, 65, "lvgl.yaml", "", BLEU, B_BLEU)
-    s.etiquette((550, 625), "lvgl.yaml : À propos, barre de navigation, suivi de la connexion.\nL'accueil est inclus d'abord : c'est la page de démarrage.", DOUX)
+    s.boite(320, 595, 220, 65, "lvgl.yaml", "", BLEU, B_BLEU)
+    s.etiquette((670, 627), "lvgl.yaml : À propos,\nnavigation, connexion.\nAccueil inclus d'abord :\npage de démarrage.", DOUX, taille=16)
     s.zone(820, 300, 260, 390, "Services")
     s.boite(840, 345, 220, 150, "liaison_ha.yaml", "action maj_valeur,\nétat et péremption\ndes valeurs", VERT, B_VERT)
     s.boite(840, 515, 220, 150, "led_veille.yaml", "veille, retour accueil,\nLED, rétroéclairage,\nLDR", VERT, B_VERT)
@@ -401,7 +402,8 @@ def yaml_matrice():
     roles_fichiers = [("base", GRIS, "#607D8B"), ("hardware", GRIS, "#607D8B"),
                       ("pages/accueil", ORANGE, B_ORANGE), ("pages/meteo", ORANGE, B_ORANGE),
                       ("pages/planning", ORANGE, B_ORANGE), ("pages/scenarios", ORANGE, B_ORANGE),
-                      ("pages/menu", ORANGE, B_ORANGE), ("lvgl", BLEU, B_BLEU),
+                      ("pages/menu", ORANGE, B_ORANGE), ("pages/reglages", ORANGE, B_ORANGE),
+                      ("lvgl", BLEU, B_BLEU),
                       ("liaison_ha", VERT, B_VERT), ("led_veille", VERT, B_VERT),
                       ("message_accueil", ORANGE, B_ORANGE)]
     lignes, autres = [], []
@@ -413,7 +415,7 @@ def yaml_matrice():
         if hors:
             autres.append(f"{', '.join(hors)} ({nom})")
         lignes.append((nom, " ".join(blocs + (["autres"] if hors else [])), fond, bord))
-    s = S(1260, 900)
+    s = S(1260, 950)
     x0, y0, lc, hl = 255, 110, 76, 52
     yf = y0 + len(lignes) * hl
     xf = x0 + len(colonnes) * lc

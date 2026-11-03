@@ -35,10 +35,11 @@ Relancer le script après toute modification du YAML.
 | `btn_men_apropos` | widget button | packages/pages/menu.yaml | — |
 | `btn_men_meteo` | widget button | packages/pages/menu.yaml | — |
 | `btn_men_planning` | widget button | packages/pages/menu.yaml | — |
+| `btn_men_reglages` | widget button | packages/pages/menu.yaml | — |
 | `btn_men_scenarios` | widget button | packages/pages/menu.yaml | — |
 | `btn_msg_fermer` | widget button | packages/message_accueil.yaml | — |
 | `btn_nav_accueil` | widget button | packages/lvgl.yaml | packages/pages/accueil.yaml |
-| `btn_nav_menu` | widget button | packages/lvgl.yaml | — |
+| `btn_nav_menu` | widget button | packages/lvgl.yaml | packages/pages/menu.yaml |
 | `btn_sce_1` | widget button | packages/pages/scenarios.yaml | — |
 | `btn_sce_2` | widget button | packages/pages/scenarios.yaml | — |
 | `btn_sce_3` | widget button | packages/pages/scenarios.yaml | — |
@@ -47,7 +48,8 @@ Relancer le script après toute modification du YAML.
 | `btn_sce_6` | widget button | packages/pages/scenarios.yaml | — |
 | `bus_i2c_tactile` | i2c | packages/hardware.yaml | — |
 | `bus_spi_ecran` | spi | packages/hardware.yaml | — |
-| `ecran` | display (mipi_spi) | packages/hardware.yaml | hapanel_banc.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/scenarios.yaml |
+| `ecran` | display (mipi_spi) | packages/hardware.yaml | hapanel_banc.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
+| `ecran_intensite` | number (template) | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `ha_connecte_affiche` | globals | packages/lvgl.yaml | packages/led_veille.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/scenarios.yaml |
 | `heure_ha` | time (homeassistant) | packages/pages/accueil.yaml | packages/pages/planning.yaml |
 | `ico_sce_1` | widget label | packages/pages/scenarios.yaml | — |
@@ -104,6 +106,9 @@ Relancer le script après toute modification du YAML.
 | `lbl_pla_nom_4` | widget label | packages/pages/planning.yaml | — |
 | `lbl_pla_resume` | widget label | packages/pages/planning.yaml | — |
 | `lbl_pla_titre` | widget label | packages/pages/planning.yaml | — |
+| `lbl_reg_ecran_intensite` | widget label | packages/pages/reglages.yaml | — |
+| `lbl_reg_impose` | widget label | packages/pages/reglages.yaml | — |
+| `lbl_reg_led_intensite` | widget label | packages/pages/reglages.yaml | — |
 | `lbl_sce_1` | widget label | packages/pages/scenarios.yaml | — |
 | `lbl_sce_2` | widget label | packages/pages/scenarios.yaml | — |
 | `lbl_sce_3` | widget label | packages/pages/scenarios.yaml | — |
@@ -115,11 +120,11 @@ Relancer le script après toute modification du YAML.
 | `ldr_obscurite` | globals | packages/led_veille.yaml | — |
 | `ldr_tension` | sensor (adc) | packages/hardware.yaml | packages/led_veille.yaml |
 | `led_alerte` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/accueil.yaml |
-| `led_alerte_active` | switch (template) | packages/led_veille.yaml | packages/liaison_ha.yaml |
+| `led_alerte_active` | switch (template) | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `led_allumee` | globals | packages/led_veille.yaml | — |
 | `led_bleu` | globals | packages/led_veille.yaml | packages/pages/accueil.yaml |
-| `led_intensite` | number (template) | packages/led_veille.yaml | packages/liaison_ha.yaml |
-| `led_mode` | select (template) | packages/led_veille.yaml | packages/liaison_ha.yaml |
+| `led_intensite` | number (template) | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
+| `led_mode` | select (template) | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `led_rouge` | globals | packages/led_veille.yaml | packages/pages/accueil.yaml |
 | `led_vert` | globals | packages/led_veille.yaml | packages/pages/accueil.yaml |
 | `liaison_chauffage_action` | globals | packages/liaison_ha.yaml | — |
@@ -183,6 +188,7 @@ Relancer le script après toute modification du YAML.
 | `page_menu` | page LVGL | packages/pages/menu.yaml | packages/lvgl.yaml |
 | `page_meteo` | page LVGL | packages/pages/meteo.yaml | packages/pages/menu.yaml |
 | `page_planning` | page LVGL | packages/pages/planning.yaml | packages/pages/menu.yaml |
+| `page_reglages` | page LVGL | packages/pages/reglages.yaml | packages/pages/menu.yaml |
 | `page_scenarios` | page LVGL | packages/pages/scenarios.yaml | packages/pages/menu.yaml |
 | `planning_rafraichir` | script | packages/pages/planning.yaml | packages/liaison_ha.yaml |
 | `police_grande` | font | packages/pages/accueil.yaml | packages/pages/meteo.yaml |
@@ -190,7 +196,14 @@ Relancer le script après toute modification du YAML.
 | `police_meteo` | font | packages/pages/meteo.yaml | — |
 | `police_scenarios` | font | packages/pages/scenarios.yaml | — |
 | `police_texte` | font | packages/lvgl.yaml | packages/message_accueil.yaml |
-| `police_titre` | font | packages/lvgl.yaml | packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml |
+| `police_titre` | font | packages/lvgl.yaml | packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml |
+| `reglage_impose_ecran_intensite` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
+| `reglage_impose_led_alerte` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
+| `reglage_impose_led_intensite` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
+| `reglage_impose_led_mode` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
+| `reglages_rafraichir` | script | packages/pages/reglages.yaml | packages/led_veille.yaml, packages/liaison_ha.yaml |
+| `retro_cible` | globals | packages/led_veille.yaml | — |
+| `retro_cible_calculer` | script | packages/led_veille.yaml | — |
 | `retro_niveau` | globals | packages/led_veille.yaml | — |
 | `retroeclairage` | light (monochromatic) | packages/hardware.yaml | packages/led_veille.yaml |
 | `scenarios_indice` | globals | packages/pages/scenarios.yaml | — |
@@ -199,9 +212,13 @@ Relancer le script après toute modification du YAML.
 | `scenarios_retour` | globals | packages/pages/scenarios.yaml | packages/liaison_ha.yaml |
 | `scenarios_retour_ms` | globals | packages/pages/scenarios.yaml | packages/liaison_ha.yaml |
 | `signal_wifi` | sensor (wifi_signal) | packages/base.yaml | packages/pages/accueil.yaml |
+| `sld_reg_ecran_intensite` | widget slider | packages/pages/reglages.yaml | — |
+| `sld_reg_led_intensite` | widget slider | packages/pages/reglages.yaml | — |
 | `sortie_led_bleu` | output (ledc) | packages/hardware.yaml | packages/led_veille.yaml, packages/pages/accueil.yaml |
 | `sortie_led_rouge` | output (ledc) | packages/hardware.yaml | packages/led_veille.yaml |
 | `sortie_led_vert` | output (ledc) | packages/hardware.yaml | packages/led_veille.yaml, packages/pages/accueil.yaml |
 | `sortie_retroeclairage` | output (ledc) | packages/hardware.yaml | — |
+| `sw_reg_led` | widget switch | packages/pages/reglages.yaml | — |
+| `sw_reg_led_alerte` | widget switch | packages/pages/reglages.yaml | — |
 | `tactile` | touchscreen (cst816) | packages/hardware.yaml | hapanel_banc.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
 | `veille_reveiller` | script | packages/led_veille.yaml | packages/message_accueil.yaml |

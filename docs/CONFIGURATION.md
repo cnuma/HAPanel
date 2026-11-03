@@ -116,26 +116,37 @@ Le bouton n'envoie qu'un numéro : ce chemin ne lance que les entités choisies 
 Protégez aussi la clé d'API : avec elle, un module modifié pourrait émettre d'autres
 événements.
 
-## 5. Régler la LED
+## 5. Régler la LED et l'écran
 
-Chaque module a trois réglages, sur sa page d'appareil (**Paramètres › Appareils et
-services › ESPHome**, le module, rubrique **Configuration**) :
+Chaque module a quatre réglages, à deux endroits qui montrent toujours la même
+valeur :
+
+- sa page d'appareil dans Home Assistant (**Paramètres › Appareils et services ›
+  ESPHome**, le module, rubrique **Configuration**) ;
+- sa page **Réglages**, sur l'écran : **Menu › Réglages** (D031).
 
 | Réglage | Valeurs | Par défaut |
 |---|---|---|
 | LED | Respiration, Éteinte | Respiration |
 | Intensité LED | 0 à 100 % ; 100 % est le maximum | 20 % |
 | Alerte LED | Activée, désactivée : clignotement rouge en cas d'anomalie | Activée |
+| Intensité écran | 20 à 100 % : multiplie la luminosité choisie selon la pièce | 100 % |
 
 L'effet est immédiat et le module garde ses réglages après un redémarrage, même sans
-Home Assistant. L'intensité baisse d'elle-même dans une pièce sombre. Alerte
+Home Assistant. L'intensité de la LED et celle de l'écran baissent d'elles-mêmes dans
+une pièce sombre ; l'écran ne descend jamais sous un plancher lisible. Alerte
 désactivée, une anomalie ne se voit plus que sur l'écran.
 
-La section **LED** du blueprint, repliée, propose les mêmes réglages, sur « Ne pas
-imposer » par défaut. Une valeur choisie dans le blueprint est envoyée au module à la
-connexion et toutes les 5 minutes : elle **l'emporte** sur la page de l'appareil, où un
-changement est remplacé sous 5 minutes. Pour régler depuis la page de l'appareil,
-laissez « Ne pas imposer ».
+La section **LED et écran** du blueprint, repliée, propose les mêmes réglages, sur
+« Ne pas imposer » par défaut. Une valeur choisie dans le blueprint est envoyée au
+module à la connexion et toutes les 5 minutes : elle **l'emporte** sur la page de
+l'appareil, où un changement est remplacé sous 5 minutes, et elle apparaît **grisée**
+sur la page Réglages de l'écran, avec « Grisé : imposé par HA ». Pour régler depuis
+la page de l'appareil ou depuis l'écran, laissez « Ne pas imposer ».
+
+Après une mise à jour du module qui ajoute « Intensité écran », **réimportez le
+blueprint** (menu **⋮ › Réimporter le blueprint**) : sans cela, la page Réglages ne
+sait pas quels réglages sont libres.
 
 ## 6. Message d'accueil
 
@@ -275,6 +286,8 @@ téléverser le module.
 | `retro_jour` | `packages/led_veille.yaml` | 1.0 | Luminosité de l'écran, pièce éclairée |
 | `retro_nuit` | `packages/led_veille.yaml` | 0.40 | Luminosité, pièce sombre (après gamma : environ 8 %) |
 | `retro_ecart_min` | `packages/led_veille.yaml` | 0.05 | Écart minimal avant de changer la luminosité |
+| `retro_plancher` | `packages/led_veille.yaml` | 0.30 | Luminosité minimale de l'écran, quel que soit « Intensité écran » |
+| `ecran_intensite_min` / `ecran_intensite_defaut` | `packages/led_veille.yaml` | 20 / 100 | Bornes et valeur d'un module neuf pour « Intensité écran » |
 | `led_plafond_jour` / `led_plafond_nuit` | `packages/led_veille.yaml` | 0.25 / 0.05 | Intensité de la LED à 100 % du réglage « Intensité LED » |
 | `led_intensite_defaut` | `packages/led_veille.yaml` | 20 | « Intensité LED » d'un module neuf |
 | `ldr_tension_jour` / `ldr_tension_nuit` | `packages/led_veille.yaml` | 0.09 / 0.20 | Tensions qui définissent pièce éclairée et pièce sombre |

@@ -45,11 +45,11 @@ Chaque ligne fusionne un fichier dans la configuration. **L'ordre compte** :
 | 1 | `base` | |
 | 2 | `hardware` | |
 | 3 | `accueil` | **Première page déclarée : c'est l'écran affiché au démarrage.** Doit rester avant `lvgl`. |
-| 4 à 7 | `meteo`, `planning`, `scenarios`, `menu` | Leur ordre est celui des pages dans LVGL. |
-| 8 | `lvgl` | Déclare la page À propos et la barre de navigation (`top_layer`). |
-| 9 | `liaison_ha` | |
-| 10 | `led_veille` | |
-| 11 | `message_accueil` | **Après `lvgl`** : son calque est ajouté après la barre de navigation dans `top_layer`, donc dessiné par-dessus. |
+| 4 à 8 | `meteo`, `planning`, `scenarios`, `menu`, `reglages` | Leur ordre est celui des pages dans LVGL. |
+| 9 | `lvgl` | Déclare la page À propos et la barre de navigation (`top_layer`). |
+| 10 | `liaison_ha` | |
+| 11 | `led_veille` | |
+| 12 | `message_accueil` | **Après `lvgl`** : son calque est ajouté après la barre de navigation dans `top_layer`, donc dessiné par-dessus. |
 
 ## hapanel_banc.yaml
 

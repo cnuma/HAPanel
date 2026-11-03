@@ -226,7 +226,10 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       3 novembre 2026 ; D027 ne les avait mis que dans HA) : LED (Respiration,
       Éteinte), Intensité LED, Alerte LED, et **nouvelle demande** : luminosité
       de l'écran, réglable des deux côtés, HA et module. Spécifié : D031 (choix
-      1A, 2A, 3A, 4A du propriétaire). À coder après la fusion du message
-      d'accueil.
+      1A, 2A, 3A, 4A du propriétaire), codé sur `feature/reglages-ecran`, à
+      tester (cahier, partie H) ; blueprint « module » à réimporter.
 - [ ] Bouton Menu masqué sur la page Menu, seul Accueil reste (révision de D025
-      du 3 novembre 2026). À coder après la fusion du message d'accueil.
+      du 3 novembre 2026) : codé sur `feature/reglages-ecran`, à tester (H).
+- [ ] Tactile plus réactif (retour du propriétaire, 3 novembre 2026 : il faut
+      laisser le doigt sur l'écran) : lecture toutes les 20 ms et bus I²C à
+      400 kHz (D009 révisée), codé sur `feature/reglages-ecran`, à tester (H).

@@ -36,6 +36,8 @@ i2c:
   id: bus_i2c_tactile
   sda: ${pin_i2c_sda}
   scl: ${pin_i2c_scl}
+  # 400 kHz (50 kHz par defaut) : lecture du tactile plus courte, toutes les 20 ms.
+  frequency: 400kHz
 
 output:
   - platform: ledc
@@ -103,7 +105,8 @@ touchscreen:
     id: tactile
     i2c_id: bus_i2c_tactile
     display: ecran
-    # Lecture periodique (50 ms) : aucune interruption n'arrive sur
-    # pin_tactile_int, volontairement non declaree (D009).
-    update_interval: 50ms
+    # Lecture periodique : aucune interruption n'arrive sur pin_tactile_int,
+    # volontairement non declaree (D009). 20 ms au lieu de 50 ms : un toucher
+    # bref n'est plus manque (retour du proprietaire, 3 novembre 2026).
+    update_interval: 20ms
     reset_pin: ${pin_tactile_rst}

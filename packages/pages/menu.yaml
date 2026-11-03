@@ -1,9 +1,14 @@
 # Ecran menu (D025) : acces a toutes les pages depuis la barre de navigation.
-# Une place reste libre pour la prochaine page. Fonctionne sans Home Assistant (P5).
+# Fonctionne sans Home Assistant (P5).
 lvgl:
   pages:
     - id: page_menu
       bg_color: 0x000000
+      # Sur le menu, le bouton Menu ne ferait rien : seul Accueil reste (D025).
+      on_load:
+        - lvgl.widget.hide: btn_nav_menu
+      on_unload:
+        - lvgl.widget.show: btn_nav_menu
       widgets:
         - button:
             id: btn_men_accueil
@@ -114,4 +119,26 @@ lvgl:
             on_click:
               - lvgl.page.show:
                   id: page_apropos
+                  animation: NONE
+        - button:
+            id: btn_men_reglages
+            align: TOP_LEFT
+            x: 124
+            y: 184
+            width: 108
+            height: 80
+            pad_all: 4
+            widgets:
+              - label:
+                  align: TOP_MID
+                  y: 8
+                  text_font: police_icones
+                  text: "\U000F0493"
+              - label:
+                  align: BOTTOM_MID
+                  y: -8
+                  text: "Réglages"
+            on_click:
+              - lvgl.page.show:
+                  id: page_reglages
                   animation: NONE

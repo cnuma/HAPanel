@@ -66,6 +66,7 @@ câblage d'origine de la carte : l'avertissement est volontairement masqué.
 | id | Clé | Rôle |
 |---|---|---|
 | `bus_i2c_tactile` | `sda`, `scl` | Bus du contrôleur tactile. |
+| | `frequency` | `400kHz` au lieu des 50 kHz par défaut : chaque lecture du tactile est plus courte, ce qui permet de le lire toutes les 20 ms (D009). |
 
 ### Bloc `output` : sorties à modulation (PWM)
 
@@ -130,20 +131,21 @@ L'écran n'a ni `lambda` ni `pages` : c'est LVGL (`lvgl.yaml`) qui dessine dessu
 | `tactile` | `platform` | `cst816` | Pilote de la famille CST816, qui convient à la puce CST820 de la carte. |
 | | `i2c_id` | `bus_i2c_tactile` | Bus utilisé. |
 | | `display` | `ecran` | Fait correspondre les coordonnées du toucher à celles de l'écran. |
-| | `update_interval` | `50ms` | La puce est interrogée toutes les 50 ms (D009). |
+| | `update_interval` | `20ms` | La puce est interrogée toutes les 20 ms (D009). À 50 ms, un toucher bref passait entre deux lectures : il fallait appuyer longtemps (retour du propriétaire, 3 novembre 2026). |
 | | `reset_pin` | `${pin_tactile_rst}` | Remise à zéro au démarrage. |
 
 **Pourquoi pas d'`interrupt_pin` :** au banc, aucune interruption n'arrive sur GPIO21.
 Si on la déclare, ESPHome attend une interruption avant de lire la puce, et aucun
-toucher n'est jamais reçu (D009). La lecture toutes les 50 ms coûte une courte
-transaction I²C et ajoute au plus 50 ms de délai : sans effet pour un panneau alimenté
-en permanence. Cette dette est notée T1.
+toucher n'est jamais reçu (D009). La lecture toutes les 20 ms coûte une courte
+transaction I²C (environ 0,2 ms à 400 kHz) et ajoute au plus 20 ms de délai : sans
+effet pour un panneau alimenté en permanence. Cette dette est notée T1.
 
 ## Maintenance
 
 | Pour | Faire |
 |---|---|
 | Porter sur une autre carte | Modifier le tableau `substitutions`, puis `display_model`, la plateforme du tactile et, si besoin, `esp32.board` dans `base.yaml`. Revalider au banc écran, tactile (coins de l'écran, voir `hapanel.md`), LED et LDR. |
+| Tactile lent ou touchers brefs ignorés | Baisser `update_interval` du tactile (20 ms aujourd'hui) ; garder `frequency: 400kHz` sur le bus. Vérifier au banc avec le journal des touchers. |
 | Tactile décalé ou inversé | Ajouter `transform` (`swap_xy`, `mirror_x`, `mirror_y`) ou `calibration` sous `tactile`. Vérifier avec le journal des touchers du banc. |
 | Couleurs de l'écran fausses | Options `invert_colors` ou `color_order` sous `ecran`. |
 | LDR trop réactive ou trop lente | `window_size` (durée de la moyenne) et `send_every` (fréquence). Les seuils sont dans `led_veille.yaml`. |

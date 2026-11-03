@@ -132,6 +132,9 @@ qui cite la précédente.
 - Conséquences : une transaction I²C toutes les 50 ms, latence de toucher
   d'au plus 50 ms ; dette T1 ; à reprendre si la veille profonde devient
   nécessaire.
+- Révision du 3 novembre 2026 (retour du propriétaire : il faut laisser le doigt
+  sur l'écran, contraire aux habitudes des téléphones) : lecture toutes les
+  20 ms et bus I²C à 400 kHz (50 kHz par défaut). À valider sur le module.
 
 ## D010 — OTA authentifiée par la clé de l'API
 
@@ -532,8 +535,8 @@ qui cite la précédente.
   comprennent pas un bouton qui ne réagit pas) : le bouton Accueil est masqué
   sur la page d'accueil ; seul Menu reste, à sa place.
 - Révision du 3 novembre 2026 (demande du propriétaire, même raison) : le bouton
-  Menu est masqué sur la page Menu ; seul Accueil reste, à sa place. À coder après
-  la fusion du message d'accueil.
+  Menu est masqué sur la page Menu ; seul Accueil reste, à sa place. Codé sur
+  `feature/reglages-ecran`, à valider sur le module.
 
 ## D026 — Icône et couleur des boutons de scénarios
 
@@ -645,8 +648,9 @@ qui cite la précédente.
 
 ## D031 — Réglages à l'écran du module et intensité de l'écran
 
-- Date : 3 novembre 2026 — Statut : choix du propriétaire (1A, 2A, 3A, 4A), à
-  coder après la fusion du message d'accueil (D028), puis à valider sur le module.
+- Date : 3 novembre 2026 — Statut : choix du propriétaire (1A, 2A, 3A, 4A), codé
+  sur `feature/reglages-ecran`, à valider sur le module ; plancher et bornes
+  choisis par l'agent (`retro_plancher` 0,30, intensité de 20 à 100 %).
 - Contexte : le propriétaire avait demandé de régler la LED depuis le module ;
   D027 ne l'a fait que dans HA. Nouvelle demande : la luminosité de l'écran,
   réglable des deux côtés, HA et module.
@@ -662,6 +666,7 @@ qui cite la précédente.
   - un changement à l'écran met à jour l'entité dans HA, et inversement : une
     seule valeur, écrite en flash seulement si elle change (G3) ;
   - réglage imposé par le blueprint : grisé à l'écran, avec « imposé par HA » ;
-    le blueprint indique au module quels réglages il impose.
+    le blueprint envoie désormais chaque réglage, avec la valeur `libre` quand il
+    ne l'impose pas (clés `led_*` et `ecran_intensite`).
 - Conséquences : nouvelle entité exposée, à ne plus renommer (G10) ; surface
   inscrite au `08` ; mémoire à mesurer (G6).
