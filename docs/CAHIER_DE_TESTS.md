@@ -23,6 +23,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 3 novembre 2026 | `6ec8bc4` | E | KO, sans détail | Numéros et constats à préciser |
 | 3 novembre 2026 | `d67b9c0` | A1 | Couleur OK ; accent de « écran » absent du pied de page | Corrigé (`bade90a`) : police du projet sur tout le message |
 | 3 novembre 2026 | `dec159c` | A1 | OK : **A et B validés**, fusion dans `main` | |
+| 3 novembre 2026 | `dec159c` | E | KO : aucune variation de la LED ni de l'écran | Journaux à 22 h 30 : `LDR 1.094 V` fixe, plafond de l'ADC en `0db` (relevés du 31 octobre : 0,075 à 0,26 V). Mesure saturée, donc obscurité toujours maximale. Diagnostic : éclairer la LDR à la lampe pendant la lecture des journaux |
 
 | Partie | Sujet | Bloque la fusion |
 |---|---|---|
