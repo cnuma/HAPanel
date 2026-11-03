@@ -208,18 +208,13 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       autonome avec un ESP-01 pré-câblé avec une diode infrarouge, qui marche très
       bien. À reprendre (codes, plateforme `climate`, portée) avant de choisir
       entre la diode sur le module et un émetteur autonome par pièce. Extrait
-      transmis le 3 novembre 2026 : plateforme `midea_ir` (clim « Climatiseur
-      chambre parents »), récepteur de test sur GPIO14. Manquent le bloc
-      `remote_transmitter` (broche, `carrier_duty_percent`) et l'en-tête
-      (carte, framework). YAML retrouvé dans le constructeur ESPHome de HA le
-      3 novembre 2026 : nœud `chambre-parent--ir-gateway`, `esp8266`, carte
-      `esp01_1m` ; il ne contient que le socle (API, OTA, Wi-Fi, point d'accès de
-      secours), **sans** `remote_transmitter` ni `climate`. La partie infrarouge
-      reste à retrouver (autre chat).
-- [ ] ESP-01 `chambre-parent--ir-gateway` : clé d'API, mot de passe OTA et mot de
-      passe du point d'accès écrits en clair dans le YAML, et passés dans une
-      conversation le 3 novembre 2026. Les renouveler et les passer en `!secret`
-      au prochain flash du module, puis ressaisir la clé d'API dans HA.
+      transmis le 3 novembre 2026 (nœud `clim-parents`, module générique ESP8285,
+      `esp8266`, carte `esp01_1m`, cadre Arduino par défaut de l'ESP8266) :
+      `remote_transmitter` sur GPIO4, `carrier_duty_percent: 50%` ; climat
+      `midea_ir` (« Climatiseur chambre parents ») ; récepteur de test sur
+      GPIO14 (`binary_sensor` brut) ; `web_server` version 3. Sur le panneau
+      (esp-idf), `remote_transmitter` et `midea_ir` se reprennent tels quels,
+      seule la broche change.
 - [ ] **À confirmer : modèle exact de la carte.** Le propriétaire pense avoir une
       2,8 pouces capacitive ; le projet suppose l'ESP32-2432S024C, 2,4 pouces
       (D004). Le brochage de `hardware.yaml` est validé au banc quel que soit le
