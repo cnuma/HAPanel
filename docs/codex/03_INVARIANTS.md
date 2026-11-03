@@ -16,6 +16,8 @@ décision dans `02_DECISIONS.md`, des tests et un checkpoint.
 | G8 | **Noms de fichiers :** un fichier modifié ou livré conserve exactement son nom d'origine, sans suffixe ni renommage non demandé. | F11 |
 | G9 | **Aucun secret dans le dépôt :** Wi-Fi et clé de l'API (qui protège aussi l'OTA, D010) dans `secrets.yaml`, ignoré par Git. | I9 |
 | G10 | **Identifiants stables :** le nom du nœud ESPHome, les `id` et les `name` des entités exposées à Home Assistant sont des contrats ; un renommage exige une décision et la mise à jour des tableaux de bord et automatisations concernés. | F5, F6 |
+| G11 | **Procédure d'installation versionnée :** tout blueprint, et plus largement tout élément à installer ou à régler dans Home Assistant, est livré avec sa procédure complète dans le dépôt (préparation des appareils, import, mise à jour, création de l'automatisation, premier test, dépannage), écrite ou mise à jour dans le même commit. Une explication donnée dans la conversation y est reportée. Vaut pour tous les dépôts du propriétaire. | Propriétaire, D029 |
+| G12 | **Moment de la mise à jour documentaire :** la documentation de fonctionnement, d'installation et d'utilisation (`CONFIGURATION.md`, `UTILISATION.md`, `ARCHITECTURE.md`, décisions, procédures) est mise à jour dans le même commit que la modification, jamais regroupée plus tard. Le statut du projet (`TODO.md` « validé », `VERSION`, checkpoint) n'est mis à jour qu'après validation par le propriétaire sur le module, à la fusion dans `main` : un commit de branche n'atteste pas un état stable. Vaut pour tous les dépôts du propriétaire. | Propriétaire, D030 |
 
 ## Invariants propres au panneau
 

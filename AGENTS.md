@@ -201,6 +201,10 @@ complets ou un package, avec l'emplacement exact de chacun dans le dépôt.
 - Pousser une branche de travail (`feature/…`, `fix/…`, `docs/…`, `chore/…`)
   ne demande pas d'accord (propriétaire, 2 novembre 2026) : la signaler dans
   la réponse. Fusionner ou pousser sur `main` reste soumis à son accord.
+- Documentation de fonctionnement, d'installation et d'utilisation dans le même
+  commit que la modification ; statut (`TODO.md` « validé », `VERSION`,
+  checkpoint) seulement après validation par le propriétaire, à la fusion dans
+  `main` (invariant G12, D030).
 - Ne jamais réécrire une branche publiée sans accord explicite du
   propriétaire ; si accordé, `git push --force-with-lease=<branche>:<sha>`.
 
@@ -210,3 +214,7 @@ complets ou un package, avec l'emplacement exact de chacun dans le dépôt.
 - Ne jamais masquer une régression sous une simplification.
 - Documenter toute dette technique introduite volontairement.
 - Mettre à jour la documentation dans le même lot que la configuration.
+- Toute procédure d'installation ou de réglage dans Home Assistant (blueprint,
+  entité à activer, liste à créer) est écrite dans le dépôt, y compris celle
+  donnée dans la conversation (invariant G11, D029). La règle vaut pour tous les
+  dépôts du propriétaire.

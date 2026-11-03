@@ -605,3 +605,36 @@ qui cite la précédente.
   nom, `switch.*message_d_accueil`) ; surface inscrite au `08`. Après un
   redémarrage de HA, pas d'accueil avant la période choisie (dernier changement
   remis à zéro).
+
+## D029 — Procédure d'installation versionnée dans chaque dépôt (invariant G11)
+
+- Date : 3 novembre 2026 — Statut : demandé par le propriétaire (« il faut
+  systématiquement ajouter dans Git la procédure pour installer les blueprints,
+  quel que soit le dépôt ; à ajouter dans les invariants des projets »).
+- Contexte : des procédures données seulement dans la conversation (activer
+  l'entité « Last seen » de Z-Wave, importer un blueprint, remplir une liste de
+  tâches) se perdent avec elle.
+- Décision : invariant G11 (`03_INVARIANTS.md`). Tout blueprint ou élément à
+  installer dans Home Assistant est livré avec sa procédure complète dans le
+  dépôt, dans le même commit ; une explication donnée dans la conversation y est
+  reportée. La règle vaut aussi pour les autres dépôts du propriétaire
+  (cnuma/HASurveillance : `docs/INSTALLATION.md`).
+- Conséquences : pour HAPanel, la procédure est `docs/CONFIGURATION.md` ; toute
+  évolution d'un blueprint la met à jour dans le même lot.
+
+## D030 — Moment de la mise à jour documentaire (invariant G12)
+
+- Date : 3 novembre 2026 — Statut : validé par le propriétaire (HAP-R024).
+- Contexte : un commit de branche précède les tests du propriétaire (G5 impose
+  même de committer avant de compiler) ; l'état stable n'est atteint qu'à la
+  validation sur le module et à la fusion dans `main`.
+- Décision : invariant G12 (`03_INVARIANTS.md`), en deux temps :
+  - documentation de fonctionnement, d'installation et d'utilisation : dans le
+    même commit que la modification ; jamais regroupée après plusieurs commits ;
+  - statut du projet (`TODO.md` « validé », `VERSION`, checkpoint) : après
+    validation par le propriétaire, à la fusion dans `main`, éventuellement pour
+    plusieurs fonctions à la fois.
+  La règle vaut pour tous les dépôts du propriétaire.
+- Conséquences : à tout commit, code et documentation concordent ; une branche
+  abandonnée n'emporte que sa propre documentation ; `main` ne déclare stable
+  que ce qui a été testé.
