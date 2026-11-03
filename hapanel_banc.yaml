@@ -7,9 +7,10 @@ packages:
   production: !include hapanel.yaml
 
 # Dossier de compilation propre au banc : passer de la production au banc ne
-# recompile plus tout (environ 10 min sinon). Sous .esphome, ignore par Git.
+# recompile plus tout (environ 10 min sinon). Chemin compte depuis .esphome :
+# .esphome/build/hapanel_banc, ignore par Git.
 esphome:
-  build_path: .esphome/build/hapanel_banc
+  build_path: build/hapanel_banc
 
 debug:
   update_interval: 30s

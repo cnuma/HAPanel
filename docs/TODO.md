@@ -121,7 +121,7 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       muette) ; bouton maison absent de l'accueil, y compris après le retour
       automatique.
 - [ ] Outillage, accepté par le propriétaire le 3 novembre 2026 :
-      `build_path: .esphome/build/hapanel_banc` dans `hapanel_banc.yaml` et
+      `build_path: build/hapanel_banc` dans `hapanel_banc.yaml` et
       règle « ne compiler que la configuration pas encore compilée » avant une
       fusion (`05_BUILD_AND_TEST.md`). Gain à mesurer au prochain passage de la
       production au banc.

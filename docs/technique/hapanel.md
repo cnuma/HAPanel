@@ -68,7 +68,7 @@ exactement le logiciel de production, avec quelques ajouts.
 
 | Clé | Valeur | Rôle |
 |---|---|---|
-| `build_path` | `.esphome/build/hapanel_banc` | Dossier de compilation propre au banc. Sans lui, banc et production partagent `.esphome/build/hapanel`, et passer de l'un à l'autre recompile tout (environ 10 min). Coût : environ 430 Mo de plus sur le disque. |
+| `build_path` | `build/hapanel_banc` | Dossier de compilation propre au banc, `.esphome/build/hapanel_banc` : ESPHome compte ce chemin depuis `.esphome`. Sans lui, banc et production partagent `.esphome/build/hapanel`, et passer de l'un à l'autre recompile tout (environ 10 min). Coût : environ 430 Mo de plus sur le disque. |
 
 ### Bloc `debug` et capteurs de mémoire
 
