@@ -194,12 +194,10 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [ ] Piloter les clims par infrarouge depuis le module : diode émettrice sur une
       broche libre, composant `remote_transmitter` et plateforme `climate` d'ESPHome
       selon la marque (HeatpumpIR exclu : Arduino seulement, D008). Infrarouge à
-      vue : seules les clims visibles depuis le panneau. Broches candidates, à
-      confirmer sur la carte S024C (inscriptions de P3 et CN1, photo, essai au
-      banc) : GPIO22 pour émettre, GPIO35 (entrée seulement) pour un récepteur qui
-      apprend les codes. GPIO21 (tactile) et GPIO27 (rétroéclairage) exclus.
-      À fournir par le propriétaire : marque et modèle des clims, nombre visibles
-      depuis le panneau.
+      vue : seules les clims visibles depuis le panneau. Émission sur GPIO22
+      (choisi, voir plus bas) ; GPIO35 (entrée seulement) possible pour un
+      récepteur qui apprend les codes. GPIO21 (tactile) et GPIO27
+      (rétroéclairage) exclus.
 - [ ] Préparer le schéma électronique de la diode infrarouge : diode, transistor
       de commande, résistances de base et de limitation, alimentation, branchement
       sur le connecteur choisi.
@@ -214,19 +212,14 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       GPIO14 (`binary_sensor` brut) ; `web_server` version 3. Sur le panneau
       (esp-idf), `remote_transmitter` et `midea_ir` se reprennent tels quels,
       seule la broche change.
-- [ ] **À confirmer : modèle exact de la carte.** Le propriétaire pense avoir une
-      2,8 pouces capacitive ; le projet suppose l'ESP32-2432S024C, 2,4 pouces
-      (D004). Le brochage de `hardware.yaml` est validé au banc quel que soit le
-      nom ; le rétroéclairage sur GPIO27 fait plutôt penser à une 2,4 pouces, sans
-      certitude. Vérifier la diagonale de l'affichage (environ 6,1 cm pour
-      2,4 pouces, 7,1 cm pour 2,8 pouces) et l'inscription au dos de la carte,
-      avec une photo des connecteurs (P3, CN1…). Si c'est une 2,8 pouces : corriger
-      D004, `docs/technique/hardware.md`, `docs/technique/README.md` dans un même
-      commit, et rechercher les broches libres de ce modèle pour la diode.
-- [ ] Points en suspens pour l'infrarouge, à fournir par le propriétaire :
-      modèle de la carte (point ci-dessus), photo des connecteurs, marque et
-      modèle des clims (Midea ou compatible pour la chambre des parents),
-      emplacement des panneaux par rapport aux clims.
+- [x] Modèle de la carte confirmé par le propriétaire le 3 novembre 2026 : bien
+      une 2,4 pouces, ESP32-2432S024C (D004 inchangée).
+- [x] Broche de la diode choisie par le propriétaire le 3 novembre 2026 : GPIO22,
+      sur un connecteur qui porte aussi GND et 3,3 V (alimentation du montage).
+- [ ] Points en suspens pour l'infrarouge : marque et modèle exacts des clims
+      (Midea ou compatible pour la chambre des parents), emplacement des panneaux
+      par rapport aux clims ; schéma à faire sur 3,3 V (courant de la diode par
+      transistor, pas par GPIO22).
 - [ ] Orientation du propriétaire (3 novembre 2026) : un panneau sera placé en
       vue de chaque clim, diode sur le module. Sinon, une automatisation de HA
       relaiera la commande vers l'émetteur ESP-01 de la pièce.
