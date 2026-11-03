@@ -206,4 +206,8 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [ ] Référence : le propriétaire a déjà réalisé, dans un autre chat, une solution
       autonome avec un ESP-01 pré-câblé avec une diode infrarouge, qui marche très
       bien. À reprendre (codes, plateforme `climate`, portée) avant de choisir
-      entre la diode sur le module et un émetteur autonome par pièce.
+      entre la diode sur le module et un émetteur autonome par pièce. Extrait
+      transmis le 3 novembre 2026 : plateforme `midea_ir` (clim « Climatiseur
+      chambre parents »), récepteur de test sur GPIO14. Manquent le bloc
+      `remote_transmitter` (broche, `carrier_duty_percent`) et l'en-tête
+      (carte, framework).
