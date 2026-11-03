@@ -211,3 +211,6 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       chambre parents »), récepteur de test sur GPIO14. Manquent le bloc
       `remote_transmitter` (broche, `carrier_duty_percent`) et l'en-tête
       (carte, framework).
+- [ ] Orientation du propriétaire (3 novembre 2026) : un panneau sera placé en
+      vue de chaque clim, diode sur le module. Sinon, une automatisation de HA
+      relaiera la commande vers l'émetteur ESP-01 de la pièce.
