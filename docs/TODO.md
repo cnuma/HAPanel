@@ -165,6 +165,7 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
       dans la plage horaire, tirage selon saison et moment, message unique coché,
       ligne météo, fermeture au toucher et après 3 min, arc-en-ciel soumis à
       D027, entité « Message d'accueil » désactivée. Saint du jour reporté.
+      Tous les tests en attente : `docs/CAHIER_DE_TESTS.md`.
 - [ ] Saint du jour : choisir la source (calendrier dans le blueprint, ou service
       en ligne téléchargé par HA) ; il s'affichera sur la ligne de la météo.
 - [ ] Spécification d'origine du message d'accueil, quand quelqu'un arrive : écran allumé, LED en arc-en-ciel
@@ -188,3 +189,53 @@ Liste unique du reste à faire, par priorité. On avance écran par écran.
 - [ ] Évolution du message d'accueil : citer la personne qui arrive (présence
       des téléphones dans HA), quand tous les téléphones de la maison seront
       connus.
+
+## P5 — Idées du propriétaire (3 novembre 2026), à spécifier avant tout code
+
+- [ ] Piloter les clims par infrarouge depuis le module : diode émettrice sur une
+      broche libre, composant `remote_transmitter` et plateforme `climate` d'ESPHome
+      selon la marque (HeatpumpIR exclu : Arduino seulement, D008). Infrarouge à
+      vue : seules les clims visibles depuis le panneau. Broches candidates, à
+      confirmer sur la carte S024C (inscriptions de P3 et CN1, photo, essai au
+      banc) : GPIO22 pour émettre, GPIO35 (entrée seulement) pour un récepteur qui
+      apprend les codes. GPIO21 (tactile) et GPIO27 (rétroéclairage) exclus.
+      À fournir par le propriétaire : marque et modèle des clims, nombre visibles
+      depuis le panneau.
+- [ ] Préparer le schéma électronique de la diode infrarouge : diode, transistor
+      de commande, résistances de base et de limitation, alimentation, branchement
+      sur le connecteur choisi.
+- [ ] Référence : le propriétaire a déjà réalisé, dans un autre chat, une solution
+      autonome avec un ESP-01 pré-câblé avec une diode infrarouge, qui marche très
+      bien. À reprendre (codes, plateforme `climate`, portée) avant de choisir
+      entre la diode sur le module et un émetteur autonome par pièce. Extrait
+      transmis le 3 novembre 2026 (nœud `clim-parents`, module générique ESP8285,
+      `esp8266`, carte `esp01_1m`, cadre Arduino par défaut de l'ESP8266) :
+      `remote_transmitter` sur GPIO4, `carrier_duty_percent: 50%` ; climat
+      `midea_ir` (« Climatiseur chambre parents ») ; récepteur de test sur
+      GPIO14 (`binary_sensor` brut) ; `web_server` version 3. Sur le panneau
+      (esp-idf), `remote_transmitter` et `midea_ir` se reprennent tels quels,
+      seule la broche change.
+- [ ] **À confirmer : modèle exact de la carte.** Le propriétaire pense avoir une
+      2,8 pouces capacitive ; le projet suppose l'ESP32-2432S024C, 2,4 pouces
+      (D004). Le brochage de `hardware.yaml` est validé au banc quel que soit le
+      nom ; le rétroéclairage sur GPIO27 fait plutôt penser à une 2,4 pouces, sans
+      certitude. Vérifier la diagonale de l'affichage (environ 6,1 cm pour
+      2,4 pouces, 7,1 cm pour 2,8 pouces) et l'inscription au dos de la carte,
+      avec une photo des connecteurs (P3, CN1…). Si c'est une 2,8 pouces : corriger
+      D004, `docs/technique/hardware.md`, `docs/technique/README.md` dans un même
+      commit, et rechercher les broches libres de ce modèle pour la diode.
+- [ ] Points en suspens pour l'infrarouge, à fournir par le propriétaire :
+      modèle de la carte (point ci-dessus), photo des connecteurs, marque et
+      modèle des clims (Midea ou compatible pour la chambre des parents),
+      emplacement des panneaux par rapport aux clims.
+- [ ] Orientation du propriétaire (3 novembre 2026) : un panneau sera placé en
+      vue de chaque clim, diode sur le module. Sinon, une automatisation de HA
+      relaiera la commande vers l'émetteur ESP-01 de la pièce.
+- [ ] Réglages sur l'écran du module (demande du propriétaire, rappelée le
+      3 novembre 2026 ; D027 ne les avait mis que dans HA) : LED (Respiration,
+      Éteinte), Intensité LED, Alerte LED, et **nouvelle demande** : luminosité
+      de l'écran, réglable des deux côtés, HA et module. Spécifié : D031 (choix
+      1A, 2A, 3A, 4A du propriétaire). À coder après la fusion du message
+      d'accueil.
+- [ ] Bouton Menu masqué sur la page Menu, seul Accueil reste (révision de D025
+      du 3 novembre 2026). À coder après la fusion du message d'accueil.

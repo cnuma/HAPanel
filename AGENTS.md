@@ -180,7 +180,10 @@ Lorsque l'utilisateur écrit exactement « checkpoint » :
 7. Téléverser sur le panneau de banc, lire les journaux, tester les cas de
    la vérification fonctionnelle et relever la mémoire libre.
 8. `git -c core.whitespace=cr-at-eol diff --check` et relecture du diff :
-   duplication, hors périmètre, identifiant renommé.
+   duplication, hors périmètre, identifiant renommé ; page de
+   `docs/technique/` mise à jour, puis
+   `.venv\Scripts\python tools\verifier_doc_technique.py` (index) et
+   `--verifier` sans écart (G12).
 9. Documenter : fichiers modifiés et volontairement non modifiés,
    compilation, mode de téléversement, tests réalisés et restant à faire,
    mémoire libre, risques.

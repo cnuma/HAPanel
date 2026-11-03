@@ -4,6 +4,7 @@ Depuis la racine du depot, apres une compilation (polices dans .esphome/font) :
     .venv/Scripts/python tools/generer_schemas_architecture.py
 """
 import math
+import re
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -394,17 +395,24 @@ def blueprint_structure():
 
 def yaml_matrice():
     colonnes = ["subst.", "esphome", "wifi", "api", "font", "globals", "lvgl", "script", "interval", "sensor", "switch", "tactile", "autres"]
-    lignes = [("base", "esphome wifi api sensor autres", GRIS, "#607D8B"),
-              ("hardware", "subst. sensor tactile autres", GRIS, "#607D8B"),
-              ("accueil", "subst. esphome wifi font globals lvgl script sensor autres", ORANGE, B_ORANGE),
-              ("meteo", "esphome font lvgl script", ORANGE, B_ORANGE),
-              ("planning", "esphome lvgl script interval", ORANGE, B_ORANGE),
-              ("scenarios", "subst. esphome font globals lvgl script interval", ORANGE, B_ORANGE),
-              ("menu", "lvgl", ORANGE, B_ORANGE),
-              ("lvgl", "font globals lvgl interval", BLEU, B_BLEU),
-              ("liaison_ha", "subst. api globals script interval", VERT, B_VERT),
-              ("led_veille", "subst. globals script interval switch tactile autres", VERT, B_VERT),
-              ("message_accueil", "subst. api globals lvgl script interval switch", ORANGE, B_ORANGE)]
+    abreges = {"substitutions": "subst.", "touchscreen": "tactile"}
+    # Role de chaque fichier (couleur) ; ses blocs sont lus dans le fichier
+    # lui-meme : la matrice suit le YAML sans saisie a la main.
+    roles_fichiers = [("base", GRIS, "#607D8B"), ("hardware", GRIS, "#607D8B"),
+                      ("pages/accueil", ORANGE, B_ORANGE), ("pages/meteo", ORANGE, B_ORANGE),
+                      ("pages/planning", ORANGE, B_ORANGE), ("pages/scenarios", ORANGE, B_ORANGE),
+                      ("pages/menu", ORANGE, B_ORANGE), ("lvgl", BLEU, B_BLEU),
+                      ("liaison_ha", VERT, B_VERT), ("led_veille", VERT, B_VERT),
+                      ("message_accueil", ORANGE, B_ORANGE)]
+    lignes, autres = [], []
+    for chemin, fond, bord in roles_fichiers:
+        texte = (RACINE / "packages" / f"{chemin}.yaml").read_text(encoding="utf-8")
+        blocs = [abreges.get(b, b) for b in re.findall(r"^([a-z0-9_]+):", texte, re.M)]
+        hors = [b for b in blocs if b not in colonnes]
+        nom = chemin.split("/")[-1]
+        if hors:
+            autres.append(f"{', '.join(hors)} ({nom})")
+        lignes.append((nom, " ".join(blocs + (["autres"] if hors else [])), fond, bord))
     s = S(1260, 900)
     x0, y0, lc, hl = 255, 110, 76, 52
     yf = y0 + len(lignes) * hl
@@ -439,7 +447,7 @@ def yaml_matrice():
         s.d.rounded_rectangle([cx, yf + 68, cx + 46, yf + 100], 7, fill=fond, outline=bord, width=2)
         s.d.text((cx + 56, yf + 84), texte, fill=ENCRE, font=f(18), anchor="lm")
     s.d.text((20, yf + 135), "Abréviations : subst. = substitutions ; tactile = touchscreen.", fill=DOUX, font=f(17), anchor="lm")
-    s.d.text((20, yf + 162), "autres : ota, logger, text_sensor (base) ; spi, output, light, display (hardware) ; time (accueil) ; select, number (led_veille).", fill=DOUX, font=f(17), anchor="lm")
+    s.d.text((20, yf + 162), "autres : " + " ; ".join(autres) + ".", fill=DOUX, font=f(17), anchor="lm")
     s.sauver("20_yaml_matrice.png")
 
 

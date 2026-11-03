@@ -531,6 +531,9 @@ qui cite la précédente.
 - Révision du 2 novembre 2026 (retour du propriétaire : les utilisateurs ne
   comprennent pas un bouton qui ne réagit pas) : le bouton Accueil est masqué
   sur la page d'accueil ; seul Menu reste, à sa place.
+- Révision du 3 novembre 2026 (demande du propriétaire, même raison) : le bouton
+  Menu est masqué sur la page Menu ; seul Accueil reste, à sa place. À coder après
+  la fusion du message d'accueil.
 
 ## D026 — Icône et couleur des boutons de scénarios
 
@@ -638,3 +641,26 @@ qui cite la précédente.
 - Conséquences : à tout commit, code et documentation concordent ; une branche
   abandonnée n'emporte que sa propre documentation ; `main` ne déclare stable
   que ce qui a été testé.
+
+## D031 — Réglages à l'écran du module et intensité de l'écran
+
+- Date : 3 novembre 2026 — Statut : choix du propriétaire (1A, 2A, 3A, 4A), à
+  coder après la fusion du message d'accueil (D028), puis à valider sur le module.
+- Contexte : le propriétaire avait demandé de régler la LED depuis le module ;
+  D027 ne l'a fait que dans HA. Nouvelle demande : la luminosité de l'écran,
+  réglable des deux côtés, HA et module.
+- Décision :
+  - page **Réglages**, ouverte par la tuile libre de la page Menu (D025), sans
+    protection : « LED », « Intensité LED », « Alerte LED » (D027) et
+    « Intensité écran » ; retour à l'accueil après 1 min comme les autres pages
+    (D022), sans HA ni Wi-Fi (P5) ;
+  - nouvelle entité de configuration « Intensité écran », gardée en flash (G3) :
+    multiplie les deux niveaux de D023, l'adaptation à la pièce reste ; plancher à
+    fixer au banc pour que l'écran reste lisible ; même réglage dans le
+    blueprint « module », « Ne pas imposer » par défaut, comme D027 ;
+  - un changement à l'écran met à jour l'entité dans HA, et inversement : une
+    seule valeur, écrite en flash seulement si elle change (G3) ;
+  - réglage imposé par le blueprint : grisé à l'écran, avec « imposé par HA » ;
+    le blueprint indique au module quels réglages il impose.
+- Conséquences : nouvelle entité exposée, à ne plus renommer (G10) ; surface
+  inscrite au `08` ; mémoire à mesurer (G6).
