@@ -42,9 +42,11 @@ lvgl:
           border_width: 0
           pad_all: 0
           bg_color: 0x000000
-          # Le top_layer n'herite pas du blanc des pages (lvgl.yaml) : sans
-          # couleur ici, le texte et la croix sont gris sombre sur noir.
+          # Le top_layer n'herite ni du blanc ni de la police des pages
+          # (lvgl.yaml) : sans eux, texte gris sombre sur noir et accents
+          # absents (police par defaut de LVGL).
           text_color: 0xFFFFFF
+          text_font: police_texte
           scrollable: false
           widgets:
             # Croix dans un cercle : montre que le message se ferme a la main.
