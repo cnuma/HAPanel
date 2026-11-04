@@ -84,13 +84,16 @@ lvgl:
       - obj:
           id: obj_nav
           align: BOTTOM_MID
+          # Derniere rangee de pixels laissee noire, comme la premiere (voir
+          # obj_barre).
+          y: -2
           # Page de demarrage : l'accueil (packages/pages/accueil.yaml).
           hidden: true
           width: 240
-          height: 44
+          height: 42
           radius: 0
           border_width: 0
-          pad_all: 4
+          pad_all: 3
           bg_color: 0x212121
           scrollable: false
           widgets:
@@ -114,8 +117,12 @@ lvgl:
       - obj:
           id: obj_barre
           align: TOP_MID
+          # Premieres rangees de pixels laissees noires : allumee, la rangee 0 de
+          # la dalle montre une ligne claire fugace (cahier I11 ; idee du
+          # proprietaire, 4 novembre 2026).
+          y: 2
           width: 240
-          height: 36
+          height: 34
           radius: 0
           border_width: 0
           pad_all: 0

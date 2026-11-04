@@ -789,5 +789,9 @@ qui cite la précédente.
     atteindrait 139 px et toucherait la disquette.
 - Conséquences : identifiants internes renommés (`obj_barre_*`, `lbl_barre_date`,
   `ico_barre_enregistrement`) ; aucune entité de HA touchée (G10).
+- Bords de l'écran : les 2 rangées de pixels du haut et du bas restent noires (barre
+  à y = 2, barre du bas à 2 px du bord). Allumée, la dernière rangée réapparaissait
+  par instants sur la première (ligne claire au redessin complet, point dans l'axe
+  du bouton maison) ; diagnostic du 4 novembre 2026, idée du propriétaire (I11).
 - Limite : sur un panneau mural, le ☰ en haut est un peu moins accessible qu'en bas
   (enfants) ; le Menu sert moins souvent que l'accueil.

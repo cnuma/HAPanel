@@ -94,9 +94,9 @@ display:
     id: ecran
     model: ${display_model}
     spi_id: bus_spi_ecran
-    # 20 MHz au lieu de 40 : essai contre une ligne parasite fugace en haut de
-    # l'ecran (retour du proprietaire du 4 novembre 2026, cahier I11).
-    data_rate: 20MHz
+    # Essai a 20 MHz le 4 novembre 2026 : la ligne parasite du haut de l'ecran
+    # (cahier I11) est bien plus frequente ; retour a 40 MHz.
+    data_rate: 40MHz
     cs_pin:
       number: ${pin_ecran_cs}
       ignore_strapping_warning: true
