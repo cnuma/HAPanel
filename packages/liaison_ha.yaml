@@ -19,9 +19,10 @@
 # scen_N_couleur ; et scen_resultat.
 # Affichage : packages/pages/scenarios.yaml (script scenarios_rafraichir).
 #
-# Reglages de la LED (D027), envoyes seulement si le blueprint les impose :
-# led_mode (respiration, eteinte), led_intensite (0 a 100), led_alerte (on, off).
-# Entites : packages/led_veille.yaml.
+# Reglages du module (D027, D031) : led_mode (respiration, eteinte),
+# led_intensite (0 a 100), led_alerte (on, off), ecran_intensite (20 a 100).
+# « libre » : le blueprint n'impose pas ce reglage (D031). Entites :
+# packages/led_veille.yaml ; page : packages/pages/reglages.yaml.
 substitutions:
   # Sans nouvelle valeur pendant ce delai, la valeur affichee est perimee
   # (le blueprint renvoie tout toutes les 5 min).
@@ -190,26 +191,35 @@ api:
               id(meteo_rafraichir).execute();
               return;
             }
-            // Reglages de la LED imposes par le blueprint (D027) : appliques aux
+            // Reglages imposes par le blueprint (D027, D031) : appliques aux
             // entites du module, que HA affiche aussitot. Rien ne change s'ils
             // sont deja en place, pas d'ecriture en flash toutes les 5 min (G3).
-            if (strncmp(k, "led_", 4) == 0) {
-              if (strcmp(k, "led_mode") == 0 && (strcmp(v, "respiration") == 0 || strcmp(v, "eteinte") == 0)) {
+            // « libre » : reglage laisse au module et a la page de l'appareil.
+            if (strncmp(k, "led_", 4) == 0 || strcmp(k, "ecran_intensite") == 0) {
+              bool libre = strcmp(v, "libre") == 0;
+              if (strcmp(k, "led_mode") == 0 && (libre || strcmp(v, "respiration") == 0 || strcmp(v, "eteinte") == 0)) {
+                id(reglage_impose_led_mode) = !libre;
                 size_t i = v[0] == 'e' ? 1 : 0;
                 auto actuel = id(led_mode).active_index();
-                if (!actuel.has_value() || *actuel != i) id(led_mode).make_call().set_index(i).perform();
-              } else if (strcmp(k, "led_intensite") == 0 && nombre && f >= 0 && f <= 100) {
-                if (id(led_intensite).state != f) id(led_intensite).make_call().set_value(f).perform();
-              } else if (strcmp(k, "led_alerte") == 0 && (strcmp(v, "on") == 0 || strcmp(v, "off") == 0)) {
+                if (!libre && (!actuel.has_value() || *actuel != i)) id(led_mode).make_call().set_index(i).perform();
+              } else if (strcmp(k, "led_intensite") == 0 && (libre || (nombre && f >= 0 && f <= 100))) {
+                id(reglage_impose_led_intensite) = !libre;
+                if (!libre && id(led_intensite).state != f) id(led_intensite).make_call().set_value(f).perform();
+              } else if (strcmp(k, "led_alerte") == 0 && (libre || strcmp(v, "on") == 0 || strcmp(v, "off") == 0)) {
+                id(reglage_impose_led_alerte) = !libre;
                 bool on = v[1] == 'n';
-                if (id(led_alerte_active).state != on) {
+                if (!libre && id(led_alerte_active).state != on) {
                   if (on) id(led_alerte_active).turn_on(); else id(led_alerte_active).turn_off();
                 }
+              } else if (strcmp(k, "ecran_intensite") == 0 && (libre || (nombre && f >= ${ecran_intensite_min} && f <= 100))) {
+                id(reglage_impose_ecran_intensite) = !libre;
+                if (!libre && id(ecran_intensite).state != f) id(ecran_intensite).make_call().set_value(f).perform();
               } else {
                 ESP_LOGW("hapanel.liaison", "cle ou valeur inconnue : %s %s", k, v);
                 return;
               }
               ESP_LOGI("hapanel.liaison", "%s %s", k, v);
+              id(reglages_rafraichir).execute();
               return;
             }
             // Planning : traite a part, comme la meteo (P3).

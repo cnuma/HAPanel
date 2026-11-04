@@ -15,10 +15,10 @@ nominal. Tests de dégradation restants. Remplace
 | Binaire sur le panneau | `hapanel_banc.yaml`, `0.1.0 (ef223f6)`, OTA chiffrée, « Boot seems successful » |
 | Version | `0.1.0` (fichier `VERSION`, inchangé : 0.2.0 après les tests de dégradation) |
 | ESPHome | 2026.10.1 (`requirements.txt`), ESP-IDF 5.5.6, LVGL 9.5.0, framework `esp-idf` |
-| Home Assistant | HA OS, Core 2026.9.4, sur 192.168.1.155 |
+| Home Assistant | HA OS, Core 2026.9.4, sur <IP_HA> |
 | Carte | ESP32-2432S024C, ESP32 rev 3.1, flash 4 Mo, sans PSRAM |
 | Alimentation | bloc secteur externe 1 A (le port USB du PC provoque des brownouts, R7) |
-| Module de banc | nœud `hapanel-a85bfc`, renommé « HAPanelSejourCheminee » dans HA (nom affiché seulement), IP 192.168.1.197 (DHCP, à redemander) ; OTA uniquement |
+| Module de banc | nœud `hapanel-a85bfc`, renommé « HAPanelSejourCheminee » dans HA (nom affiché seulement), IP <IP_PANNEAU> (DHCP, à redemander) ; OTA uniquement |
 
 ## Écran d'accueil (D014)
 

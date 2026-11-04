@@ -23,6 +23,12 @@ substitutions:
   retro_jour: "1.0"
   retro_nuit: "0.40"
   retro_ecart_min: "0.05"
+  # Reglage « Intensite ecran » (D031) : multiplie les deux niveaux ci-dessus,
+  # sans descendre sous le plancher, pour que l'ecran reste lisible (a ajuster
+  # au banc).
+  retro_plancher: "0.30"
+  ecran_intensite_min: "20"
+  ecran_intensite_defaut: "100"
 
 globals:
   # Obscurite de la piece selon la LDR, de 0 (eclairee) a 1 (sombre).
@@ -33,6 +39,24 @@ globals:
   - id: retro_niveau
     type: float
     initial_value: "${retro_jour}f"
+  # Luminosite voulue, calculee par retro_cible_calculer.
+  - id: retro_cible
+    type: float
+    initial_value: "${retro_jour}f"
+  # Reglages imposes par le blueprint (D031) : cadenas sur la page Reglages.
+  # Mis a jour par les cles led_* et ecran_intensite (packages/liaison_ha.yaml).
+  - id: reglage_impose_led_mode
+    type: bool
+    initial_value: "false"
+  - id: reglage_impose_led_intensite
+    type: bool
+    initial_value: "false"
+  - id: reglage_impose_led_alerte
+    type: bool
+    initial_value: "false"
+  - id: reglage_impose_ecran_intensite
+    type: bool
+    initial_value: "false"
   # Couleur du prereglage, calculee par accueil_rafraichir ; 0 : eteinte.
   - id: led_rouge
     type: float
@@ -51,9 +75,11 @@ globals:
     type: bool
     initial_value: "false"
 
-# Reglages de la LED par module (D027), sur la page de l'appareil dans Home
-# Assistant ou imposes par le blueprint (cles led_*, packages/liaison_ha.yaml).
-# Gardes en flash, ecrits seulement quand ils changent (G3).
+# Reglages de la LED par module (D027) et intensite de l'ecran (D031), sur la
+# page de l'appareil dans Home Assistant, sur la page Reglages du module
+# (packages/pages/reglages.yaml) ou imposes par le blueprint (cles led_* et
+# ecran_intensite, packages/liaison_ha.yaml). Gardes en flash, ecrits seulement
+# quand ils changent (G3). Chaque changement met a jour la page Reglages.
 select:
   - platform: template
     id: led_mode
@@ -66,6 +92,9 @@ select:
     initial_option: Respiration
     optimistic: true
     restore_value: true
+    on_value:
+      - script.execute: reglages_rafraichir
+      - script.execute: enregistrement_signaler
 
 number:
   - platform: template
@@ -81,6 +110,36 @@ number:
     initial_value: ${led_intensite_defaut}
     optimistic: true
     restore_value: true
+    on_value:
+      - script.execute: reglages_rafraichir
+      - script.execute: enregistrement_signaler
+  - platform: template
+    id: ecran_intensite
+    name: Intensité écran
+    icon: mdi:brightness-percent
+    entity_category: config
+    min_value: ${ecran_intensite_min}
+    max_value: 100
+    step: 5
+    unit_of_measurement: "%"
+    mode: slider
+    initial_value: ${ecran_intensite_defaut}
+    optimistic: true
+    restore_value: true
+    on_value:
+      - script.execute: retro_cible_calculer
+      # Ecran eteint : applique au reveil (veille_reveiller).
+      - if:
+          condition:
+            not: lvgl.is_paused
+          then:
+            - lambda: id(retro_niveau) = id(retro_cible);
+            - light.turn_on:
+                id: retroeclairage
+                brightness: !lambda return id(retro_niveau);
+                transition_length: 0.5s
+      - script.execute: reglages_rafraichir
+      - script.execute: enregistrement_signaler
 
 switch:
   - platform: template
@@ -93,6 +152,11 @@ switch:
     # Desactivee : le clignotement en cours s'arrete aussitot.
     on_turn_off:
       - lambda: if (id(led_alerte)) id(sortie_led_rouge).set_level(0.0f);
+      - script.execute: reglages_rafraichir
+      - script.execute: enregistrement_signaler
+    on_turn_on:
+      - script.execute: reglages_rafraichir
+      - script.execute: enregistrement_signaler
 
 # En pause, LVGL ignore le toucher : reveiller au relachement du doigt empeche
 # le premier toucher d'envoyer une commande (P4).
@@ -105,39 +169,51 @@ touchscreen:
             - script.execute: veille_reveiller
 
 script:
+  # Luminosite selon la piece (D023) multipliee par « Intensite ecran » (D031),
+  # jamais sous le plancher.
+  - id: retro_cible_calculer
+    then:
+      - lambda: |-
+          float base = ${retro_jour} + id(ldr_obscurite) * (${retro_nuit} - ${retro_jour});
+          float k = id(ecran_intensite).state / 100.0f;
+          if (isnan(k)) k = ${ecran_intensite_defaut} / 100.0f;
+          float c = base * k;
+          id(retro_cible) = c < ${retro_plancher} ? ${retro_plancher} : c;
   - id: veille_reveiller
     then:
       - lvgl.resume:
       - lvgl.widget.redraw:
-      - lambda: id(retro_niveau) = ${retro_jour} + id(ldr_obscurite) * (${retro_nuit} - ${retro_jour});
+      - script.execute: retro_cible_calculer
+      - lambda: id(retro_niveau) = id(retro_cible);
       - light.turn_on:
           id: retroeclairage
           brightness: !lambda return id(retro_niveau);
           transition_length: 0s
 
 interval:
-  # Meme periode que la moyenne de la LDR. Sans mesure : piece eclairee, ecran
-  # lisible et LED visible (P2). Ecran eteint : applique au reveil.
-  - interval: 10s
+  # Meme periode que la publication de la LDR. Sans mesure : piece eclairee,
+  # ecran lisible et LED visible (P2). Ecran eteint : applique au reveil.
+  - interval: 2s
     then:
       - lambda: |-
           float v = id(ldr_tension).state;
           float t = isnan(v) ? 0.0f : (v - ${ldr_tension_jour}) / (${ldr_tension_nuit} - ${ldr_tension_jour});
           id(ldr_obscurite) = t < 0.0f ? 0.0f : (t > 1.0f ? 1.0f : t);
+      - script.execute: retro_cible_calculer
       - if:
           condition:
             and:
               - not: lvgl.is_paused
               # Ecart minimal : le signal instable de la LDR ne fait pas varier l'ecran.
-              - lambda: return fabs(${retro_jour} + id(ldr_obscurite) * (${retro_nuit} - ${retro_jour}) - id(retro_niveau)) >= ${retro_ecart_min};
+              - lambda: return fabs(id(retro_cible) - id(retro_niveau)) >= ${retro_ecart_min};
           then:
             - lambda: |-
-                id(retro_niveau) = ${retro_jour} + id(ldr_obscurite) * (${retro_nuit} - ${retro_jour});
+                id(retro_niveau) = id(retro_cible);
                 ESP_LOGD("hapanel.led", "Retroeclairage %.2f", id(retro_niveau));
             - light.turn_on:
                 id: retroeclairage
                 brightness: !lambda return id(retro_niveau);
-                transition_length: 2s
+                transition_length: 1s
   - interval: 1s
     then:
       # Retour a l'accueil (D022), avant la pause et meme sans Home Assistant.

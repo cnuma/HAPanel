@@ -1,0 +1,217 @@
+# Ecran reglages (D031) : LED et intensite de l'ecran, les memes entites que la
+# page de l'appareil dans Home Assistant (packages/led_veille.yaml). Ouvert par
+# la page Menu, sans protection ; fonctionne sans Home Assistant (P5). Un
+# reglage impose par le blueprint porte un cadenas et ne reagit pas ; le gris
+# seul se confondait avec un interrupteur eteint (retour du proprietaire,
+# 3 novembre 2026).
+lvgl:
+  pages:
+    - id: page_reglages
+      bg_color: 0x000000
+      scrollable: false
+      on_load:
+        - script.execute: reglages_rafraichir
+      widgets:
+        - label:
+            align: TOP_MID
+            y: 8
+            text_font: police_titre
+            text: "Réglages"
+        - label:
+            align: TOP_LEFT
+            x: 12
+            y: 50
+            text: "LED"
+        - label:
+            id: ico_reg_led_verrou
+            align: TOP_RIGHT
+            x: -76
+            y: 47
+            hidden: true
+            text_font: police_icones
+            text: "\U000F033E"
+        - switch:
+            id: sw_reg_led
+            align: TOP_RIGHT
+            x: -12
+            y: 44
+            width: 56
+            height: 30
+            # Arret : fond sombre borde, le bouton blanc reste lisible (le gris
+            # clair du theme l'etait peu, retour du proprietaire).
+            bg_color: 0x303030
+            bg_opa: COVER
+            border_width: 2
+            border_color: 0x9E9E9E
+            on_change:
+              - select.set_index:
+                  id: led_mode
+                  index: !lambda "return x ? 0 : 1;"
+        - label:
+            align: TOP_LEFT
+            x: 12
+            y: 88
+            text: "Intensité LED"
+        - label:
+            id: ico_reg_led_intensite_verrou
+            align: TOP_RIGHT
+            x: -66
+            y: 84
+            hidden: true
+            text_font: police_icones
+            text: "\U000F033E"
+        - label:
+            id: lbl_reg_led_intensite
+            align: TOP_RIGHT
+            x: -12
+            y: 88
+            text: ""
+        - slider:
+            id: sld_reg_led_intensite
+            align: TOP_MID
+            y: 118
+            width: 196
+            height: 10
+            min_value: 0
+            max_value: 100
+            # Valeur affichee pendant le glissement ; enregistree au relachement
+            # seulement, pour une seule ecriture en flash (G3).
+            on_value:
+              - lvgl.label.update:
+                  id: lbl_reg_led_intensite
+                  text:
+                    format: "%d %%"
+                    args: ["(int) (5 * lroundf(x / 5.0f))"]
+            on_release:
+              - number.set:
+                  id: led_intensite
+                  value: !lambda return 5 * lroundf(x / 5.0f);
+        - label:
+            align: TOP_LEFT
+            x: 12
+            y: 150
+            text: "Alerte LED"
+        - label:
+            id: ico_reg_led_alerte_verrou
+            align: TOP_RIGHT
+            x: -76
+            y: 147
+            hidden: true
+            text_font: police_icones
+            text: "\U000F033E"
+        - switch:
+            id: sw_reg_led_alerte
+            align: TOP_RIGHT
+            x: -12
+            y: 144
+            width: 56
+            height: 30
+            bg_color: 0x303030
+            bg_opa: COVER
+            border_width: 2
+            border_color: 0x9E9E9E
+            on_change:
+              - if:
+                  condition:
+                    lambda: return x;
+                  then:
+                    - switch.turn_on: led_alerte_active
+                  else:
+                    - switch.turn_off: led_alerte_active
+        - label:
+            align: TOP_LEFT
+            x: 12
+            y: 188
+            text: "Intensité écran"
+        - label:
+            id: ico_reg_ecran_intensite_verrou
+            align: TOP_RIGHT
+            x: -66
+            y: 184
+            hidden: true
+            text_font: police_icones
+            text: "\U000F033E"
+        - label:
+            id: lbl_reg_ecran_intensite
+            align: TOP_RIGHT
+            x: -12
+            y: 188
+            text: ""
+        - slider:
+            id: sld_reg_ecran_intensite
+            align: TOP_MID
+            y: 218
+            width: 196
+            height: 10
+            min_value: ${ecran_intensite_min}
+            max_value: 100
+            on_value:
+              - lvgl.label.update:
+                  id: lbl_reg_ecran_intensite
+                  text:
+                    format: "%d %%"
+                    args: ["(int) (5 * lroundf(x / 5.0f))"]
+            on_release:
+              - number.set:
+                  id: ecran_intensite
+                  value: !lambda return 5 * lroundf(x / 5.0f);
+        - obj:
+            id: obj_reg_impose
+            align: TOP_MID
+            y: 240
+            width: SIZE_CONTENT
+            height: SIZE_CONTENT
+            pad_all: 0
+            bg_opa: TRANSP
+            border_width: 0
+            hidden: true
+            widgets:
+              - label:
+                  align: LEFT_MID
+                  text_font: police_icones
+                  text_color: 0x9E9E9E
+                  text: "\U000F033E"
+              - label:
+                  align: LEFT_MID
+                  x: 30
+                  text_color: 0x9E9E9E
+                  text: "imposé par HA"
+
+script:
+  # Recopie les entites sur la page ; appele a chaque changement d'un reglage,
+  # d'ou qu'il vienne (page, HA, blueprint). Aucun evenement LVGL n'est emis :
+  # pas de boucle.
+  - id: reglages_rafraichir
+    then:
+      - lambda: |-
+          // Au demarrage, les entites publient leur valeur avant que LVGL ait
+          // cree la page.
+          if (id(sw_reg_led) == nullptr) return;
+          auto etat = [](lv_obj_t *o, lv_state_t s, bool actif) {
+            if (actif) lv_obj_add_state(o, s); else lv_obj_remove_state(o, s);
+          };
+          auto mode = id(led_mode).active_index();
+          etat(id(sw_reg_led), LV_STATE_CHECKED, !mode.has_value() || *mode == 0);
+          etat(id(sw_reg_led_alerte), LV_STATE_CHECKED, id(led_alerte_active).state);
+          float li = id(led_intensite).state;
+          if (isnan(li)) li = ${led_intensite_defaut};
+          lv_slider_set_value(id(sld_reg_led_intensite), (int32_t) lroundf(li), LV_ANIM_OFF);
+          lv_label_set_text_fmt(id(lbl_reg_led_intensite), "%d %%", (int) lroundf(li));
+          float ei = id(ecran_intensite).state;
+          if (isnan(ei)) ei = ${ecran_intensite_defaut};
+          lv_slider_set_value(id(sld_reg_ecran_intensite), (int32_t) lroundf(ei), LV_ANIM_OFF);
+          lv_label_set_text_fmt(id(lbl_reg_ecran_intensite), "%d %%", (int) lroundf(ei));
+          // Impose : cadenas visible et commande inactive.
+          auto verrou = [&](lv_obj_t *commande, lv_obj_t *icone, bool impose) {
+            etat(commande, LV_STATE_DISABLED, impose);
+            if (impose) lv_obj_remove_flag(icone, LV_OBJ_FLAG_HIDDEN);
+            else lv_obj_add_flag(icone, LV_OBJ_FLAG_HIDDEN);
+          };
+          verrou(id(sw_reg_led), id(ico_reg_led_verrou), id(reglage_impose_led_mode));
+          verrou(id(sld_reg_led_intensite), id(ico_reg_led_intensite_verrou), id(reglage_impose_led_intensite));
+          verrou(id(sw_reg_led_alerte), id(ico_reg_led_alerte_verrou), id(reglage_impose_led_alerte));
+          verrou(id(sld_reg_ecran_intensite), id(ico_reg_ecran_intensite_verrou), id(reglage_impose_ecran_intensite));
+          bool impose = id(reglage_impose_led_mode) || id(reglage_impose_led_intensite) ||
+                        id(reglage_impose_led_alerte) || id(reglage_impose_ecran_intensite);
+          if (impose) lv_obj_remove_flag(id(obj_reg_impose), LV_OBJ_FLAG_HIDDEN);
+          else lv_obj_add_flag(id(obj_reg_impose), LV_OBJ_FLAG_HIDDEN);

@@ -21,7 +21,7 @@ ajouter une valeur, changer un écran. Il décrit chaque fichier YAML bloc par b
 | liaison_ha.md | `packages/liaison_ha.yaml` | À venir |
 | led_veille.md | `packages/led_veille.yaml` | À venir |
 | message_accueil.md | `packages/message_accueil.yaml` | À venir |
-| pages/accueil.md, meteo.md, planning.md, scenarios.md, menu.md | `packages/pages/` | À venir |
+| pages/accueil.md, meteo.md, planning.md, scenarios.md, menu.md, reglages.md | `packages/pages/` | À venir |
 | Blueprints | `blueprints/automation/hapanel/` | À venir |
 | [INDEX_IDS.md](INDEX_IDS.md) | Tous les `id`, générés | Généré |
 
@@ -65,10 +65,13 @@ Pour voir la configuration une fois tous les fichiers fusionnés :
 | `btn_` | Bouton | `btn_nav_menu` |
 | `obj_` | Conteneur ou forme | `obj_nav` |
 | `ico_` | Icône (label en police d'icônes) | `ico_sce_1` |
+| `sld_` | Curseur (slider) | `sld_reg_ecran_intensite` |
+| `sw_` | Interrupteur (switch LVGL) | `sw_reg_led` |
 | `police_` | Police | `police_icones` |
 | `liaison_` | Valeur reçue de Home Assistant et son état | `liaison_chauffage_consigne` |
 | `accueil_`, `meteo_`, `planning_`, `scenarios_` | Variable ou script d'un écran | `accueil_rafraichir` |
-| `led_`, `retro_`, `veille_`, `ldr_` | LED, rétroéclairage, veille, capteur de lumière | |
+| `led_`, `retro_`, `veille_`, `ldr_`, `ecran_` | LED, rétroéclairage, veille, capteur de lumière, réglage de l'écran | |
+| `reglage_`, `reglages_` | Page Réglages et réglages imposés (D031) | `reglages_rafraichir` |
 | `message_` | Message d'accueil | `message_fermer` |
 | `banc_` | Outil du panneau de banc seulement | `banc_memoire_libre` |
 

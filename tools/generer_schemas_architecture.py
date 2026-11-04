@@ -139,11 +139,12 @@ def packages():
     s.boite(40, 345, 220, 150, "base.yaml", "nœud, Wi-Fi, API,\nOTA, journaux,\nidentité de build", GRIS)
     s.boite(40, 515, 220, 150, "hardware.yaml", "seul propriétaire\ndes broches et bus\n(G2)", GRIS)
     s.zone(300, 300, 500, 390, "Écran : pages dans l'ordre d'inclusion")
-    pages = [("accueil", 320, 350), ("météo", 560, 350), ("planning", 320, 430), ("scénarios", 560, 430), ("menu", 320, 510)]
+    pages = [("accueil", 320, 350), ("météo", 560, 350), ("planning", 320, 430), ("scénarios", 560, 430),
+             ("menu", 320, 510), ("réglages", 560, 510)]
     for t, x, y in pages:
         s.boite(x, y, 220, 65, t + ".yaml", "", ORANGE, B_ORANGE)
-    s.boite(560, 510, 220, 65, "lvgl.yaml", "", BLEU, B_BLEU)
-    s.etiquette((550, 625), "lvgl.yaml : À propos, barre de navigation, suivi de la connexion.\nL'accueil est inclus d'abord : c'est la page de démarrage.", DOUX)
+    s.boite(320, 595, 220, 65, "lvgl.yaml", "", BLEU, B_BLEU)
+    s.etiquette((670, 627), "lvgl.yaml : À propos,\nnavigation, connexion.\nAccueil inclus d'abord :\npage de démarrage.", DOUX, taille=16)
     s.zone(820, 300, 260, 390, "Services")
     s.boite(840, 345, 220, 150, "liaison_ha.yaml", "action maj_valeur,\nétat et péremption\ndes valeurs", VERT, B_VERT)
     s.boite(840, 515, 220, 150, "led_veille.yaml", "veille, retour accueil,\nLED, rétroéclairage,\nLDR", VERT, B_VERT)
@@ -163,7 +164,7 @@ def materiel():
     s.fleche([(320, 480), (400, 480)], double=True)
     s.boite(780, 120, 290, 170, "LED RVB", "active à l'état bas, PWM\nR 4, V 16, B 17", VIOLET, B_VIOLET)
     s.fleche([(700, 230), (780, 200)])
-    s.boite(780, 340, 290, 200, "LDR", "GPIO34, ADC 0 dB\n8 échantillons toutes les 2 s\nmoyenne glissante de 30,\npublie toutes les 10 s", JAUNE)
+    s.boite(780, 340, 290, 200, "LDR", "GPIO34, ADC 0 dB\n8 échantillons chaque seconde\nmoyenne glissante de 5,\npublie toutes les 2 s", JAUNE)
     s.fleche([(780, 440), (700, 440)])
     s.boite(400, 630, 300, 100, "Alimentation", "bloc 1 A recommandé (R7)", ROUGE, B_ROUGE)
     s.fleche([(550, 630), (550, 580)], B_ROUGE)
@@ -228,12 +229,12 @@ def veille():
 
 def lumiere():
     s = S(1100, 650)
-    s.boite(30, 240, 220, 130, "LDR", "tension moyenne\nsur 1 min", JAUNE)
-    s.boite(330, 240, 270, 130, "ldr_obscurite", "(V - 0,09) / (0,20 - 0,09)\nbornée de 0 à 1, 10 s\nsans mesure : 0", BLEU, B_BLEU)
+    s.boite(30, 240, 220, 130, "LDR", "tension moyenne\nsur 5 s", JAUNE)
+    s.boite(330, 240, 270, 130, "ldr_obscurite", "(V - 0,09) / (0,20 - 0,09)\nbornée de 0 à 1, 2 s\nsans mesure : 0", BLEU, B_BLEU)
     s.fleche([(250, 305), (330, 305)])
-    s.boite(690, 60, 380, 170, "Rétroéclairage", "de 1,0 à 0,40 (gamma : environ 8 %)\nchange à partir de 5 points d'écart\ntransition de 2 s\nécran éteint : appliqué au réveil", ORANGE, B_ORANGE)
+    s.boite(690, 60, 380, 170, "Rétroéclairage", "de 1,0 à 0,40 × « Intensité écran »,\njamais sous 0,30 (D031)\nà partir de 5 points d'écart, en 1 s\nécran éteint : appliqué au réveil", ORANGE, B_ORANGE)
     s.fleche([(600, 280), (690, 170)], B_ORANGE)
-    s.boite(690, 280, 380, 150, "Plafond de la LED", "de 0,25 à 0,05\nrespiration de 6 s\nplancher 20 % du plafond", VIOLET, B_VIOLET)
+    s.boite(690, 280, 380, 150, "Plafond de la LED", "de 0,25 à 0,05 × « Intensité LED »\nrespiration de 6 s\néteinte au creux", VIOLET, B_VIOLET)
     s.fleche([(600, 320), (690, 350)], B_VIOLET)
     s.boite(690, 470, 380, 130, "LED en alerte", "rouge à pleine intensité, 500 ms\nne dépend pas de la LDR", ROUGE, B_ROUGE)
     s.boite(330, 470, 270, 130, "accueil_rafraichir", "couleur du préréglage,\nalerte si valeur douteuse", GRIS)
@@ -401,7 +402,8 @@ def yaml_matrice():
     roles_fichiers = [("base", GRIS, "#607D8B"), ("hardware", GRIS, "#607D8B"),
                       ("pages/accueil", ORANGE, B_ORANGE), ("pages/meteo", ORANGE, B_ORANGE),
                       ("pages/planning", ORANGE, B_ORANGE), ("pages/scenarios", ORANGE, B_ORANGE),
-                      ("pages/menu", ORANGE, B_ORANGE), ("lvgl", BLEU, B_BLEU),
+                      ("pages/menu", ORANGE, B_ORANGE), ("pages/reglages", ORANGE, B_ORANGE),
+                      ("lvgl", BLEU, B_BLEU),
                       ("liaison_ha", VERT, B_VERT), ("led_veille", VERT, B_VERT),
                       ("message_accueil", ORANGE, B_ORANGE)]
     lignes, autres = [], []
@@ -413,7 +415,7 @@ def yaml_matrice():
         if hors:
             autres.append(f"{', '.join(hors)} ({nom})")
         lignes.append((nom, " ".join(blocs + (["autres"] if hors else [])), fond, bord))
-    s = S(1260, 900)
+    s = S(1260, 950)
     x0, y0, lc, hl = 255, 110, 76, 52
     yf = y0 + len(lignes) * hl
     xf = x0 + len(colonnes) * lc

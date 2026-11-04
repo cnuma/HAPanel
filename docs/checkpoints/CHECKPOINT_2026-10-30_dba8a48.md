@@ -15,10 +15,10 @@ Remplace `CHECKPOINT_2026-10-30_847e17c.md`.
 | Binaire sur le panneau | `hapanel_banc.yaml`, `0.2.1 (dba8a48)`, compilé le 30 octobre 2026 à 22:15, OTA chiffrée, « Boot seems successful », pas de retour arrière |
 | Version | `0.2.1` (fichier `VERSION`) |
 | ESPHome | 2026.10.1 (`requirements.txt`), ESP-IDF 5.5.6, LVGL 9.5.0, framework `esp-idf` |
-| Home Assistant | HA OS, Core 2026.9.4, sur 192.168.1.155 |
+| Home Assistant | HA OS, Core 2026.9.4, sur <IP_HA> |
 | Carte | ESP32-2432S024C, ESP32 rev 3.1, flash 4 Mo, sans PSRAM |
 | Alimentation | bloc secteur externe 1 A (le port USB du PC provoque des brownouts, R7) |
-| Module de banc | nœud `hapanel-a85bfc`, « HAPanelSejourCheminee » dans HA (nom affiché seulement), IP 192.168.1.197 le 30 octobre 2026 (DHCP, à redemander) ; OTA uniquement |
+| Module de banc | nœud `hapanel-a85bfc`, « HAPanelSejourCheminee » dans HA (nom affiché seulement), IP <IP_PANNEAU> le 30 octobre 2026 (DHCP, à redemander) ; OTA uniquement |
 
 ## Changements depuis `847e17c`
 

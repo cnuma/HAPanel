@@ -160,14 +160,19 @@ Lorsque l'utilisateur écrit exactement « checkpoint » :
 
 1. identifier branche, commit et état Git ;
 2. vérifier que la configuration validée compile et que le dépôt est propre ;
-3. créer `docs/checkpoints/CHECKPOINT_YYYY-MM-DD_<sha-court>.md`, autonome :
-   dépôt, branche, commit, version, version ESPHome, écrans et fonctions
-   validés, fichiers modifiés, invariants préservés, état compilation et
-   panneau, mémoire libre mesurée, risques et limites, procédure exacte de
-   reprise, commandes Git ;
-4. ajouter, committer et pousser ce document, puis vérifier qu'il est bien
+3. reporter d'abord dans leur fichier de référence toute information
+   réutilisable apprise depuis le dernier checkpoint (pièges : `09_PIEGES.md` ;
+   reste à faire et priorités : `docs/TODO.md` ; tests : cahier ; matériel :
+   `00_CONTEXT.md`) ;
+4. créer `docs/checkpoints/CHECKPOINT_YYYY-MM-DD_<sha-court>.md` selon le
+   modèle de `docs/checkpoints/README.md` : état variable seulement (branche,
+   commit, version, binaire, changements, mesures, mémoire), rangs suivants du
+   TODO et tests qui bloquent la prochaine fusion cités sans être recopiés ;
+   aucune adresse IP, port COM ni mot de passe (G9, G14) ;
+5. ajouter, committer et pousser ce document, puis vérifier qu'il est bien
    sur le dépôt distant avant de l'annoncer ;
-5. fournir un bloc minimal de reprise prêt à copier dans un nouveau chat.
+6. fournir un bloc minimal de reprise prêt à copier dans un nouveau chat
+   (branche et nom du checkpoint ; `docs/START_HERE.md` fait le reste).
 
 ## Procédure obligatoire avant livraison
 
@@ -187,6 +192,9 @@ Lorsque l'utilisateur écrit exactement « checkpoint » :
 9. Documenter : fichiers modifiés et volontairement non modifiés,
    compilation, mode de téléversement, tests réalisés et restant à faire,
    mémoire libre, risques.
+10. Ajouter au cahier de tests (`docs/CAHIER_DE_TESTS.md`) les tests de la
+    fonction, codés par fonction, dans le même commit ; y reporter chaque
+    retour du propriétaire dès réception (invariant G13, D032).
 
 ## Livrables
 
@@ -208,6 +216,8 @@ complets ou un package, avec l'emplacement exact de chacun dans le dépôt.
   commit que la modification ; statut (`TODO.md` « validé », `VERSION`,
   checkpoint) seulement après validation par le propriétaire, à la fusion dans
   `main` (invariant G12, D030).
+- Pas de fusion dans `main` sans que les tests bloquants du cahier soient OK ou
+  reportés avec l'accord du propriétaire (invariant G13, D032).
 - Ne jamais réécrire une branche publiée sans accord explicite du
   propriétaire ; si accordé, `git push --force-with-lease=<branche>:<sha>`.
 

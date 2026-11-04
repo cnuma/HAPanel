@@ -23,7 +23,7 @@ MDI = {
     "meteo": "\U000F0595", "planning": "\U000F00F0", "scenarios": "\U000F0D19", "menu": "\U000F035C",
     "info": "\U000F02FD", "soleil": "\U000F0599", "pluie": "\U000F0597", "nuage": "\U000F0590",
     "canape": "\U000F04B9", "depart": "\U000F0A48", "lune": "\U000F0594", "lumiere_eteinte": "\U000F0E4F",
-    "film": "\U000F0FCE", "reveil": "\U000F0020",
+    "film": "\U000F0FCE", "reveil": "\U000F0020", "reglages": "\U000F0493", "verrou": "\U000F033E",
 }
 
 
@@ -42,17 +42,20 @@ def police(taille, graisse=400):
 class Ecran:
     """Ecran de 240 x 320 du module, coordonnees en pixels du module."""
 
-    def __init__(self, barre=True):
+    def __init__(self, barre=True, maison=True, menu=True):
+        """Barre de navigation : maison masquee sur l'accueil, Menu sur le menu (D025)."""
         self.image = Image.new("RGB", (240 * S, 320 * S), "#000000")
         self.d = ImageDraw.Draw(self.image)
         self.reperes = []
         if barre:
             self.rect(0, 276, 240, 44, "#212121")
-            self.bouton(4, 280, 68, 36, BLEU)
-            self.icone("maison", 38, 298, 24)
-            self.bouton(76, 280, 160, 36, BLEU)
-            self.icone("menu", 126, 298, 24)
-            self.texte(170, 298, "Menu", BLANC, 22, 500, "mm")
+            if maison:
+                self.bouton(4, 280, 68, 36, BLEU)
+                self.icone("maison", 38, 298, 24)
+            if menu:
+                self.bouton(76, 280, 160, 36, BLEU)
+                self.icone("menu", 126, 298, 24)
+                self.texte(170, 298, "Menu", BLANC, 22, 500, "mm")
 
     def rect(self, x, y, l, h, couleur, rayon=0, bord=None, epaisseur=0):
         boite = [x * S, y * S, (x + l) * S - 1, (y + h) * S - 1]
@@ -125,7 +128,7 @@ def glissiere(e, chauffage=True):
 
 
 def accueil():
-    e = Ecran()
+    e = Ecran(maison=False)
     bandeau(e)
     e.texte(12, 32, "Séjour")
     e.texte(120, 46, "20,5 °C", BLANC, 48, 500, "ma")
@@ -142,14 +145,14 @@ def accueil():
     e.texte(200, 196, "+", BLANC, 22, 500, "mm")
     glissiere(e)
     for numero, x, y in [(1, 148, 15), (2, 226, 62), (3, 180, 110), (4, 232, 146), (5, 76, 196),
-                         (6, 120, 246), (7, 38, 276), (8, 214, 276)]:
+                         (6, 120, 246), (7, 214, 276)]:
         e.repere(numero, x, y)
     e.finir("accueil.png")
     return e
 
 
 def accueil_eteint():
-    e = Ecran()
+    e = Ecran(maison=False)
     bandeau(e)
     e.texte(12, 32, "Séjour")
     e.texte(120, 46, "20,5 °C", BLANC, 48, 500, "ma")
@@ -159,7 +162,7 @@ def accueil_eteint():
 
 
 def accueil_hs(wifi):
-    e = Ecran()
+    e = Ecran(maison=False)
     e.texte(8, 6, "dim. 1 nov.  14:32")
     for x, y, h in [(186, 18, 4), (192, 15, 7), (198, 12, 10), (204, 9, 13)]:
         e.rect(x, y, 4, h, BLANC if wifi else INACTIF)
@@ -170,14 +173,61 @@ def accueil_hs(wifi):
 
 
 def menu():
-    e = Ecran()
-    tuiles = [("maison", "Accueil", 8, 8), ("meteo", "Météo", 124, 8), ("planning", "Planning", 8, 96),
-              ("scenarios", "Scénarios", 124, 96), ("info", "À propos", 8, 184)]
+    e = Ecran(menu=False)
+    tuiles = [("meteo", "Météo", 8, 8), ("planning", "Planning", 124, 8), ("scenarios", "Scénarios", 8, 96),
+              ("reglages", "Réglages", 124, 96), ("info", "À propos", 8, 184)]
     for nom, texte, x, y in tuiles:
         e.bouton(x, y, 108, 80)
         e.icone(nom, x + 54, y + 24, 24)
         e.texte(x + 54, y + 58, texte, BLANC, 16, 400, "mm")
     e.finir("menu.png")
+
+
+def interrupteur(e, y, libelle, actif, impose):
+    """Interrupteur de packages/pages/reglages.yaml : arret sur fond sombre borde."""
+    e.texte(12, y + 6, libelle)
+    if actif:
+        e.rect(172, y, 56, 30, "#546E7A" if impose else BLEU, 15)
+    else:
+        e.rect(172, y, 56, 30, GRIS_FONCE, 15, GRIS, 2)
+    e.rect(201 if actif else 175, y + 3, 24, 24, "#BDBDBD" if impose else BLANC, 12)
+    if impose:
+        e.icone("verrou", 152, y + 15, 24, GRIS)
+
+
+def curseur(e, y, libelle, valeur, minimum, impose):
+    """Curseur par pas de 5 et valeur affichee a droite."""
+    e.texte(12, y, libelle)
+    e.texte(228, y, f"{valeur} %", BLANC, 16, 400, "ra")
+    plein = round(196 * (valeur - minimum) / (100 - minimum))
+    couleur = "#546E7A" if impose else BLEU
+    e.rect(22, y + 30, 196, 10, "#123C5E", 5)
+    e.rect(22, y + 30, max(plein, 10), 10, couleur, 5)
+    e.rect(22 + plein - 10, y + 25, 20, 20, couleur, 10)
+    if impose:
+        e.icone("verrou", 162, y + 8, 24, GRIS)
+
+
+def reglages_ecran(alerte=True, impose_alerte=False):
+    e = Ecran()
+    e.texte(120, 8, "Réglages", BLANC, 22, 500, "ma")
+    interrupteur(e, 44, "LED", True, False)
+    curseur(e, 88, "Intensité LED", 20, 0, False)
+    interrupteur(e, 144, "Alerte LED", alerte, impose_alerte)
+    curseur(e, 188, "Intensité écran", 80, 20, False)
+    if impose_alerte:
+        e.icone("verrou", 68, 252, 24, GRIS)
+        e.texte(84, 252, "imposé par HA", GRIS, 16, 400, "lm")
+    return e
+
+
+def reglages():
+    e = reglages_ecran()
+    for numero, x, y in [(1, 140, 59), (2, 140, 96), (3, 140, 159), (4, 150, 196)]:
+        e.repere(numero, x, y)
+    e.finir("reglages.png")
+    cote_a_cote([encadrer(reglages_ecran(alerte=False)), encadrer(reglages_ecran(impose_alerte=True))],
+                "reglages_etats.png", ["Alerte LED arrêtée", "Alerte LED imposée par HA"])
 
 
 def meteo():
@@ -320,6 +370,7 @@ def main():
                  encadrer(scenarios_ecran("Pas de réponse de HA", ORANGE))],
                 "scenarios_etats.png", ["Envoi", "Accepté par HA", "Sans réponse"])
     apropos()
+    reglages()
     schema_scenario()
     formulaire()
     led()

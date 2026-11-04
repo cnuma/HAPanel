@@ -20,6 +20,7 @@ packages:
   planning: !include packages/pages/planning.yaml
   scenarios: !include packages/pages/scenarios.yaml
   menu: !include packages/pages/menu.yaml
+  reglages: !include packages/pages/reglages.yaml
   lvgl: !include packages/lvgl.yaml
   liaison_ha: !include packages/liaison_ha.yaml
   led_veille: !include packages/led_veille.yaml

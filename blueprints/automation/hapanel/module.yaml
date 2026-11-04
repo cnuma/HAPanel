@@ -253,11 +253,12 @@ blueprint:
           <<: *couleur
           name: Couleur du bouton 6
     led:
-      name: LED
+      name: LED et écran
       description: >-
-        Réglages de la LED du module, aussi modifiables sur la page de l'appareil.
-        « Ne pas imposer » laisse la page de l'appareil décider ; une valeur
-        choisie ici la remplace à la connexion et toutes les 5 minutes (D027).
+        Réglages de la LED et de l'écran du module, aussi modifiables sur la page
+        de l'appareil et sur la page Réglages du module. « Ne pas imposer » les
+        laisse libres ; une valeur choisie ici les remplace à la connexion et
+        toutes les 5 minutes, et la page Réglages la montre grisée (D027, D031).
       collapsed: true
       input:
         led_mode:
@@ -318,6 +319,27 @@ blueprint:
                   value: "on"
                 - label: Désactivée
                   value: "off"
+        ecran_intensite:
+          name: Intensité écran
+          description: >-
+            Multiplie la luminosité choisie selon la lumière de la pièce ; 100 %
+            par défaut sur le module, 20 % au minimum.
+          default: ne_pas_imposer
+          selector:
+            select:
+              mode: dropdown
+              options:
+                - label: Ne pas imposer
+                  value: ne_pas_imposer
+                - { label: "20 %", value: "20" }
+                - { label: "30 %", value: "30" }
+                - { label: "40 %", value: "40" }
+                - { label: "50 %", value: "50" }
+                - { label: "60 %", value: "60" }
+                - { label: "70 %", value: "70" }
+                - { label: "80 %", value: "80" }
+                - { label: "90 %", value: "90" }
+                - { label: "100 %", value: "100" }
 
 mode: queued
 max: 20
@@ -366,6 +388,8 @@ variables:
       valeur: !input led_intensite
     - cle: led_alerte
       valeur: !input led_alerte
+    - cle: ecran_intensite
+      valeur: !input ecran_intensite
   # Action ESPHome du module : esphome.<nom du noeud>_maj_valeur.
   action_maj: "esphome.{{ device_attr(panneau, 'name') | slugify }}_maj_valeur"
 
@@ -572,19 +596,21 @@ actions:
                         data:
                           cle: "{{ repeat.item.cle }}"
                           valeur: "{{ repeat.item.valeur }}"
-      # LED : seulement les réglages imposés (D027).
+      # Réglages du module (D027, D031) : la valeur imposée, ou « libre »
+      # pour que la page Réglages sache qu'elle peut le modifier.
       - if:
           - condition: template
             value_template: "{{ trigger.id in ['periodique', 'demarrage', 'demande'] }}"
         then:
           - repeat:
-              for_each: >-
-                {{ led_reglages | rejectattr('valeur', 'eq', 'ne_pas_imposer') | list }}
+              for_each: "{{ led_reglages }}"
               sequence:
                 - action: "{{ action_maj }}"
                   data:
                     cle: "{{ repeat.item.cle }}"
-                    valeur: "{{ repeat.item.valeur }}"
+                    valeur: >-
+                      {{ 'libre' if repeat.item.valeur == 'ne_pas_imposer'
+                         else repeat.item.valeur }}
       # Météo.
       - if:
           - condition: template

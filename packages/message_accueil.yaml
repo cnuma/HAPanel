@@ -25,6 +25,9 @@ switch:
     restore_mode: RESTORE_DEFAULT_ON
     on_turn_off:
       - script.execute: message_fermer
+      - script.execute: enregistrement_signaler
+    on_turn_on:
+      - script.execute: enregistrement_signaler
 
 lvgl:
   top_layer:

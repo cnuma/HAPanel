@@ -132,6 +132,9 @@ qui cite la précédente.
 - Conséquences : une transaction I²C toutes les 50 ms, latence de toucher
   d'au plus 50 ms ; dette T1 ; à reprendre si la veille profonde devient
   nécessaire.
+- Révision du 3 novembre 2026 (retour du propriétaire : il faut laisser le doigt
+  sur l'écran, contraire aux habitudes des téléphones) : lecture toutes les
+  20 ms et bus I²C à 400 kHz (50 kHz par défaut). À valider sur le module.
 
 ## D010 — OTA authentifiée par la clé de l'API
 
@@ -383,7 +386,7 @@ qui cite la précédente.
     creux) au plafond ; un même facteur sur les trois canaux conserve les
     mélanges de D017 ;
   - plafond : 25 % pièce éclairée, 5 % pièce sombre, interpolé selon la LDR
-    (0,09 à 0,20 V, moyenne sur 1 min), multiplié par le réglage « Intensité
+    (0,09 à 0,20 V, moyenne sur 5 s depuis le 3 novembre 2026, D023), multiplié par le réglage « Intensité
     LED » (D027, 20 % par défaut : 5 % et 1 %) ; sans mesure, plafond de jour ;
   - révision du 2 novembre 2026 (retour du propriétaire : respiration trop
     haute) : le maximum devient l'ancien niveau bas (20 % de 25 % et de 5 %)
@@ -488,12 +491,18 @@ qui cite la précédente.
   choisis par l'agent, à ajuster et tester sur le module.
 - Décision :
   - la LDR donne une obscurité de 0 à 1 (0,09 à 0,20 V, D018), commune à la LED
-    et au rétroéclairage, recalculée toutes les 10 s sur la moyenne de 1 min ;
+    et au rétroéclairage, recalculée toutes les 10 s sur la moyenne de 1 min (2 s et 5 s depuis la
+    révision ci-dessous) ;
   - luminosité : 100 % pièce éclairée, 40 % pièce sombre (avant correction
     gamma), interpolée ; transition de 2 s, seulement à partir de 5 points d'écart ;
   - écran éteint : le niveau est appliqué au réveil, sans rallumer l'écran ;
   - sans mesure de la LDR : pleine luminosité, écran lisible. Aucune dépendance
     à Home Assistant.
+- Révision du 3 novembre 2026 (retour du propriétaire : l'écran baissait trop
+  lentement en éteignant une chambre) : moyenne sur 5 s publiée toutes les 2 s,
+  obscurité recalculée toutes les 2 s, transition de 1 s ; l'écart minimal de
+  5 points reste le seul rempart contre un écran qui varie sans cesse. Codé sur
+  `feature/reglages-ecran`, à valider sur le module.
 - Limite : si l'écran éclaire la LDR, baisser sa luminosité assombrit la mesure
   et accentue la baisse. Effet borné par `retro_nuit`, à vérifier au banc, comme
   la pièce sombre, jamais testée.
@@ -532,8 +541,9 @@ qui cite la précédente.
   comprennent pas un bouton qui ne réagit pas) : le bouton Accueil est masqué
   sur la page d'accueil ; seul Menu reste, à sa place.
 - Révision du 3 novembre 2026 (demande du propriétaire, même raison) : le bouton
-  Menu est masqué sur la page Menu ; seul Accueil reste, à sa place. À coder après
-  la fusion du message d'accueil.
+  Menu est masqué sur la page Menu ; seul Accueil reste, à sa place. Après essai,
+  la tuile Accueil du Menu, doublon de ce bouton, est retirée ; les cinq tuiles
+  restantes remontent. Codé sur `feature/reglages-ecran`, à valider sur le module.
 
 ## D026 — Icône et couleur des boutons de scénarios
 
@@ -645,8 +655,9 @@ qui cite la précédente.
 
 ## D031 — Réglages à l'écran du module et intensité de l'écran
 
-- Date : 3 novembre 2026 — Statut : choix du propriétaire (1A, 2A, 3A, 4A), à
-  coder après la fusion du message d'accueil (D028), puis à valider sur le module.
+- Date : 3 novembre 2026 — Statut : choix du propriétaire (1A, 2A, 3A, 4A), codé
+  sur `feature/reglages-ecran`, à valider sur le module ; plancher et bornes
+  choisis par l'agent (`retro_plancher` 0,30, intensité de 20 à 100 %).
 - Contexte : le propriétaire avait demandé de régler la LED depuis le module ;
   D027 ne l'a fait que dans HA. Nouvelle demande : la luminosité de l'écran,
   réglable des deux côtés, HA et module.
@@ -661,7 +672,88 @@ qui cite la précédente.
     blueprint « module », « Ne pas imposer » par défaut, comme D027 ;
   - un changement à l'écran met à jour l'entité dans HA, et inversement : une
     seule valeur, écrite en flash seulement si elle change (G3) ;
-  - réglage imposé par le blueprint : grisé à l'écran, avec « imposé par HA » ;
-    le blueprint indique au module quels réglages il impose.
-- Conséquences : nouvelle entité exposée, à ne plus renommer (G10) ; surface
-  inscrite au `08` ; mémoire à mesurer (G6).
+  - réglage imposé par le blueprint : cadenas devant la commande, qui ne réagit
+    pas, et cadenas suivi de « imposé par HA » en bas de la page ; le blueprint
+    envoie désormais chaque réglage, avec la valeur `libre` quand il ne l'impose
+    pas (clés `led_*` et `ecran_intensite`) ;
+  - révision après le premier essai (3 novembre 2026) : le gris seul se confondait
+    avec un interrupteur à l'arrêt, d'où le cadenas ; interrupteur à l'arrêt sur
+    fond sombre bordé, le bouton blanc sur gris clair étant peu lisible.
+
+## D032 — Cahier de tests codé par fonction (invariant G13)
+
+- Date : 4 novembre 2026 — Statut : demandé par le propriétaire (« toujours
+  générer un cahier de tests qui permet un suivi de l'avancement et de ne pas en
+  oublier, avec une codification selon les fonctions à tester »).
+- Contexte : `docs/CAHIER_DE_TESTS.md`, créé le 3 novembre 2026, a permis de
+  répondre par codes (« C1 ok, E1-E7 ok, H1-H9 ok ») et de savoir ce qui bloquait
+  la fusion ; auparavant, des tests restaient « non confirmés » dans `TODO.md`.
+- Décision : invariant G13 (`03_INVARIANTS.md`). Une partie par fonction, des codes
+  stables jamais réattribués, action, attendu et case OK / KO datée, un tableau des
+  résultats. Complément du même jour (demande du propriétaire) : une colonne
+  « Bloque la fusion de » sur chaque test, avec le nom de la branche en
+  référence, « (fusionnée) » après la fusion, « — » si le test ne bloque rien. Les tests d'une
+  fonction entrent dans le cahier dans le même commit que son code (comme G12). La
+  règle vaut pour tous les dépôts du propriétaire.
+- Conséquences : à une fusion, les tests de la fonction sont OK ou explicitement
+  reportés ; le checkpoint cite le cahier.
+
+## D033 — Checkpoints courts, TODO priorisé, aucune adresse dans le dépôt (G14, G9)
+
+- Date : 4 novembre 2026 — Statut : demandé par le propriétaire (« nouvelles règles
+  pour la rédaction des checkpoints »).
+- Contexte : chaque checkpoint recopiait l'identité du matériel, les pièges, la
+  procédure de reprise et le reste à faire ; les pièges s'y accumulaient (« pièges des
+  checkpoints précédents toujours valables ») et une information se perdait quand elle
+  n'était pas recopiée. Les adresses IP de HA et du module y figuraient.
+- Décision :
+  - invariant **G14** : informations réutilisables d'abord dans leur fichier de
+    référence ; nouveau `docs/codex/09_PIEGES.md`, qui rassemble les pièges des
+    checkpoints ; procédure de reprise dans `START_HERE.md` ; checkpoint réduit à
+    l'état variable, selon le modèle de `docs/checkpoints/README.md` ;
+  - `docs/TODO.md` toujours utilisé, avec une colonne **Prio** qui ordonne les
+    développements selon leurs dépendances (fusionner avant d'ouvrir un chantier,
+    décider avant de coder, matériel avant code) ; les tests n'y figurent plus, ils
+    sont dans le cahier (G13) ;
+  - **G9** étendu : ni adresse IP, ni port COM, ni mot de passe, ni nom de réseau dans
+    un fichier du dépôt ; adresses retirées des checkpoints existants.
+  Les règles valent pour tous les dépôts du propriétaire.
+- Limite : les adresses restent dans l'historique Git des commits passés. Ce sont des
+  adresses de réseau local, non joignables depuis Internet ; réécrire l'historique de
+  `main` demanderait l'accord du propriétaire et casserait les SHA cités partout.
+- Conséquences : aucune sur le firmware ; méthode de travail seulement.
+
+## D034 — Réglages écrits en flash sous 5 s
+
+- Date : 4 novembre 2026 — Statut : corrige le test C2 (KO : « le module ne garde
+  pas les paramètres LED et écran » après redémarrage) ; à valider sur le module.
+- Contexte : les réglages de D027 et D031 sont gardés en flash (`restore_value`),
+  mais ESPHome n'écrit la flash qu'à l'intervalle `flash_write_interval`, 60 s par
+  défaut. Le module n'a pas de bouton Redémarrer : un redémarrage est une coupure
+  d'alimentation, qui perd tout réglage changé depuis moins de 60 s.
+- Décision : `preferences: flash_write_interval: 5s` (`packages/base.yaml`).
+- G3 respecté : ESPHome n'écrit que les valeurs changées (comparaison avec la
+  flash) ; seules les entités réglées par l'utilisateur sont gardées (le
+  rétroéclairage, `ALWAYS_ON`, n'écrit rien) ; un curseur déplacé donne au plus une
+  écriture toutes les 5 s.
+- Limite : une coupure moins de 5 s après le réglage le perd encore ; D035 le montre
+  à l'écran.
+
+## D035 — Icône d'enregistrement des réglages
+
+- Date : 4 novembre 2026 — Statut : demandé par le propriétaire (« une petite icône
+  juste au-dessus à droite du bouton menu qui s'affiche un temps bref pour confirmer
+  l'enregistrement ») ; à valider sur le module.
+- Décision :
+  - disquette (`mdi:content-save`) au-dessus du bouton Menu, à droite, dans la couche
+    commune à toutes les pages (`top_layer`, `packages/lvgl.yaml`) ;
+  - script `enregistrement_signaler`, appelé à chaque changement d'un réglage gardé
+    en flash (« LED », « Intensité LED », « Intensité écran », « Alerte LED »,
+    « Message d'accueil »), d'où qu'il vienne : disquette grise, écriture forcée
+    (`global_preferences->sync()`) 5 s après le dernier changement, disquette verte
+    2 s, puis masquée. L'icône montre donc l'écriture réelle, pas une estimation ;
+  - rien au démarrage, quand les entités relisent leur valeur en flash.
+- Écartée : un message texte entre les pages et la barre du bas. La page Réglages
+  occupe déjà cette bande (« imposé par HA »).
+- G3 : au plus une écriture toutes les 5 s pendant une série de gestes, et seulement
+  des valeurs changées ; `flash_write_interval: 5s` (D034) reste en secours.

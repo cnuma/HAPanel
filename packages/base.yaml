@@ -45,6 +45,12 @@ ota:
 logger:
   level: ${log_level}
 
+# Reglages gardes en flash (D027, D031) : ESPHome ne les ecrit qu'a cet
+# intervalle (60 s par defaut) ; une coupure avant les perdait (C2, D034).
+# Seules les valeurs changees sont ecrites (G3).
+preferences:
+  flash_write_interval: 5s
+
 sensor:
   - platform: wifi_signal
     id: signal_wifi
