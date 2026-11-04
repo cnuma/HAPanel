@@ -132,17 +132,21 @@ lvgl:
           text_font: police_texte
           bg_color: 0x212121
           scrollable: false
+          # Laisse le toucher du bouton Menu deborder sous la barre.
+          overflow_visible: true
           widgets:
-            # Accueil seulement (on_load de page_accueil), mise a jour par
-            # accueil_heure.
             # Masque sur la page Menu, ou il ne ferait rien (D025). Sans fond :
-            # seule l'icone, grisee pendant l'appui.
+            # seule l'icone, grisee pendant l'appui. Toute la hauteur de la barre,
+            # et 6 px de plus autour pour le toucher : petit, il etait difficile
+            # a attraper (retour du proprietaire, 4 novembre 2026). Sous lui,
+            # aucune page n'a d'element touchable.
             - button:
                 id: btn_nav_menu
                 align: LEFT_MID
-                x: 2
-                width: 40
-                height: 32
+                width: 48
+                height: 34
+                ext_click_area: 6
+                radius: 0
                 bg_opa: TRANSP
                 shadow_width: 0
                 pressed:
@@ -157,17 +161,19 @@ lvgl:
                   - lvgl.page.show:
                       id: page_menu
                       animation: NONE
+            # Accueil seulement (on_load de page_accueil), mise a jour par
+            # accueil_heure.
             - label:
                 id: lbl_barre_date
                 align: TOP_LEFT
-                x: 48
+                x: 52
                 y: 9
                 text: "--:--"
             # Autres pages : titre ecrit par leur on_load.
             - label:
                 id: lbl_barre_titre
                 align: TOP_LEFT
-                x: 48
+                x: 52
                 y: 9
                 hidden: true
                 text: ""

@@ -52,7 +52,7 @@ class Ecran:
         self.rect(0, 0, 240, 36, "#212121")
         if menu:
             self.icone("menu", 22, 18, 24)
-        self.texte(48, 9, titre if titre else "1 nov.  14:32")
+        self.texte(52, 9, titre if titre else "1 nov.  14:32")
         if disquette:
             self.icone("disquette", 172, 18, 24, disquette)
         for i, (x, y, h) in enumerate([(192, 21, 4), (198, 18, 7), (204, 15, 10), (210, 12, 13)]):

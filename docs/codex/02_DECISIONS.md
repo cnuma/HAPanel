@@ -776,7 +776,7 @@ qui cite la précédente.
   disquette (D035) passait par-dessus le contenu quand on changeait vite de page.
 - Décision :
   - barre de 36 px en haut de toutes les pages (`top_layer`, `packages/lvgl.yaml`) :
-    à gauche le bouton Menu ☰ (40 × 32 px, sans fond, masqué sur le Menu), puis le
+    à gauche le bouton Menu ☰ (sans fond, masqué sur le Menu ; zone tactile de 48 × 34 px plus 6 px autour, jugée trop petite à 40 × 32), puis le
     titre de la page (écrit par son `on_load`), ou la date et l'heure sur l'accueil ;
     à droite la disquette, le Wi-Fi et le point de connexion à HA (P2 sur toutes les
     pages, plus seulement l'accueil). Après essai, le ☰ passe de droite à gauche et
