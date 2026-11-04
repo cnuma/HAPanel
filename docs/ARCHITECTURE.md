@@ -55,17 +55,17 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `hapanel.yaml` | 28 | Production : inclusions et substitutions seulement |
 | `hapanel_banc.yaml` | 33 | Banc : production, plus mémoire mesurée, journaux DEBUG et dossier de compilation propre |
 | `packages/base.yaml` | 67 | Nœud, ESP32, Wi-Fi, API, OTA, journaux, écriture des réglages, identité de build |
-| `packages/hardware.yaml` | 114 | Broches, bus, écran, tactile, sorties PWM, LDR (G2) |
-| `packages/lvgl.yaml` | 223 | Polices communes, À propos, barre de navigation, icône d'enregistrement (D035), suivi de la connexion |
+| `packages/hardware.yaml` | 116 | Broches, bus, écran, tactile, sorties PWM, LDR (G2) |
+| `packages/lvgl.yaml` | 324 | Polices communes, À propos, barre d'état en haut (titre, disquette, Wi-Fi, HA, ☰, D036) et bouton Accueil en bas, suivi de la connexion |
 | `packages/liaison_ha.yaml` | 489 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
 | `packages/led_veille.yaml` | 286 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
 | `packages/message_accueil.yaml` | 160 | Action `message_accueil`, message plein écran, entité « Message d'accueil » |
-| `packages/pages/accueil.yaml` | 824 | Température, chauffage, commandes, couleur de la LED |
-| `packages/pages/meteo.yaml` | 195 | Conditions et prévisions |
-| `packages/pages/planning.yaml` | 373 | Résumé et frises |
-| `packages/pages/scenarios.yaml` | 366 | Boutons et lancement |
-| `packages/pages/menu.yaml` | 123 | Tuiles de navigation |
-| `packages/pages/reglages.yaml` | 217 | Réglages de la LED et de l'écran, synchronisés avec HA, cadenas si imposés (D031) |
+| `packages/pages/accueil.yaml` | 764 | Température, chauffage, commandes, couleur de la LED |
+| `packages/pages/meteo.yaml` | 194 | Conditions et prévisions |
+| `packages/pages/planning.yaml` | 378 | Résumé et frises |
+| `packages/pages/scenarios.yaml` | 365 | Boutons et lancement |
+| `packages/pages/menu.yaml` | 126 | Tuiles de navigation |
+| `packages/pages/reglages.yaml` | 216 | Réglages de la LED et de l'écran, synchronisés avec HA, cadenas si imposés (D031) |
 | `secrets.yaml` | | Wi-Fi et clé d'API, hors de Git (G9) |
 
 **Pour lire le projet :** `hapanel.yaml`, puis `liaison_ha.yaml`, puis `scenarios.yaml`, qui est la
@@ -142,7 +142,7 @@ indépendants des valeurs font exception, comme l'heure, le Wi-Fi ou la page À 
 | `substitutions` | Constante remplacée à la compilation | `pin_ldr`, `veille_delai_ms` |
 | `globals` | Variable C++ partagée entre packages | `liaison_chauffage_etat` |
 | `lvgl.pages` | Widgets d'un écran | `page_meteo` |
-| `lvgl.top_layer` | Widgets au-dessus de toutes les pages | Barre de navigation |
+| `lvgl.top_layer` | Widgets au-dessus de toutes les pages | Barre d'état, bouton Accueil |
 | `api.actions` | Fonction appelable par HA | `maj_valeur` |
 | `script` | Fonction interne, avec paramètres possibles | `scenarios_lancer(indice)` |
 | `mode: restart` | Un nouvel appel annule le précédent | Attente de 2 s de la consigne |
@@ -193,7 +193,7 @@ toutes les 2 s.
 | Nouvelle clé reçue de HA | `liaison_ha.yaml` et le blueprint |
 | Nouvelle commande | Script de la page et blueprint |
 | Délai réglable | `substitutions` du fichier concerné |
-| Barre de navigation | `top_layer` de `lvgl.yaml` |
+| Barre d'état et bouton Accueil | `top_layer` de `lvgl.yaml` |
 | Nouvelle page | Voir [Navigation et interface](#navigation-et-interface) |
 
 Le second blueprint, `envoyer_valeur.yaml`, reste un outil générique : `module.yaml` ne s'en sert pas.
@@ -519,12 +519,15 @@ l'action, pas qu'elle a abouti (D024).
 
 ![Navigation](images/architecture/11_navigation.png)
 
-La barre est dans le `top_layer` de LVGL, donc commune à toutes les pages (D025). Une page
-visible ou non reçoit ses mises à jour de la même façon : les widgets vivent en mémoire pour
-toute la durée d'exécution.
+Les deux barres sont dans le `top_layer` de LVGL, donc communes à toutes les pages (D025,
+D036) : en haut la barre d'état (titre, disquette, Wi-Fi, point HA, bouton Menu ☰), en bas
+le bouton Accueil, masqué avec sa barre sur l'accueil. Une page visible ou non reçoit ses
+mises à jour de la même façon : les widgets vivent en mémoire pour toute la durée
+d'exécution.
 
-**Ajouter une page :** créer `packages/pages/<page>.yaml`, l'inclure dans `hapanel.yaml`, ajouter
-sa tuile dans `menu.yaml`, puis, si elle reçoit des valeurs, ajouter un préfixe dans `liaison_ha.yaml`
+**Ajouter une page :** créer `packages/pages/<page>.yaml`, l'inclure dans `hapanel.yaml`, écrire
+son titre dans `lbl_barre_titre` par son `on_load` et placer son contenu entre y = 38 et
+y = 274, ajouter sa tuile dans `menu.yaml`, puis, si elle reçoit des valeurs, ajouter un préfixe dans `liaison_ha.yaml`
 et un envoi dans le blueprint. Mesurer ensuite la mémoire (G6).
 
 ## Veille et retour à l'accueil
@@ -561,7 +564,7 @@ commande.
 
 **Message d'accueil (D028) :** le blueprint de la maison `message_accueil.yaml` choisit le
 texte et la ligne de météo, puis appelle `message_accueil` sur chaque panneau dont l'entité
-« Message d'accueil » est activée. Le module l'affiche par-dessus la barre de navigation,
+« Message d'accueil » est activée. Le module l'affiche par-dessus les deux barres,
 garde l'écran allumé, passe la LED en arc-en-ciel (l'alerte reste prioritaire) et ferme le
 message au toucher, après 3 minutes ou à la déconnexion de HA (P2).
 

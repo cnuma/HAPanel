@@ -545,6 +545,9 @@ qui cite la précédente.
   la tuile Accueil du Menu, doublon de ce bouton, est retirée ; les cinq tuiles
   restantes remontent. Validée par le propriétaire (cahier H2, H3) et fusionnée le
   4 novembre 2026.
+- Révision du 4 novembre 2026 (D036) : le bouton Menu passe dans la barre d'état en
+  haut (☰) ; le bouton Accueil est centré en bas, et l'accueil n'a plus de barre du
+  bas.
 
 ## D026 — Icône et couleur des boutons de scénarios
 
@@ -759,3 +762,36 @@ qui cite la précédente.
   occupe déjà cette bande (« imposé par HA »).
 - G3 : au plus une écriture toutes les 5 s pendant une série de gestes, et seulement
   des valeurs changées ; `flash_write_interval: 5s` (D034) reste en secours.
+- Révision du 4 novembre 2026 (D036) : la disquette passe dans la barre d'état ; elle
+  ne passe plus par-dessus le contenu des pages.
+
+## D036 — Barre d'état commune et navigation en haut
+
+- Date : 4 novembre 2026 — Statut : proposé par le propriétaire (« une barre du haut
+  comme sur un portable » ; « le burger de menu en haut dans la barre » ; « le home au
+  milieu en bas ») ; choix A aux questions de HAP-R087 et HAP-R090 ; à valider sur le
+  module.
+- Contexte : seul l'accueil avait un bandeau (date, Wi-Fi, connexion) ; les autres
+  pages avaient chacune leur titre, à des places différentes, et le Menu aucun. La
+  disquette (D035) passait par-dessus le contenu quand on changeait vite de page.
+- Décision :
+  - barre de 36 px en haut de toutes les pages (`top_layer`, `packages/lvgl.yaml`) :
+    à gauche le bouton Menu ☰ (sans fond, masqué sur le Menu ; zone tactile de 48 × 34 px plus 6 px autour, jugée trop petite à 40 × 32), puis le
+    titre de la page (écrit par son `on_load`), ou la date et l'heure sur l'accueil ;
+    à droite la disquette, le Wi-Fi et le point de connexion à HA (P2 sur toutes les
+    pages, plus seulement l'accueil). Après essai, le ☰ passe de droite à gauche et
+    perd son fond bleu, jugé disgracieux (retour du propriétaire) ;
+  - barre du bas réduite au bouton Accueil, centré, 68 px ; masquée sur l'accueil,
+    qui gagne 44 px ;
+  - contenus des pages sous la barre (y ≥ 38) : titres retirés, tuiles du Menu et
+    boutons des Scénarios un peu moins hauts, Météo resserrée ;
+  - date de l'accueil sans le jour de la semaine (« 4 nov.  17:20 ») : avec, elle
+    atteindrait 139 px et toucherait la disquette.
+- Conséquences : identifiants internes renommés (`obj_barre_*`, `lbl_barre_date`,
+  `ico_barre_enregistrement`) ; aucune entité de HA touchée (G10).
+- Bords de l'écran : les 2 rangées de pixels du haut et du bas restent noires (barre
+  à y = 2, barre du bas à 2 px du bord). Allumée, la dernière rangée réapparaissait
+  par instants sur la première (ligne claire au redessin complet, point dans l'axe
+  du bouton maison) ; diagnostic du 4 novembre 2026, idée du propriétaire (I11).
+- Limite : sur un panneau mural, le ☰ en haut est un peu moins accessible qu'en bas
+  (enfants) ; le Menu sert moins souvent que l'accueil.

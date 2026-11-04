@@ -119,7 +119,7 @@ sont dans `led_veille.yaml`, qui interprète la mesure.
 | `ecran` | `platform` | `mipi_spi` | Pilote générique des écrans SPI d'ESPHome. |
 | | `model` | `${display_model}` | Réglages propres à l'ILI9341. |
 | | `spi_id` | `bus_spi_ecran` | Bus utilisé. |
-| | `data_rate` | `40MHz` | Vitesse du bus : plus rapide, l'écran se redessine plus vite. |
+| | `data_rate` | `40MHz` | Vitesse du bus : plus rapide, l'écran se redessine plus vite. Un essai à 20 MHz (cahier I11) a rendu la ligne parasite du haut plus fréquente. |
 | | `cs_pin`, `dc_pin` | `ignore_strapping_warning: true` | GPIO15 et GPIO2 sont aussi des broches de démarrage : même raison que pour `miso_pin`. |
 
 L'écran n'a ni `lambda` ni `pages` : c'est LVGL (`lvgl.yaml`) qui dessine dessus.
@@ -161,6 +161,13 @@ effet pour un panneau alimenté en permanence. Cette dette est notée T1.
   `retroeclairage` : sa transition et son état (allumé ou éteint, utilisé par la veille)
   deviendraient faux.
 - Monter `data_rate` au-delà de 40 MHz peut donner un écran brouillé.
+- **Bords de la dalle (constaté le 4 novembre 2026, I11) :** ne rien allumer sur les
+  2 premières ni les 2 dernières rangées de pixels (y = 0, 1, 318, 319). La dernière
+  rangée allumée réapparaît par instants sur la première : ligne claire fugace au
+  redessin complet, point qui clignote dans l'axe d'un bouton du bas. Ce n'est pas la
+  liaison (à 20 MHz, c'est pire) ni LVGL (aucun envoi à l'écran immobile). Toute barre
+  ou tout élément collé à un bord en tient compte (D036). Vraisemblable sur d'autres
+  dalles du même type : à vérifier sur toute nouvelle carte.
 
 **Contrôle après modification :** `.\tools\build.ps1 config`, puis `compile`, puis au
 banc : affichage, toucher aux quatre coins, couleur de la LED et ligne `LDR … V` des

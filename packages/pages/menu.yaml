@@ -1,4 +1,4 @@
-# Ecran menu (D025) : acces a toutes les pages depuis la barre de navigation.
+# Ecran menu (D025) : acces a toutes les pages par le bouton Menu de la barre d'etat (D036).
 # Fonctionne sans Home Assistant (P5).
 lvgl:
   pages:
@@ -8,6 +8,9 @@ lvgl:
       # Pas de tuile Accueil, doublon du bouton de la barre.
       on_load:
         - lvgl.widget.hide: btn_nav_menu
+        - lvgl.label.update:
+            id: lbl_barre_titre
+            text: "Menu"
       on_unload:
         - lvgl.widget.show: btn_nav_menu
       widgets:
@@ -15,9 +18,9 @@ lvgl:
             id: btn_men_meteo
             align: TOP_LEFT
             x: 8
-            y: 8
+            y: 40
             width: 108
-            height: 80
+            height: 72
             pad_all: 4
             widgets:
               - label:
@@ -37,9 +40,9 @@ lvgl:
             id: btn_men_planning
             align: TOP_LEFT
             x: 124
-            y: 8
+            y: 40
             width: 108
-            height: 80
+            height: 72
             pad_all: 4
             widgets:
               - label:
@@ -59,9 +62,9 @@ lvgl:
             id: btn_men_scenarios
             align: TOP_LEFT
             x: 8
-            y: 96
+            y: 118
             width: 108
-            height: 80
+            height: 72
             pad_all: 4
             widgets:
               - label:
@@ -81,9 +84,9 @@ lvgl:
             id: btn_men_apropos
             align: TOP_LEFT
             x: 8
-            y: 184
+            y: 196
             width: 108
-            height: 80
+            height: 72
             pad_all: 4
             widgets:
               - label:
@@ -103,9 +106,9 @@ lvgl:
             id: btn_men_reglages
             align: TOP_LEFT
             x: 124
-            y: 96
+            y: 118
             width: 108
-            height: 80
+            height: 72
             pad_all: 4
             widgets:
               - label:

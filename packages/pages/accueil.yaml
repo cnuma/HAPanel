@@ -95,81 +95,21 @@ lvgl:
   pages:
     - id: page_accueil
       bg_color: 0x000000
-      # Bouton Accueil masque sur l'accueil, ou il ne fait rien (D025, retour
-      # du proprietaire du 2 novembre 2026).
+      # Pas de barre du bas : son bouton Accueil ne ferait rien (D025, D036).
+      # Barre d'etat : date et heure a la place du titre.
       on_load:
-        - lvgl.widget.hide: btn_nav_accueil
+        - lvgl.widget.hide: [obj_nav, lbl_barre_titre]
+        - lvgl.widget.show: lbl_barre_date
       on_unload:
-        - lvgl.widget.show: btn_nav_accueil
+        - lvgl.widget.show: [obj_nav, lbl_barre_titre]
+        - lvgl.widget.hide: lbl_barre_date
       widgets:
-        # Bandeau
-        - label:
-            id: lbl_acc_date
-            align: TOP_LEFT
-            x: 8
-            y: 6
-            text: "--:--"
-        - obj:
-            id: obj_acc_wifi_1
-            align: TOP_LEFT
-            x: 186
-            y: 18
-            width: 4
-            height: 4
-            radius: 0
-            border_width: 0
-            pad_all: 0
-            bg_color: 0x424242
-        - obj:
-            id: obj_acc_wifi_2
-            align: TOP_LEFT
-            x: 192
-            y: 15
-            width: 4
-            height: 7
-            radius: 0
-            border_width: 0
-            pad_all: 0
-            bg_color: 0x424242
-        - obj:
-            id: obj_acc_wifi_3
-            align: TOP_LEFT
-            x: 198
-            y: 12
-            width: 4
-            height: 10
-            radius: 0
-            border_width: 0
-            pad_all: 0
-            bg_color: 0x424242
-        - obj:
-            id: obj_acc_wifi_4
-            align: TOP_LEFT
-            x: 204
-            y: 9
-            width: 4
-            height: 13
-            radius: 0
-            border_width: 0
-            pad_all: 0
-            bg_color: 0x424242
-        - obj:
-            id: obj_acc_point_ha
-            align: TOP_LEFT
-            x: 218
-            y: 9
-            width: 13
-            height: 13
-            radius: 7
-            border_width: 0
-            pad_all: 0
-            bg_color: 0xF44336
         # Temperature du sejour
         - label:
             id: lbl_acc_sejour
             align: TOP_LEFT
             x: 12
-            y: 32
+            y: 40
             text: "Séjour"
         # Largeur fixe : alignee a droite avec une largeur au contenu, le
         # label cree vide s'elargissait hors de l'ecran (P3).
@@ -177,7 +117,7 @@ lvgl:
             id: lbl_acc_temperature_etat
             align: TOP_RIGHT
             x: -12
-            y: 32
+            y: 40
             width: 120
             text_align: RIGHT
             text_color: 0xFF9800
@@ -185,7 +125,7 @@ lvgl:
         - label:
             id: lbl_acc_temperature
             align: TOP_MID
-            y: 46
+            y: 54
             text_font: police_grande
             text: "--,- °C"
         # Temperature exterieure (D016), remplacee par la ligne du chauffage
@@ -194,7 +134,7 @@ lvgl:
             id: lbl_acc_exterieur
             align: TOP_LEFT
             x: 12
-            y: 102
+            y: 110
             hidden: true
             text: ""
         # Chauffage
@@ -202,7 +142,7 @@ lvgl:
             id: lbl_acc_chauffage
             align: TOP_LEFT
             x: 12
-            y: 102
+            y: 110
             text_color: 0xFF9800
             text: "Chauffage : non reçu"
         # Prereglages (D014) : Manuel, Hors-gel, Eco, Confort, Boost ; le
@@ -211,7 +151,7 @@ lvgl:
             id: btn_acc_pre_none
             align: TOP_LEFT
             x: 12
-            y: 126
+            y: 134
             width: 40
             height: 40
             pad_all: 0
@@ -233,7 +173,7 @@ lvgl:
             id: btn_acc_pre_frost
             align: TOP_LEFT
             x: 56
-            y: 126
+            y: 134
             width: 40
             height: 40
             pad_all: 0
@@ -255,7 +195,7 @@ lvgl:
             id: btn_acc_pre_eco
             align: TOP_LEFT
             x: 100
-            y: 126
+            y: 134
             width: 40
             height: 40
             pad_all: 0
@@ -277,7 +217,7 @@ lvgl:
             id: btn_acc_pre_comfort
             align: TOP_LEFT
             x: 144
-            y: 126
+            y: 134
             width: 40
             height: 40
             pad_all: 0
@@ -299,7 +239,7 @@ lvgl:
             id: btn_acc_pre_boost
             align: TOP_LEFT
             x: 188
-            y: 126
+            y: 134
             width: 40
             height: 40
             pad_all: 0
@@ -321,7 +261,7 @@ lvgl:
             id: btn_acc_moins
             align: TOP_LEFT
             x: 12
-            y: 174
+            y: 182
             width: 56
             height: 44
             bg_color: 0x1E88E5
@@ -339,14 +279,14 @@ lvgl:
         - label:
             id: lbl_acc_consigne
             align: TOP_MID
-            y: 184
+            y: 192
             text_font: police_titre
             text: "--,- °C"
         - button:
             id: btn_acc_plus
             align: TOP_LEFT
             x: 172
-            y: 174
+            y: 182
             width: 56
             height: 44
             bg_color: 0xE53935
@@ -368,7 +308,7 @@ lvgl:
         - obj:
             id: obj_acc_glissiere
             align: TOP_MID
-            y: 226
+            y: 234
             width: 216
             height: 40
             radius: 20
@@ -447,7 +387,7 @@ lvgl:
         - label:
             id: lbl_acc_hs_icone
             align: TOP_MID
-            y: 118
+            y: 126
             width: 60
             text_align: CENTER
             text_font: police_icones
@@ -457,7 +397,7 @@ lvgl:
         - label:
             id: lbl_acc_hs_message
             align: TOP_MID
-            y: 150
+            y: 158
             width: 216
             long_mode: WRAP
             text_align: CENTER
@@ -478,7 +418,7 @@ script:
             id(accueil_mode_cible) = -1;
             id(accueil_prereglage_cible) = -1;
           }
-          lv_obj_set_style_bg_color(id(obj_acc_point_ha), lv_color_hex(ha ? 0x4CAF50 : 0xF44336), 0);
+          lv_obj_set_style_bg_color(id(obj_barre_point_ha), lv_color_hex(ha ? 0x4CAF50 : 0xF44336), 0);
 
           char texte[40];
           int et = id(liaison_temperature_etat);
@@ -794,21 +734,21 @@ script:
                   - script.execute: accueil_rafraichir
 
   # Heure de Home Assistant, en francais, 24 h ; --:-- avant synchronisation.
+  # Sans le jour de la semaine : la place manque dans la barre d'etat (D036).
   - id: accueil_heure
     then:
       - lambda: |-
           auto t = id(heure_ha).now();
           if (!t.is_valid()) {
-            lv_label_set_text(id(lbl_acc_date), "--:--");
+            lv_label_set_text(id(lbl_barre_date), "--:--");
             return;
           }
-          static const char *const jours[] = {"dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."};
           static const char *const mois[] = {"janv.", "févr.", "mars", "avr.", "mai", "juin",
                                              "juil.", "août", "sept.", "oct.", "nov.", "déc."};
           char texte[32];
-          snprintf(texte, sizeof(texte), "%s %d %s  %02d:%02d", jours[t.day_of_week - 1],
+          snprintf(texte, sizeof(texte), "%d %s  %02d:%02d",
                    t.day_of_month, mois[t.month - 1], t.hour, t.minute);
-          lv_label_set_text(id(lbl_acc_date), texte);
+          lv_label_set_text(id(lbl_barre_date), texte);
 
   # Barres Wi-Fi : 4 au-dessus de -55 dBm, aucune sans Wi-Fi.
   - id: accueil_wifi
@@ -818,7 +758,7 @@ script:
           float r = id(signal_wifi).state;
           if (wifi::global_wifi_component->is_connected() && !isnan(r))
             n = r > -55 ? 4 : r > -65 ? 3 : r > -75 ? 2 : r > -85 ? 1 : 0;
-          lv_obj_t *barres[] = {id(obj_acc_wifi_1), id(obj_acc_wifi_2),
-                                id(obj_acc_wifi_3), id(obj_acc_wifi_4)};
+          lv_obj_t *barres[] = {id(obj_barre_wifi_1), id(obj_barre_wifi_2),
+                                id(obj_barre_wifi_3), id(obj_barre_wifi_4)};
           for (int i = 0; i < 4; i++)
             lv_obj_set_style_bg_color(barres[i], lv_color_hex(i < n ? 0xFFFFFF : 0x424242), 0);

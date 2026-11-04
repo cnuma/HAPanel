@@ -46,18 +46,17 @@ lvgl:
   pages:
     - id: page_scenarios
       bg_color: 0x000000
-      widgets:
-        - label:
-            id: lbl_sce_titre
-            align: TOP_LEFT
-            x: 12
-            y: 6
+      # Titre dans la barre d'etat (D036) ; contenu sous la barre (y >= 38).
+      on_load:
+        - lvgl.label.update:
+            id: lbl_barre_titre
             text: "Scénarios"
+      widgets:
         - label:
             id: lbl_sce_etat
             align: TOP_LEFT
             x: 12
-            y: 28
+            y: 38
             width: 216
             long_mode: DOT
             text_color: 0xFF9800
@@ -67,9 +66,9 @@ lvgl:
             id: btn_sce_1
             align: TOP_LEFT
             x: 8
-            y: 52
+            y: 60
             width: 108
-            height: 68
+            height: 66
             pad_all: 4
             hidden: true
             layout:
@@ -97,9 +96,9 @@ lvgl:
             id: btn_sce_2
             align: TOP_LEFT
             x: 124
-            y: 52
+            y: 60
             width: 108
-            height: 68
+            height: 66
             pad_all: 4
             hidden: true
             layout:
@@ -127,9 +126,9 @@ lvgl:
             id: btn_sce_3
             align: TOP_LEFT
             x: 8
-            y: 126
+            y: 132
             width: 108
-            height: 68
+            height: 66
             pad_all: 4
             hidden: true
             layout:
@@ -157,9 +156,9 @@ lvgl:
             id: btn_sce_4
             align: TOP_LEFT
             x: 124
-            y: 126
+            y: 132
             width: 108
-            height: 68
+            height: 66
             pad_all: 4
             hidden: true
             layout:
@@ -187,9 +186,9 @@ lvgl:
             id: btn_sce_5
             align: TOP_LEFT
             x: 8
-            y: 200
+            y: 204
             width: 108
-            height: 68
+            height: 66
             pad_all: 4
             hidden: true
             layout:
@@ -217,9 +216,9 @@ lvgl:
             id: btn_sce_6
             align: TOP_LEFT
             x: 124
-            y: 200
+            y: 204
             width: 108
-            height: 68
+            height: 66
             pad_all: 4
             hidden: true
             layout:

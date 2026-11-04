@@ -94,6 +94,8 @@ display:
     id: ecran
     model: ${display_model}
     spi_id: bus_spi_ecran
+    # Essai a 20 MHz le 4 novembre 2026 : la ligne parasite du haut de l'ecran
+    # (cahier I11) est bien plus frequente ; retour a 40 MHz.
     data_rate: 40MHz
     cs_pin:
       number: ${pin_ecran_cs}

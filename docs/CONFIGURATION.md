@@ -53,6 +53,11 @@ https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/module.
 
 Pour une mise à jour : menu **⋮** du blueprint, puis **Réimporter le blueprint**.
 
+Blueprint importé depuis une branche pour des tests (lien contenant `feature/…`) :
+après la fusion, l'importer de nouveau avec le lien ci-dessus, en acceptant de
+remplacer l'existant, puis rouvrir l'automatisation du module et l'enregistrer.
+« Réimporter » reprendrait la branche, qui ne sera plus mise à jour.
+
 ## 3. Créer l'automatisation du module
 
 Créez une automatisation depuis **HAPanel — module**, une seule par module. Deux

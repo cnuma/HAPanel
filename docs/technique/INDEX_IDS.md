@@ -13,15 +13,15 @@ Relancer le script après toute modification du YAML.
 | `accueil_glisse_actif` | globals | packages/pages/accueil.yaml | — |
 | `accueil_glisse_depart` | globals | packages/pages/accueil.yaml | — |
 | `accueil_glisse_x0` | globals | packages/pages/accueil.yaml | — |
-| `accueil_heure` | script | packages/pages/accueil.yaml | — |
+| `accueil_heure` | script | packages/pages/accueil.yaml | packages/lvgl.yaml |
 | `accueil_mode_cible` | globals | packages/pages/accueil.yaml | — |
 | `accueil_mode_permis` | globals | packages/pages/accueil.yaml | — |
 | `accueil_prereglage_actuel` | globals | packages/pages/accueil.yaml | — |
 | `accueil_prereglage_cible` | globals | packages/pages/accueil.yaml | — |
 | `accueil_prereglage_permis` | globals | packages/pages/accueil.yaml | — |
-| `accueil_rafraichir` | script | packages/pages/accueil.yaml | packages/led_veille.yaml, packages/liaison_ha.yaml |
+| `accueil_rafraichir` | script | packages/pages/accueil.yaml | packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml |
 | `accueil_regler_consigne` | script | packages/pages/accueil.yaml | — |
-| `accueil_wifi` | script | packages/pages/accueil.yaml | — |
+| `accueil_wifi` | script | packages/pages/accueil.yaml | packages/lvgl.yaml |
 | `banc_memoire_libre` | sensor (free) | hapanel_banc.yaml | — |
 | `banc_plus_grand_bloc` | sensor (block) | hapanel_banc.yaml | — |
 | `btn_acc_moins` | widget button | packages/pages/accueil.yaml | — |
@@ -37,7 +37,7 @@ Relancer le script après toute modification du YAML.
 | `btn_men_reglages` | widget button | packages/pages/menu.yaml | — |
 | `btn_men_scenarios` | widget button | packages/pages/menu.yaml | — |
 | `btn_msg_fermer` | widget button | packages/message_accueil.yaml | — |
-| `btn_nav_accueil` | widget button | packages/lvgl.yaml | packages/pages/accueil.yaml |
+| `btn_nav_accueil` | widget button | packages/lvgl.yaml | — |
 | `btn_nav_menu` | widget button | packages/lvgl.yaml | packages/pages/menu.yaml |
 | `btn_sce_1` | widget button | packages/pages/scenarios.yaml | — |
 | `btn_sce_2` | widget button | packages/pages/scenarios.yaml | — |
@@ -52,7 +52,7 @@ Relancer le script après toute modification du YAML.
 | `enregistrement_signaler` | script | packages/lvgl.yaml | packages/led_veille.yaml, packages/message_accueil.yaml |
 | `ha_connecte_affiche` | globals | packages/lvgl.yaml | packages/led_veille.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/scenarios.yaml |
 | `heure_ha` | time (homeassistant) | packages/pages/accueil.yaml | packages/pages/planning.yaml |
-| `ico_nav_enregistrement` | widget label | packages/lvgl.yaml | — |
+| `ico_barre_enregistrement` | widget label | packages/lvgl.yaml | — |
 | `ico_reg_ecran_intensite_verrou` | widget label | packages/pages/reglages.yaml | — |
 | `ico_reg_led_alerte_verrou` | widget label | packages/pages/reglages.yaml | — |
 | `ico_reg_led_intensite_verrou` | widget label | packages/pages/reglages.yaml | — |
@@ -66,7 +66,6 @@ Relancer le script après toute modification du YAML.
 | `identite_build` | text_sensor (template) | packages/base.yaml | — |
 | `lbl_acc_chauffage` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_acc_consigne` | widget label | packages/pages/accueil.yaml | — |
-| `lbl_acc_date` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_acc_exterieur` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_acc_hs_icone` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_acc_hs_message` | widget label | packages/pages/accueil.yaml | — |
@@ -78,8 +77,9 @@ Relancer le script après toute modification du YAML.
 | `lbl_apropos_connexion` | widget label | packages/lvgl.yaml | — |
 | `lbl_apropos_memoire` | widget label | packages/lvgl.yaml | — |
 | `lbl_apropos_sha` | widget label | packages/lvgl.yaml | — |
-| `lbl_apropos_titre` | widget label | packages/lvgl.yaml | — |
 | `lbl_apropos_version` | widget label | packages/lvgl.yaml | — |
+| `lbl_barre_date` | widget label | packages/lvgl.yaml | packages/pages/accueil.yaml |
+| `lbl_barre_titre` | widget label | packages/lvgl.yaml | packages/pages/accueil.yaml, packages/pages/menu.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
 | `lbl_met_condition` | widget label | packages/pages/meteo.yaml | — |
 | `lbl_met_etat` | widget label | packages/pages/meteo.yaml | — |
 | `lbl_met_icone` | widget label | packages/pages/meteo.yaml | — |
@@ -93,7 +93,6 @@ Relancer le script après toute modification du YAML.
 | `lbl_met_j3_jour` | widget label | packages/pages/meteo.yaml | — |
 | `lbl_met_j3_temp` | widget label | packages/pages/meteo.yaml | — |
 | `lbl_met_temperature` | widget label | packages/pages/meteo.yaml | — |
-| `lbl_met_titre` | widget label | packages/pages/meteo.yaml | — |
 | `lbl_msg_infos` | widget label | packages/message_accueil.yaml | — |
 | `lbl_msg_texte` | widget label | packages/message_accueil.yaml | — |
 | `lbl_pla_etat` | widget label | packages/pages/planning.yaml | — |
@@ -120,7 +119,6 @@ Relancer le script après toute modification du YAML.
 | `lbl_sce_5` | widget label | packages/pages/scenarios.yaml | — |
 | `lbl_sce_6` | widget label | packages/pages/scenarios.yaml | — |
 | `lbl_sce_etat` | widget label | packages/pages/scenarios.yaml | — |
-| `lbl_sce_titre` | widget label | packages/pages/scenarios.yaml | — |
 | `ldr_obscurite` | globals | packages/led_veille.yaml | — |
 | `ldr_tension` | sensor (adc) | packages/hardware.yaml | packages/led_veille.yaml |
 | `led_alerte` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/accueil.yaml |
@@ -175,13 +173,14 @@ Relancer le script après toute modification du YAML.
 | `meteo_rafraichir` | script | packages/pages/meteo.yaml | packages/liaison_ha.yaml |
 | `obj_acc_glissiere` | widget obj | packages/pages/accueil.yaml | — |
 | `obj_acc_pastille` | widget obj | packages/pages/accueil.yaml | — |
-| `obj_acc_point_ha` | widget obj | packages/pages/accueil.yaml | — |
-| `obj_acc_wifi_1` | widget obj | packages/pages/accueil.yaml | — |
-| `obj_acc_wifi_2` | widget obj | packages/pages/accueil.yaml | — |
-| `obj_acc_wifi_3` | widget obj | packages/pages/accueil.yaml | — |
-| `obj_acc_wifi_4` | widget obj | packages/pages/accueil.yaml | — |
+| `obj_barre` | widget obj | packages/lvgl.yaml | — |
+| `obj_barre_point_ha` | widget obj | packages/lvgl.yaml | packages/pages/accueil.yaml |
+| `obj_barre_wifi_1` | widget obj | packages/lvgl.yaml | packages/pages/accueil.yaml |
+| `obj_barre_wifi_2` | widget obj | packages/lvgl.yaml | packages/pages/accueil.yaml |
+| `obj_barre_wifi_3` | widget obj | packages/lvgl.yaml | packages/pages/accueil.yaml |
+| `obj_barre_wifi_4` | widget obj | packages/lvgl.yaml | packages/pages/accueil.yaml |
 | `obj_message` | widget obj | packages/message_accueil.yaml | — |
-| `obj_nav` | widget obj | packages/lvgl.yaml | — |
+| `obj_nav` | widget obj | packages/lvgl.yaml | packages/pages/accueil.yaml |
 | `obj_pla_bande` | widget obj | packages/pages/planning.yaml | — |
 | `obj_pla_maintenant` | widget obj | packages/pages/planning.yaml | — |
 | `obj_pla_point_2` | widget obj | packages/pages/planning.yaml | — |
@@ -201,7 +200,7 @@ Relancer le script après toute modification du YAML.
 | `police_meteo` | font | packages/pages/meteo.yaml | — |
 | `police_scenarios` | font | packages/pages/scenarios.yaml | — |
 | `police_texte` | font | packages/lvgl.yaml | packages/message_accueil.yaml |
-| `police_titre` | font | packages/lvgl.yaml | packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml |
+| `police_titre` | font | packages/lvgl.yaml | packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml |
 | `reglage_impose_ecran_intensite` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `reglage_impose_led_alerte` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `reglage_impose_led_intensite` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
