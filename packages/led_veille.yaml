@@ -94,6 +94,7 @@ select:
     restore_value: true
     on_value:
       - script.execute: reglages_rafraichir
+      - script.execute: enregistrement_signaler
 
 number:
   - platform: template
@@ -111,6 +112,7 @@ number:
     restore_value: true
     on_value:
       - script.execute: reglages_rafraichir
+      - script.execute: enregistrement_signaler
   - platform: template
     id: ecran_intensite
     name: Intensité écran
@@ -137,6 +139,7 @@ number:
                 brightness: !lambda return id(retro_niveau);
                 transition_length: 0.5s
       - script.execute: reglages_rafraichir
+      - script.execute: enregistrement_signaler
 
 switch:
   - platform: template
@@ -150,8 +153,10 @@ switch:
     on_turn_off:
       - lambda: if (id(led_alerte)) id(sortie_led_rouge).set_level(0.0f);
       - script.execute: reglages_rafraichir
+      - script.execute: enregistrement_signaler
     on_turn_on:
       - script.execute: reglages_rafraichir
+      - script.execute: enregistrement_signaler
 
 # En pause, LVGL ignore le toucher : reveiller au relachement du doigt empeche
 # le premier toucher d'envoyer une commande (P4).

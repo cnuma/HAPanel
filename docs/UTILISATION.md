@@ -124,7 +124,10 @@ fonctionne même sans Home Assistant ni Wi-Fi.
 
 - **Un curseur s'applique quand vous levez le doigt** : la valeur affichée suit le
   doigt, la LED ou l'écran change au relâchement.
-- **Les réglages sont gardés** après une coupure de courant.
+- **Les réglages sont gardés** après une coupure de courant. Après un changement,
+  une disquette apparaît au-dessus du bouton Menu : **grise** pendant 5 s, le temps
+  d'enregistrer (ne pas débrancher), puis **verte** 2 s quand c'est enregistré. Elle
+  apparaît aussi, sur n'importe quelle page, quand le réglage vient de Home Assistant.
 - **Ce sont les mêmes réglages** que sur la page de l'appareil dans Home Assistant :
   un changement d'un côté apparaît aussitôt de l'autre.
 

@@ -49,8 +49,10 @@ Relancer le script après toute modification du YAML.
 | `bus_spi_ecran` | spi | packages/hardware.yaml | — |
 | `ecran` | display (mipi_spi) | packages/hardware.yaml | hapanel_banc.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
 | `ecran_intensite` | number (template) | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
+| `enregistrement_signaler` | script | packages/lvgl.yaml | packages/led_veille.yaml, packages/message_accueil.yaml |
 | `ha_connecte_affiche` | globals | packages/lvgl.yaml | packages/led_veille.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/scenarios.yaml |
 | `heure_ha` | time (homeassistant) | packages/pages/accueil.yaml | packages/pages/planning.yaml |
+| `ico_nav_enregistrement` | widget label | packages/lvgl.yaml | — |
 | `ico_reg_ecran_intensite_verrou` | widget label | packages/pages/reglages.yaml | — |
 | `ico_reg_led_alerte_verrou` | widget label | packages/pages/reglages.yaml | — |
 | `ico_reg_led_intensite_verrou` | widget label | packages/pages/reglages.yaml | — |

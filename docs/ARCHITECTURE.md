@@ -56,10 +56,10 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `hapanel_banc.yaml` | 33 | Banc : production, plus mémoire mesurée, journaux DEBUG et dossier de compilation propre |
 | `packages/base.yaml` | 67 | Nœud, ESP32, Wi-Fi, API, OTA, journaux, écriture des réglages, identité de build |
 | `packages/hardware.yaml` | 114 | Broches, bus, écran, tactile, sorties PWM, LDR (G2) |
-| `packages/lvgl.yaml` | 182 | Polices communes, À propos, barre de navigation, suivi de la connexion |
+| `packages/lvgl.yaml` | 223 | Polices communes, À propos, barre de navigation, icône d'enregistrement (D035), suivi de la connexion |
 | `packages/liaison_ha.yaml` | 489 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
-| `packages/led_veille.yaml` | 281 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
-| `packages/message_accueil.yaml` | 157 | Action `message_accueil`, message plein écran, entité « Message d'accueil » |
+| `packages/led_veille.yaml` | 286 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
+| `packages/message_accueil.yaml` | 160 | Action `message_accueil`, message plein écran, entité « Message d'accueil » |
 | `packages/pages/accueil.yaml` | 824 | Température, chauffage, commandes, couleur de la LED |
 | `packages/pages/meteo.yaml` | 195 | Conditions et prévisions |
 | `packages/pages/planning.yaml` | 373 | Résumé et frises |

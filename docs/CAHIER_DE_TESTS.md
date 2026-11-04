@@ -190,3 +190,7 @@ ensuite l'automatisation du module et l'enregistrer.
 | H13 | Rester 1 min sur Réglages sans toucher | Retour à l'accueil, puis écran éteint | `feature/reglages-ecran` | |
 | H14 | HA coupé (comme A13), ouvrir Réglages | La page marche, réglages modifiables | `feature/reglages-ecran` | |
 | H15 | Éteindre la lumière d'une pièce éclairée | L'écran baisse en moins de 10 s, sans clignoter ensuite | `feature/reglages-ecran` | OK 4 nov. |
+| H16 | Sur Réglages, déplacer « Intensité LED » et lever le doigt | Disquette **grise** au-dessus du bouton Menu, à droite ; **verte** 5 s après, puis disparaît 2 s plus tard | `feature/reglages-ecran` | |
+| H17 | Déplacer trois fois de suite un curseur, à 2 s d'intervalle | Disquette grise sans interruption, verte seulement 5 s après le dernier geste | `feature/reglages-ecran` | |
+| H18 | Écran sur l'Accueil, changer « Intensité écran » sur la page de l'appareil dans HA | La disquette apparaît sur l'Accueil, comme en H16 | `feature/reglages-ecran` | |
+| H19 | Couper puis rétablir le courant | Pas de disquette au démarrage | `feature/reglages-ecran` | |

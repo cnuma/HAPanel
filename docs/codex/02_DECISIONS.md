@@ -736,4 +736,24 @@ qui cite la précédente.
   flash) ; seules les entités réglées par l'utilisateur sont gardées (le
   rétroéclairage, `ALWAYS_ON`, n'écrit rien) ; un curseur déplacé donne au plus une
   écriture toutes les 5 s.
-- Limite : une coupure moins de 5 s après le réglage le perd encore.
+- Limite : une coupure moins de 5 s après le réglage le perd encore ; D035 le montre
+  à l'écran.
+
+## D035 — Icône d'enregistrement des réglages
+
+- Date : 4 novembre 2026 — Statut : demandé par le propriétaire (« une petite icône
+  juste au-dessus à droite du bouton menu qui s'affiche un temps bref pour confirmer
+  l'enregistrement ») ; à valider sur le module.
+- Décision :
+  - disquette (`mdi:content-save`) au-dessus du bouton Menu, à droite, dans la couche
+    commune à toutes les pages (`top_layer`, `packages/lvgl.yaml`) ;
+  - script `enregistrement_signaler`, appelé à chaque changement d'un réglage gardé
+    en flash (« LED », « Intensité LED », « Intensité écran », « Alerte LED »,
+    « Message d'accueil »), d'où qu'il vienne : disquette grise, écriture forcée
+    (`global_preferences->sync()`) 5 s après le dernier changement, disquette verte
+    2 s, puis masquée. L'icône montre donc l'écriture réelle, pas une estimation ;
+  - rien au démarrage, quand les entités relisent leur valeur en flash.
+- Écartée : un message texte entre les pages et la barre du bas. La page Réglages
+  occupe déjà cette bande (« imposé par HA »).
+- G3 : au plus une écriture toutes les 5 s pendant une série de gestes, et seulement
+  des valeurs changées ; `flash_write_interval: 5s` (D034) reste en secours.
