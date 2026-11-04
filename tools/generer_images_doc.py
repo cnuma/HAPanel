@@ -271,7 +271,7 @@ def scenarios_ecran(etat="", couleur=ORANGE, attente=False, noms=None):
 
 def apropos():
     e = Ecran("À propos")
-    e.texte(12, 60, "HAPanel 0.7.0-dev")
+    e.texte(12, 60, "HAPanel 0.7.0")
     e.texte(12, 88, "SHA 3e880f3")
     e.texte(12, 128, "Home Assistant : connecté", VERT)
     e.texte(12, 168, "Mémoire : 162 Ko libres,")

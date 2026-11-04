@@ -5,7 +5,7 @@ fonctionnement global ; le détail et l'historique des choix sont dans
 [02_DECISIONS.md](codex/02_DECISIONS.md), notés `Dnnn` ci-dessous. Le détail de chaque
 fichier YAML, bloc par bloc, est dans [technique/](technique/README.md).
 
-État décrit : version `0.6.0`, fusion `c328617`, ESPHome 2026.10.1.
+État décrit : version `0.7.0`, fusion `bffcabe`, ESPHome 2026.10.1.
 
 ## Vue d'ensemble
 

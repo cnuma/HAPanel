@@ -14,16 +14,15 @@ Liste unique du reste à faire (G14).
 
 | Prio | Sujet | Dépend de | Branche | Pourquoi à ce rang |
 |---|---|---|---|---|
-| 1 | Barre d'état commune en haut de toutes les pages (proposition du propriétaire, 4 novembre ; titre à gauche, choix A) : titre de la page à gauche (date et heure sur l'Accueil), disquette (D035), Wi-Fi et point HA à droite ; titres actuels des pages retirés, contenus décalés | — | `feature/barre-etat` | Touche toutes les pages : à faire avant la documentation des pages (rang 5) et avant d'en ajouter. Règle aussi la disquette affichée par-dessus le contenu. |
-| 2 | Message d'accueil : confirmer B3 (même texte deux fois) ; décider s'il faut empêcher deux fois de suite le même message (entrée texte dans HA, procédure G11) | Cahier B3 refait | à créer | Ne touche que le blueprint de la maison ; à trancher avant de l'enrichir (rangs 6 et 8). |
-| 3 | Sécurité : décider de laisser ou non l'autorisation des actions HA sur chaque module (surface plus petite, `08`) ; évaluer l'usurpation de `device_id` (un firmware modifié, avec la clé d'API, pourrait se faire passer pour un autre panneau) et l'inscrire au `08` | — | `docs/…` | À décider avant d'ajouter des commandes (infrarouge), sinon elles seraient à reprendre. |
-| 4 | Infrarouge (P5) : 1. marque et modèle exacts des clims (Midea ou compatible pour la chambre des parents) et emplacement des panneaux ; 2. schéma de la diode sur GPIO22 (transistor, résistances, 3,3 V, connecteur avec GND) ; 3. code (`remote_transmitter`, `midea_ir`, repris de `clim-parents`) | Rang 3 ; réponses du propriétaire au point 1 | à créer | Plus gros chantier : sur une base stable et des règles de sécurité fixées. Le matériel avant le code. En attendant les réponses, passer au rang 5. |
-| 5 | Documentation technique, lots 3 à 6 : `lvgl.md`, `liaison_ha.md` ; `led_veille.md`, `message_accueil.md` ; `pages/` ; blueprints (avec extension du script de contrôle) | Rang 1 | `docs/…` | Après la barre d'état, les pages ne bougent plus : la doc n'est pas à refaire. |
-| 6 | Saint du jour : choisir la source (calendrier dans le blueprint, sans Internet, proposé ; ou service en ligne lu par HA). Il s'affiche sur la ligne de la météo, sans changer le firmware | Rang 2 | à créer | Blueprint de la maison seulement. |
-| 7 | LDR : les seuils (0,09 à 0,20 V) viennent du relevé du 31 octobre ; les journaux du 3 novembre montrent 0,9 à 1,094 V (plafond de l'ADC). Le cahier E est validé à l'œil : relever les tensions jour et nuit dans les journaux pour confirmer ou recaler | — | à créer | Petit et isolé ; à faire à l'occasion d'un flash. |
-| 8 | Message d'accueil : citer la personne qui arrive (présence des téléphones dans HA) | Rang 2 ; tous les téléphones de la maison connus dans HA | à créer | Dépend d'un préalable du propriétaire. |
-| 9 | LED de face avant : autres informations (alerte météo…), à spécifier | D017, rang 4 | à créer | À spécifier après l'infrarouge, pour ne revoir la logique de la LED qu'une fois. |
-| 10 | Outillage : mesurer le gain du dossier de compilation séparé du banc | Prochaine fusion | — | Constat seulement, sans développement. |
+| 1 | Message d'accueil : confirmer B3 (même texte deux fois) ; décider s'il faut empêcher deux fois de suite le même message (entrée texte dans HA, procédure G11) | Cahier B3 refait | à créer | Ne touche que le blueprint de la maison ; à trancher avant de l'enrichir (rangs 5 et 7). |
+| 2 | Sécurité : décider de laisser ou non l'autorisation des actions HA sur chaque module (surface plus petite, `08`) ; évaluer l'usurpation de `device_id` (un firmware modifié, avec la clé d'API, pourrait se faire passer pour un autre panneau) et l'inscrire au `08` | — | `docs/…` | À décider avant d'ajouter des commandes (infrarouge), sinon elles seraient à reprendre. |
+| 3 | Infrarouge (P5) : 1. marque et modèle exacts des clims (Midea ou compatible pour la chambre des parents) et emplacement des panneaux ; 2. schéma de la diode sur GPIO22 (transistor, résistances, 3,3 V, connecteur avec GND) ; 3. code (`remote_transmitter`, `midea_ir`, repris de `clim-parents`) | Rang 2 ; réponses du propriétaire au point 1 | à créer | Plus gros chantier : sur une base stable et des règles de sécurité fixées. Le matériel avant le code. En attendant les réponses, passer au rang 4. |
+| 4 | Documentation technique, lots 3 à 6 : `lvgl.md`, `liaison_ha.md` ; `led_veille.md`, `message_accueil.md` ; `pages/` ; blueprints (avec extension du script de contrôle) | — | `docs/…` | La barre d'état est fusionnée : les pages ne bougent plus, la doc n'est pas à refaire. |
+| 5 | Saint du jour : choisir la source (calendrier dans le blueprint, sans Internet, proposé ; ou service en ligne lu par HA). Il s'affiche sur la ligne de la météo, sans changer le firmware | Rang 1 | à créer | Blueprint de la maison seulement. |
+| 6 | LDR : les seuils (0,09 à 0,20 V) viennent du relevé du 31 octobre ; les journaux du 3 novembre montrent 0,9 à 1,094 V (plafond de l'ADC). Le cahier E est validé à l'œil : relever les tensions jour et nuit dans les journaux pour confirmer ou recaler | — | à créer | Petit et isolé ; à faire à l'occasion d'un flash. |
+| 7 | Message d'accueil : citer la personne qui arrive (présence des téléphones dans HA) | Rang 1 ; tous les téléphones de la maison connus dans HA | à créer | Dépend d'un préalable du propriétaire. |
+| 8 | LED de face avant : autres informations (alerte météo…), à spécifier | D017, rang 3 | à créer | À spécifier après l'infrarouge, pour ne revoir la logique de la LED qu'une fois. |
+| 9 | Outillage : mesurer le gain du dossier de compilation séparé du banc | Prochaine fusion | — | Constat seulement, sans développement. |
 
 ## Reporté
 
@@ -88,9 +87,9 @@ Liste unique du reste à faire (G14).
       validés le 1er novembre 2026. États dégradés : cahier F et G.
 - [x] Retour à l'accueil (D022) : validé ; cas sans HA au cahier (F10).
 - [x] Autorisation des actions HA : inutile, testé le 2 novembre 2026 (option
-      réactivée ; décision au rang 3).
+      réactivée ; décision au rang 2).
 - [x] Outillage : dossier de compilation séparé du banc, accepté le 3 novembre 2026
-      (mesure du gain au rang 10).
+      (mesure du gain au rang 9).
 
 ### P4 — Idées du propriétaire du 2 novembre 2026
 
@@ -114,3 +113,10 @@ Liste unique du reste à faire (G14).
       plus réactif (D009 révisée) : réglages écrits en flash sous 5 s (D034),
       icône d'enregistrement (D035) : cahier H1 à H19 et C2 OK, fusionnés dans `main`
       le 4 novembre 2026 ; `VERSION` 0.6.0.
+
+### P6 — Idées du propriétaire du 4 novembre 2026
+
+- [x] Barre d'état commune et navigation en haut (D036, D025 révisée) : ☰ à gauche,
+      titre ou date, disquette, Wi-Fi, point HA ; maison centrée en bas ; bords de la
+      dalle laissés noirs. Cahier I1 à I12 OK, fusionnée dans `main` le 4 novembre
+      2026 ; `VERSION` 0.7.0.

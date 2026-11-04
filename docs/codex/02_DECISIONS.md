@@ -769,8 +769,8 @@ qui cite la précédente.
 
 - Date : 4 novembre 2026 — Statut : proposé par le propriétaire (« une barre du haut
   comme sur un portable » ; « le burger de menu en haut dans la barre » ; « le home au
-  milieu en bas ») ; choix A aux questions de HAP-R087 et HAP-R090 ; à valider sur le
-  module.
+  milieu en bas ») ; choix A aux questions de HAP-R087 et HAP-R090 ; validé par le
+  propriétaire (cahier I1 à I12) et fusionné le 4 novembre 2026, version 0.7.0.
 - Contexte : seul l'accueil avait un bandeau (date, Wi-Fi, connexion) ; les autres
   pages avaient chacune leur titre, à des places différentes, et le Menu aucun. La
   disquette (D035) passait par-dessus le contenu quand on changeait vite de page.
