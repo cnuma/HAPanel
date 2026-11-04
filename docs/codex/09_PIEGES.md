@@ -41,6 +41,9 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   l'indicateur de connexion.
 - Perdre `api_encryption_key` interdit toute OTA : flash par USB obligatoire.
 - `secrets.yaml` : la ligne `ota_password` est devenue inutile (D010).
+- `restore_value` ne suffit pas : ESPHome n'écrit la flash qu'à
+  `flash_write_interval` (60 s par défaut, 5 s ici, D034). Pour tester la
+  conservation d'un réglage, attendre au moins 10 s avant de couper.
 
 ## LVGL
 

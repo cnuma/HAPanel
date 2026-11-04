@@ -3,7 +3,8 @@
 ## Rôle
 
 Le socle commun à tous les modules : nom du nœud, type de puce, Wi-Fi, connexion
-chiffrée à Home Assistant, mise à jour à distance (OTA), journaux et identité de build.
+chiffrée à Home Assistant, mise à jour à distance (OTA), journaux, écriture des
+réglages en flash et identité de build.
 
 Sans ce fichier, le module ne démarre pas sur le réseau : pas de Wi-Fi, pas de Home
 Assistant, pas de mise à jour à distance. Il ne contient aucune fonction de l'écran.
@@ -64,6 +65,12 @@ l'écran « HA déconnecté » (D015).
 |---|---|---|
 | `level` | `${log_level}` | `INFO` en production, `DEBUG` sur le banc (`hapanel_banc.yaml`). |
 
+### Bloc `preferences`
+
+| Clé | Valeur | Rôle |
+|---|---|---|
+| `flash_write_interval` | `5s` | Délai avant l'écriture en flash des réglages gardés (`restore_value`, `RESTORE_DEFAULT_ON` : « LED », « Intensité LED », « Intensité écran », « Alerte LED », « Message d'accueil »). 60 s par défaut : une coupure d'alimentation avant ce délai perdait le réglage (C2, D034). Seules les valeurs changées sont écrites (G3). |
+
 ### Bloc `sensor`
 
 | id | Type | Nom dans HA | Rôle |
@@ -82,6 +89,7 @@ l'écran « HA déconnecté » (D015).
 |---|---|
 | Changer de réseau Wi-Fi | Modifier `secrets.yaml`, recompiler, téléverser **par USB** : le module ne joindra plus l'ancien réseau pour une OTA. |
 | Changer la clé de l'API | Modifier `secrets.yaml`, téléverser, puis ressaisir la clé dans Home Assistant (ESPHome › module › Reconfigurer). L'OTA suivante utilise la nouvelle clé (D010). |
+| Changer le délai d'écriture des réglages | `flash_write_interval`. Plus court : moins de perte à la coupure, mais jamais sous 1 s (usure de la flash, G3). |
 | Mesurer le Wi-Fi plus souvent | `update_interval` de `signal_wifi`. Plus court : plus de messages vers Home Assistant. |
 | Ajouter une entité de diagnostic | Ici si elle concerne le module entier, avec `entity_category: diagnostic`. Son `name` devient stable (G10). |
 

@@ -54,7 +54,7 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 |---|---|---|
 | `hapanel.yaml` | 28 | Production : inclusions et substitutions seulement |
 | `hapanel_banc.yaml` | 33 | Banc : production, plus mémoire mesurée, journaux DEBUG et dossier de compilation propre |
-| `packages/base.yaml` | 61 | Nœud, ESP32, Wi-Fi, API, OTA, journaux, identité de build |
+| `packages/base.yaml` | 67 | Nœud, ESP32, Wi-Fi, API, OTA, journaux, écriture des réglages, identité de build |
 | `packages/hardware.yaml` | 114 | Broches, bus, écran, tactile, sorties PWM, LDR (G2) |
 | `packages/lvgl.yaml` | 182 | Polices communes, À propos, barre de navigation, suivi de la connexion |
 | `packages/liaison_ha.yaml` | 489 | Action `maj_valeur`, valeurs reçues, effacement, péremption |

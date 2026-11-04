@@ -34,12 +34,13 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 4 novembre 2026 | `20dda6e` | P | OK : P1, P2, P4, P5 | P3 (liste « Messages uniques ») non rapporté |
 | 4 novembre 2026 | `20dda6e` | A | OK : A1 à A5, cochés un à un (A et B validés en bloc le 3 novembre) | A6 à A13 non rapportés un à un |
 | 4 novembre 2026 | `20dda6e` | B | OK : B1, B2. B3 : l'écran se rallume (l'automatisation a bien envoyé) mais le texte est le même qu'en B1 | Tirage au hasard parmi 7 à 10 messages selon l'heure : une répétition est possible (environ 1 fois sur 9). À refaire 3 fois en notant les textes ; toujours le même : message unique non coché (P3) ou défaut du tirage, voir la trace |
+| 4 novembre 2026 | `20dda6e` | A, C | OK : A13, C3, C5 ; C4 sauf redémarrage. **KO : C2**, réglages LED et écran perdus au redémarrage | Cause : ESPHome n'écrit la flash que toutes les 60 s, une coupure avant perd le réglage. Corrigé (D034) : écriture sous 5 s ; C2 à refaire après flash, en attendant 10 s avant de couper |
 
 | Partie | Sujet | Bloque la fusion de |
 |---|---|---|
 | A | Message d'accueil, côté module (D028) | `feature/message-accueil` (fusionnée) |
 | B | Message d'accueil, côté blueprint (D028) | `feature/message-accueil` (fusionnée) |
-| C | Réglages de la LED par module (D027) et bouton Accueil (D025) | — |
+| C | Réglages de la LED par module (D027) et bouton Accueil (D025) | `feature/reglages-ecran` (C2 seulement) |
 | D | Icônes et couleurs des scénarios (D026) | — |
 | E | LED selon la lumière (D018) et rétroéclairage (D023) | — |
 | F | Cas d'erreur jamais confirmés séparément | — |
@@ -75,7 +76,7 @@ Sans passer par la porte : **Outils de développement › Actions**, action
 | A10 | Désactiver l'entité « Message d'accueil », puis envoyer | Rien ne s'affiche | `feature/message-accueil` (fusionnée) | |
 | A11 | Message affiché, puis désactiver l'entité « Message d'accueil » | Le message se ferme | `feature/message-accueil` (fusionnée) | |
 | A12 | Réactiver l'entité, redémarrer le module (bouton Redémarrer ou coupure) | Entité toujours activée après le redémarrage | `feature/message-accueil` (fusionnée) | |
-| A13 | Message affiché, puis couper la liaison avec HA (Paramètres › Appareils et services › ESPHome › `hapanel-a85bfc` › ⋮ › Désactiver ; réactiver ensuite) | Le message se ferme ; l'écran « HA déconnecté » est visible | `feature/message-accueil` (fusionnée) | |
+| A13 | Message affiché, puis couper la liaison avec HA (Paramètres › Appareils et services › ESPHome › `hapanel-a85bfc` › ⋮ › Désactiver ; réactiver ensuite) | Le message se ferme ; l'écran « HA déconnecté » est visible | `feature/message-accueil` (fusionnée) | OK 4 nov. |
 
 ## B — Message d'accueil, côté blueprint
 
@@ -101,10 +102,10 @@ Binaire `966fb2d` et suivants, jamais rapportés.
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
 | C1 | Page de l'appareil | Entités « LED », « Intensité LED » et « Alerte LED » présentes | — | OK 4 nov. |
-| C2 | Changer « Intensité LED », redémarrer le module | Valeur conservée | — | |
-| C3 | Dans le blueprint « module », imposer une valeur LED, enregistrer | La valeur imposée apparaît sur la page de l'appareil | — | |
-| C4 | Choisir « Ne pas imposer », régler à la main sur la page de l'appareil | Le réglage manuel reste | — | |
-| C5 | « Alerte LED » désactivée, puis couper HA (comme A13) | La LED reste muette (pas de rouge clignotant) | — | |
+| C2 | Changer « Intensité LED » et « Intensité écran », attendre 10 s, couper l'alimentation du module puis la rétablir | Valeurs conservées | `feature/reglages-ecran` | KO 4 nov. (valeurs perdues) ; corrigé (D034), à refaire |
+| C3 | Dans le blueprint « module », imposer une valeur LED, enregistrer | La valeur imposée apparaît sur la page de l'appareil | — | OK 4 nov. |
+| C4 | Choisir « Ne pas imposer », régler à la main sur la page de l'appareil | Le réglage manuel reste | — | OK 4 nov. (sauf redémarrage, voir C2) |
+| C5 | « Alerte LED » désactivée, puis couper HA (comme A13) | La LED reste muette (pas de rouge clignotant) | — | OK 4 nov. |
 | C6 | Écran d'accueil | Pas de bouton maison dans la barre | — | OK 4 nov. |
 | C7 | Aller sur une autre page, attendre le retour automatique à l'accueil | Toujours pas de bouton maison sur l'accueil | — | OK 4 nov. |
 

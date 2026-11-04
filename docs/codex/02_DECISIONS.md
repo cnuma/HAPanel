@@ -721,5 +721,19 @@ qui cite la précédente.
 - Limite : les adresses restent dans l'historique Git des commits passés. Ce sont des
   adresses de réseau local, non joignables depuis Internet ; réécrire l'historique de
   `main` demanderait l'accord du propriétaire et casserait les SHA cités partout.
-- Conséquences : nouvelle entité exposée, à ne plus renommer (G10) ; surface
-  inscrite au `08` ; mémoire à mesurer (G6).
+- Conséquences : aucune sur le firmware ; méthode de travail seulement.
+
+## D034 — Réglages écrits en flash sous 5 s
+
+- Date : 4 novembre 2026 — Statut : corrige le test C2 (KO : « le module ne garde
+  pas les paramètres LED et écran » après redémarrage) ; à valider sur le module.
+- Contexte : les réglages de D027 et D031 sont gardés en flash (`restore_value`),
+  mais ESPHome n'écrit la flash qu'à l'intervalle `flash_write_interval`, 60 s par
+  défaut. Le module n'a pas de bouton Redémarrer : un redémarrage est une coupure
+  d'alimentation, qui perd tout réglage changé depuis moins de 60 s.
+- Décision : `preferences: flash_write_interval: 5s` (`packages/base.yaml`).
+- G3 respecté : ESPHome n'écrit que les valeurs changées (comparaison avec la
+  flash) ; seules les entités réglées par l'utilisateur sont gardées (le
+  rétroéclairage, `ALWAYS_ON`, n'écrit rien) ; un curseur déplacé donne au plus une
+  écriture toutes les 5 s.
+- Limite : une coupure moins de 5 s après le réglage le perd encore.
