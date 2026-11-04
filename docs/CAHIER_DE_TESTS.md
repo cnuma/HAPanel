@@ -32,6 +32,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 3 novembre 2026 | `bc6f66e` | H | Page Réglages OK, tactile bien plus réactif, luminosité suit la pièce mais trop lentement ; tuile Accueil du Menu en doublon ; interrupteur à l'arrêt gris confondu avec « grisé = imposé » et peu lisible ; « Alerte LED » bloquée | Corrigé (`20dda6e`) : tuile retirée, cadenas, interrupteur sur fond sombre, LDR moyennée sur 5 s. « Alerte LED » était imposée par l'automatisation (`led_alerte on` dans les journaux) : la mettre sur « Ne pas imposer » |
 | 4 novembre 2026 | `20dda6e` | C, E, G, H | OK : C1, C6, C7 ; **E1 à E7** (E levé) ; G3 ; H1 à H9, H15 | Restent : C2 à C5, F, G1, G2, G4, H10 à H14 |
 | 4 novembre 2026 | `20dda6e` | P | OK : P1, P2, P4, P5 | P3 (liste « Messages uniques ») non rapporté |
+| 4 novembre 2026 | `20dda6e` | A | OK : A1 à A5, cochés un à un (A et B validés en bloc le 3 novembre) | A6 à A13 non rapportés un à un |
 
 | Partie | Sujet | Bloque la fusion de |
 |---|---|---|
@@ -61,11 +62,11 @@ Sans passer par la porte : **Outils de développement › Actions**, action
 
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
-| A1 | Envoyer `texte` = « Test d'accueil », `infos` = « Dehors : 12 °C » | Message plein écran, fond noir, par-dessus la barre de navigation ; croix en haut à droite ; ligne grise d'informations ; « Touchez l'écran pour fermer » en bas | `feature/message-accueil` (fusionnée) | |
-| A2 | Pendant A1, regarder la LED | Arc-en-ciel, si la LED est autorisée (entité « LED », D027) | `feature/message-accueil` (fusionnée) | |
-| A3 | Toucher la croix | Le message se ferme ; la page d'en dessous revient | `feature/message-accueil` (fusionnée) | |
-| A4 | Renvoyer, puis toucher l'écran **à l'endroit d'un bouton** de la page d'en dessous | Le message se ferme ; le bouton n'est **pas** actionné | `feature/message-accueil` (fusionnée) | |
-| A5 | Renvoyer, ne rien toucher, chronométrer | Fermeture seule après 3 min (± 1 s) | `feature/message-accueil` (fusionnée) | |
+| A1 | Envoyer `texte` = « Test d'accueil », `infos` = « Dehors : 12 °C » | Message plein écran, fond noir, par-dessus la barre de navigation ; croix en haut à droite ; ligne grise d'informations ; « Touchez l'écran pour fermer » en bas | `feature/message-accueil` (fusionnée) | OK 4 nov. |
+| A2 | Pendant A1, regarder la LED | Arc-en-ciel, si la LED est autorisée (entité « LED », D027) | `feature/message-accueil` (fusionnée) | OK 4 nov. |
+| A3 | Toucher la croix | Le message se ferme ; la page d'en dessous revient | `feature/message-accueil` (fusionnée) | OK 4 nov. |
+| A4 | Renvoyer, puis toucher l'écran **à l'endroit d'un bouton** de la page d'en dessous | Le message se ferme ; le bouton n'est **pas** actionné | `feature/message-accueil` (fusionnée) | OK 4 nov. |
+| A5 | Renvoyer, ne rien toucher, chronométrer | Fermeture seule après 3 min (± 1 s) | `feature/message-accueil` (fusionnée) | OK 4 nov. |
 | A6 | Attendre la mise en veille de l'écran (60 s sans toucher), puis envoyer | L'écran se rallume et montre le message | `feature/message-accueil` (fusionnée) | |
 | A7 | Envoyer un texte d'environ 150 caractères avec accents | Texte coupé en lignes, centré, lisible ; aucun caractère bizarre | `feature/message-accueil` (fusionnée) | |
 | A8 | Envoyer un texte de plus de 240 caractères | Texte tronqué proprement, sans caractère cassé à la fin | `feature/message-accueil` (fusionnée) | |
