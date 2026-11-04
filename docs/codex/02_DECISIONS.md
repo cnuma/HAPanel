@@ -501,8 +501,8 @@ qui cite la précédente.
 - Révision du 3 novembre 2026 (retour du propriétaire : l'écran baissait trop
   lentement en éteignant une chambre) : moyenne sur 5 s publiée toutes les 2 s,
   obscurité recalculée toutes les 2 s, transition de 1 s ; l'écart minimal de
-  5 points reste le seul rempart contre un écran qui varie sans cesse. Codé sur
-  `feature/reglages-ecran`, à valider sur le module.
+  5 points reste le seul rempart contre un écran qui varie sans cesse. Validée par
+  le propriétaire (cahier H15) et fusionnée le 4 novembre 2026.
 - Limite : si l'écran éclaire la LDR, baisser sa luminosité assombrit la mesure
   et accentue la baisse. Effet borné par `retro_nuit`, à vérifier au banc, comme
   la pièce sombre, jamais testée.
@@ -543,7 +543,8 @@ qui cite la précédente.
 - Révision du 3 novembre 2026 (demande du propriétaire, même raison) : le bouton
   Menu est masqué sur la page Menu ; seul Accueil reste, à sa place. Après essai,
   la tuile Accueil du Menu, doublon de ce bouton, est retirée ; les cinq tuiles
-  restantes remontent. Codé sur `feature/reglages-ecran`, à valider sur le module.
+  restantes remontent. Validée par le propriétaire (cahier H2, H3) et fusionnée le
+  4 novembre 2026.
 
 ## D026 — Icône et couleur des boutons de scénarios
 
@@ -563,7 +564,7 @@ qui cite la précédente.
 
 - Date : 2 novembre 2026 — Statut : demandé par le propriétaire (« A et B,
   alignés »), qui a choisi l'alerte réglable, le curseur et la règle
-  d'alignement ; à valider sur le module.
+  d'alignement ; validé par le propriétaire (cahier C1 à C7) le 4 novembre 2026.
 - Contexte : selon la pièce (une chambre), la LED doit pouvoir être atténuée ou
   éteinte, module par module, alors que le firmware est unique (D012).
 - Décision :
@@ -655,8 +656,8 @@ qui cite la précédente.
 
 ## D031 — Réglages à l'écran du module et intensité de l'écran
 
-- Date : 3 novembre 2026 — Statut : choix du propriétaire (1A, 2A, 3A, 4A), codé
-  sur `feature/reglages-ecran`, à valider sur le module ; plancher et bornes
+- Date : 3 novembre 2026 — Statut : choix du propriétaire (1A, 2A, 3A, 4A), validé
+  par le propriétaire (cahier H) et fusionné le 4 novembre 2026 ; plancher et bornes
   choisis par l'agent (`retro_plancher` 0,30, intensité de 20 à 100 %).
 - Contexte : le propriétaire avait demandé de régler la LED depuis le module ;
   D027 ne l'a fait que dans HA. Nouvelle demande : la luminosité de l'écran,
@@ -726,7 +727,7 @@ qui cite la précédente.
 ## D034 — Réglages écrits en flash sous 5 s
 
 - Date : 4 novembre 2026 — Statut : corrige le test C2 (KO : « le module ne garde
-  pas les paramètres LED et écran » après redémarrage) ; à valider sur le module.
+  pas les paramètres LED et écran » après redémarrage) ; C2 OK, fusionné le 4 novembre 2026.
 - Contexte : les réglages de D027 et D031 sont gardés en flash (`restore_value`),
   mais ESPHome n'écrit la flash qu'à l'intervalle `flash_write_interval`, 60 s par
   défaut. Le module n'a pas de bouton Redémarrer : un redémarrage est une coupure
@@ -743,7 +744,8 @@ qui cite la précédente.
 
 - Date : 4 novembre 2026 — Statut : demandé par le propriétaire (« une petite icône
   juste au-dessus à droite du bouton menu qui s'affiche un temps bref pour confirmer
-  l'enregistrement ») ; à valider sur le module.
+  l'enregistrement ») ; cahier H16 à H19 OK, fusionné le 4 novembre 2026. La barre
+  d'état commune (TODO rang 1) lui donnera une place réservée.
 - Décision :
   - disquette (`mdi:content-save`) au-dessus du bouton Menu, à droite, dans la couche
     commune à toutes les pages (`top_layer`, `packages/lvgl.yaml`) ;

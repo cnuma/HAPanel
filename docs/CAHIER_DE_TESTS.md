@@ -35,18 +35,19 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 4 novembre 2026 | `20dda6e` | A | OK : A1 à A5, cochés un à un (A et B validés en bloc le 3 novembre) | A6 à A13 non rapportés un à un |
 | 4 novembre 2026 | `20dda6e` | B | OK : B1, B2. B3 : l'écran se rallume (l'automatisation a bien envoyé) mais le texte est le même qu'en B1 | Tirage au hasard parmi 7 à 10 messages selon l'heure : une répétition est possible (environ 1 fois sur 9). À refaire 3 fois en notant les textes ; toujours le même : message unique non coché (P3) ou défaut du tirage, voir la trace |
 | 4 novembre 2026 | `420fdbe` | H | OK : H16 à H19 (disquette). Interfaces non uniformes : barre du haut sur l'Accueil seulement, titres différents d'une page à l'autre ; la disquette verte s'affiche par-dessus le contenu de la page quand on change vite de page | Proposition du propriétaire : barre d'état commune (titre, Wi-Fi, HA, disquette) ; TODO rang 2 |
+| 4 novembre 2026 | `420fdbe` | C, H | OK : C2, H10 à H14 | **Fusion de `feature/reglages-ecran` dans `main`**, accord du propriétaire |
 | 4 novembre 2026 | `20dda6e` | A, C | OK : A13, C3, C5 ; C4 sauf redémarrage. **KO : C2**, réglages LED et écran perdus au redémarrage | Cause : ESPHome n'écrit la flash que toutes les 60 s, une coupure avant perd le réglage. Corrigé (D034) : écriture sous 5 s ; C2 à refaire après flash, en attendant 10 s avant de couper |
 
 | Partie | Sujet | Bloque la fusion de |
 |---|---|---|
 | A | Message d'accueil, côté module (D028) | `feature/message-accueil` (fusionnée) |
 | B | Message d'accueil, côté blueprint (D028) | `feature/message-accueil` (fusionnée) |
-| C | Réglages de la LED par module (D027) et bouton Accueil (D025) | `feature/reglages-ecran` (C2 seulement) |
+| C | Réglages de la LED par module (D027) et bouton Accueil (D025) | `feature/reglages-ecran` (fusionnée ; C2 seulement) |
 | D | Icônes et couleurs des scénarios (D026) | — |
 | E | LED selon la lumière (D018) et rétroéclairage (D023) | — |
 | F | Cas d'erreur jamais confirmés séparément | — |
 | G | Cas qui demandent une date particulière | — |
-| H | Page Réglages (D031), menu (D025 révisée), tactile (D009 révisée) | `feature/reglages-ecran` |
+| H | Page Réglages (D031), menu (D025 révisée), tactile (D009 révisée) | `feature/reglages-ecran` (fusionnée) |
 
 ## Préparation (une fois, avant A et B)
 
@@ -103,7 +104,7 @@ Binaire `966fb2d` et suivants, jamais rapportés.
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
 | C1 | Page de l'appareil | Entités « LED », « Intensité LED » et « Alerte LED » présentes | — | OK 4 nov. |
-| C2 | Changer « Intensité LED » et « Intensité écran », attendre 10 s, couper l'alimentation du module puis la rétablir | Valeurs conservées | `feature/reglages-ecran` | KO 4 nov. (valeurs perdues) ; corrigé (D034), à refaire |
+| C2 | Changer « Intensité LED » et « Intensité écran », attendre 10 s, couper l'alimentation du module puis la rétablir | Valeurs conservées | `feature/reglages-ecran` (fusionnée) | KO 4 nov. (valeurs perdues) ; corrigé (D034), OK 4 nov. |
 | C3 | Dans le blueprint « module », imposer une valeur LED, enregistrer | La valeur imposée apparaît sur la page de l'appareil | — | OK 4 nov. |
 | C4 | Choisir « Ne pas imposer », régler à la main sur la page de l'appareil | Le réglage manuel reste | — | OK 4 nov. (sauf redémarrage, voir C2) |
 | C5 | « Alerte LED » désactivée, puis couper HA (comme A13) | La LED reste muette (pas de rouge clignotant) | — | OK 4 nov. |
@@ -167,7 +168,7 @@ mesure suivante).
 
 ## H — Page Réglages, menu et tactile
 
-Branche `feature/reglages-ecran`. Avant H4 : **importer le blueprint « module »
+Fusionnée dans `main` le 4 novembre 2026. Avant H4 (pour mémoire) : **importer le blueprint « module »
 depuis la branche** (Paramètres › Automatisations et scènes › Blueprints › Importer
 un blueprint), en acceptant de remplacer l'existant, avec l'adresse
 `https://github.com/cnuma/HAPanel/blob/feature/reglages-ecran/blueprints/automation/hapanel/module.yaml`.
@@ -176,22 +177,22 @@ ensuite l'automatisation du module et l'enregistrer.
 
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
-| H1 | Toucher brièvement, comme sur un téléphone, les boutons de la barre et des tuiles | Chaque toucher bref est pris en compte, sans laisser le doigt | `feature/reglages-ecran` | OK 4 nov. |
-| H2 | Ouvrir le Menu | Seul le bouton maison reste dans la barre ; pas de tuile Accueil ; tuiles Météo, Planning, Scénarios, **Réglages**, À propos | `feature/reglages-ecran` | OK 4 nov. |
-| H3 | Quitter le Menu par une tuile | Le bouton Menu revient sur la nouvelle page | `feature/reglages-ecran` | OK 4 nov. |
-| H4 | Ouvrir Réglages, blueprint sur « Ne pas imposer » partout | 4 réglages actifs, mêmes valeurs que la page de l'appareil dans HA ; aucun cadenas ; interrupteur à l'arrêt lisible (fond sombre bordé, bouton blanc) | `feature/reglages-ecran` | OK 4 nov. |
-| H5 | Basculer « LED » | La LED s'éteint ou reprend sa respiration ; « LED » change aussi sur la page de l'appareil | `feature/reglages-ecran` | OK 4 nov. |
-| H6 | Glisser « Intensité LED », relâcher | Valeur affichée pendant le glissement, par pas de 5 ; LED et page de l'appareil suivent au relâchement | `feature/reglages-ecran` | OK 4 nov. |
-| H7 | Basculer « Alerte LED » | Même valeur sur la page de l'appareil | `feature/reglages-ecran` | OK 4 nov. |
-| H8 | Glisser « Intensité écran » jusqu'à 20 % | L'écran baisse aussitôt sans devenir illisible (plancher) | `feature/reglages-ecran` | OK 4 nov. |
-| H9 | Changer « Intensité écran » sur la page de l'appareil | Le curseur de la page Réglages suit | `feature/reglages-ecran` | OK 4 nov. |
-| H10 | Redémarrer le module | Les 4 réglages sont conservés | `feature/reglages-ecran` | |
-| H11 | Dans le blueprint, imposer « Alerte LED », enregistrer | Sur l'écran, cadenas devant Alerte LED, qui ne réagit plus ; « imposé par HA » avec un cadenas en bas | `feature/reglages-ecran` | |
-| H12 | Remettre « Ne pas imposer », enregistrer | Alerte LED de nouveau modifiable, cadenas et mention disparus | `feature/reglages-ecran` | |
-| H13 | Rester 1 min sur Réglages sans toucher | Retour à l'accueil, puis écran éteint | `feature/reglages-ecran` | |
-| H14 | HA coupé (comme A13), ouvrir Réglages | La page marche, réglages modifiables | `feature/reglages-ecran` | |
-| H15 | Éteindre la lumière d'une pièce éclairée | L'écran baisse en moins de 10 s, sans clignoter ensuite | `feature/reglages-ecran` | OK 4 nov. |
-| H16 | Sur Réglages, déplacer « Intensité LED » et lever le doigt | Disquette **grise** au-dessus du bouton Menu, à droite ; **verte** 5 s après, puis disparaît 2 s plus tard | `feature/reglages-ecran` | OK 4 nov. |
-| H17 | Déplacer trois fois de suite un curseur, à 2 s d'intervalle | Disquette grise sans interruption, verte seulement 5 s après le dernier geste | `feature/reglages-ecran` | OK 4 nov. |
-| H18 | Écran sur l'Accueil, changer « Intensité écran » sur la page de l'appareil dans HA | La disquette apparaît sur l'Accueil, comme en H16 | `feature/reglages-ecran` | OK 4 nov. |
-| H19 | Couper puis rétablir le courant | Pas de disquette au démarrage | `feature/reglages-ecran` | OK 4 nov. |
+| H1 | Toucher brièvement, comme sur un téléphone, les boutons de la barre et des tuiles | Chaque toucher bref est pris en compte, sans laisser le doigt | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H2 | Ouvrir le Menu | Seul le bouton maison reste dans la barre ; pas de tuile Accueil ; tuiles Météo, Planning, Scénarios, **Réglages**, À propos | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H3 | Quitter le Menu par une tuile | Le bouton Menu revient sur la nouvelle page | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H4 | Ouvrir Réglages, blueprint sur « Ne pas imposer » partout | 4 réglages actifs, mêmes valeurs que la page de l'appareil dans HA ; aucun cadenas ; interrupteur à l'arrêt lisible (fond sombre bordé, bouton blanc) | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H5 | Basculer « LED » | La LED s'éteint ou reprend sa respiration ; « LED » change aussi sur la page de l'appareil | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H6 | Glisser « Intensité LED », relâcher | Valeur affichée pendant le glissement, par pas de 5 ; LED et page de l'appareil suivent au relâchement | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H7 | Basculer « Alerte LED » | Même valeur sur la page de l'appareil | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H8 | Glisser « Intensité écran » jusqu'à 20 % | L'écran baisse aussitôt sans devenir illisible (plancher) | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H9 | Changer « Intensité écran » sur la page de l'appareil | Le curseur de la page Réglages suit | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H10 | Redémarrer le module | Les 4 réglages sont conservés | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H11 | Dans le blueprint, imposer « Alerte LED », enregistrer | Sur l'écran, cadenas devant Alerte LED, qui ne réagit plus ; « imposé par HA » avec un cadenas en bas | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H12 | Remettre « Ne pas imposer », enregistrer | Alerte LED de nouveau modifiable, cadenas et mention disparus | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H13 | Rester 1 min sur Réglages sans toucher | Retour à l'accueil, puis écran éteint | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H14 | HA coupé (comme A13), ouvrir Réglages | La page marche, réglages modifiables | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H15 | Éteindre la lumière d'une pièce éclairée | L'écran baisse en moins de 10 s, sans clignoter ensuite | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H16 | Sur Réglages, déplacer « Intensité LED » et lever le doigt | Disquette **grise** au-dessus du bouton Menu, à droite ; **verte** 5 s après, puis disparaît 2 s plus tard | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H17 | Déplacer trois fois de suite un curseur, à 2 s d'intervalle | Disquette grise sans interruption, verte seulement 5 s après le dernier geste | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H18 | Écran sur l'Accueil, changer « Intensité écran » sur la page de l'appareil dans HA | La disquette apparaît sur l'Accueil, comme en H16 | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+| H19 | Couper puis rétablir le courant | Pas de disquette au démarrage | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
