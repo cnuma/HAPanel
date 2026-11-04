@@ -11,20 +11,6 @@ packages:
 # .esphome/build/hapanel_banc, ignore par Git.
 esphome:
   build_path: build/hapanel_banc
-  # Diagnostic provisoire (cahier I11) : journalise toute zone envoyee a l'ecran
-  # qui touche la premiere ou la derniere ligne, pour savoir si la ligne
-  # parasite du haut vient d'un dessin au bord.
-  on_boot:
-    priority: -200
-    then:
-      - lambda: |-
-          lv_display_add_event_cb(lv_display_get_default(), [](lv_event_t *e) {
-            static uint32_t n = 0;
-            if (++n % 100 == 0) ESP_LOGI("hapanel.diag", "%u envois", (unsigned) n);
-            auto *a = static_cast<lv_area_t *>(lv_event_get_param(e));
-            if (a != nullptr && (a->y1 <= 1 || a->y2 >= 318 || a->x2 >= 239 || a->x1 < 0 || a->y1 < 0))
-              ESP_LOGI("hapanel.diag", "envoi %d,%d - %d,%d", a->x1, a->y1, a->x2, a->y2);
-          }, LV_EVENT_FLUSH_START, nullptr);
 
 debug:
   update_interval: 30s

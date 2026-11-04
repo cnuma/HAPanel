@@ -47,6 +47,10 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 
 ## LVGL
 
+- Dalle de la carte : quand la dernière rangée de pixels (319) est allumée, elle
+  réapparaît par instants sur la première (ligne claire au redessin complet, point
+  dans l'axe d'un bouton du bas). Laisser 2 rangées noires en haut et en bas (D036).
+  Ce n'est pas un défaut de transmission : à 20 MHz, c'est pire.
 - Le `top_layer` n'hérite pas de `text_color` ni de `text_font` posés au niveau de
   `lvgl:` (ils vont aux pages) : un label y est sombre, donc invisible sur fond foncé.
   Les poser sur le conteneur (barre d'état, D036).
