@@ -161,6 +161,13 @@ effet pour un panneau alimenté en permanence. Cette dette est notée T1.
   `retroeclairage` : sa transition et son état (allumé ou éteint, utilisé par la veille)
   deviendraient faux.
 - Monter `data_rate` au-delà de 40 MHz peut donner un écran brouillé.
+- **Bords de la dalle (constaté le 4 novembre 2026, I11) :** ne rien allumer sur les
+  2 premières ni les 2 dernières rangées de pixels (y = 0, 1, 318, 319). La dernière
+  rangée allumée réapparaît par instants sur la première : ligne claire fugace au
+  redessin complet, point qui clignote dans l'axe d'un bouton du bas. Ce n'est pas la
+  liaison (à 20 MHz, c'est pire) ni LVGL (aucun envoi à l'écran immobile). Toute barre
+  ou tout élément collé à un bord en tient compte (D036). Vraisemblable sur d'autres
+  dalles du même type : à vérifier sur toute nouvelle carte.
 
 **Contrôle après modification :** `.\tools\build.ps1 config`, puis `compile`, puis au
 banc : affichage, toucher aux quatre coins, couleur de la LED et ligne `LDR … V` des
