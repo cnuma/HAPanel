@@ -690,7 +690,9 @@ qui cite la précédente.
   la fusion ; auparavant, des tests restaient « non confirmés » dans `TODO.md`.
 - Décision : invariant G13 (`03_INVARIANTS.md`). Une partie par fonction, des codes
   stables jamais réattribués, action, attendu et case OK / KO datée, un tableau des
-  résultats, les parties qui bloquent une fusion désignées. Les tests d'une
+  résultats. Complément du même jour (demande du propriétaire) : une colonne
+  « Bloque la fusion de » sur chaque test, avec le nom de la branche en
+  référence, « (fusionnée) » après la fusion, « — » si le test ne bloque rien. Les tests d'une
   fonction entrent dans le cahier dans le même commit que son code (comme G12). La
   règle vaut pour tous les dépôts du propriétaire.
 - Conséquences : à une fusion, les tests de la fonction sont OK ou explicitement
