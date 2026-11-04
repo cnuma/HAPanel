@@ -34,6 +34,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 4 novembre 2026 | `20dda6e` | P | OK : P1, P2, P4, P5 | P3 (liste « Messages uniques ») non rapporté |
 | 4 novembre 2026 | `20dda6e` | A | OK : A1 à A5, cochés un à un (A et B validés en bloc le 3 novembre) | A6 à A13 non rapportés un à un |
 | 4 novembre 2026 | `20dda6e` | B | OK : B1, B2. B3 : l'écran se rallume (l'automatisation a bien envoyé) mais le texte est le même qu'en B1 | Tirage au hasard parmi 7 à 10 messages selon l'heure : une répétition est possible (environ 1 fois sur 9). À refaire 3 fois en notant les textes ; toujours le même : message unique non coché (P3) ou défaut du tirage, voir la trace |
+| 4 novembre 2026 | `420fdbe` | H | OK : H16 à H19 (disquette). Interfaces non uniformes : barre du haut sur l'Accueil seulement, titres différents d'une page à l'autre ; la disquette verte s'affiche par-dessus le contenu de la page quand on change vite de page | Proposition du propriétaire : barre d'état commune (titre, Wi-Fi, HA, disquette) ; TODO rang 2 |
 | 4 novembre 2026 | `20dda6e` | A, C | OK : A13, C3, C5 ; C4 sauf redémarrage. **KO : C2**, réglages LED et écran perdus au redémarrage | Cause : ESPHome n'écrit la flash que toutes les 60 s, une coupure avant perd le réglage. Corrigé (D034) : écriture sous 5 s ; C2 à refaire après flash, en attendant 10 s avant de couper |
 
 | Partie | Sujet | Bloque la fusion de |
@@ -190,7 +191,7 @@ ensuite l'automatisation du module et l'enregistrer.
 | H13 | Rester 1 min sur Réglages sans toucher | Retour à l'accueil, puis écran éteint | `feature/reglages-ecran` | |
 | H14 | HA coupé (comme A13), ouvrir Réglages | La page marche, réglages modifiables | `feature/reglages-ecran` | |
 | H15 | Éteindre la lumière d'une pièce éclairée | L'écran baisse en moins de 10 s, sans clignoter ensuite | `feature/reglages-ecran` | OK 4 nov. |
-| H16 | Sur Réglages, déplacer « Intensité LED » et lever le doigt | Disquette **grise** au-dessus du bouton Menu, à droite ; **verte** 5 s après, puis disparaît 2 s plus tard | `feature/reglages-ecran` | |
-| H17 | Déplacer trois fois de suite un curseur, à 2 s d'intervalle | Disquette grise sans interruption, verte seulement 5 s après le dernier geste | `feature/reglages-ecran` | |
-| H18 | Écran sur l'Accueil, changer « Intensité écran » sur la page de l'appareil dans HA | La disquette apparaît sur l'Accueil, comme en H16 | `feature/reglages-ecran` | |
-| H19 | Couper puis rétablir le courant | Pas de disquette au démarrage | `feature/reglages-ecran` | |
+| H16 | Sur Réglages, déplacer « Intensité LED » et lever le doigt | Disquette **grise** au-dessus du bouton Menu, à droite ; **verte** 5 s après, puis disparaît 2 s plus tard | `feature/reglages-ecran` | OK 4 nov. |
+| H17 | Déplacer trois fois de suite un curseur, à 2 s d'intervalle | Disquette grise sans interruption, verte seulement 5 s après le dernier geste | `feature/reglages-ecran` | OK 4 nov. |
+| H18 | Écran sur l'Accueil, changer « Intensité écran » sur la page de l'appareil dans HA | La disquette apparaît sur l'Accueil, comme en H16 | `feature/reglages-ecran` | OK 4 nov. |
+| H19 | Couper puis rétablir le courant | Pas de disquette au démarrage | `feature/reglages-ecran` | OK 4 nov. |
