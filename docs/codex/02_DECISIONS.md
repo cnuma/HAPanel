@@ -795,3 +795,44 @@ qui cite la précédente.
   du bouton maison) ; diagnostic du 4 novembre 2026, idée du propriétaire (I11).
 - Limite : sur un panneau mural, le ☰ en haut est un peu moins accessible qu'en bas
   (enfants) ; le Menu sert moins souvent que l'accueil.
+
+## D037 — Mises à jour du parc depuis Home Assistant
+
+- Date : 4 novembre 2026 — Statut : proposé ; option C choisie par le propriétaire
+  (HAP-R096), à concevoir et tester avant tout code.
+- Contexte : le propriétaire prévoit plusieurs modules. Aujourd'hui chaque mise à
+  jour part du PC, module par module (`build.ps1 upload`). Le binaire est le même pour
+  tous (D012).
+- Options étudiées :
+  - A. script PC qui compile une fois et envoie l'OTA à chaque `hapanel-xxxxxx.local` :
+    rien à changer au firmware, mais le PC est nécessaire et HA ne montre rien ;
+  - B. module complémentaire ESPHome de HA : une compilation par module (longue avec
+    LVGL sur un petit serveur), dépôt et secrets copiés dans HA, version d'ESPHome
+    imposée par HA (R5) ;
+  - C. mise à jour tirée par le module : une compilation, un binaire et un manifeste
+    déposés sur un serveur local ; chaque module expose une entité de mise à jour
+    (« 0.8.0 disponible », bouton Installer).
+- Décision : option C.
+  - Firmware : composant `http_request`, `ota: platform: http_request` et
+    `update: platform: http_request` ; l'OTA native (D010) reste, pour le banc et en
+    secours ;
+  - adresse du manifeste dans `secrets.yaml` (G9), jamais dans le dépôt ;
+  - publication : `build.ps1` produit le binaire de production et son manifeste
+    (version, MD5) dans un dossier local ignoré par Git ; le propriétaire les copie
+    vers l'hébergement ;
+  - après chaque mise à jour, version et SHA relus dans HA (R7), comme aujourd'hui.
+- Points à trancher avec le propriétaire avant le code :
+  - hébergement : le binaire contient le mot de passe Wi-Fi et la clé de l'API, donc
+    jamais de publication sur Internet (GitHub exclu). `/config/www` de HA est servi
+    sans authentification sous `/local/` : acceptable seulement si HA n'est pas
+    joignable depuis Internet, sinon un autre serveur du réseau local ;
+  - installation : bouton seulement, ou automatisation de HA qui met tout le parc à
+    jour ; fréquence de vérification du manifeste.
+- À mesurer : mémoire libre pendant le téléchargement (G6, R2) ; place en flash (36 %
+  libres dans la partition à 0.7.0) ; retour au binaire précédent si le nouveau ne
+  démarre pas.
+- Conséquences : nouvelle surface au `08` avant fusion : le module ne vérifie que
+  l'intégrité (MD5), pas l'auteur ; quiconque peut écrire à l'emplacement du
+  manifeste, ou se placer entre le module et le serveur en HTTP, installe son
+  firmware (à évaluer avec la sécurité, rang 2 du TODO). Nouvelle partie du cahier
+  de tests ; procédure de publication écrite dans le dépôt (G11).
