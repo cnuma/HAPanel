@@ -5,7 +5,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 (et l'heure, pour retrouver les journaux).
 
 - **Module :** `hapanel-a85bfc`, binaire de banc `0.7.0-dev (7642307)`, branche
-  `feature/barre-etat`, flashé le 4 novembre 2026. Vérifier l'entité « Version » sur la page de l'appareil avant de
+  `feature/barre-etat` (fusionnée dans `main` le 4 novembre 2026), flashé le 4 novembre 2026. Vérifier l'entité « Version » sur la page de l'appareil avant de
   commencer.
 - **Ordre :** d'abord les tests qui bloquent une fusion (colonne « Bloque la fusion
   de ») ; les autres se font quand l'occasion se présente.
@@ -35,6 +35,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 4 novembre 2026 | `20dda6e` | A | OK : A1 à A5, cochés un à un (A et B validés en bloc le 3 novembre) | A6 à A13 non rapportés un à un |
 | 4 novembre 2026 | `20dda6e` | B | OK : B1, B2. B3 : l'écran se rallume (l'automatisation a bien envoyé) mais le texte est le même qu'en B1 | Tirage au hasard parmi 7 à 10 messages selon l'heure : une répétition est possible (environ 1 fois sur 9). À refaire 3 fois en notant les textes ; toujours le même : message unique non coché (P3) ou défaut du tirage, voir la trace |
 | 4 novembre 2026 | `420fdbe` | H | OK : H16 à H19 (disquette). Interfaces non uniformes : barre du haut sur l'Accueil seulement, titres différents d'une page à l'autre ; la disquette verte s'affiche par-dessus le contenu de la page quand on change vite de page | Proposition du propriétaire : barre d'état commune (titre, Wi-Fi, HA, disquette) ; TODO rang 2 |
+| 4 novembre 2026 | `7642307` | I | **I12 OK** : partie I validée | **Fusion de `feature/barre-etat` dans `main`**, accord du propriétaire |
 | 4 novembre 2026 | `c95f6b8` | I | **I1 à I11 OK**. ☰ « un peu capricieux à attraper », trop petit | Zone tactile agrandie : bouton de toute la hauteur de la barre, 48 px de large, plus 6 px autour (I12) |
 | 4 novembre 2026 | `8d21d4e` | I | **I11 OK** : « plus de point blanc, plus de ligne blanche » | Diagnostic provisoire retiré du binaire de banc |
 | 4 novembre 2026 | `4091687` | I | Titres visibles. Ligne du haut **bien plus fréquente à 20 MHz**, pas sur toute la largeur ; point du milieu qui clignote quand le bouton maison est affiché ; ligne au passage du Menu à une autre page | Diagnostic au banc : à l'écran immobile, aucun envoi de LVGL, donc pas un dessin du programme. Idée du propriétaire retenue : la dernière rangée de pixels réapparaît sur la première (le point est dans l'axe du bouton maison ; la ligne vient avec le redessin complet, dont le dernier morceau va jusqu'à la rangée 319). 40 MHz rétabli ; barre du haut et barre du bas décalées de 2 px des bords (I11 à refaire) |
@@ -53,7 +54,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | F | Cas d'erreur jamais confirmés séparément | — |
 | G | Cas qui demandent une date particulière | — |
 | H | Page Réglages (D031), menu (D025 révisée), tactile (D009 révisée) | `feature/reglages-ecran` (fusionnée) |
-| I | Barre d'état commune et navigation (D036, D025 révisée) | `feature/barre-etat` |
+| I | Barre d'état commune et navigation (D036, D025 révisée) | `feature/barre-etat` (fusionnée) |
 
 ## Préparation (une fois, avant A et B)
 
@@ -207,15 +208,15 @@ ensuite l'automatisation du module et l'enregistrer.
 
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
-| I1 | Écran d'accueil | En haut : bouton ☰ à gauche, sans fond, puis date et heure (« 4 nov.  17:20 ») ; Wi-Fi et point vert à droite. **Pas de barre en bas** | `feature/barre-etat` | OK 4 nov. |
-| I2 | Toucher brièvement ☰ | Le Menu s'ouvre ; titre « Menu » dans la barre, pas de ☰ ; maison centrée en bas | `feature/barre-etat` | OK 4 nov. |
-| I3 | Ouvrir chaque tuile du Menu | Titre de la barre = nom de la page (Météo, Planning, Scénarios, Réglages, À propos) ; ☰ présent ; maison en bas | `feature/barre-etat` | OK 4 nov. |
-| I4 | Toucher la maison | Accueil : la date revient à la place du titre ; la barre du bas disparaît | `feature/barre-etat` | OK 4 nov. |
-| I5 | Sur Menu, Météo (3e jour), Planning (dernière ligne), Scénarios (6e bouton), Réglages, À propos | Rien n'est caché par la barre du haut ni par celle du bas ; rien ne déborde | `feature/barre-etat` | OK 4 nov. |
-| I6 | Couper HA (comme A13), ouvrir Météo puis Scénarios | Point rouge dans la barre sur chaque page ; texte orange « HA non connecté » sur la page | `feature/barre-etat` | OK 4 nov. |
-| I7 | Sur Réglages, déplacer un curseur puis ouvrir aussitôt une autre page | La disquette reste dans la barre, grise puis verte ; rien ne s'affiche par-dessus la page | `feature/barre-etat` | OK 4 nov. |
-| I8 | Laisser Météo 1 min sans toucher | Retour à l'accueil : date dans la barre, pas de barre du bas | `feature/barre-etat` | OK 4 nov. |
-| I9 | Envoyer un message d'accueil (comme A1) | Le message couvre tout l'écran, barre du haut comprise ; à la fermeture, la barre revient | `feature/barre-etat` | OK 4 nov. |
-| I10 | HA coupé, sur l'accueil (D015) | Message « Pas de communication » lisible sous la barre ; point rouge | `feature/barre-etat` | OK 4 nov. |
-| I11 | Observer 1 min la barre du haut sur Réglages, sur l'accueil, puis passer du Menu à chaque page | Aucune ligne ni point parasite en haut de l'écran (2 rangées noires en haut et en bas) | `feature/barre-etat` | OK 4 nov. |
-| I12 | Toucher le ☰ dix fois, vite, un peu à côté de l'icône (dessous, à droite) | Le Menu s'ouvre à chaque fois | `feature/barre-etat` | |
+| I1 | Écran d'accueil | En haut : bouton ☰ à gauche, sans fond, puis date et heure (« 4 nov.  17:20 ») ; Wi-Fi et point vert à droite. **Pas de barre en bas** | `feature/barre-etat` (fusionnée) | OK 4 nov. |
+| I2 | Toucher brièvement ☰ | Le Menu s'ouvre ; titre « Menu » dans la barre, pas de ☰ ; maison centrée en bas | `feature/barre-etat` (fusionnée) | OK 4 nov. |
+| I3 | Ouvrir chaque tuile du Menu | Titre de la barre = nom de la page (Météo, Planning, Scénarios, Réglages, À propos) ; ☰ présent ; maison en bas | `feature/barre-etat` (fusionnée) | OK 4 nov. |
+| I4 | Toucher la maison | Accueil : la date revient à la place du titre ; la barre du bas disparaît | `feature/barre-etat` (fusionnée) | OK 4 nov. |
+| I5 | Sur Menu, Météo (3e jour), Planning (dernière ligne), Scénarios (6e bouton), Réglages, À propos | Rien n'est caché par la barre du haut ni par celle du bas ; rien ne déborde | `feature/barre-etat` (fusionnée) | OK 4 nov. |
+| I6 | Couper HA (comme A13), ouvrir Météo puis Scénarios | Point rouge dans la barre sur chaque page ; texte orange « HA non connecté » sur la page | `feature/barre-etat` (fusionnée) | OK 4 nov. |
+| I7 | Sur Réglages, déplacer un curseur puis ouvrir aussitôt une autre page | La disquette reste dans la barre, grise puis verte ; rien ne s'affiche par-dessus la page | `feature/barre-etat` (fusionnée) | OK 4 nov. |
+| I8 | Laisser Météo 1 min sans toucher | Retour à l'accueil : date dans la barre, pas de barre du bas | `feature/barre-etat` (fusionnée) | OK 4 nov. |
+| I9 | Envoyer un message d'accueil (comme A1) | Le message couvre tout l'écran, barre du haut comprise ; à la fermeture, la barre revient | `feature/barre-etat` (fusionnée) | OK 4 nov. |
+| I10 | HA coupé, sur l'accueil (D015) | Message « Pas de communication » lisible sous la barre ; point rouge | `feature/barre-etat` (fusionnée) | OK 4 nov. |
+| I11 | Observer 1 min la barre du haut sur Réglages, sur l'accueil, puis passer du Menu à chaque page | Aucune ligne ni point parasite en haut de l'écran (2 rangées noires en haut et en bas) | `feature/barre-etat` (fusionnée) | OK 4 nov. |
+| I12 | Toucher le ☰ dix fois, vite, un peu à côté de l'icône (dessous, à droite) | Le Menu s'ouvre à chaque fois | `feature/barre-etat` (fusionnée) | OK 4 nov. |

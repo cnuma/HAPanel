@@ -1,4 +1,4 @@
-# Socle graphique LVGL, barre de navigation et page « À propos » (version,
+# Socle graphique LVGL, barre d'etat en haut, bouton Accueil en bas et page « À propos » (version,
 # SHA, connexion a Home Assistant, memoire). Carte sans PSRAM : buffer_size explicite (G6, R2).
 font:
   - file: "gfonts://Roboto"

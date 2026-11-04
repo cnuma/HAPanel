@@ -1,6 +1,6 @@
 # Message d'accueil (D028) : texte choisi par le blueprint
 # blueprints/automation/hapanel/message_accueil.yaml quand quelqu'un arrive.
-# Plein ecran par-dessus la barre de navigation, ferme par un toucher ou apres
+# Plein ecran par-dessus les deux barres, ferme par un toucher ou apres
 # 3 min. LED en arc-en-ciel pendant l'affichage (packages/led_veille.yaml).
 substitutions:
   message_duree_ms: "180000"
@@ -32,7 +32,7 @@ switch:
 lvgl:
   top_layer:
     widgets:
-      # Apres la barre de navigation : dessine par-dessus. Le toucher ferme le
+      # Apres les barres (packages/lvgl.yaml) : dessine par-dessus. Le toucher ferme le
       # message sans atteindre la page en dessous (aucune commande, P4).
       - obj:
           id: obj_message

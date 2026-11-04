@@ -564,7 +564,7 @@ commande.
 
 **Message d'accueil (D028) :** le blueprint de la maison `message_accueil.yaml` choisit le
 texte et la ligne de météo, puis appelle `message_accueil` sur chaque panneau dont l'entité
-« Message d'accueil » est activée. Le module l'affiche par-dessus la barre de navigation,
+« Message d'accueil » est activée. Le module l'affiche par-dessus les deux barres,
 garde l'écran allumé, passe la LED en arc-en-ciel (l'alerte reste prioritaire) et ferme le
 message au toucher, après 3 minutes ou à la déconnexion de HA (P2).
 

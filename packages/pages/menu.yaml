@@ -1,4 +1,4 @@
-# Ecran menu (D025) : acces a toutes les pages depuis la barre de navigation.
+# Ecran menu (D025) : acces a toutes les pages par le bouton Menu de la barre d'etat (D036).
 # Fonctionne sans Home Assistant (P5).
 lvgl:
   pages:
