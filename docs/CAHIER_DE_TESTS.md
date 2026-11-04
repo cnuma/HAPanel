@@ -4,7 +4,7 @@ Tous les tests lancés et pas encore confirmés, en un seul endroit, pour n'en o
 aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a été vu
 (et l'heure, pour retrouver les journaux).
 
-- **Module :** `hapanel-a85bfc`, binaire de banc `0.7.0-dev (a3a8864)`, branche
+- **Module :** `hapanel-a85bfc`, binaire de banc `0.7.0-dev (4091687)`, branche
   `feature/barre-etat`, flashé le 4 novembre 2026. Vérifier l'entité « Version » sur la page de l'appareil avant de
   commencer.
 - **Ordre :** d'abord les tests qui bloquent une fusion (colonne « Bloque la fusion
