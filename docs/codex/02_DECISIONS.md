@@ -836,3 +836,35 @@ qui cite la précédente.
   manifeste, ou se placer entre le module et le serveur en HTTP, installe son
   firmware (à évaluer avec la sécurité, rang 2 du TODO). Nouvelle partie du cahier
   de tests ; procédure de publication écrite dans le dépôt (G11).
+- Compatibilité avec D038 : rien de ce qui est conçu ici ne doit empêcher un binaire
+  public sans secret (Wi-Fi saisi à l'installation, mêmes entités de mise à jour).
+
+## D038 — Orientation : un projet publiable
+
+- Date : 4 novembre 2026 — Statut : orientation donnée par le propriétaire (« c'est
+  franchement l'orientation que le projet est en train de prendre », après
+  HAP-R099) ; cadrage à faire avant tout code.
+- Contexte : le binaire de production contient le nom et le mot de passe du Wi-Fi
+  et la clé de l'API (vérifié le 4 novembre 2026 sur `a06cdbb`, HAP-R098) ; il ne
+  peut donc pas être publié. ESPHome ne permet pas, d'après la recherche du
+  4 novembre 2026, de fournir la clé de l'API à un module après compilation.
+- Orientation : HAPanel doit pouvoir être installé par d'autres, sur le modèle des
+  projets « Made for ESPHome » :
+  - binaire générique sans secret, publié sur GitHub (Releases), installable depuis
+    le navigateur (ESP Web Tools) ;
+  - Wi-Fi saisi à la première installation (Improv par USB, ou point d'accès du
+    module et portail captif), gardé en flash ; Improv par Bluetooth exclu (mémoire,
+    R2) ;
+  - chaque utilisateur adopte son module (`dashboard_import`) et recompile avec sa
+    propre clé ; les modules du propriétaire restent sur D037, binaire chiffré
+    hébergé chez lui ;
+  - configuration de la maison entièrement dans le blueprint (déjà le cas, D012).
+- À cadrer avec le propriétaire : licence ; dépôt rendu public (G9 le prépare) ;
+  relecture de la documentation pour en retirer ce qui est personnel (pièces,
+  nœuds, maison) ; page d'installation ; choix entre « adoption obligatoire » et
+  binaire public non chiffré (API et OTA ouvertes sur le réseau local, à refuser
+  sauf décision contraire).
+- Conséquences immédiates : les nouveaux développements évitent tout réglage propre
+  à la maison dans le firmware (tout passe par le blueprint ou les entités de
+  configuration) ; le Wi-Fi hors du binaire sert aussi les modules du propriétaire
+  (une fuite du binaire ne livre plus le Wi-Fi).
