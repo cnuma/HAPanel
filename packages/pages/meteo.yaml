@@ -24,20 +24,19 @@ lvgl:
   pages:
     - id: page_meteo
       bg_color: 0x000000
-      widgets:
-        - label:
-            id: lbl_met_titre
-            align: TOP_LEFT
-            x: 8
-            y: 6
+      # Titre dans la barre d'etat (D036) ; contenu sous la barre (y >= 38).
+      on_load:
+        - lvgl.label.update:
+            id: lbl_barre_titre
             text: "Météo"
+      widgets:
         # Largeur fixe : voir la regle des labels alignes a droite (04).
         - label:
             id: lbl_met_etat
             align: TOP_RIGHT
-            x: -8
-            y: 6
-            width: 160
+            x: -12
+            y: 38
+            width: 216
             text_align: RIGHT
             text_color: 0xFF9800
             text: ""
@@ -45,7 +44,7 @@ lvgl:
             id: lbl_met_icone
             align: TOP_LEFT
             x: 12
-            y: 40
+            y: 72
             text_font: police_meteo
             text_color: 0x9E9E9E
             text: "\U000F0625"
@@ -53,7 +52,7 @@ lvgl:
             id: lbl_met_temperature
             align: TOP_RIGHT
             x: -12
-            y: 26
+            y: 58
             width: 170
             text_align: RIGHT
             text_font: police_grande
@@ -62,7 +61,7 @@ lvgl:
             id: lbl_met_condition
             align: TOP_LEFT
             x: 12
-            y: 82
+            y: 114
             width: 216
             text: ""
         # Previsions : jour, icone, maximale / minimale.
@@ -70,13 +69,13 @@ lvgl:
             id: lbl_met_j1_jour
             align: TOP_LEFT
             x: 12
-            y: 124
+            y: 152
             text: "--"
         - label:
             id: lbl_met_j1_icone
             align: TOP_LEFT
             x: 76
-            y: 116
+            y: 144
             text_font: police_meteo
             text_color: 0x9E9E9E
             text: "\U000F0625"
@@ -84,7 +83,7 @@ lvgl:
             id: lbl_met_j1_temp
             align: TOP_RIGHT
             x: -12
-            y: 120
+            y: 148
             width: 110
             text_align: RIGHT
             text_font: police_titre
@@ -93,13 +92,13 @@ lvgl:
             id: lbl_met_j2_jour
             align: TOP_LEFT
             x: 12
-            y: 176
+            y: 198
             text: "--"
         - label:
             id: lbl_met_j2_icone
             align: TOP_LEFT
             x: 76
-            y: 168
+            y: 190
             text_font: police_meteo
             text_color: 0x9E9E9E
             text: "\U000F0625"
@@ -107,7 +106,7 @@ lvgl:
             id: lbl_met_j2_temp
             align: TOP_RIGHT
             x: -12
-            y: 172
+            y: 194
             width: 110
             text_align: RIGHT
             text_font: police_titre
@@ -116,13 +115,13 @@ lvgl:
             id: lbl_met_j3_jour
             align: TOP_LEFT
             x: 12
-            y: 228
+            y: 244
             text: "--"
         - label:
             id: lbl_met_j3_icone
             align: TOP_LEFT
             x: 76
-            y: 220
+            y: 236
             text_font: police_meteo
             text_color: 0x9E9E9E
             text: "\U000F0625"
@@ -130,7 +129,7 @@ lvgl:
             id: lbl_met_j3_temp
             align: TOP_RIGHT
             x: -12
-            y: 224
+            y: 240
             width: 110
             text_align: RIGHT
             text_font: police_titre

@@ -9,9 +9,12 @@ peut légèrement différer.*
 
 ## L'essentiel
 
-- La barre du bas est présente sur toutes les pages : **la maison** ramène à
-  l'accueil (elle n'apparaît pas sur l'accueil), **Menu** ouvre la liste des pages
-  (il n'apparaît pas sur le Menu).
+- **La barre du haut** est présente sur toutes les pages, comme sur un téléphone :
+  le titre de la page (la date et l'heure sur l'accueil), le Wi-Fi, le point de
+  connexion à Home Assistant (vert : relié, rouge : non relié) et le bouton **☰**,
+  qui ouvre le Menu (il n'apparaît pas sur le Menu).
+- **La maison**, en bas au centre, ramène à l'accueil. L'accueil n'a pas de barre en
+  bas.
 - La LED et la luminosité de l'écran se règlent depuis le panneau lui-même :
   **Menu › Réglages**.
 - Après **1 minute sans toucher**, le panneau revient à l'accueil et l'écran
@@ -27,13 +30,13 @@ peut légèrement différer.*
 
 | Repère | Élément | Utilisation |
 |---|---|---|
-| 1 | Date, heure, Wi-Fi, point de connexion | Point vert : relié à Home Assistant. Point rouge : non relié. |
-| 2 | Température de la pièce | Affichage seul. |
-| 3 | Température extérieure | Affichage seul. |
-| 4 | Préréglages : Manuel, Hors-gel, Éco, Confort, Boost | Touchez une icône pour changer. Le préréglage actif est entouré de blanc. |
-| 5 | Consigne, avec **-** et **+** | Chaque toucher change de 0,5 °C. L'envoi part 2 secondes après le dernier toucher. |
-| 6 | Glissière Éteint / Chauffage | Touchez le côté inactif, ou faites glisser la pastille. |
-| 7 | Menu | Ouvre la liste des pages. La maison n'apparaît pas ici : vous êtes déjà sur l'accueil. |
+| 1 | Barre du haut : date, heure, Wi-Fi, point de connexion | Point vert : relié à Home Assistant. Point rouge : non relié. |
+| 2 | ☰ | Ouvre le Menu, la liste des pages. |
+| 3 | Température de la pièce | Affichage seul. |
+| 4 | Température extérieure | Affichage seul. |
+| 5 | Préréglages : Manuel, Hors-gel, Éco, Confort, Boost | Touchez une icône pour changer. Le préréglage actif est entouré de blanc. |
+| 6 | Consigne, avec **-** et **+** | Chaque toucher change de 0,5 °C. L'envoi part 2 secondes après le dernier toucher. |
+| 7 | Glissière Éteint / Chauffage | Touchez le côté inactif, ou faites glisser la pastille. |
 
 **Après une commande**, la valeur demandée reste en attente jusqu'à la confirmation
 de Home Assistant. Sans confirmation au bout de 10 secondes, l'écran revient à la
@@ -56,7 +59,8 @@ pastille de la glissière devient grise.
 ![Page Menu](images/menu.png)
 
 Touchez une tuile pour ouvrir la page correspondante : Météo, Planning, Scénarios,
-Réglages ou À propos. Pour revenir à l'accueil, touchez la maison en bas.
+Réglages ou À propos. Pour revenir à l'accueil, touchez la maison en bas. Le bouton
+☰ n'apparaît pas ici : vous êtes déjà sur le Menu.
 
 ## Météo
 
@@ -121,11 +125,12 @@ fonctionne même sans Home Assistant ni Wi-Fi.
 | 2 | Intensité LED | Faites glisser, par pas de 5 %. 100 % est le maximum prévu, déjà discret ; 20 % par défaut. |
 | 3 | Alerte LED | Interrupteur. Arrêté : plus de rouge clignotant en cas d'anomalie ; seul l'écran la montre. |
 | 4 | Intensité écran | Faites glisser, de 20 à 100 %. L'écran continue de baisser tout seul dans le noir, et ne devient jamais illisible. |
+| 5 | Disquette | Apparaît après un changement : grise pendant l'enregistrement, verte quand il est fait. |
 
 - **Un curseur s'applique quand vous levez le doigt** : la valeur affichée suit le
   doigt, la LED ou l'écran change au relâchement.
 - **Les réglages sont gardés** après une coupure de courant. Après un changement,
-  une disquette apparaît au-dessus du bouton Menu : **grise** pendant 5 s, le temps
+  une disquette apparaît dans la barre du haut (repère 5) : **grise** pendant 5 s, le temps
   d'enregistrer (ne pas débrancher), puis **verte** 2 s quand c'est enregistré. Elle
   apparaît aussi, sur n'importe quelle page, quand le réglage vient de Home Assistant.
 - **Ce sont les mêmes réglages** que sur la page de l'appareil dans Home Assistant :

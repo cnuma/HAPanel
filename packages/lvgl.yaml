@@ -45,13 +45,11 @@ lvgl:
   pages:
     - id: page_apropos
       bg_color: 0x000000
-      widgets:
-        - label:
-            id: lbl_apropos_titre
-            align: TOP_MID
-            y: 12
-            text_font: police_titre
+      on_load:
+        - lvgl.label.update:
+            id: lbl_barre_titre
             text: "À propos"
+      widgets:
         - label:
             id: lbl_apropos_version
             align: TOP_LEFT
@@ -79,12 +77,15 @@ lvgl:
             long_mode: WRAP
             width: 216
             text: "Mémoire : mesure en cours"
-  # Barre de navigation, commune a toutes les pages (D014, D025).
+  # Navigation (D025 revisee par D036) : bouton Menu dans la barre d'etat en
+  # haut, bouton Accueil centre en bas ; pas de barre du bas sur l'accueil.
   top_layer:
     widgets:
       - obj:
           id: obj_nav
           align: BOTTOM_MID
+          # Page de demarrage : l'accueil (packages/pages/accueil.yaml).
+          hidden: true
           width: 240
           height: 44
           radius: 0
@@ -95,9 +96,7 @@ lvgl:
           widgets:
             - button:
                 id: btn_nav_accueil
-                align: LEFT_MID
-                # Page de demarrage : l'accueil (packages/pages/accueil.yaml).
-                hidden: true
+                align: CENTER
                 width: 68
                 height: 36
                 widgets:
@@ -109,41 +108,120 @@ lvgl:
                   - lvgl.page.show:
                       id: page_accueil
                       animation: NONE
+      # Barre d'etat, commune a toutes les pages (D036) : titre de la page (date
+      # et heure sur l'accueil), enregistrement, Wi-Fi, connexion a HA (P2) et
+      # bouton Menu. Les pages commencent sous la barre (y >= 38).
+      - obj:
+          id: obj_barre
+          align: TOP_MID
+          width: 240
+          height: 36
+          radius: 0
+          border_width: 0
+          pad_all: 0
+          bg_color: 0x212121
+          scrollable: false
+          widgets:
+            # Accueil seulement (on_load de page_accueil), mise a jour par
+            # accueil_heure.
+            - label:
+                id: lbl_barre_date
+                align: TOP_LEFT
+                x: 8
+                y: 9
+                text: "--:--"
+            # Autres pages : titre ecrit par leur on_load.
+            - label:
+                id: lbl_barre_titre
+                align: TOP_LEFT
+                x: 8
+                y: 9
+                hidden: true
+                text: ""
+            # Reglage en cours d'enregistrement (D035). Script
+            # enregistrement_signaler.
+            - label:
+                id: ico_barre_enregistrement
+                align: TOP_LEFT
+                x: 124
+                y: 6
+                hidden: true
+                text_font: police_icones
+                text_color: 0x9E9E9E
+                text: "\U000F0193"
+            # Wi-Fi : 4 barres, script accueil_wifi.
+            - obj:
+                id: obj_barre_wifi_1
+                align: TOP_LEFT
+                x: 152
+                y: 21
+                width: 4
+                height: 4
+                radius: 0
+                border_width: 0
+                pad_all: 0
+                bg_color: 0x424242
+            - obj:
+                id: obj_barre_wifi_2
+                align: TOP_LEFT
+                x: 158
+                y: 18
+                width: 4
+                height: 7
+                radius: 0
+                border_width: 0
+                pad_all: 0
+                bg_color: 0x424242
+            - obj:
+                id: obj_barre_wifi_3
+                align: TOP_LEFT
+                x: 164
+                y: 15
+                width: 4
+                height: 10
+                radius: 0
+                border_width: 0
+                pad_all: 0
+                bg_color: 0x424242
+            - obj:
+                id: obj_barre_wifi_4
+                align: TOP_LEFT
+                x: 170
+                y: 12
+                width: 4
+                height: 13
+                radius: 0
+                border_width: 0
+                pad_all: 0
+                bg_color: 0x424242
+            # Connexion a HA : vert ou rouge, script accueil_rafraichir.
+            - obj:
+                id: obj_barre_point_ha
+                align: TOP_LEFT
+                x: 180
+                y: 12
+                width: 13
+                height: 13
+                radius: 7
+                border_width: 0
+                pad_all: 0
+                bg_color: 0xF44336
+            # Masque sur la page Menu, ou il ne ferait rien (D025).
             - button:
                 id: btn_nav_menu
                 align: RIGHT_MID
-                width: 160
-                height: 36
+                x: -2
+                width: 42
+                height: 32
                 widgets:
                   - label:
                       align: CENTER
-                      x: -30
                       text_font: police_icones
                       text: "\U000F035C"
-                  - label:
-                      align: CENTER
-                      x: 14
-                      text_font: police_titre
-                      text: "Menu"
                 on_click:
                   - lvgl.page.show:
                       id: page_menu
                       animation: NONE
-      # Reglage en cours d'enregistrement (D035), au-dessus du bouton Menu,
-      # sur toutes les pages. Script enregistrement_signaler.
-      - label:
-          id: ico_nav_enregistrement
-          align: BOTTOM_RIGHT
-          x: -8
-          y: -48
-          hidden: true
-          pad_all: 4
-          radius: 6
-          bg_color: 0x212121
-          bg_opa: COVER
-          text_font: police_icones
-          text_color: 0x9E9E9E
-          text: "\U000F0193"
 
 script:
   # Appele a chaque changement d'un reglage garde en flash (D027, D028, D031) :
@@ -157,19 +235,19 @@ script:
       # avant que LVGL ait cree l'icone : rien a enregistrer.
       - if:
           condition:
-            lambda: return App.is_setup_complete() && id(ico_nav_enregistrement) != nullptr;
+            lambda: return App.is_setup_complete() && id(ico_barre_enregistrement) != nullptr;
           then:
             - lvgl.label.update:
-                id: ico_nav_enregistrement
+                id: ico_barre_enregistrement
                 text_color: 0x9E9E9E
-            - lvgl.widget.show: ico_nav_enregistrement
+            - lvgl.widget.show: ico_barre_enregistrement
             - delay: 5s
             - lambda: global_preferences->sync();
             - lvgl.label.update:
-                id: ico_nav_enregistrement
+                id: ico_barre_enregistrement
                 text_color: 0x4CAF50
             - delay: 2s
-            - lvgl.widget.hide: ico_nav_enregistrement
+            - lvgl.widget.hide: ico_barre_enregistrement
 
 interval:
   # Connexion a Home Assistant : seul un client qui s'annonce « Home

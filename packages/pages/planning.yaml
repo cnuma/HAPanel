@@ -14,12 +14,17 @@ lvgl:
   pages:
     - id: page_planning
       bg_color: 0x000000
+      # Titre dans la barre d'etat (D036) ; contenu sous la barre (y >= 38).
+      on_load:
+        - lvgl.label.update:
+            id: lbl_barre_titre
+            text: "Planning"
       widgets:
         - label:
             id: lbl_pla_titre
             align: TOP_LEFT
             x: 12
-            y: 8
+            y: 38
             text: "Aujourd'hui"
         # Heure, ou etat de la page. Largeur fixe : voir la regle des labels
         # alignes a droite (04).
@@ -27,7 +32,7 @@ lvgl:
             id: lbl_pla_etat
             align: TOP_RIGHT
             x: -12
-            y: 8
+            y: 38
             width: 130
             text_align: RIGHT
             text_color: 0x9E9E9E
@@ -37,7 +42,7 @@ lvgl:
             id: lbl_pla_nom_1
             align: TOP_LEFT
             x: 12
-            y: 36
+            y: 66
             width: 216
             text_color: 0x9E9E9E
             hidden: true
@@ -46,7 +51,7 @@ lvgl:
             id: lbl_pla_resume
             align: TOP_LEFT
             x: 12
-            y: 58
+            y: 88
             width: 216
             text_font: police_titre
             hidden: true
@@ -55,7 +60,7 @@ lvgl:
             id: obj_pla_bande
             align: TOP_LEFT
             x: 12
-            y: 92
+            y: 122
             width: 216
             height: 18
             radius: 6
@@ -69,7 +74,7 @@ lvgl:
             id: lbl_pla_h0
             align: TOP_LEFT
             x: 12
-            y: 114
+            y: 144
             text_color: 0x9E9E9E
             hidden: true
             text: "0"
@@ -77,7 +82,7 @@ lvgl:
             id: lbl_pla_h6
             align: TOP_LEFT
             x: 51
-            y: 114
+            y: 144
             width: 30
             text_align: CENTER
             text_color: 0x9E9E9E
@@ -87,7 +92,7 @@ lvgl:
             id: lbl_pla_h12
             align: TOP_LEFT
             x: 105
-            y: 114
+            y: 144
             width: 30
             text_align: CENTER
             text_color: 0x9E9E9E
@@ -97,7 +102,7 @@ lvgl:
             id: lbl_pla_h18
             align: TOP_LEFT
             x: 159
-            y: 114
+            y: 144
             width: 30
             text_align: CENTER
             text_color: 0x9E9E9E
@@ -107,7 +112,7 @@ lvgl:
             id: lbl_pla_h24
             align: TOP_RIGHT
             x: -12
-            y: 114
+            y: 144
             width: 30
             text_align: RIGHT
             text_color: 0x9E9E9E
@@ -118,7 +123,7 @@ lvgl:
             id: obj_pla_maintenant
             align: TOP_LEFT
             x: 12
-            y: 88
+            y: 118
             width: 2
             height: 26
             radius: 0
@@ -134,7 +139,7 @@ lvgl:
             id: obj_pla_point_2
             align: TOP_LEFT
             x: 12
-            y: 150
+            y: 180
             width: 8
             height: 8
             radius: 4
@@ -147,7 +152,7 @@ lvgl:
             id: lbl_pla_nom_2
             align: TOP_LEFT
             x: 28
-            y: 144
+            y: 174
             width: 104
             long_mode: DOT
             hidden: true
@@ -156,7 +161,7 @@ lvgl:
             id: lbl_pla_horaire_2
             align: TOP_RIGHT
             x: -12
-            y: 144
+            y: 174
             width: 104
             text_align: RIGHT
             hidden: true
@@ -165,7 +170,7 @@ lvgl:
             id: obj_pla_point_3
             align: TOP_LEFT
             x: 12
-            y: 190
+            y: 220
             width: 8
             height: 8
             radius: 4
@@ -178,7 +183,7 @@ lvgl:
             id: lbl_pla_nom_3
             align: TOP_LEFT
             x: 28
-            y: 184
+            y: 214
             width: 104
             long_mode: DOT
             hidden: true
@@ -187,7 +192,7 @@ lvgl:
             id: lbl_pla_horaire_3
             align: TOP_RIGHT
             x: -12
-            y: 184
+            y: 214
             width: 104
             text_align: RIGHT
             hidden: true
@@ -196,7 +201,7 @@ lvgl:
             id: obj_pla_point_4
             align: TOP_LEFT
             x: 12
-            y: 230
+            y: 260
             width: 8
             height: 8
             radius: 4
@@ -209,7 +214,7 @@ lvgl:
             id: lbl_pla_nom_4
             align: TOP_LEFT
             x: 28
-            y: 224
+            y: 254
             width: 104
             long_mode: DOT
             hidden: true
@@ -218,7 +223,7 @@ lvgl:
             id: lbl_pla_horaire_4
             align: TOP_RIGHT
             x: -12
-            y: 224
+            y: 254
             width: 104
             text_align: RIGHT
             hidden: true

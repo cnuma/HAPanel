@@ -247,7 +247,7 @@ def lumiere():
 
 def navigation():
     s = S(1100, 560)
-    s.boite(60, 40, 980, 90, "Barre de navigation (top_layer), toujours visible", "Accueil : un toucher ; Menu : tout le reste en deux touchers", GRIS)
+    s.boite(60, 40, 980, 90, "Barres (top_layer) : ☰ en haut, maison en bas", "Accueil : un toucher ; Menu : tout le reste en deux touchers", GRIS)
     s.boite(430, 190, 240, 90, "page_menu", "", BLEU, B_BLEU)
     s.fleche([(550, 130), (550, 190)], TRAIT, "Menu", (600, 160))
     s.d.line([(550, 280), (550, 325)], fill=TRAIT, width=3)

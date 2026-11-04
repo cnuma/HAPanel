@@ -48,6 +48,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | F | Cas d'erreur jamais confirmés séparément | — |
 | G | Cas qui demandent une date particulière | — |
 | H | Page Réglages (D031), menu (D025 révisée), tactile (D009 révisée) | `feature/reglages-ecran` (fusionnée) |
+| I | Barre d'état commune et navigation (D036, D025 révisée) | `feature/barre-etat` |
 
 ## Préparation (une fois, avant A et B)
 
@@ -196,3 +197,18 @@ ensuite l'automatisation du module et l'enregistrer.
 | H17 | Déplacer trois fois de suite un curseur, à 2 s d'intervalle | Disquette grise sans interruption, verte seulement 5 s après le dernier geste | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
 | H18 | Écran sur l'Accueil, changer « Intensité écran » sur la page de l'appareil dans HA | La disquette apparaît sur l'Accueil, comme en H16 | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
 | H19 | Couper puis rétablir le courant | Pas de disquette au démarrage | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
+
+## I — Barre d'état et navigation (D036)
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| I1 | Écran d'accueil | En haut : date et heure (« 4 nov.  17:20 »), Wi-Fi, point vert, bouton ☰ à droite. **Pas de barre en bas** | `feature/barre-etat` | |
+| I2 | Toucher brièvement ☰ | Le Menu s'ouvre ; titre « Menu » dans la barre, pas de ☰ ; maison centrée en bas | `feature/barre-etat` | |
+| I3 | Ouvrir chaque tuile du Menu | Titre de la barre = nom de la page (Météo, Planning, Scénarios, Réglages, À propos) ; ☰ présent ; maison en bas | `feature/barre-etat` | |
+| I4 | Toucher la maison | Accueil : la date revient à la place du titre ; la barre du bas disparaît | `feature/barre-etat` | |
+| I5 | Sur Menu, Météo (3e jour), Planning (dernière ligne), Scénarios (6e bouton), Réglages, À propos | Rien n'est caché par la barre du haut ni par celle du bas ; rien ne déborde | `feature/barre-etat` | |
+| I6 | Couper HA (comme A13), ouvrir Météo puis Scénarios | Point rouge dans la barre sur chaque page ; texte orange « HA non connecté » sur la page | `feature/barre-etat` | |
+| I7 | Sur Réglages, déplacer un curseur puis ouvrir aussitôt une autre page | La disquette reste dans la barre, grise puis verte ; rien ne s'affiche par-dessus la page | `feature/barre-etat` | |
+| I8 | Laisser Météo 1 min sans toucher | Retour à l'accueil : date dans la barre, pas de barre du bas | `feature/barre-etat` | |
+| I9 | Envoyer un message d'accueil (comme A1) | Le message couvre tout l'écran, barre du haut comprise ; à la fermeture, la barre revient | `feature/barre-etat` | |
+| I10 | HA coupé, sur l'accueil (D015) | Message « Pas de communication » lisible sous la barre ; point rouge | `feature/barre-etat` | |
