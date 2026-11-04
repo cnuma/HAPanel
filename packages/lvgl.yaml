@@ -119,6 +119,10 @@ lvgl:
           radius: 0
           border_width: 0
           pad_all: 0
+          # La couche commune n'herite pas du texte blanc des pages : sans
+          # cela, titre et date sont sombres sur le gris, donc invisibles.
+          text_color: 0xFFFFFF
+          text_font: police_texte
           bg_color: 0x212121
           scrollable: false
           widgets:

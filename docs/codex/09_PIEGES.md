@@ -47,6 +47,9 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 
 ## LVGL
 
+- Le `top_layer` n'hérite pas de `text_color` ni de `text_font` posés au niveau de
+  `lvgl:` (ils vont aux pages) : un label y est sombre, donc invisible sur fond foncé.
+  Les poser sur le conteneur (barre d'état, D036).
 - Un label non aligné à gauche dont le texte change porte une largeur fixe
   (`04_DEVELOPMENT_RULES.md`).
 - Le curseur natif saute à l'endroit touché (d'où la glissière sur mesure de

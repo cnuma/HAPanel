@@ -119,7 +119,7 @@ sont dans `led_veille.yaml`, qui interprète la mesure.
 | `ecran` | `platform` | `mipi_spi` | Pilote générique des écrans SPI d'ESPHome. |
 | | `model` | `${display_model}` | Réglages propres à l'ILI9341. |
 | | `spi_id` | `bus_spi_ecran` | Bus utilisé. |
-| | `data_rate` | `40MHz` | Vitesse du bus : plus rapide, l'écran se redessine plus vite. |
+| | `data_rate` | `20MHz` | Vitesse du bus. 40 MHz redessine deux fois plus vite, mais une ligne parasite fugace apparaissait en haut de l'écran : essai à 20 MHz (cahier I11). |
 | | `cs_pin`, `dc_pin` | `ignore_strapping_warning: true` | GPIO15 et GPIO2 sont aussi des broches de démarrage : même raison que pour `miso_pin`. |
 
 L'écran n'a ni `lambda` ni `pages` : c'est LVGL (`lvgl.yaml`) qui dessine dessus.
