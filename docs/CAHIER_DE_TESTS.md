@@ -25,6 +25,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 3 novembre 2026 | `dec159c` | A1 | OK : **A et B validés**, fusion dans `main` | |
 | 3 novembre 2026 | `dec159c` | E | KO : aucune variation de la LED ni de l'écran | Journaux à 22 h 30 : `LDR 1.094 V` fixe, plafond de l'ADC en `0db` (relevés du 31 octobre : 0,075 à 0,26 V). Mesure saturée, donc obscurité toujours maximale. Diagnostic : éclairer la LDR à la lampe pendant la lecture des journaux |
 | 3 novembre 2026 | `bc6f66e` | H | Page Réglages OK, tactile bien plus réactif, luminosité suit la pièce mais trop lentement ; tuile Accueil du Menu en doublon ; interrupteur à l'arrêt gris confondu avec « grisé = imposé » et peu lisible ; « Alerte LED » bloquée | Corrigé (`20dda6e`) : tuile retirée, cadenas, interrupteur sur fond sombre, LDR moyennée sur 5 s. « Alerte LED » était imposée par l'automatisation (`led_alerte on` dans les journaux) : la mettre sur « Ne pas imposer » |
+| 4 novembre 2026 | `20dda6e` | C, E, G, H | OK : C1, C6, C7 ; **E1 à E7** (E levé) ; G3 ; H1 à H9, H15 | Restent : C2 à C5, F, G1, G2, G4, H10 à H14 |
 
 | Partie | Sujet | Bloque la fusion |
 |---|---|---|
@@ -91,13 +92,13 @@ Binaire `966fb2d` et suivants, jamais rapportés.
 
 | N° | Action | Attendu | OK / KO |
 |---|---|---|---|
-| C1 | Page de l'appareil | Entités « LED », « Intensité LED » et « Alerte LED » présentes | |
+| C1 | Page de l'appareil | Entités « LED », « Intensité LED » et « Alerte LED » présentes | OK 4 nov. |
 | C2 | Changer « Intensité LED », redémarrer le module | Valeur conservée | |
 | C3 | Dans le blueprint « module », imposer une valeur LED, enregistrer | La valeur imposée apparaît sur la page de l'appareil | |
 | C4 | Choisir « Ne pas imposer », régler à la main sur la page de l'appareil | Le réglage manuel reste | |
 | C5 | « Alerte LED » désactivée, puis couper HA (comme A13) | La LED reste muette (pas de rouge clignotant) | |
-| C6 | Écran d'accueil | Pas de bouton maison dans la barre | |
-| C7 | Aller sur une autre page, attendre le retour automatique à l'accueil | Toujours pas de bouton maison sur l'accueil | |
+| C6 | Écran d'accueil | Pas de bouton maison dans la barre | OK 4 nov. |
+| C7 | Aller sur une autre page, attendre le retour automatique à l'accueil | Toujours pas de bouton maison sur l'accueil | OK 4 nov. |
 
 ## D — Icônes et couleurs des scénarios (D026)
 
@@ -115,13 +116,13 @@ Après réimport du blueprint « module » depuis `main`.
 
 | N° | Action | Attendu | OK / KO |
 |---|---|---|---|
-| E1 | Pièce éclairée : regarder la respiration de la LED | Monte de 0 à environ 5 %, discrète ; couleur du préréglage lisible | |
-| E2 | Pièce sombre (attendre 10 s, la mesure est moyennée) | Respiration plus faible (environ 1 %), couleur encore reconnaissable | |
-| E3 | Préréglage Confort, puis Éco | Orange et vert bien distincts, de jour comme de nuit | |
-| E4 | Boost, ou une alerte | Signal visible, y compris en pièce sombre | |
-| E5 | Pièce sombre : lire l'écran | Lisible sans éblouir (niveau `retro_nuit`) | |
-| E6 | Allumer puis éteindre la lumière de la pièce | Le rétroéclairage suit en moins de 10 s, sans clignoter ni varier sans cesse (binaire `20dda6e` et suivants ; 1 min avant) | |
-| E7 | Pièce sombre, écran allumé puis en veille | La luminosité de l'écran ne fausse pas la mesure (pas de va-et-vient) | |
+| E1 | Pièce éclairée : regarder la respiration de la LED | Monte de 0 à environ 5 %, discrète ; couleur du préréglage lisible | OK 4 nov. |
+| E2 | Pièce sombre (attendre 10 s, la mesure est moyennée) | Respiration plus faible (environ 1 %), couleur encore reconnaissable | OK 4 nov. |
+| E3 | Préréglage Confort, puis Éco | Orange et vert bien distincts, de jour comme de nuit | OK 4 nov. |
+| E4 | Boost, ou une alerte | Signal visible, y compris en pièce sombre | OK 4 nov. |
+| E5 | Pièce sombre : lire l'écran | Lisible sans éblouir (niveau `retro_nuit`) | OK 4 nov. |
+| E6 | Allumer puis éteindre la lumière de la pièce | Le rétroéclairage suit en moins de 10 s, sans clignoter ni varier sans cesse (binaire `20dda6e` et suivants ; 1 min avant) | OK 4 nov. |
+| E7 | Pièce sombre, écran allumé puis en veille | La luminosité de l'écran ne fausse pas la mesure (pas de va-et-vient) | OK 4 nov. |
 
 ## F — Cas d'erreur jamais confirmés séparément
 
@@ -151,7 +152,7 @@ mesure suivante).
 |---|---|---|---|
 | G1 | Passage à minuit, écran Planning ouvert | Le planning bascule sur le nouveau jour | |
 | G2 | Changement d'heure (28 mars 2027) | Planning et heures justes | |
-| G3 | 3 ou 4 calendriers dans le blueprint « module » | Tous affichés sur la page Planning | |
+| G3 | 3 ou 4 calendriers dans le blueprint « module » | Tous affichés sur la page Planning | OK 4 nov. |
 | G4 | Message d'accueil en hiver (à partir du 21 décembre) | Messages « hiver » tirés | |
 
 ## H — Page Réglages, menu et tactile
@@ -165,18 +166,18 @@ ensuite l'automatisation du module et l'enregistrer.
 
 | N° | Action | Attendu | OK / KO |
 |---|---|---|---|
-| H1 | Toucher brièvement, comme sur un téléphone, les boutons de la barre et des tuiles | Chaque toucher bref est pris en compte, sans laisser le doigt | |
-| H2 | Ouvrir le Menu | Seul le bouton maison reste dans la barre ; pas de tuile Accueil ; tuiles Météo, Planning, Scénarios, **Réglages**, À propos | |
-| H3 | Quitter le Menu par une tuile | Le bouton Menu revient sur la nouvelle page | |
-| H4 | Ouvrir Réglages, blueprint sur « Ne pas imposer » partout | 4 réglages actifs, mêmes valeurs que la page de l'appareil dans HA ; aucun cadenas ; interrupteur à l'arrêt lisible (fond sombre bordé, bouton blanc) | |
-| H5 | Basculer « LED » | La LED s'éteint ou reprend sa respiration ; « LED » change aussi sur la page de l'appareil | |
-| H6 | Glisser « Intensité LED », relâcher | Valeur affichée pendant le glissement, par pas de 5 ; LED et page de l'appareil suivent au relâchement | |
-| H7 | Basculer « Alerte LED » | Même valeur sur la page de l'appareil | |
-| H8 | Glisser « Intensité écran » jusqu'à 20 % | L'écran baisse aussitôt sans devenir illisible (plancher) | |
-| H9 | Changer « Intensité écran » sur la page de l'appareil | Le curseur de la page Réglages suit | |
+| H1 | Toucher brièvement, comme sur un téléphone, les boutons de la barre et des tuiles | Chaque toucher bref est pris en compte, sans laisser le doigt | OK 4 nov. |
+| H2 | Ouvrir le Menu | Seul le bouton maison reste dans la barre ; pas de tuile Accueil ; tuiles Météo, Planning, Scénarios, **Réglages**, À propos | OK 4 nov. |
+| H3 | Quitter le Menu par une tuile | Le bouton Menu revient sur la nouvelle page | OK 4 nov. |
+| H4 | Ouvrir Réglages, blueprint sur « Ne pas imposer » partout | 4 réglages actifs, mêmes valeurs que la page de l'appareil dans HA ; aucun cadenas ; interrupteur à l'arrêt lisible (fond sombre bordé, bouton blanc) | OK 4 nov. |
+| H5 | Basculer « LED » | La LED s'éteint ou reprend sa respiration ; « LED » change aussi sur la page de l'appareil | OK 4 nov. |
+| H6 | Glisser « Intensité LED », relâcher | Valeur affichée pendant le glissement, par pas de 5 ; LED et page de l'appareil suivent au relâchement | OK 4 nov. |
+| H7 | Basculer « Alerte LED » | Même valeur sur la page de l'appareil | OK 4 nov. |
+| H8 | Glisser « Intensité écran » jusqu'à 20 % | L'écran baisse aussitôt sans devenir illisible (plancher) | OK 4 nov. |
+| H9 | Changer « Intensité écran » sur la page de l'appareil | Le curseur de la page Réglages suit | OK 4 nov. |
 | H10 | Redémarrer le module | Les 4 réglages sont conservés | |
 | H11 | Dans le blueprint, imposer « Alerte LED », enregistrer | Sur l'écran, cadenas devant Alerte LED, qui ne réagit plus ; « imposé par HA » avec un cadenas en bas | |
 | H12 | Remettre « Ne pas imposer », enregistrer | Alerte LED de nouveau modifiable, cadenas et mention disparus | |
 | H13 | Rester 1 min sur Réglages sans toucher | Retour à l'accueil, puis écran éteint | |
 | H14 | HA coupé (comme A13), ouvrir Réglages | La page marche, réglages modifiables | |
-| H15 | Éteindre la lumière d'une pièce éclairée | L'écran baisse en moins de 10 s, sans clignoter ensuite | |
+| H15 | Éteindre la lumière d'une pièce éclairée | L'écran baisse en moins de 10 s, sans clignoter ensuite | OK 4 nov. |
