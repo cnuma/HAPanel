@@ -14,10 +14,10 @@ documentation complète. Remplace `CHECKPOINT_2026-10-31_97b1f34.md`.
 | Binaire sur le panneau | `0.6.0-dev (dc83077)`, sans `+modif`, OTA, « Boot seems successful » ; volontairement non reflashé : la page À propos affiche donc `dc83077` |
 | Version | `0.6.0-dev` (fichier `VERSION`) |
 | ESPHome | 2026.10.1 (`requirements.txt`), framework `esp-idf`, LVGL 9 |
-| Home Assistant | HA OS sur 192.168.1.155 ; Core 2026.9.4 au dernier relevé (31 octobre 2026), à reconfirmer |
+| Home Assistant | HA OS sur <IP_HA> ; Core 2026.9.4 au dernier relevé (31 octobre 2026), à reconfirmer |
 | Carte | ESP32-2432S024C, ESP32 rev 3.1, flash 4 Mo, sans PSRAM |
 | Alimentation | Bloc secteur externe 1 A, OTA uniquement (R7) |
-| Module de banc | Nœud `hapanel-a85bfc`, IP 192.168.1.197 au dernier relevé (DHCP, à redemander) |
+| Module de banc | Nœud `hapanel-a85bfc`, IP <IP_PANNEAU> au dernier relevé (DHCP, à redemander) |
 
 ## Changements depuis `97b1f34`
 

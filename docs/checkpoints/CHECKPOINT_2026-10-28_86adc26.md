@@ -14,10 +14,10 @@ Remplace `CHECKPOINT_2026-10-28_33bf440.md`.
 | Binaire sur le panneau | `hapanel_banc.yaml`, `0.1.0 (86adc26)`, compilé le 28 octobre 2026 à 20 h 32, OTA chiffrée |
 | Version | `0.1.0` (fichier `VERSION`) |
 | ESPHome | 2026.10.1 (`requirements.txt`), ESP-IDF 5.5.6, framework `esp-idf` |
-| Home Assistant | HA OS, Core 2026.9.4, sur 192.168.1.155 |
+| Home Assistant | HA OS, Core 2026.9.4, sur <IP_HA> |
 | Carte | ESP32-2432S024C, ESP32 rev 3.1, flash 4 Mo, sans PSRAM |
 | Alimentation | bloc secteur externe 1 A (le port USB du PC provoque des brownouts, R7) |
-| Panneau | nœud `hapanel`, IP 192.168.1.197 (DHCP, à redemander à chaque session) ; plus branché en USB : tout passe par OTA |
+| Panneau | nœud `hapanel`, IP <IP_PANNEAU> (DHCP, à redemander à chaque session) ; plus branché en USB : tout passe par OTA |
 
 ## Fichiers modifiés depuis le checkpoint `33bf440`
 

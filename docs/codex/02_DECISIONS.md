@@ -697,5 +697,29 @@ qui cite la précédente.
   règle vaut pour tous les dépôts du propriétaire.
 - Conséquences : à une fusion, les tests de la fonction sont OK ou explicitement
   reportés ; le checkpoint cite le cahier.
+
+## D033 — Checkpoints courts, TODO priorisé, aucune adresse dans le dépôt (G14, G9)
+
+- Date : 4 novembre 2026 — Statut : demandé par le propriétaire (« nouvelles règles
+  pour la rédaction des checkpoints »).
+- Contexte : chaque checkpoint recopiait l'identité du matériel, les pièges, la
+  procédure de reprise et le reste à faire ; les pièges s'y accumulaient (« pièges des
+  checkpoints précédents toujours valables ») et une information se perdait quand elle
+  n'était pas recopiée. Les adresses IP de HA et du module y figuraient.
+- Décision :
+  - invariant **G14** : informations réutilisables d'abord dans leur fichier de
+    référence ; nouveau `docs/codex/09_PIEGES.md`, qui rassemble les pièges des
+    checkpoints ; procédure de reprise dans `START_HERE.md` ; checkpoint réduit à
+    l'état variable, selon le modèle de `docs/checkpoints/README.md` ;
+  - `docs/TODO.md` toujours utilisé, avec une colonne **Prio** qui ordonne les
+    développements selon leurs dépendances (fusionner avant d'ouvrir un chantier,
+    décider avant de coder, matériel avant code) ; les tests n'y figurent plus, ils
+    sont dans le cahier (G13) ;
+  - **G9** étendu : ni adresse IP, ni port COM, ni mot de passe, ni nom de réseau dans
+    un fichier du dépôt ; adresses retirées des checkpoints existants.
+  Les règles valent pour tous les dépôts du propriétaire.
+- Limite : les adresses restent dans l'historique Git des commits passés. Ce sont des
+  adresses de réseau local, non joignables depuis Internet ; réécrire l'historique de
+  `main` demanderait l'accord du propriétaire et casserait les SHA cités partout.
 - Conséquences : nouvelle entité exposée, à ne plus renommer (G10) ; surface
   inscrite au `08` ; mémoire à mesurer (G6).
