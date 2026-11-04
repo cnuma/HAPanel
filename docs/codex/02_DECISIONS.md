@@ -848,6 +848,13 @@ qui cite la précédente.
   et la clé de l'API (vérifié le 4 novembre 2026 sur `a06cdbb`, HAP-R098) ; il ne
   peut donc pas être publié. ESPHome ne permet pas, d'après la recherche du
   4 novembre 2026, de fournir la clé de l'API à un module après compilation.
+- Public visé : des utilisateurs de Home Assistant qui veulent réaliser le projet
+  chez eux (carte achetée, montage, installation). Le propriétaire développe
+  d'abord seul ; la publication vient ensuite. C'est la raison de l'absence de
+  secret dans le dépôt (G9).
+- Deux chemins pour un utilisateur, le premier possible dès aujourd'hui : cloner le
+  dépôt et compiler avec son propre `secrets.yaml` (modèle `secrets.example.yaml`) ;
+  ou, plus simple, installer le binaire générique décrit ci-dessous.
 - Orientation : HAPanel doit pouvoir être installé par d'autres, sur le modèle des
   projets « Made for ESPHome » :
   - binaire générique sans secret, publié sur GitHub (Releases), installable depuis
@@ -859,7 +866,9 @@ qui cite la précédente.
     propre clé ; les modules du propriétaire restent sur D037, binaire chiffré
     hébergé chez lui ;
   - configuration de la maison entièrement dans le blueprint (déjà le cas, D012).
-- À cadrer avec le propriétaire : licence ; dépôt rendu public (G9 le prépare) ;
+- À cadrer avec le propriétaire : licence (le dépôt est déjà public, constaté le
+  4 novembre 2026, mais sans licence : personne n'a légalement le droit de le
+  réutiliser) ;
   relecture de la documentation pour en retirer ce qui est personnel (pièces,
   nœuds, maison) ; page d'installation ; choix entre « adoption obligatoire » et
   binaire public non chiffré (API et OTA ouvertes sur le réseau local, à refuser
