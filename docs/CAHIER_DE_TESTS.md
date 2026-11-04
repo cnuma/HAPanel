@@ -33,6 +33,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 4 novembre 2026 | `20dda6e` | C, E, G, H | OK : C1, C6, C7 ; **E1 à E7** (E levé) ; G3 ; H1 à H9, H15 | Restent : C2 à C5, F, G1, G2, G4, H10 à H14 |
 | 4 novembre 2026 | `20dda6e` | P | OK : P1, P2, P4, P5 | P3 (liste « Messages uniques ») non rapporté |
 | 4 novembre 2026 | `20dda6e` | A | OK : A1 à A5, cochés un à un (A et B validés en bloc le 3 novembre) | A6 à A13 non rapportés un à un |
+| 4 novembre 2026 | `20dda6e` | B | OK : B1, B2. B3 : l'écran se rallume (l'automatisation a bien envoyé) mais le texte est le même qu'en B1 | Tirage au hasard parmi 7 à 10 messages selon l'heure : une répétition est possible (environ 1 fois sur 9). À refaire 3 fois en notant les textes ; toujours le même : message unique non coché (P3) ou défaut du tirage, voir la trace |
 
 | Partie | Sujet | Bloque la fusion de |
 |---|---|---|
@@ -83,9 +84,9 @@ Chaque déclenchement : noter le message affiché. En cas d'absence, ouvrir les
 
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
-| B1 | Porte fermée et rien touché depuis plus d'1 min, entre 6 h et 23 h : ouvrir la porte | Message tiré de la liste, avec la ligne météo | `feature/message-accueil` (fusionnée) | |
-| B2 | Refermer et rouvrir aussitôt | **Pas** de nouveau message (période sans déclenchement) | `feature/message-accueil` (fusionnée) | |
-| B3 | Après 1 min de calme, rouvrir | Nouveau message | `feature/message-accueil` (fusionnée) | |
+| B1 | Porte fermée et rien touché depuis plus d'1 min, entre 6 h et 23 h : ouvrir la porte | Message tiré de la liste, avec la ligne météo | `feature/message-accueil` (fusionnée) | OK 4 nov. |
+| B2 | Refermer et rouvrir aussitôt | **Pas** de nouveau message (période sans déclenchement) | `feature/message-accueil` (fusionnée) | OK 4 nov. |
+| B3 | Après 1 min de calme, rouvrir | Nouveau message | `feature/message-accueil` (fusionnée) | À confirmer 4 nov. : même texte qu'en B1 |
 | B4 | Ajouter une tâche « Test unique » dans « Messages uniques », attendre 1 min, ouvrir | « Test unique » s'affiche, puis la tâche est **cochée** dans la liste | `feature/message-accueil` (fusionnée) | |
 | B5 | Attendre 1 min, ouvrir | De nouveau un message de la liste ordinaire | `feature/message-accueil` (fusionnée) | |
 | B6 | Sur 4 ou 5 déclenchements, comparer les messages aux descriptions de leurs tâches | Seulement des messages sans étiquette, ou étiquetés « automne » et du moment de la journée (« soir » de 18 h à 22 h, « nuit » après 22 h) | `feature/message-accueil` (fusionnée) | |
