@@ -167,6 +167,7 @@ Relancer le script après toute modification du YAML.
 | `liaison_temperature` | globals | packages/liaison_ha.yaml | packages/pages/accueil.yaml |
 | `liaison_temperature_etat` | globals | packages/liaison_ha.yaml | packages/pages/accueil.yaml |
 | `liaison_temperature_ms` | globals | packages/liaison_ha.yaml | — |
+| `maj_firmware` | update (http_request) | packages/acces_public.yaml | — |
 | `message_actif` | switch (template) | packages/message_accueil.yaml | — |
 | `message_fermer` | script | packages/message_accueil.yaml | packages/liaison_ha.yaml |
 | `message_ms` | globals | packages/message_accueil.yaml | packages/led_veille.yaml |

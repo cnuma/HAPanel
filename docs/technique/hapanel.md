@@ -1,22 +1,24 @@
-# hapanel.yaml et hapanel_banc.yaml
+# hapanel.yaml, hapanel_banc.yaml et hapanel_public.yaml
 
 ## Rôle
 
-Ce sont les deux points d'entrée qu'on donne à ESPHome. Ils ne contiennent aucune
+Ce sont les trois points d'entrée qu'on donne à ESPHome. Ils ne contiennent aucune
 fonction : ils **assemblent** les packages et fixent les substitutions communes.
 
 | Fichier | Sert à | Flashé sur |
 |---|---|---|
 | `hapanel.yaml` | Configuration de production | Les modules de la maison |
 | `hapanel_banc.yaml` | Production plus outils de mise au point | Le panneau de banc |
+| `hapanel_public.yaml` | Mêmes fonctions, sans aucun secret, publiable (D039, maquette) | Les modules installés depuis GitHub |
 
 Sans `hapanel.yaml`, il n'y a rien à compiler. `hapanel_banc.yaml` n'existe que pour
 le banc : il n'est jamais flashé sur un module de la maison.
 
 ## Dépendances
 
-- **Utilise :** les 11 fichiers de `packages/`, et `secrets.yaml` à travers
-  `base.yaml`.
+- **Utilise :** `packages/application.yaml`, qui inclut les 12 fichiers de fonctions,
+  et un fichier d'accès : `acces_prive.yaml` (lit `secrets.yaml`) pour `hapanel.yaml`,
+  `acces_public.yaml` pour `hapanel_public.yaml`.
 - **Fournit :** les substitutions ci-dessous à tous les packages.
 - **Outil :** `tools/build.ps1` remplace `version` et `git_sha` au lancement (G5).
 
@@ -38,7 +40,12 @@ substitution déclarée ici **prime** sur la même substitution d'un package.
 
 ### Bloc `packages`
 
-Chaque ligne fusionne un fichier dans la configuration. **L'ordre compte** :
+| Package | Fichier | Rôle |
+|---|---|---|
+| `application` | `packages/application.yaml` | Toutes les fonctions du panneau, communes au binaire public |
+| `acces` | `packages/acces_prive.yaml` | Wi-Fi, clé de l'API et OTA depuis le PC, compilés depuis `secrets.yaml` |
+
+`application.yaml` inclut à son tour chaque fichier de fonction. **L'ordre compte** :
 
 | Ordre | Package | Contrainte d'ordre |
 |---|---|---|
@@ -50,6 +57,19 @@ Chaque ligne fusionne un fichier dans la configuration. **L'ordre compte** :
 | 10 | `liaison_ha` | |
 | 11 | `led_veille` | |
 | 12 | `message_accueil` | **Après `lvgl`** : son calque est ajouté après la barre de navigation dans `top_layer`, donc dessiné par-dessus. |
+
+## hapanel_public.yaml
+
+Maquette D039, procédure dans `docs/DEPLOIEMENT_PUBLIC.md`.
+
+| Bloc | Contenu | Rôle |
+|---|---|---|
+| `substitutions` | Celles de `hapanel.yaml`, plus `source_mise_a_jour` | Adresse du manifeste de la dernière Release du dépôt public, lue par l'entité « Firmware ». |
+| `packages` | `application`, puis `acces: acces_public.yaml` | Mêmes fonctions ; accès sans secret. |
+| `esphome.build_path` | `build/hapanel_public` | Même nom de nœud que la production : sans dossier propre, les deux compilations s'écraseraient. |
+
+Compilé par GitHub Actions (`.github/workflows/publication.yml`) à l'envoi d'une
+étiquette `v<version>` ; localement : `.\tools\build.ps1 compile -Config hapanel_public.yaml`.
 
 ## hapanel_banc.yaml
 
@@ -93,7 +113,7 @@ droit vers 240,320.
 
 | Pour | Faire |
 |---|---|
-| Ajouter un fichier de fonction | L'ajouter dans `packages:` de `hapanel.yaml`, à la bonne place (voir l'ordre) ; ajouter sa ligne dans `tools/generer_schemas_architecture.py` (matrice) et sa page ici. |
+| Ajouter un fichier de fonction | L'ajouter dans `packages:` de `packages/application.yaml`, à la bonne place (voir l'ordre) ; ajouter sa ligne dans `tools/generer_schemas_architecture.py` (matrice) et sa page ici. |
 | Ajouter un écran | Package dans `packages/pages/`, inclus **avant** `lvgl`. |
 | Changer l'écran de démarrage | Mettre son package en premier parmi les pages. |
 | Ajouter un outil de mise au point | Dans `hapanel_banc.yaml` uniquement : la production reste inchangée. |
@@ -107,4 +127,4 @@ droit vers 240,320.
 - Deux packages qui déclarent le même `id` font échouer `esphome config`.
 
 **Contrôle après modification :** `.\tools\build.ps1 config`, puis `compile`, pour les
-deux fichiers.
+trois fichiers.

@@ -1,0 +1,85 @@
+# Publication du binaire public (D038, D039) : compile hapanel_public.yaml,
+# sans aucun secret, et publie une Release GitHub avec le binaire complet
+# (premiere installation), le binaire de mise a jour et le manifeste lu par
+# l'entite « Firmware » des modules.
+#
+# Declenche par l'envoi d'une etiquette v<version>, par exemple v0.8.0-dev.1 :
+# la version doit commencer par le contenu du fichier VERSION (G5).
+name: Publication
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  publier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Version et SHA
+        id: id
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          base="$(head -n 1 VERSION | tr -d '[:space:]')"
+          case "$version" in
+            "$base"*) ;;
+            *) echo "Etiquette $GITHUB_REF_NAME hors de VERSION ($base)"; exit 1 ;;
+          esac
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: ESPHome
+        run: pip install -r requirements.txt
+
+      - name: Compilation
+        run: >
+          esphome -s version "${{ steps.id.outputs.version }}"
+          -s git_sha "${{ steps.id.outputs.sha }}"
+          compile hapanel_public.yaml
+
+      - name: Binaires et manifeste
+        run: |
+          d=.esphome/build/hapanel_public/build
+          mkdir publication
+          cp "$d/firmware.factory.bin" publication/hapanel-factory.bin
+          cp "$d/firmware.ota.bin" publication/hapanel-ota.bin
+          md5="$(md5sum publication/hapanel-ota.bin | cut -d' ' -f1)"
+          v="${{ steps.id.outputs.version }}"
+          cat > publication/manifest.json <<EOF
+          {
+            "name": "HAPanel",
+            "version": "$v",
+            "home_assistant_domain": "esphome",
+            "new_install_prompt_erase": true,
+            "builds": [
+              {
+                "chipFamily": "ESP32",
+                "ota": {
+                  "path": "hapanel-ota.bin",
+                  "md5": "$md5",
+                  "summary": "HAPanel $v (${{ steps.id.outputs.sha }})",
+                  "release_url": "https://github.com/${{ github.repository }}/releases/tag/$GITHUB_REF_NAME"
+                },
+                "parts": [{ "path": "hapanel-factory.bin", "offset": 0 }]
+              }
+            ]
+          }
+          EOF
+          cat publication/manifest.json
+
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "$GITHUB_REF_NAME" publication/*
+          --title "HAPanel ${{ steps.id.outputs.version }}"
+          --notes "Binaire public sans secret (D039). Premiere installation : hapanel-factory.bin. Mise a jour : entite Firmware dans Home Assistant."
+          --latest

@@ -17,6 +17,7 @@ avant fusion.
 | R7 | Alimentation insuffisante au pic de démarrage du Wi-Fi (sous-tension, *brownout*) | Boucle de redémarrages, mode sans échec, retour silencieux au binaire précédent après une OTA | Bloc secteur externe (1 A validé) ; SHA relu après chaque OTA (`05_BUILD_AND_TEST.md`) | Ouvert le 28 octobre 2026 : constaté sur le port USB du PC ; alimentation du montage mural à définir |
 | R8 | Clé d'API et d'OTA commune à tous les modules (D012) | La clé d'un module donne accès à tous (lecture, affichage, OTA) | Choix du propriétaire ; option ouverte : clé par module, fournie à l'exécution | Ouvert le 28 octobre 2026 |
 | R9 | Valeurs affichées poussées par un blueprint (D012) : un blueprint absent ou en erreur laisse l'écran vide ou périmé | Affichage incomplet, jamais une valeur fausse non signalée | Garde-fous « indisponible », « périmée », effacement à la déconnexion | Ouvert le 28 octobre 2026 |
+| R10 | Binaire public (D039) : compte GitHub ou Releases compromis | Un firmware malveillant proposé à tous les modules publics, installé au premier clic sur « Installer » | Double authentification sur le compte GitHub ; publication par étiquette seulement ; installation jamais automatique (choix à confirmer) | Ouvert le 4 novembre 2026 (maquette) |
 
 ## Surfaces exposées
 
@@ -24,6 +25,8 @@ avant fusion.
 |---|---|---|---|
 | API native ESPHome | TCP local | Clé de chiffrement (`secrets.yaml`) | `04_DEVELOPMENT_RULES.md` |
 | Mise à jour OTA | Réseau local, chiffré (Noise) | Clé de chiffrement de l'API (`secrets.yaml`, D010) | `04_DEVELOPMENT_RULES.md` |
+| Fenêtre d'installation du binaire public : point d'accès Wi-Fi, portail captif, Improv par USB, API sans clé | Wi-Fi, HTTP, série, API native | Aucune, 15 min après chaque démarrage tant que le module n'a ni Wi-Fi ni clé | D039 : le premier qui se connecte choisit le Wi-Fi ou la clé ; une fois provisionné, plus rien n'est ouvert |
+| Mise à jour du binaire public depuis GitHub | HTTPS (certificats vérifiés) | Lancée depuis HA (clé de l'API) ; binaire vérifié par MD5 contre le manifeste | D039 : pas d'OTA depuis un PC sur le binaire public (ESPHome l'accepterait sans clé) ; voir R10 |
 | Actions Home Assistant autorisées pour le panneau | API native | Autorisation dans l'intégration ESPHome | Inutile : le 2 novembre 2026, option désactivée, une commande du chauffage et un scénario ont été exécutés (HA émet les événements `esphome.*` sans elle). Activée sur le module de banc à la date du test |
 | Portée de l'autorisation des actions HA | API native | Clé de chiffrement de l'API | Option activée : un firmware modifié pourrait appeler d'autres actions que les événements du panneau. Désactivée : il ne peut qu'émettre des événements. La liste de scénarios (D024) ne limite que le chemin normal |
 | Action ESPHome `maj_valeur(cle, valeur)` | API native | Clé de chiffrement de l'API | D012 : n'importe quel client muni de la clé peut changer ce qu'affiche le panneau |

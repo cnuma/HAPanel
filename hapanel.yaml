@@ -11,18 +11,7 @@ substitutions:
   log_level: INFO
 
 packages:
-  base: !include packages/base.yaml
-  hardware: !include packages/hardware.yaml
-  # Avant lvgl : ESPHome garde l'ordre des packages pour les pages, et la
-  # premiere page est celle affichee au demarrage (accueil).
-  accueil: !include packages/pages/accueil.yaml
-  meteo: !include packages/pages/meteo.yaml
-  planning: !include packages/pages/planning.yaml
-  scenarios: !include packages/pages/scenarios.yaml
-  menu: !include packages/pages/menu.yaml
-  reglages: !include packages/pages/reglages.yaml
-  lvgl: !include packages/lvgl.yaml
-  liaison_ha: !include packages/liaison_ha.yaml
-  led_veille: !include packages/led_veille.yaml
-  # Apres lvgl : le message se dessine par-dessus la barre de navigation.
-  message_accueil: !include packages/message_accueil.yaml
+  # Fonctions du panneau, communes au binaire public (D039).
+  application: !include packages/application.yaml
+  # Wi-Fi et cle de l'API compiles depuis secrets.yaml : binaire prive.
+  acces: !include packages/acces_prive.yaml

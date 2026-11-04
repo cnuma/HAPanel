@@ -220,3 +220,22 @@ ensuite l'automatisation du module et l'enregistrer.
 | I10 | HA coupé, sur l'accueil (D015) | Message « Pas de communication » lisible sous la barre ; point rouge | `feature/barre-etat` (fusionnée) | OK 4 nov. |
 | I11 | Observer 1 min la barre du haut sur Réglages, sur l'accueil, puis passer du Menu à chaque page | Aucune ligne ni point parasite en haut de l'écran (2 rangées noires en haut et en bas) | `feature/barre-etat` (fusionnée) | OK 4 nov. |
 | I12 | Toucher le ☰ dix fois, vite, un peu à côté de l'icône (dessous, à droite) | Le Menu s'ouvre à chaque fois | `feature/barre-etat` (fusionnée) | OK 4 nov. |
+
+## J — Déploiement public, maquette (D039)
+
+Binaires publiés par GitHub (`hapanel_public.yaml`), sur une carte qui n'est pas le
+module de banc. Procédure : `docs/DEPLOIEMENT_PUBLIC.md`.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| J1 | Publication : pousser l'étiquette `v0.8.0-dev.1` (§ 1 de `DEPLOIEMENT_PUBLIC.md`) | Release créée, marquée Latest, avec `hapanel-factory.bin`, `hapanel-ota.bin` et `manifest.json` | `feature/poc-deploiement` | |
+| J2 | Nouvelle carte : première installation par web.esphome.io, Wi-Fi par Improv (§ 2) | Le module démarre, l'écran d'accueil s'affiche, le module rejoint le Wi-Fi | `feature/poc-deploiement` | |
+| J3 | Adoption dans HA (§ 3) | Appareil découvert ; **aucune clé demandée** (sinon noter le message) ; entités présentes, dont « Firmware » et « Version » (`0.8.0-dev.1 (sha)`) | `feature/poc-deploiement` | |
+| J4 | Après J3, journaux du module ou une seconde adoption depuis un autre HA | La clé est enregistrée (« Noise PSK saved ») ; une connexion sans cette clé est refusée | `feature/poc-deploiement` | |
+| J5 | Couper et rétablir l'alimentation | Le module rejoint le Wi-Fi et HA sans rien ressaisir | `feature/poc-deploiement` | |
+| J6 | Publier `v0.8.0-dev.2`, puis dans HA : entité Firmware › Rechercher, Installer (§ 4) | « Mise à jour disponible 0.8.0-dev.2 » ; téléchargement depuis GitHub sans erreur ; redémarrage | `feature/poc-deploiement` | |
+| J7 | Après J6 | Version `0.8.0-dev.2` ; Wi-Fi et HA reconnectés sans rien ressaisir ; réglages du module (LED, intensité) conservés | `feature/poc-deploiement` | |
+| J8 | Pendant J6, journaux par USB ; page À propos avant et après | Pas de manque de mémoire ni de redémarrage pendant le téléchargement ; noter la mémoire libre (G6) | `feature/poc-deploiement` | |
+| J9 | Nouvelle carte sans Improv : point d'accès `hapanel-xxxxxx` depuis un téléphone (§ 2) | Portail captif, choix du réseau, le module rejoint le Wi-Fi | `feature/poc-deploiement` | |
+| J10 | Laisser une carte effacée sans Wi-Fi 16 min, puis tenter le point d'accès | Point d'accès fermé après 15 min ; rouvert après une coupure d'alimentation | `feature/poc-deploiement` | |
+| J11 | Depuis le PC, `esphome upload` vers un module public par le réseau | Refusé : le binaire public n'a pas d'OTA depuis un PC | `feature/poc-deploiement` | |

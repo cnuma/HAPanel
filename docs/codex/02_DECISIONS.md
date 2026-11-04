@@ -877,3 +877,53 @@ qui cite la précédente.
   à la maison dans le firmware (tout passe par le blueprint ou les entités de
   configuration) ; le Wi-Fi hors du binaire sert aussi les modules du propriétaire
   (une fuite du binaire ne livre plus le Wi-Fi).
+
+## D039 — Maquette du déploiement public (binaire sans secret, mises à jour depuis HA)
+
+- Date : 4 novembre 2026 — Statut : maquette, branche `feature/poc-deploiement` ;
+  demandée par le propriétaire (« valider la faisabilité d'un déploiement de
+  nouveaux binaires via une méthode simple depuis HA […] sans avoir à refaire une
+  compile en local par l'utilisateur ») ; plusieurs cartes disponibles pour les
+  essais.
+- Constat dans le code d'ESPHome 2026.10.1 (`.venv`, 4 novembre 2026) :
+  - `api: encryption:` sans `key` : le module démarre non provisionné, accepte une
+    première clé (`NoiseEncryptionSetKeyRequest`), la garde en flash et refuse
+    ensuite toute connexion sans elle ; seule une remise à zéro l'efface ;
+  - le Wi-Fi saisi par Improv ou par le portail captif est gardé en flash ;
+  - `provisioning:` ferme, passé un délai, le point d'accès, Improv et les
+    connexions sans clé, jusqu'au prochain redémarrage ;
+  - avec une clé reçue à l'exécution, l'OTA `esphome` (depuis un PC) l'**offre**
+    mais accepte aussi un envoi sans clé (« plaintext accepted ») ; ESPHome refuse
+    `ota: encryption:` dans ce cas ;
+  - `update: platform: http_request` lit un manifeste (version, MD5) et télécharge
+    le binaire ; mise à jour proposée si la version diffère de `project.version`.
+- Décision (maquette) :
+  - les fonctions passent dans `packages/application.yaml`, commun aux deux
+    configurations ; l'accès est séparé : `packages/acces_prive.yaml` (Wi-Fi, clé,
+    OTA depuis le PC, inchangés pour `hapanel.yaml` et le banc : configuration
+    résolue identique, vérifiée) et `packages/acces_public.yaml` ;
+  - `hapanel_public.yaml` : aucun secret ; Wi-Fi par Improv (USB) ou point d'accès
+    et portail captif ; clé reçue à l'adoption ; fenêtre d'installation de 15 min ;
+    **pas d'OTA depuis un PC** (elle accepterait un envoi sans clé) : mises à jour
+    par l'entité « Firmware » seulement, reflash par USB sinon ;
+  - publication par GitHub Actions (`.github/workflows/publication.yml`) à l'envoi
+    d'une étiquette `v<version>` : binaire complet, binaire de mise à jour et
+    manifeste dans une Release ; l'entité lit
+    `releases/latest/download/manifest.json` ;
+  - première installation : binaire complet par USB depuis le navigateur (ESPHome
+    Web ou ESP Web Tools), puis Wi-Fi par Improv.
+- Mesures (compilation locale, 4 novembre 2026) : binaire public compilé ; flash
+  75,2 % (1 379 923 octets, contre 63,6 % pour la production : environ 213 Ko pour
+  TLS, `http_request`, portail captif et Improv) ; RAM statique 32,5 % ; aucun des
+  trois secrets de `secrets.yaml` dans le binaire (recherche octet par octet). La
+  marge de flash tombe à 25 % : à suivre pour l'infrarouge.
+- À vérifier par la maquette (cahier J) : HA envoie-t-il la clé à l'adoption ;
+  Wi-Fi et clé gardés après une mise à jour ; redirection de GitHub lue
+  (`buffer_size_rx` porté à 2048) ; mémoire libre pendant le téléchargement (G6) ;
+  écran pendant la fenêtre d'installation.
+- Avant fusion : risques au `08`, schémas d'architecture (packages, matrice,
+  compilation, sécurité) régénérés, procédure G11 validée, D037 révisée (hébergement
+  sur GitHub au lieu du réseau local).
+- Limite : un module public n'a pas d'écran d'installation ; sans Wi-Fi, rien ne
+  dit à l'utilisateur de se connecter au point d'accès (à concevoir si la maquette
+  est retenue).

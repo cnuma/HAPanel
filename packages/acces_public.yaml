@@ -1,0 +1,47 @@
+# Acces du binaire public (D038, D039) : aucun secret. Le Wi-Fi est saisi a la
+# premiere installation (USB ou point d'acces du module), la cle de l'API est
+# envoyee par Home Assistant a l'adoption ; les deux restent en flash et
+# servent aux binaires suivants.
+wifi:
+  # Point d'acces du module et portail captif, tant qu'aucun Wi-Fi ne repond.
+  ap: {}
+
+captive_portal:
+
+# Saisie du Wi-Fi par le cable USB, depuis une page web (ESP Web Tools).
+# Improv par Bluetooth exclu : la pile BLE ne tient pas a cote de LVGL (R2).
+improv_serial:
+
+api:
+  # Sans cle : le module demarre non provisionne et garde la premiere cle
+  # recue ; il refuse ensuite toute connexion sans elle.
+  encryption: {}
+
+# Fenetre d'installation : passe ce delai sans Wi-Fi ni cle, le point d'acces
+# se ferme et les connexions sans cle sont refusees, jusqu'au prochain
+# redemarrage.
+provisioning:
+  timeout: 15min
+
+# Mises a jour publiees sur GitHub (Releases), proposees dans Home Assistant.
+http_request:
+  # Le lien de telechargement de GitHub redirige vers une adresse signee de
+  # pres de 1 ko : 512 octets ne suffisent pas a lire l'en-tete.
+  buffer_size_rx: 2048
+
+# Seule OTA du binaire public. Pas d'OTA esphome (depuis un PC) : avec une
+# cle recue a l'execution, ESPHome l'accepte sans cle (« plaintext
+# accepted ») ; un reflash passe par l'USB.
+ota:
+  - platform: http_request
+
+update:
+  - platform: http_request
+    id: maj_firmware
+    name: "Firmware"
+    source: ${source_mise_a_jour}
+
+# Adoption dans le module ESPHome de Home Assistant : configuration reprise
+# depuis le depot public, a recompiler avec sa propre cle si on le souhaite.
+dashboard_import:
+  package_import_url: github://cnuma/HAPanel/hapanel_public.yaml@main

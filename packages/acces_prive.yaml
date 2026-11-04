@@ -1,0 +1,15 @@
+# Acces des modules du proprietaire : Wi-Fi et cle de l'API compiles dans le
+# binaire, lus dans secrets.yaml (G9). Ce binaire ne doit jamais etre publie
+# (D038, D039).
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  - platform: esphome
+    # Chiffree par la cle de l'API, heritee faute de cle propre (D010).
+    encryption:

@@ -28,7 +28,8 @@ Trois idées structurent tout le reste :
 | Événement `esphome.hapanel_demande_valeurs` | API native | Module vers HA | Demande un envoi complet à la connexion |
 | Événement `esphome.hapanel_commande` | API native | Module vers HA | Toutes les commandes |
 | Action `message_accueil(texte, infos)` | API native chiffrée | HA vers module | Message d'accueil (D028), blueprint `message_accueil.yaml` |
-| OTA | Réseau local chiffré | PC vers module | Mise à jour du firmware |
+| OTA | Réseau local chiffré | PC vers module | Mise à jour du firmware (modules privés, `hapanel.yaml`) |
+| Entité « Firmware » | HTTPS depuis GitHub | GitHub vers module, lancée depuis HA | Mise à jour du binaire public (D039, maquette) |
 
 ## Organisation du YAML
 
@@ -52,9 +53,13 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 
 | Fichier | Lignes | Responsabilité |
 |---|---|---|
-| `hapanel.yaml` | 28 | Production : inclusions et substitutions seulement |
+| `hapanel.yaml` | 17 | Production : substitutions, fonctions (`application`) et accès privé |
 | `hapanel_banc.yaml` | 33 | Banc : production, plus mémoire mesurée, journaux DEBUG et dossier de compilation propre |
-| `packages/base.yaml` | 67 | Nœud, ESP32, Wi-Fi, API, OTA, journaux, écriture des réglages, identité de build |
+| `hapanel_public.yaml` | 23 | Binaire public sans secret : fonctions et accès public (D039, maquette) |
+| `packages/application.yaml` | 19 | Liste ordonnée des fichiers de fonctions, commune aux configurations |
+| `packages/acces_prive.yaml` | 15 | Wi-Fi, clé de l'API et OTA depuis le PC, lus dans `secrets.yaml` |
+| `packages/acces_public.yaml` | 47 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub |
+| `packages/base.yaml` | 57 | Nœud, ESP32, journaux, écriture des réglages, identité de build |
 | `packages/hardware.yaml` | 116 | Broches, bus, écran, tactile, sorties PWM, LDR (G2) |
 | `packages/lvgl.yaml` | 324 | Polices communes, À propos, barre d'état en haut (titre, disquette, Wi-Fi, HA, ☰, D036) et bouton Accueil en bas, suivi de la connexion |
 | `packages/liaison_ha.yaml` | 489 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
@@ -66,25 +71,35 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `packages/pages/scenarios.yaml` | 365 | Boutons et lancement |
 | `packages/pages/menu.yaml` | 126 | Tuiles de navigation |
 | `packages/pages/reglages.yaml` | 216 | Réglages de la LED et de l'écran, synchronisés avec HA, cadenas si imposés (D031) |
-| `secrets.yaml` | | Wi-Fi et clé d'API, hors de Git (G9) |
+| `secrets.yaml` | | Wi-Fi et clé d'API des modules privés, hors de Git (G9) |
 
 **Pour lire le projet :** `hapanel.yaml`, puis `liaison_ha.yaml`, puis `scenarios.yaml`, qui est la
 page la plus simple à commander. `accueil.yaml` est la plus dense et se lit en dernier.
 
 ### Comment les fichiers s'assemblent
 
-`hapanel.yaml` les liste, et ESPHome les fusionne en une seule configuration :
+`packages/application.yaml` les liste ; `hapanel.yaml` l'inclut avec un fichier d'accès, et
+ESPHome fusionne le tout en une seule configuration :
 
 ```yaml
+# hapanel.yaml
 substitutions:
   node_name: hapanel
   version: "0.0.0-non-injectee"
 packages:
-  base: !include packages/base.yaml
-  hardware: !include packages/hardware.yaml
-  accueil: !include packages/pages/accueil.yaml
-  # autres pages, puis lvgl, liaison, led_veille
+  application: !include packages/application.yaml
+  acces: !include packages/acces_prive.yaml
+
+# packages/application.yaml
+packages:
+  base: !include base.yaml
+  hardware: !include hardware.yaml
+  accueil: !include pages/accueil.yaml
+  # autres pages, puis lvgl, liaison, led_veille, message_accueil
 ```
+
+`hapanel_public.yaml` inclut le même `application.yaml` avec `acces_public.yaml` : les deux
+binaires ont exactement les mêmes fonctions (D039).
 
 Un même bloc peut donc apparaître dans plusieurs fichiers. Chaque package y ajoute sa part :
 
@@ -525,7 +540,7 @@ le bouton Accueil, masqué avec sa barre sur l'accueil. Une page visible ou non 
 mises à jour de la même façon : les widgets vivent en mémoire pour toute la durée
 d'exécution.
 
-**Ajouter une page :** créer `packages/pages/<page>.yaml`, l'inclure dans `hapanel.yaml`, écrire
+**Ajouter une page :** créer `packages/pages/<page>.yaml`, l'inclure dans `packages/application.yaml`, écrire
 son titre dans `lbl_barre_titre` par son `on_load` et placer son contenu entre y = 38 et
 y = 274, ajouter sa tuile dans `menu.yaml`, puis, si elle reçoit des valeurs, ajouter un préfixe dans `liaison_ha.yaml`
 et un envoi dans le blueprint. Mesurer ensuite la mémoire (G6).
@@ -579,8 +594,11 @@ message au toucher, après 3 minutes ou à la déconnexion de HA (P2).
   successful », car un échec peut ramener sans bruit au binaire précédent.
 - **Blueprint :** `source_url` pointe sur `main`. Il suit Git et non le firmware : un changement de
   clés demande de mettre à jour les deux.
-- **Dossier de compilation :** `hapanel.yaml` et `hapanel_banc.yaml` partagent `.esphome/build/hapanel` ;
-  les alterner recompile environ 1 500 fichiers.
+- **Dossier de compilation :** production `.esphome/build/hapanel`, banc `hapanel_banc`, public
+  `hapanel_public` : passer de l'un à l'autre ne recompile pas tout.
+- **Binaire public (D039, maquette) :** une étiquette `v<version>` lance GitHub Actions, qui publie
+  une Release (binaire complet, binaire de mise à jour, manifeste) ; les modules publics la
+  proposent dans HA. Procédure : [DEPLOIEMENT_PUBLIC.md](DEPLOIEMENT_PUBLIC.md).
 
 ## Sécurité
 
@@ -594,6 +612,7 @@ message au toucher, après 3 minutes ou à la déconnexion de HA (P2).
 | Message d'accueil (D028) | Texte borné à 240 octets, sans commande ; fermé à la déconnexion de HA |
 | Autorisation des actions HA du module | Inutile aux événements (testé le 2 novembre 2026). Activée, elle permettrait à un firmware modifié d'appeler d'autres actions ; désactivée, il ne peut qu'émettre des événements. La liste de scénarios ne remplace pas la protection de la clé |
 | Secrets dans le dépôt (R3, G9) | `secrets.yaml` est ignoré par Git |
+| Binaire public (D039, R10) | Sans secret ; fenêtre d'installation de 15 min ; pas d'OTA depuis un PC ; binaire non signé : sa fiabilité repose sur le compte GitHub |
 | Commande sur état inconnu (R4) | Refus côté module et côté blueprint |
 
 Toute nouvelle surface s'inscrit dans [08_RISKS_AND_DEBT.md](codex/08_RISKS_AND_DEBT.md) avant fusion.

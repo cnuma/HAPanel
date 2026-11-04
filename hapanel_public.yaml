@@ -1,0 +1,23 @@
+# HAPanel : configuration publique (D038, D039). Memes fonctions que
+# hapanel.yaml, sans aucun secret : le binaire peut etre publie sur GitHub.
+# Wi-Fi saisi a l'installation, cle de l'API envoyee par Home Assistant,
+# mises a jour proposees dans Home Assistant.
+#
+# version et git_sha sont injectes par tools/build.ps1 ou par la publication
+# GitHub (G5).
+substitutions:
+  node_name: hapanel
+  friendly_name: HAPanel
+  version: "0.0.0-non-injectee"
+  git_sha: "inconnu"
+  log_level: INFO
+  # Manifeste de la derniere version publiee (Releases du depot public).
+  source_mise_a_jour: https://github.com/cnuma/HAPanel/releases/latest/download/manifest.json
+
+packages:
+  application: !include packages/application.yaml
+  acces: !include packages/acces_public.yaml
+
+# Dossier de compilation propre : meme nom de noeud que la production.
+esphome:
+  build_path: build/hapanel_public

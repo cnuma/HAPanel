@@ -1,5 +1,5 @@
-# Socle : noeud, plateforme, Wi-Fi, API chiffree, OTA protegee, journaux et
-# identite de build. Secrets dans secrets.yaml (invariant G9).
+# Socle : noeud, plateforme, journaux, ecriture des reglages et identite de build.
+# Aucun secret ici (G9) : voir acces_prive.yaml et acces_public.yaml.
 esphome:
   name: ${node_name}
   friendly_name: ${friendly_name}
@@ -29,18 +29,8 @@ esp32:
       # Puce du panneau en revision 3.1 : binaire plus petit (D011).
       minimum_chip_revision: "3.1"
 
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-
-api:
-  encryption:
-    key: !secret api_encryption_key
-
-ota:
-  - platform: esphome
-    # Chiffree par la cle de l'API, heritee faute de cle propre (D010).
-    encryption:
+# Wi-Fi, cle de l'API et OTA : acces_prive.yaml (secrets compiles) ou
+# acces_public.yaml (saisis a l'installation), D039.
 
 logger:
   level: ${log_level}
