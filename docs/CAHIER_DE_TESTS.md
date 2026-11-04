@@ -31,6 +31,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 3 novembre 2026 | `dec159c` | E | KO : aucune variation de la LED ni de l'écran | Journaux à 22 h 30 : `LDR 1.094 V` fixe, plafond de l'ADC en `0db` (relevés du 31 octobre : 0,075 à 0,26 V). Mesure saturée, donc obscurité toujours maximale. Diagnostic : éclairer la LDR à la lampe pendant la lecture des journaux |
 | 3 novembre 2026 | `bc6f66e` | H | Page Réglages OK, tactile bien plus réactif, luminosité suit la pièce mais trop lentement ; tuile Accueil du Menu en doublon ; interrupteur à l'arrêt gris confondu avec « grisé = imposé » et peu lisible ; « Alerte LED » bloquée | Corrigé (`20dda6e`) : tuile retirée, cadenas, interrupteur sur fond sombre, LDR moyennée sur 5 s. « Alerte LED » était imposée par l'automatisation (`led_alerte on` dans les journaux) : la mettre sur « Ne pas imposer » |
 | 4 novembre 2026 | `20dda6e` | C, E, G, H | OK : C1, C6, C7 ; **E1 à E7** (E levé) ; G3 ; H1 à H9, H15 | Restent : C2 à C5, F, G1, G2, G4, H10 à H14 |
+| 4 novembre 2026 | `20dda6e` | P | OK : P1, P2, P4, P5 | P3 (liste « Messages uniques ») non rapporté |
 
 | Partie | Sujet | Bloque la fusion de |
 |---|---|---|
@@ -47,11 +48,11 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
-| P1 | Page de l'appareil `hapanel-a85bfc`, rubrique Configuration | Entité **Message d'accueil** présente et activée | `feature/message-accueil` (fusionnée) | |
-| P2 | Créer la liste « Messages d'accueil » et exécuter **une fois** le script `docs/exemples/messages_accueil.yaml` (voir `CONFIGURATION.md` § 6) | 27 tâches dans la liste | `feature/message-accueil` (fusionnée) | |
+| P1 | Page de l'appareil `hapanel-a85bfc`, rubrique Configuration | Entité **Message d'accueil** présente et activée | `feature/message-accueil` (fusionnée) | OK 4 nov. |
+| P2 | Créer la liste « Messages d'accueil » et exécuter **une fois** le script `docs/exemples/messages_accueil.yaml` (voir `CONFIGURATION.md` § 6) | 27 tâches dans la liste | `feature/message-accueil` (fusionnée) | OK 4 nov. |
 | P3 | Créer la liste « Messages uniques » (vide pour l'instant) | Liste présente | `feature/message-accueil` (fusionnée) | |
-| P4 | Importer le blueprint (lien de `CONFIGURATION.md` § 6) ; s'il a été importé depuis la branche `feature/message-accueil`, le réimporter depuis `main` | Blueprint « HAPanel — message d'accueil » listé | `feature/message-accueil` (fusionnée) | |
-| P5 | Créer l'automatisation : Panneaux = le module ; Déclencheurs = `binary_sensor.entree_capteur_porte_entree` ; Période sans déclenchement = **1 min** pour les tests ; les deux listes ; Météo = l'entité `weather` | Automatisation enregistrée, sans erreur | `feature/message-accueil` (fusionnée) | |
+| P4 | Importer le blueprint (lien de `CONFIGURATION.md` § 6) ; s'il a été importé depuis la branche `feature/message-accueil`, le réimporter depuis `main` | Blueprint « HAPanel — message d'accueil » listé | `feature/message-accueil` (fusionnée) | OK 4 nov. |
+| P5 | Créer l'automatisation : Panneaux = le module ; Déclencheurs = `binary_sensor.entree_capteur_porte_entree` ; Période sans déclenchement = **1 min** pour les tests ; les deux listes ; Météo = l'entité `weather` | Automatisation enregistrée, sans erreur | `feature/message-accueil` (fusionnée) | OK 4 nov. |
 
 ## A — Message d'accueil, côté module
 
