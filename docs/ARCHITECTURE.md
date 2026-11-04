@@ -55,8 +55,8 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `hapanel.yaml` | 28 | Production : inclusions et substitutions seulement |
 | `hapanel_banc.yaml` | 33 | Banc : production, plus mémoire mesurée, journaux DEBUG et dossier de compilation propre |
 | `packages/base.yaml` | 61 | Nœud, ESP32, Wi-Fi, API, OTA, journaux, identité de build |
-| `packages/hardware.yaml` | 112 | Broches, bus, écran, tactile, sorties PWM, LDR (G2) |
-| `packages/lvgl.yaml` | 181 | Polices communes, À propos, barre de navigation, suivi de la connexion |
+| `packages/hardware.yaml` | 114 | Broches, bus, écran, tactile, sorties PWM, LDR (G2) |
+| `packages/lvgl.yaml` | 182 | Polices communes, À propos, barre de navigation, suivi de la connexion |
 | `packages/liaison_ha.yaml` | 489 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
 | `packages/led_veille.yaml` | 281 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
 | `packages/message_accueil.yaml` | 157 | Action `message_accueil`, message plein écran, entité « Message d'accueil » |
@@ -64,8 +64,8 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `packages/pages/meteo.yaml` | 195 | Conditions et prévisions |
 | `packages/pages/planning.yaml` | 373 | Résumé et frises |
 | `packages/pages/scenarios.yaml` | 366 | Boutons et lancement |
-| `packages/pages/menu.yaml` | 144 | Tuiles de navigation |
-| `packages/pages/reglages.yaml` | 153 | Réglages de la LED et de l'écran, synchronisés avec HA (D031) |
+| `packages/pages/menu.yaml` | 123 | Tuiles de navigation |
+| `packages/pages/reglages.yaml` | 217 | Réglages de la LED et de l'écran, synchronisés avec HA, cadenas si imposés (D031) |
 | `secrets.yaml` | | Wi-Fi et clé d'API, hors de Git (G9) |
 
 **Pour lire le projet :** `hapanel.yaml`, puis `liaison_ha.yaml`, puis `scenarios.yaml`, qui est la
@@ -547,6 +547,17 @@ LED » et « Alerte LED », gardées en flash. Elles se règlent sur la page de 
 ou sont imposées par le blueprint par les clés `led_*`. `maj_valeur` les applique aux mêmes
 entités, que HA affiche aussitôt, et seulement si la valeur change : pas d'écriture en flash
 toutes les 5 minutes (G3).
+
+**Réglages depuis le module (D031) :** la page `page_reglages` (`packages/pages/reglages.yaml`,
+tuile du Menu) agit sur ces mêmes entités et sur une quatrième, « Intensité écran », qui
+multiplie la luminosité calculée par `retro_cible_calculer` sans descendre sous
+`retro_plancher`. Une seule valeur par réglage, donc pas de synchronisation à écrire : la page
+écrit l'entité (au relâchement pour un curseur, une seule écriture en flash), et chaque
+`on_value` d'entité appelle `reglages_rafraichir`, qui recopie les quatre valeurs sur la page
+sans émettre d'événement LVGL, donc sans boucle. Le blueprint envoie chaque clé `led_*` et
+`ecran_intensite`, avec `libre` quand il n'impose rien ; une valeur imposée met à vrai le
+drapeau `reglage_impose_*` correspondant, et la page affiche un cadenas et désactive la
+commande.
 
 **Message d'accueil (D028) :** le blueprint de la maison `message_accueil.yaml` choisit le
 texte et la ligne de météo, puis appelle `message_accueil` sur chaque panneau dont l'entité

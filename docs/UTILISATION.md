@@ -10,7 +10,10 @@ peut légèrement différer.*
 ## L'essentiel
 
 - La barre du bas est présente sur toutes les pages : **la maison** ramène à
-  l'accueil (elle n'apparaît pas sur l'accueil), **Menu** ouvre la liste des pages.
+  l'accueil (elle n'apparaît pas sur l'accueil), **Menu** ouvre la liste des pages
+  (il n'apparaît pas sur le Menu).
+- La LED et la luminosité de l'écran se règlent depuis le panneau lui-même :
+  **Menu › Réglages**.
 - Après **1 minute sans toucher**, le panneau revient à l'accueil et l'écran
   s'éteint.
 - Quand l'écran est éteint, **le premier toucher ne fait que le rallumer** : il ne
@@ -30,8 +33,7 @@ peut légèrement différer.*
 | 4 | Préréglages : Manuel, Hors-gel, Éco, Confort, Boost | Touchez une icône pour changer. Le préréglage actif est entouré de blanc. |
 | 5 | Consigne, avec **-** et **+** | Chaque toucher change de 0,5 °C. L'envoi part 2 secondes après le dernier toucher. |
 | 6 | Glissière Éteint / Chauffage | Touchez le côté inactif, ou faites glisser la pastille. |
-| 7 | Maison | Revient à l'accueil. |
-| 8 | Menu | Ouvre la liste des pages. |
+| 7 | Menu | Ouvre la liste des pages. La maison n'apparaît pas ici : vous êtes déjà sur l'accueil. |
 
 **Après une commande**, la valeur demandée reste en attente jusqu'à la confirmation
 de Home Assistant. Sans confirmation au bout de 10 secondes, l'écran revient à la
@@ -53,7 +55,8 @@ pastille de la glissière devient grise.
 
 ![Page Menu](images/menu.png)
 
-Touchez une tuile pour ouvrir la page correspondante.
+Touchez une tuile pour ouvrir la page correspondante : Météo, Planning, Scénarios,
+Réglages ou À propos. Pour revenir à l'accueil, touchez la maison en bas.
 
 ## Météo
 
@@ -104,10 +107,42 @@ Un bouton marqué **Indisponible** ne peut pas être touché.
 Version du logiciel, connexion à Home Assistant et mémoire. Ces informations sont
 utiles en cas de dépannage.
 
+## Réglages
+
+Ouvrez **Menu › Réglages** pour régler la LED et l'écran de ce panneau, par exemple
+pour qu'il soit discret dans une chambre. Aucun code n'est demandé, et la page
+fonctionne même sans Home Assistant ni Wi-Fi.
+
+![Page Réglages](images/reglages.png)
+
+| Repère | Réglage | Utilisation |
+|---|---|---|
+| 1 | LED | Interrupteur. Arrêté : la LED ne montre plus l'état du chauffage. |
+| 2 | Intensité LED | Faites glisser, par pas de 5 %. 100 % est le maximum prévu, déjà discret ; 20 % par défaut. |
+| 3 | Alerte LED | Interrupteur. Arrêté : plus de rouge clignotant en cas d'anomalie ; seul l'écran la montre. |
+| 4 | Intensité écran | Faites glisser, de 20 à 100 %. L'écran continue de baisser tout seul dans le noir, et ne devient jamais illisible. |
+
+- **Un curseur s'applique quand vous levez le doigt** : la valeur affichée suit le
+  doigt, la LED ou l'écran change au relâchement.
+- **Les réglages sont gardés** après une coupure de courant.
+- **Ce sont les mêmes réglages** que sur la page de l'appareil dans Home Assistant :
+  un changement d'un côté apparaît aussitôt de l'autre.
+
+![Interrupteur arrêté et réglage imposé](images/reglages_etats.png)
+
+**Interrupteur arrêté :** fond sombre bordé de gris, bouton blanc à gauche. En marche :
+fond bleu, bouton à droite.
+
+**Cadenas :** ce réglage est imposé par Home Assistant (automatisation du module) ;
+il ne réagit pas au toucher, et « imposé par HA » est rappelé en bas de la page. Pour
+le régler depuis le panneau, mettez-le sur « Ne pas imposer » dans l'automatisation
+(voir [la configuration](CONFIGURATION.md)).
+
 ## Écran et LED
 
 **Luminosité de l'écran :** elle baisse dans une pièce sombre et remonte quand la
-pièce est éclairée. Le changement est progressif et peut prendre environ une minute.
+pièce est éclairée, en quelques secondes. Le réglage « Intensité écran » (page
+Réglages) la diminue en plus, partout.
 
 **LED de façade :** elle montre l'état du chauffage même écran éteint.
 
@@ -122,8 +157,8 @@ pièce est éclairée. Le changement est progressif et peut prendre environ une 
 Boost est un rouge qui respire doucement, l'anomalie un rouge qui clignote franchement.
 
 La respiration s'éteint un instant au creux de chaque cycle. Selon les réglages du
-module (une chambre par exemple), la LED peut être éteinte en permanence et l'alerte
-désactivée : seul l'écran montre alors une anomalie.
+module (page Réglages, une chambre par exemple), la LED peut être éteinte en
+permanence et l'alerte désactivée : seul l'écran montre alors une anomalie.
 
 ## Message d'accueil
 
