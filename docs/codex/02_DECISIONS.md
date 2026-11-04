@@ -795,3 +795,76 @@ qui cite la précédente.
   du bouton maison) ; diagnostic du 4 novembre 2026, idée du propriétaire (I11).
 - Limite : sur un panneau mural, le ☰ en haut est un peu moins accessible qu'en bas
   (enfants) ; le Menu sert moins souvent que l'accueil.
+
+## D037 — Mises à jour du parc depuis Home Assistant
+
+- Date : 4 novembre 2026 — Statut : proposé ; option C choisie par le propriétaire
+  (HAP-R096), à concevoir et tester avant tout code.
+- Contexte : le propriétaire prévoit plusieurs modules. Aujourd'hui chaque mise à
+  jour part du PC, module par module (`build.ps1 upload`). Le binaire est le même pour
+  tous (D012).
+- Options étudiées :
+  - A. script PC qui compile une fois et envoie l'OTA à chaque `hapanel-xxxxxx.local` :
+    rien à changer au firmware, mais le PC est nécessaire et HA ne montre rien ;
+  - B. module complémentaire ESPHome de HA : une compilation par module (longue avec
+    LVGL sur un petit serveur), dépôt et secrets copiés dans HA, version d'ESPHome
+    imposée par HA (R5) ;
+  - C. mise à jour tirée par le module : une compilation, un binaire et un manifeste
+    déposés sur un serveur local ; chaque module expose une entité de mise à jour
+    (« 0.8.0 disponible », bouton Installer).
+- Décision : option C.
+  - Firmware : composant `http_request`, `ota: platform: http_request` et
+    `update: platform: http_request` ; l'OTA native (D010) reste, pour le banc et en
+    secours ;
+  - adresse du manifeste dans `secrets.yaml` (G9), jamais dans le dépôt ;
+  - publication : `build.ps1` produit le binaire de production et son manifeste
+    (version, MD5) dans un dossier local ignoré par Git ; le propriétaire les copie
+    vers l'hébergement ;
+  - après chaque mise à jour, version et SHA relus dans HA (R7), comme aujourd'hui.
+- Points à trancher avec le propriétaire avant le code :
+  - hébergement : le binaire contient le mot de passe Wi-Fi et la clé de l'API, donc
+    jamais de publication sur Internet (GitHub exclu). `/config/www` de HA est servi
+    sans authentification sous `/local/` : acceptable seulement si HA n'est pas
+    joignable depuis Internet, sinon un autre serveur du réseau local ;
+  - installation : bouton seulement, ou automatisation de HA qui met tout le parc à
+    jour ; fréquence de vérification du manifeste.
+- À mesurer : mémoire libre pendant le téléchargement (G6, R2) ; place en flash (36 %
+  libres dans la partition à 0.7.0) ; retour au binaire précédent si le nouveau ne
+  démarre pas.
+- Conséquences : nouvelle surface au `08` avant fusion : le module ne vérifie que
+  l'intégrité (MD5), pas l'auteur ; quiconque peut écrire à l'emplacement du
+  manifeste, ou se placer entre le module et le serveur en HTTP, installe son
+  firmware (à évaluer avec la sécurité, rang 2 du TODO). Nouvelle partie du cahier
+  de tests ; procédure de publication écrite dans le dépôt (G11).
+- Compatibilité avec D038 : rien de ce qui est conçu ici ne doit empêcher un binaire
+  public sans secret (Wi-Fi saisi à l'installation, mêmes entités de mise à jour).
+
+## D038 — Orientation : un projet publiable
+
+- Date : 4 novembre 2026 — Statut : orientation donnée par le propriétaire (« c'est
+  franchement l'orientation que le projet est en train de prendre », après
+  HAP-R099) ; cadrage à faire avant tout code.
+- Contexte : le binaire de production contient le nom et le mot de passe du Wi-Fi
+  et la clé de l'API (vérifié le 4 novembre 2026 sur `a06cdbb`, HAP-R098) ; il ne
+  peut donc pas être publié. ESPHome ne permet pas, d'après la recherche du
+  4 novembre 2026, de fournir la clé de l'API à un module après compilation.
+- Orientation : HAPanel doit pouvoir être installé par d'autres, sur le modèle des
+  projets « Made for ESPHome » :
+  - binaire générique sans secret, publié sur GitHub (Releases), installable depuis
+    le navigateur (ESP Web Tools) ;
+  - Wi-Fi saisi à la première installation (Improv par USB, ou point d'accès du
+    module et portail captif), gardé en flash ; Improv par Bluetooth exclu (mémoire,
+    R2) ;
+  - chaque utilisateur adopte son module (`dashboard_import`) et recompile avec sa
+    propre clé ; les modules du propriétaire restent sur D037, binaire chiffré
+    hébergé chez lui ;
+  - configuration de la maison entièrement dans le blueprint (déjà le cas, D012).
+- À cadrer avec le propriétaire : licence ; dépôt rendu public (G9 le prépare) ;
+  relecture de la documentation pour en retirer ce qui est personnel (pièces,
+  nœuds, maison) ; page d'installation ; choix entre « adoption obligatoire » et
+  binaire public non chiffré (API et OTA ouvertes sur le réseau local, à refuser
+  sauf décision contraire).
+- Conséquences immédiates : les nouveaux développements évitent tout réglage propre
+  à la maison dans le firmware (tout passe par le blueprint ou les entités de
+  configuration) ; le Wi-Fi hors du binaire sert aussi les modules du propriétaire
+  (une fuite du binaire ne livre plus le Wi-Fi).
