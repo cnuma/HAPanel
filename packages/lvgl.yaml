@@ -108,9 +108,9 @@ lvgl:
                   - lvgl.page.show:
                       id: page_accueil
                       animation: NONE
-      # Barre d'etat, commune a toutes les pages (D036) : titre de la page (date
-      # et heure sur l'accueil), enregistrement, Wi-Fi, connexion a HA (P2) et
-      # bouton Menu. Les pages commencent sous la barre (y >= 38).
+      # Barre d'etat, commune a toutes les pages (D036) : bouton Menu, titre de la
+      # page (date et heure sur l'accueil), enregistrement, Wi-Fi et connexion a
+      # HA (P2). Les pages commencent sous la barre (y >= 38).
       - obj:
           id: obj_barre
           align: TOP_MID
@@ -124,17 +124,39 @@ lvgl:
           widgets:
             # Accueil seulement (on_load de page_accueil), mise a jour par
             # accueil_heure.
+            # Masque sur la page Menu, ou il ne ferait rien (D025). Sans fond :
+            # seule l'icone, grisee pendant l'appui.
+            - button:
+                id: btn_nav_menu
+                align: LEFT_MID
+                x: 2
+                width: 40
+                height: 32
+                bg_opa: TRANSP
+                shadow_width: 0
+                pressed:
+                  bg_color: 0x424242
+                  bg_opa: COVER
+                widgets:
+                  - label:
+                      align: CENTER
+                      text_font: police_icones
+                      text: "\U000F035C"
+                on_click:
+                  - lvgl.page.show:
+                      id: page_menu
+                      animation: NONE
             - label:
                 id: lbl_barre_date
                 align: TOP_LEFT
-                x: 8
+                x: 48
                 y: 9
                 text: "--:--"
             # Autres pages : titre ecrit par leur on_load.
             - label:
                 id: lbl_barre_titre
                 align: TOP_LEFT
-                x: 8
+                x: 48
                 y: 9
                 hidden: true
                 text: ""
@@ -143,7 +165,7 @@ lvgl:
             - label:
                 id: ico_barre_enregistrement
                 align: TOP_LEFT
-                x: 124
+                x: 160
                 y: 6
                 hidden: true
                 text_font: police_icones
@@ -153,7 +175,7 @@ lvgl:
             - obj:
                 id: obj_barre_wifi_1
                 align: TOP_LEFT
-                x: 152
+                x: 192
                 y: 21
                 width: 4
                 height: 4
@@ -164,7 +186,7 @@ lvgl:
             - obj:
                 id: obj_barre_wifi_2
                 align: TOP_LEFT
-                x: 158
+                x: 198
                 y: 18
                 width: 4
                 height: 7
@@ -175,7 +197,7 @@ lvgl:
             - obj:
                 id: obj_barre_wifi_3
                 align: TOP_LEFT
-                x: 164
+                x: 204
                 y: 15
                 width: 4
                 height: 10
@@ -186,7 +208,7 @@ lvgl:
             - obj:
                 id: obj_barre_wifi_4
                 align: TOP_LEFT
-                x: 170
+                x: 210
                 y: 12
                 width: 4
                 height: 13
@@ -198,7 +220,7 @@ lvgl:
             - obj:
                 id: obj_barre_point_ha
                 align: TOP_LEFT
-                x: 180
+                x: 220
                 y: 12
                 width: 13
                 height: 13
@@ -206,22 +228,6 @@ lvgl:
                 border_width: 0
                 pad_all: 0
                 bg_color: 0xF44336
-            # Masque sur la page Menu, ou il ne ferait rien (D025).
-            - button:
-                id: btn_nav_menu
-                align: RIGHT_MID
-                x: -2
-                width: 42
-                height: 32
-                widgets:
-                  - label:
-                      align: CENTER
-                      text_font: police_icones
-                      text: "\U000F035C"
-                on_click:
-                  - lvgl.page.show:
-                      id: page_menu
-                      animation: NONE
 
 script:
   # Appele a chaque changement d'un reglage garde en flash (D027, D028, D031) :

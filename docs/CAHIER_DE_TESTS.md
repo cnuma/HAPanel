@@ -202,7 +202,7 @@ ensuite l'automatisation du module et l'enregistrer.
 
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
-| I1 | Écran d'accueil | En haut : date et heure (« 4 nov.  17:20 »), Wi-Fi, point vert, bouton ☰ à droite. **Pas de barre en bas** | `feature/barre-etat` | |
+| I1 | Écran d'accueil | En haut : bouton ☰ à gauche, sans fond, puis date et heure (« 4 nov.  17:20 ») ; Wi-Fi et point vert à droite. **Pas de barre en bas** | `feature/barre-etat` | |
 | I2 | Toucher brièvement ☰ | Le Menu s'ouvre ; titre « Menu » dans la barre, pas de ☰ ; maison centrée en bas | `feature/barre-etat` | |
 | I3 | Ouvrir chaque tuile du Menu | Titre de la barre = nom de la page (Météo, Planning, Scénarios, Réglages, À propos) ; ☰ présent ; maison en bas | `feature/barre-etat` | |
 | I4 | Toucher la maison | Accueil : la date revient à la place du titre ; la barre du bas disparaît | `feature/barre-etat` | |

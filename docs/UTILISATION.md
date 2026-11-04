@@ -10,9 +10,9 @@ peut légèrement différer.*
 ## L'essentiel
 
 - **La barre du haut** est présente sur toutes les pages, comme sur un téléphone :
-  le titre de la page (la date et l'heure sur l'accueil), le Wi-Fi, le point de
-  connexion à Home Assistant (vert : relié, rouge : non relié) et le bouton **☰**,
-  qui ouvre le Menu (il n'apparaît pas sur le Menu).
+  à gauche le bouton **☰**, qui ouvre le Menu (il n'apparaît pas sur le Menu), puis le
+  titre de la page (la date et l'heure sur l'accueil) ; à droite le Wi-Fi et le point
+  de connexion à Home Assistant (vert : relié, rouge : non relié).
 - **La maison**, en bas au centre, ramène à l'accueil. L'accueil n'a pas de barre en
   bas.
 - La LED et la luminosité de l'écran se règlent depuis le panneau lui-même :

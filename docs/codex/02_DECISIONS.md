@@ -776,10 +776,11 @@ qui cite la précédente.
   disquette (D035) passait par-dessus le contenu quand on changeait vite de page.
 - Décision :
   - barre de 36 px en haut de toutes les pages (`top_layer`, `packages/lvgl.yaml`) :
-    à gauche le titre de la page (écrit par son `on_load`), ou la date et l'heure sur
-    l'accueil ; à droite la disquette, le Wi-Fi, le point de connexion à HA (P2 sur
-    toutes les pages, plus seulement l'accueil) et le bouton Menu ☰ (42 × 32 px),
-    masqué sur le Menu ;
+    à gauche le bouton Menu ☰ (40 × 32 px, sans fond, masqué sur le Menu), puis le
+    titre de la page (écrit par son `on_load`), ou la date et l'heure sur l'accueil ;
+    à droite la disquette, le Wi-Fi et le point de connexion à HA (P2 sur toutes les
+    pages, plus seulement l'accueil). Après essai, le ☰ passe de droite à gauche et
+    perd son fond bleu, jugé disgracieux (retour du propriétaire) ;
   - barre du bas réduite au bouton Accueil, centré, 68 px ; masquée sur l'accueil,
     qui gagne 44 px ;
   - contenus des pages sous la barre (y ≥ 38) : titres retirés, tuiles du Menu et

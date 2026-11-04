@@ -43,22 +43,21 @@ class Ecran:
     """Ecran de 240 x 320 du module, coordonnees en pixels du module."""
 
     def __init__(self, titre=None, maison=True, menu=True, wifi=True, ha=True, disquette=None):
-        """Barre d'etat en haut (D036) : titre, ou date et heure sur l'accueil (titre None),
-        disquette, Wi-Fi, connexion a HA et bouton Menu, masque sur le menu. En bas,
+        """Barre d'etat en haut (D036) : bouton Menu (masque sur le menu), titre, ou date et
+        heure sur l'accueil (titre None), disquette, Wi-Fi et connexion a HA. En bas,
         maison centree, sans barre sur l'accueil (D025 revisee)."""
         self.image = Image.new("RGB", (240 * S, 320 * S), "#000000")
         self.d = ImageDraw.Draw(self.image)
         self.reperes = []
         self.rect(0, 0, 240, 36, "#212121")
-        self.texte(8, 9, titre if titre else "1 nov.  14:32")
-        if disquette:
-            self.icone("disquette", 136, 18, 24, disquette)
-        for i, (x, y, h) in enumerate([(152, 21, 4), (158, 18, 7), (164, 15, 10), (170, 12, 13)]):
-            self.rect(x, y, 4, h, BLANC if wifi and i < 3 else INACTIF)
-        self.rect(180, 12, 13, 13, VERT if ha else ROUGE, 7)
         if menu:
-            self.bouton(196, 2, 42, 32, BLEU)
-            self.icone("menu", 217, 18, 24)
+            self.icone("menu", 22, 18, 24)
+        self.texte(48, 9, titre if titre else "1 nov.  14:32")
+        if disquette:
+            self.icone("disquette", 172, 18, 24, disquette)
+        for i, (x, y, h) in enumerate([(192, 21, 4), (198, 18, 7), (204, 15, 10), (210, 12, 13)]):
+            self.rect(x, y, 4, h, BLANC if wifi and i < 3 else INACTIF)
+        self.rect(220, 12, 13, 13, VERT if ha else ROUGE, 7)
         if maison:
             self.rect(0, 276, 240, 44, "#212121")
             self.bouton(86, 280, 68, 36, BLEU)
@@ -143,7 +142,7 @@ def accueil():
     e.bouton(172, 182, 56, 44, "#E53935")
     e.texte(200, 204, "+", BLANC, 22, 500, "mm")
     glissiere(e)
-    for numero, x, y in [(1, 120, 18), (2, 217, 44), (3, 226, 70), (4, 180, 118), (5, 232, 154),
+    for numero, x, y in [(1, 150, 18), (2, 42, 32), (3, 226, 70), (4, 180, 118), (5, 232, 154),
                          (6, 76, 204), (7, 120, 284)]:
         e.repere(numero, x, y)
     e.finir("accueil.png")
@@ -216,7 +215,7 @@ def reglages_ecran(alerte=True, impose_alerte=False, disquette=None):
 
 def reglages():
     e = reglages_ecran(disquette=VERT)
-    for numero, x, y in [(1, 140, 59), (2, 140, 96), (3, 140, 159), (4, 150, 196), (5, 112, 18)]:
+    for numero, x, y in [(1, 140, 59), (2, 140, 96), (3, 140, 159), (4, 150, 196), (5, 150, 18)]:
         e.repere(numero, x, y)
     e.finir("reglages.png")
     cote_a_cote([encadrer(reglages_ecran(alerte=False)), encadrer(reglages_ecran(impose_alerte=True))],
