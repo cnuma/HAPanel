@@ -4,8 +4,8 @@ Tous les tests lancés et pas encore confirmés, en un seul endroit, pour n'en o
 aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a été vu
 (et l'heure, pour retrouver les journaux).
 
-- **Module :** `hapanel-a85bfc`, binaire de banc `0.6.0-dev (dec159c)`, flashé le
-  3 novembre 2026. Vérifier l'entité « Version » sur la page de l'appareil avant de
+- **Module :** `hapanel-a85bfc`, binaire de banc `0.6.0-dev (20dda6e)`, branche
+  `feature/reglages-ecran`, flashé le 3 novembre 2026. Vérifier l'entité « Version » sur la page de l'appareil avant de
   commencer.
 - **Ordre :** la partie A bloque la fusion dans `main` ; les parties B à G se font
   quand l'occasion se présente.
@@ -24,6 +24,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 3 novembre 2026 | `d67b9c0` | A1 | Couleur OK ; accent de « écran » absent du pied de page | Corrigé (`bade90a`) : police du projet sur tout le message |
 | 3 novembre 2026 | `dec159c` | A1 | OK : **A et B validés**, fusion dans `main` | |
 | 3 novembre 2026 | `dec159c` | E | KO : aucune variation de la LED ni de l'écran | Journaux à 22 h 30 : `LDR 1.094 V` fixe, plafond de l'ADC en `0db` (relevés du 31 octobre : 0,075 à 0,26 V). Mesure saturée, donc obscurité toujours maximale. Diagnostic : éclairer la LDR à la lampe pendant la lecture des journaux |
+| 3 novembre 2026 | `bc6f66e` | H | Page Réglages OK, tactile bien plus réactif, luminosité suit la pièce mais trop lentement ; tuile Accueil du Menu en doublon ; interrupteur à l'arrêt gris confondu avec « grisé = imposé » et peu lisible ; « Alerte LED » bloquée | Corrigé (`20dda6e`) : tuile retirée, cadenas, interrupteur sur fond sombre, LDR moyennée sur 5 s. « Alerte LED » était imposée par l'automatisation (`led_alerte on` dans les journaux) : la mettre sur « Ne pas imposer » |
 
 | Partie | Sujet | Bloque la fusion |
 |---|---|---|
@@ -115,11 +116,11 @@ Après réimport du blueprint « module » depuis `main`.
 | N° | Action | Attendu | OK / KO |
 |---|---|---|---|
 | E1 | Pièce éclairée : regarder la respiration de la LED | Monte de 0 à environ 5 %, discrète ; couleur du préréglage lisible | |
-| E2 | Pièce sombre (attendre 1 min, la mesure est moyennée) | Respiration plus faible (environ 1 %), couleur encore reconnaissable | |
+| E2 | Pièce sombre (attendre 10 s, la mesure est moyennée) | Respiration plus faible (environ 1 %), couleur encore reconnaissable | |
 | E3 | Préréglage Confort, puis Éco | Orange et vert bien distincts, de jour comme de nuit | |
 | E4 | Boost, ou une alerte | Signal visible, y compris en pièce sombre | |
 | E5 | Pièce sombre : lire l'écran | Lisible sans éblouir (niveau `retro_nuit`) | |
-| E6 | Allumer puis éteindre la lumière de la pièce | Le rétroéclairage suit après environ 1 min, sans clignoter ni varier sans cesse | |
+| E6 | Allumer puis éteindre la lumière de la pièce | Le rétroéclairage suit en moins de 10 s, sans clignoter ni varier sans cesse (binaire `20dda6e` et suivants ; 1 min avant) | |
 | E7 | Pièce sombre, écran allumé puis en veille | La luminosité de l'écran ne fausse pas la mesure (pas de va-et-vient) | |
 
 ## F — Cas d'erreur jamais confirmés séparément
@@ -155,9 +156,12 @@ mesure suivante).
 
 ## H — Page Réglages, menu et tactile
 
-Branche `feature/reglages-ecran`. Avant H4 : **réimporter le blueprint « module »**
-(menu **⋮ › Réimporter le blueprint**), puis rouvrir l'automatisation du module et
-l'enregistrer.
+Branche `feature/reglages-ecran`. Avant H4 : **importer le blueprint « module »
+depuis la branche** (Paramètres › Automatisations et scènes › Blueprints › Importer
+un blueprint), en acceptant de remplacer l'existant, avec l'adresse
+`https://github.com/cnuma/HAPanel/blob/feature/reglages-ecran/blueprints/automation/hapanel/module.yaml`.
+**Pas** « Réimporter le blueprint » : il reprendrait la version de `main`. Rouvrir
+ensuite l'automatisation du module et l'enregistrer.
 
 | N° | Action | Attendu | OK / KO |
 |---|---|---|---|
@@ -173,6 +177,6 @@ l'enregistrer.
 | H10 | Redémarrer le module | Les 4 réglages sont conservés | |
 | H11 | Dans le blueprint, imposer « Alerte LED », enregistrer | Sur l'écran, cadenas devant Alerte LED, qui ne réagit plus ; « imposé par HA » avec un cadenas en bas | |
 | H12 | Remettre « Ne pas imposer », enregistrer | Alerte LED de nouveau modifiable, cadenas et mention disparus | |
-| H15 | Éteindre la lumière d'une pièce éclairée | L'écran baisse en moins de 10 s, sans clignoter ensuite | |
 | H13 | Rester 1 min sur Réglages sans toucher | Retour à l'accueil, puis écran éteint | |
 | H14 | HA coupé (comme A13), ouvrir Réglages | La page marche, réglages modifiables | |
+| H15 | Éteindre la lumière d'une pièce éclairée | L'écran baisse en moins de 10 s, sans clignoter ensuite | |
