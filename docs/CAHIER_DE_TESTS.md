@@ -9,6 +9,8 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
   commencer.
 - **Ordre :** la partie A bloque la fusion dans `main` ; les parties B à G se font
   quand l'occasion se présente.
+- **Codes (G13) :** une lettre par fonction, puis un numéro. Un code n'est jamais
+  réattribué : un test retiré est barré, un test ajouté prend le numéro suivant.
 - **Rapport :** donner les numéros KO (par exemple « A7 KO : … ») ; les tests non faits
   restent vides.
 

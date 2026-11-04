@@ -679,5 +679,21 @@ qui cite la précédente.
   - révision après le premier essai (3 novembre 2026) : le gris seul se confondait
     avec un interrupteur à l'arrêt, d'où le cadenas ; interrupteur à l'arrêt sur
     fond sombre bordé, le bouton blanc sur gris clair étant peu lisible.
+
+## D032 — Cahier de tests codé par fonction (invariant G13)
+
+- Date : 4 novembre 2026 — Statut : demandé par le propriétaire (« toujours
+  générer un cahier de tests qui permet un suivi de l'avancement et de ne pas en
+  oublier, avec une codification selon les fonctions à tester »).
+- Contexte : `docs/CAHIER_DE_TESTS.md`, créé le 3 novembre 2026, a permis de
+  répondre par codes (« C1 ok, E1-E7 ok, H1-H9 ok ») et de savoir ce qui bloquait
+  la fusion ; auparavant, des tests restaient « non confirmés » dans `TODO.md`.
+- Décision : invariant G13 (`03_INVARIANTS.md`). Une partie par fonction, des codes
+  stables jamais réattribués, action, attendu et case OK / KO datée, un tableau des
+  résultats, les parties qui bloquent une fusion désignées. Les tests d'une
+  fonction entrent dans le cahier dans le même commit que son code (comme G12). La
+  règle vaut pour tous les dépôts du propriétaire.
+- Conséquences : à une fusion, les tests de la fonction sont OK ou explicitement
+  reportés ; le checkpoint cite le cahier.
 - Conséquences : nouvelle entité exposée, à ne plus renommer (G10) ; surface
   inscrite au `08` ; mémoire à mesurer (G6).

@@ -88,7 +88,11 @@ utilisable pour lire le journal série, pas pour juger un démarrage.
 
 ## Compte rendu de test
 
-Consigner : configuration flashée, port ou IP, version ESPHome, écrans
+Les tests à faire par le propriétaire et leurs résultats vivent dans
+`docs/CAHIER_DE_TESTS.md`, codés par fonction (G13) : il y répond par codes
+(« H4 OK, H11 KO : … »), et rien ne se perd entre deux sessions.
+
+Pour un essai au banc, consigner aussi : configuration flashée, port ou IP, version ESPHome, écrans
 testés, cas testés (Home Assistant connecté, déconnecté, entité
 indisponible, redémarrages), résultat attendu, résultat observé, mémoire
 libre et plus grand bloc libre, tests non effectués.
