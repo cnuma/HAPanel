@@ -53,6 +53,9 @@ jobs:
           cp "$d/firmware.ota.bin" publication/hapanel-ota.bin
           md5="$(md5sum publication/hapanel-ota.bin | cut -d' ' -f1)"
           v="${{ steps.id.outputs.version }}"
+          # Binaire designe par son etiquette, pas par la derniere Release : une
+          # publication entre la verification et l'installation ne change pas
+          # le fichier telecharge (MD5 refuse sinon).
           cat > publication/manifest.json <<EOF
           {
             "name": "HAPanel",
@@ -63,7 +66,7 @@ jobs:
               {
                 "chipFamily": "ESP32",
                 "ota": {
-                  "path": "hapanel-ota.bin",
+                  "path": "https://github.com/${{ github.repository }}/releases/download/$GITHUB_REF_NAME/hapanel-ota.bin",
                   "md5": "$md5",
                   "summary": "HAPanel $v (${{ steps.id.outputs.sha }})",
                   "release_url": "https://github.com/${{ github.repository }}/releases/tag/$GITHUB_REF_NAME"
