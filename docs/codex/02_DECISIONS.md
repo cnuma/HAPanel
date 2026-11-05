@@ -924,6 +924,12 @@ qui cite la précédente.
   vers l'adresse signée de GitHub ne tenant pas dans 512 octets ; corrigé par
   `v0.8.0-dev.3`, constaté le 5 nov.) ; mémoire libre pendant le téléchargement (G6) ;
   écran pendant la fenêtre d'installation.
+- Constaté le 5 novembre 2026 (cahier J1 à J3, J6 à J8, J12) : publication par
+  GitHub Actions en 3 min ; carte neuve installée par web.esphome.io, Wi-Fi par
+  Improv, adoption sans clé ; mise à jour par Wi-Fi depuis l'entité Firmware de HA,
+  téléchargée depuis GitHub en 16 s, Wi-Fi, clé et réglages conservés. Pièges
+  (tampons, versions suffixées, vérification au démarrage) : `09_PIEGES.md`. Le
+  manifeste désigne le binaire par son étiquette, et non par la dernière Release.
 - Avant fusion : risques au `08`, schémas d'architecture (packages, matrice,
   compilation, sécurité) régénérés, procédure G11 validée, D037 révisée (hébergement
   sur GitHub au lieu du réseau local).
