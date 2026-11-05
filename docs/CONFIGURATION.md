@@ -67,6 +67,7 @@ automatisations sur le même module exécuteraient chaque commande deux fois.
 |---|---|---|
 | Panneau | Le module HAPanel | |
 | Thermomètre | Capteur de température de la pièce | |
+| Nom de la pièce | Texte affiché au-dessus de la température | Facultatif ; vide : zone du thermomètre dans HA, sinon « Intérieur » ; 14 caractères au plus envoyés (D040) |
 | Thermomètre extérieur | Capteur de température extérieure | |
 | Thermostat | Entité `climate` | Modes `heat` et `off` |
 | Consigne minimale / maximale | Bornes de réglage | 15 et 25 °C par défaut ; resserrées à celles du thermostat |

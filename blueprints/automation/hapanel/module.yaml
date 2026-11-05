@@ -2,7 +2,7 @@ blueprint:
   name: HAPanel — module
   description: >-
     Alimente toutes les pages d'un panneau HAPanel, une automatisation par
-    module. Accueil : températures du séjour et de l'extérieur, mode, activité,
+    module. Accueil : nom de la pièce, températures de la pièce et de l'extérieur, mode, activité,
     consigne, préréglage et verrou du thermostat, bornes de la consigne. Météo :
     conditions actuelles et prévisions sur 3 jours. Planning : créneaux du jour
     de 1 à 4 calendriers. Scénarios : 6 scènes, scripts ou automatisations au
@@ -27,14 +27,23 @@ blueprint:
             - integration: esphome
     thermometre:
       name: Thermomètre
-      description: Température affichée en grand (séjour).
+      description: Température affichée en grand (la pièce du panneau).
       selector:
         entity:
           filter:
             - domain: sensor
+    nom_piece:
+      name: Nom de la pièce
+      description: >-
+        Affiché au-dessus de la température, 13 caractères visibles environ.
+        Vide : la pièce (zone) du thermomètre dans Home Assistant, sinon
+        « Intérieur ».
+      default: ""
+      selector:
+        text:
     thermometre_exterieur:
       name: Thermomètre extérieur
-      description: Température extérieure affichée sous celle du séjour.
+      description: Température extérieure affichée sous celle de la pièce.
       selector:
         entity:
           filter:
@@ -347,6 +356,7 @@ max: 20
 variables:
   panneau: !input panneau
   thermometre: !input thermometre
+  nom_piece: !input nom_piece
   thermometre_exterieur: !input thermometre_exterieur
   thermostat: !input thermostat
   consigne_min: !input consigne_min
@@ -540,6 +550,11 @@ actions:
               # produirait toute la liste échoue, car hvac_action est une
               # énumération que Home Assistant ne sait pas relire dans une liste.
               for_each:
+                # 14 caractères au plus : le panneau lit 31 octets (accents
+                # sur 2 octets).
+                - cle: piece
+                  valeur: >-
+                    {{ (nom_piece | trim or area_name(thermometre) or 'Intérieur')[:14] }}
                 - cle: temperature
                   valeur: "{{ states(thermometre) }}"
                 - cle: temperature_exterieure

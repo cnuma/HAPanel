@@ -927,3 +927,20 @@ qui cite la précédente.
 - Limite : un module public n'a pas d'écran d'installation ; sans Wi-Fi, rien ne
   dit à l'utilisateur de se connecter au point d'accès (à concevoir si la maquette
   est retenue).
+
+## D040 — Nom de la pièce envoyé par le blueprint
+
+- Date : 5 novembre 2026 — Statut : à valider (cahier J12, J13), branche
+  `feature/poc-deploiement`.
+- Contexte : sur le module de la maquette, l'accueil affiche « Séjour » alors que le
+  blueprint vise la cuisine (retour du propriétaire, J3). Le mot était écrit dans
+  `pages/accueil.yaml` : un réglage propre à la maison dans le firmware, contraire
+  à D038.
+- Décision : nouvelle clé `piece`, envoyée avec les valeurs de l'accueil. Champ
+  facultatif « Nom de la pièce » dans le blueprint ; vide : zone (`area_name`) du
+  thermomètre, sinon « Intérieur ». 14 caractères au plus (tampon de 31 octets du
+  panneau, accents sur 2 octets) ; à l'écran, 124 px, coupé par « … » au-delà.
+  Texte par défaut du firmware : « Intérieur ».
+- Conséquences : un ancien blueprint n'envoie pas `piece` : l'accueil affiche
+  « Intérieur » jusqu'à la réimportation. L'`id` interne `lbl_acc_sejour` est
+  gardé (aucune entité de HA touchée, G10).

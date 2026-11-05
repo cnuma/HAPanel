@@ -465,6 +465,7 @@ tampon de réception sans zéro terminal.
 
 | Préfixe | Clés | Lecture |
 |---|---|---|
+| `piece` | nom de la pièce (D040) | Écrit directement dans `lbl_acc_sejour`, sans état ni péremption |
 | `temperature*` | `temperature`, `temperature_exterieure` | `accueil_rafraichir` |
 | `chauffage_*`, `consigne_*` | mode, action, consigne, préréglage, verrou, bornes | `accueil_rafraichir` |
 | `meteo_*` | condition, température, `meteo_jN_*` (N de 1 à 3) | `meteo_rafraichir` |

@@ -104,13 +104,17 @@ lvgl:
         - lvgl.widget.show: [obj_nav, lbl_barre_titre]
         - lvgl.widget.hide: lbl_barre_date
       widgets:
-        # Temperature du sejour
+        # Nom de la piece, envoye par le blueprint (cle piece, D040) ; rien de
+        # propre a la maison dans le firmware (D038). Largeur bornee : ne
+        # touche pas « indisponible », a droite.
         - label:
             id: lbl_acc_sejour
             align: TOP_LEFT
             x: 12
             y: 40
-            text: "Séjour"
+            width: 124
+            long_mode: DOT
+            text: "Intérieur"
         # Largeur fixe : alignee a droite avec une largeur au contenu, le
         # label cree vide s'elargissait hors de l'ecran (P3).
         - label:

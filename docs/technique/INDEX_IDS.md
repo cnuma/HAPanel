@@ -71,7 +71,7 @@ Relancer le script après toute modification du YAML.
 | `lbl_acc_hs_message` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_acc_option_chauffage` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_acc_option_eteint` | widget label | packages/pages/accueil.yaml | — |
-| `lbl_acc_sejour` | widget label | packages/pages/accueil.yaml | — |
+| `lbl_acc_sejour` | widget label | packages/pages/accueil.yaml | packages/liaison_ha.yaml |
 | `lbl_acc_temperature` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_acc_temperature_etat` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_apropos_connexion` | widget label | packages/lvgl.yaml | — |
