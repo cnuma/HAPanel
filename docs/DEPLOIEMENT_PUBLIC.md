@@ -26,6 +26,13 @@ pas concernés : ils se mettent à jour depuis le PC (`tools/build.ps1 upload`).
 4. Vérifier la Release : les trois fichiers sont présents, elle est marquée
    **Latest**.
 
+**Forme des versions :** toujours `X.Y.Z-dev.N`, puis `X.Y.Z`, sans suffixe ajouté.
+HA ne propose une mise à jour que si la version publiée est plus récente que
+l'installée ; or il juge incomparables `0.8.0-dev.3-usb` et `0.8.0-dev.4` (constaté le
+5 novembre 2026) : l'entité reste « À jour ». Un binaire de test local ne porte donc
+pas de suffixe ; s'il en porte un, lancer l'action `update.install` de HA sur
+l'entité Firmware (à confirmer, cahier J6).
+
 Le binaire publié ne contient aucun secret : la configuration publique n'en lit
 aucun (`secrets.yaml` n'existe pas sur GitHub).
 
