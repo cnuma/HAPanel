@@ -1,6 +1,6 @@
 """HAPanel : index des identifiants du YAML et controle de docs/technique (G12).
 
-Lit hapanel.yaml, hapanel_banc.yaml et packages/, puis :
+Lit hapanel.yaml, hapanel_banc.yaml, hapanel_public.yaml et packages/, puis :
 - ecrit docs/technique/INDEX_IDS.md : chaque id, son type, son fichier et les
   fichiers qui l'utilisent ;
 - verifie que chaque id et chaque substitution d'un fichier YAML documente
@@ -48,6 +48,7 @@ Chargeur.add_multi_constructor("!", _etiquette)
 def fichiers_yaml():
     yield RACINE / "hapanel.yaml"
     yield RACINE / "hapanel_banc.yaml"
+    yield RACINE / "hapanel_public.yaml"
     yield from sorted((RACINE / "packages").rglob("*.yaml"))
 
 
@@ -55,7 +56,7 @@ def page_de(fichier):
     """Page de docs/technique qui documente ce fichier YAML."""
     rel = fichier.relative_to(RACINE)
     if rel.parts[0] != "packages":
-        return DOC / "hapanel.md"  # hapanel.yaml et hapanel_banc.yaml
+        return DOC / "hapanel.md"  # hapanel.yaml, hapanel_banc.yaml, hapanel_public.yaml
     return DOC.joinpath(*rel.parts[1:]).with_suffix(".md")
 
 

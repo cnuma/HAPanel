@@ -1,0 +1,19 @@
+# Fonctions du panneau, communes a toutes les configurations (hapanel.yaml,
+# hapanel_public.yaml). L'acces au reseau et a Home Assistant (Wi-Fi, cle de
+# l'API) n'est pas ici : acces_prive.yaml ou acces_public.yaml (D039).
+packages:
+  base: !include base.yaml
+  hardware: !include hardware.yaml
+  # Avant lvgl : ESPHome garde l'ordre des packages pour les pages, et la
+  # premiere page est celle affichee au demarrage (accueil).
+  accueil: !include pages/accueil.yaml
+  meteo: !include pages/meteo.yaml
+  planning: !include pages/planning.yaml
+  scenarios: !include pages/scenarios.yaml
+  menu: !include pages/menu.yaml
+  reglages: !include pages/reglages.yaml
+  lvgl: !include lvgl.yaml
+  liaison_ha: !include liaison_ha.yaml
+  led_veille: !include led_veille.yaml
+  # Apres lvgl : le message se dessine par-dessus la barre de navigation.
+  message_accueil: !include message_accueil.yaml

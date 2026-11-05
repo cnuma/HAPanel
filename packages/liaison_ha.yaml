@@ -2,7 +2,7 @@
 # un blueprint de Home Assistant lui pousse des valeurs par cle avec l'action
 # maj_valeur, et le panneau demande un envoi complet a chaque connexion.
 #
-# Cles de l'ecran d'accueil (D014, D016) : temperature,
+# Cles de l'ecran d'accueil (D014, D016, D040) : piece, temperature,
 # temperature_exterieure, chauffage_mode, chauffage_action,
 # chauffage_consigne, chauffage_prereglage, chauffage_verrou, consigne_min,
 # consigne_max. Affichage :
@@ -158,6 +158,13 @@ api:
             bool nombre = fin != v && *fin == '\0' && !isnan(f);
             uint32_t maintenant = millis();
             if (maintenant == 0) maintenant = 1;
+            // Nom de la piece (D040) : texte seul, sans etat ni peremption ; un
+            // nom vide garde le precedent.
+            if (strcmp(k, "piece") == 0) {
+              if (v[0] != '\0' && id(lbl_acc_sejour) != nullptr) lv_label_set_text(id(lbl_acc_sejour), v);
+              ESP_LOGI("hapanel.liaison", "%s %s", k, v);
+              return;
+            }
             // Meteo : traitee a part, elle ne doit pas rafraichir le chauffage (P3).
             if (strncmp(k, "meteo_", 6) == 0) {
               static const char *const conditions[] = {

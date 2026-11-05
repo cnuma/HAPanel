@@ -83,6 +83,21 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   et sur la page de l'appareil : vérifier l'automatisation avant de conclure à une panne
   (journaux : `hapanel.liaison: led_alerte on`).
 
+## Binaire public et mises à jour (D039)
+
+- `http_request` vers GitHub : `buffer_size_rx` **et** `buffer_size_tx` à 2048. La
+  redirection vers l'adresse signée (près de 1 ko) ne tient pas dans 512 octets :
+  « HTTP_CLIENT: Out of buffer », puis « Failed to fetch manifest ». Ce message n'est
+  écrit qu'au démarrage, vers 20 s : capturer le journal dès le reset.
+- L'action « Mettre à jour l'entité » de HA ne fait pas vérifier le module : il ne
+  vérifie qu'au démarrage, puis toutes les 6 h. Pour forcer, redémarrer le module.
+- HA ne propose une mise à jour que si la version publiée est plus récente : une
+  version suffixée (`0.8.0-dev.3-usb`) est incomparable avec `0.8.0-dev.N`, l'entité
+  reste « À jour » et `update.install` est refusé. Versions sans suffixe ; le module
+  POC, en `0.8.0-dev.4-wifi`, ne verra que des versions suffixées ou `0.8.0`.
+- Un binaire public déjà installé qui ne lit pas le manifeste ne peut plus se corriger
+  par Wi-Fi : seul l'USB le rattrape. Tester la lecture du manifeste avant de publier.
+
 ## Documentation
 
 - Avant chaque commit qui touche le YAML : mettre à jour la page de `docs/technique/`,

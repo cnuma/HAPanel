@@ -71,7 +71,7 @@ Relancer le script après toute modification du YAML.
 | `lbl_acc_hs_message` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_acc_option_chauffage` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_acc_option_eteint` | widget label | packages/pages/accueil.yaml | — |
-| `lbl_acc_sejour` | widget label | packages/pages/accueil.yaml | — |
+| `lbl_acc_sejour` | widget label | packages/pages/accueil.yaml | packages/liaison_ha.yaml |
 | `lbl_acc_temperature` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_acc_temperature_etat` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_apropos_connexion` | widget label | packages/lvgl.yaml | — |
@@ -167,6 +167,7 @@ Relancer le script après toute modification du YAML.
 | `liaison_temperature` | globals | packages/liaison_ha.yaml | packages/pages/accueil.yaml |
 | `liaison_temperature_etat` | globals | packages/liaison_ha.yaml | packages/pages/accueil.yaml |
 | `liaison_temperature_ms` | globals | packages/liaison_ha.yaml | — |
+| `maj_firmware` | update (http_request) | packages/acces_public.yaml | — |
 | `message_actif` | switch (template) | packages/message_accueil.yaml | — |
 | `message_fermer` | script | packages/message_accueil.yaml | packages/liaison_ha.yaml |
 | `message_ms` | globals | packages/message_accueil.yaml | packages/led_veille.yaml |

@@ -2,18 +2,17 @@
 
 ## Rôle
 
-Le socle commun à tous les modules : nom du nœud, type de puce, Wi-Fi, connexion
-chiffrée à Home Assistant, mise à jour à distance (OTA), journaux, écriture des
-réglages en flash et identité de build.
-
-Sans ce fichier, le module ne démarre pas sur le réseau : pas de Wi-Fi, pas de Home
-Assistant, pas de mise à jour à distance. Il ne contient aucune fonction de l'écran.
+Le socle commun à tous les modules : nom du nœud, type de puce, journaux, écriture
+des réglages en flash et identité de build. Il ne contient aucune fonction de l'écran
+et **aucun accès au réseau** : le Wi-Fi, la clé de l'API et l'OTA sont dans
+`acces_prive.yaml` (secrets compilés, `hapanel.yaml`) ou `acces_public.yaml`
+(saisis à l'installation, `hapanel_public.yaml`), D039.
 
 ## Dépendances
 
 - **Utilise :** les substitutions de `hapanel.yaml` (`node_name`, `friendly_name`,
-  `version`, `git_sha`, `log_level`) et trois valeurs de `secrets.yaml` (`wifi_ssid`,
-  `wifi_password`, `api_encryption_key`), hors de Git (G9).
+  `version`, `git_sha`, `log_level`). Aucun secret (G9).
+- **Inclus par :** `application.yaml`, commun à `hapanel.yaml` et `hapanel_public.yaml`.
 - **Fournit :**
   - `signal_wifi`, complété par `pages/accueil.yaml` (`!extend`) pour l'icône Wi-Fi ;
   - `identite_build`, l'entité « Version » dans Home Assistant.
@@ -47,14 +46,12 @@ Assistant, pas de mise à jour à distance. Il ne contient aucune fonction de l'
 | `framework.type` | `esp-idf` | Cadre logiciel d'Espressif, plus léger que celui d'Arduino (D008). |
 | `framework.advanced.minimum_chip_revision` | `"3.1"` | La puce du panneau est en révision 3.1 : le compilateur retire le code de contournement des anciennes révisions, le binaire est plus petit (D011). |
 
-### Blocs `wifi`, `api`, `ota`
+### Wi-Fi, API et OTA : hors de ce fichier (D039)
 
-| Bloc | Clé | Valeur | Rôle |
+| Fichier | Wi-Fi | Clé de l'API | OTA |
 |---|---|---|---|
-| `wifi` | `ssid`, `password` | `!secret` | Réseau Wi-Fi, lu dans `secrets.yaml`. |
-| `api` | `encryption.key` | `!secret api_encryption_key` | Connexion à Home Assistant toujours chiffrée. La même clé est saisie dans Home Assistant à l'ajout du module. |
-| `ota` | `platform` | `esphome` | Mise à jour par le réseau. |
-| `ota` | `encryption:` | vide | **Volontairement vide** : l'OTA reprend la clé de l'API (D010). Ne pas supprimer : sans ce bloc, l'OTA ne serait plus protégée. |
+| `acces_prive.yaml` | `ssid`, `password` : `!secret` | `encryption.key: !secret api_encryption_key` ; la même clé est saisie dans HA | `esphome` (depuis le PC), `encryption:` **volontairement vide** : reprend la clé de l'API (D010) ; ne pas supprimer |
+| `acces_public.yaml` | saisi à l'installation : Improv par USB, ou point d'accès et portail captif | `encryption: {}` sans clé : reçue de HA à l'adoption, gardée en flash | `http_request` seulement, lancée par l'entité « Firmware » ; pas d'OTA depuis un PC (ESPHome l'accepterait sans clé) |
 
 `pages/accueil.yaml` ajoute `on_connect` et `on_disconnect` au bloc `wifi` pour
 l'écran « HA déconnecté » (D015).
@@ -87,7 +84,7 @@ l'écran « HA déconnecté » (D015).
 
 | Pour | Faire |
 |---|---|
-| Changer de réseau Wi-Fi | Modifier `secrets.yaml`, recompiler, téléverser **par USB** : le module ne joindra plus l'ancien réseau pour une OTA. |
+| Changer de réseau Wi-Fi | Module privé : modifier `secrets.yaml`, recompiler, téléverser **par USB** : le module ne joindra plus l'ancien réseau pour une OTA. Module public : `docs/DEPLOIEMENT_PUBLIC.md` § 5. |
 | Changer la clé de l'API | Modifier `secrets.yaml`, téléverser, puis ressaisir la clé dans Home Assistant (ESPHome › module › Reconfigurer). L'OTA suivante utilise la nouvelle clé (D010). |
 | Changer le délai d'écriture des réglages | `flash_write_interval`. Plus court : moins de perte à la coupure, mais jamais sous 1 s (usure de la flash, G3). |
 | Mesurer le Wi-Fi plus souvent | `update_interval` de `signal_wifi`. Plus court : plus de messages vers Home Assistant. |
