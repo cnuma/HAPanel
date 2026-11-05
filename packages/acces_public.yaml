@@ -26,8 +26,10 @@ provisioning:
 # Mises a jour publiees sur GitHub (Releases), proposees dans Home Assistant.
 http_request:
   # Le lien de telechargement de GitHub redirige vers une adresse signee de
-  # pres de 1 ko : 512 octets ne suffisent pas a lire l'en-tete.
+  # pres de 1 ko : 512 octets ne suffisent ni a lire l'en-tete de reponse, ni
+  # a envoyer la requete vers cette adresse (« Out of buffer », 5 nov.).
   buffer_size_rx: 2048
+  buffer_size_tx: 2048
 
 # Seule OTA du binaire public. Pas d'OTA esphome (depuis un PC) : avec une
 # cle recue a l'execution, ESPHome l'accepte sans cle (« plaintext

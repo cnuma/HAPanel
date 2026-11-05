@@ -60,8 +60,10 @@ couper et rétablir l'alimentation pour rouvrir la fenêtre.
 ## 4. Mettre à jour un module
 
 1. Une fois la nouvelle Release publiée (§ 1), l'entité **Firmware** du module
-   passe à « Mise à jour disponible » (vérification toutes les 6 h ; **Rechercher
-   les mises à jour** dans le menu de l'entité pour forcer).
+   passe à « Mise à jour disponible ». Le module vérifie environ 20 s après son
+   démarrage, puis toutes les 6 h. Pour forcer, redémarrer le module ; l'action
+   « Mettre à jour l'entité » de HA ne déclenche pas la vérification (constaté le
+   5 nov.).
 2. **Installer**. Le module télécharge le binaire depuis GitHub, vérifie son
    empreinte (MD5), l'écrit et redémarre (2 à 3 min).
 3. Vérifier l'entité **Version** : elle donne la nouvelle version et son SHA.

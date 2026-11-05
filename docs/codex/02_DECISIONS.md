@@ -919,7 +919,10 @@ qui cite la précédente.
   marge de flash tombe à 25 % : à suivre pour l'infrarouge.
 - À vérifier par la maquette (cahier J) : HA envoie-t-il la clé à l'adoption ;
   Wi-Fi et clé gardés après une mise à jour ; redirection de GitHub lue
-  (`buffer_size_rx` porté à 2048) ; mémoire libre pendant le téléchargement (G6) ;
+  (`buffer_size_rx` et `buffer_size_tx` portés à 2048 : avec le seul tampon de
+  réception, `v0.8.0-dev.1` échoue au démarrage sur « Out of buffer », la requête
+  vers l'adresse signée de GitHub ne tenant pas dans 512 octets ; corrigé par
+  `v0.8.0-dev.3`, constaté le 5 nov.) ; mémoire libre pendant le téléchargement (G6) ;
   écran pendant la fenêtre d'installation.
 - Avant fusion : risques au `08`, schémas d'architecture (packages, matrice,
   compilation, sécurité) régénérés, procédure G11 validée, D037 révisée (hébergement
