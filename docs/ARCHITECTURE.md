@@ -53,9 +53,9 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 
 | Fichier | Lignes | Responsabilité |
 |---|---|---|
-| `hapanel.yaml` | 17 | Production : substitutions, fonctions (`application`) et accès privé |
-| `hapanel_banc.yaml` | 33 | Banc : production, plus mémoire mesurée, journaux DEBUG et dossier de compilation propre |
-| `hapanel_public.yaml` | 23 | Binaire public sans secret : fonctions et accès public (D039, maquette) |
+| `hapanel.yaml` | 17 | Atelier (modules de test) : substitutions, fonctions (`application`) et accès privé |
+| `hapanel_banc.yaml` | 33 | Banc de l'atelier : `hapanel.yaml`, plus mémoire mesurée, journaux DEBUG et dossier de compilation propre |
+| `hapanel_public.yaml` | 23 | Modules de la maison : binaire public sans secret, fonctions et accès public (D039, D037 révisée) |
 | `packages/application.yaml` | 19 | Liste ordonnée des fichiers de fonctions, commune aux configurations |
 | `packages/acces_prive.yaml` | 15 | Wi-Fi, clé de l'API et OTA depuis le PC, lus dans `secrets.yaml` |
 | `packages/acces_public.yaml` | 47 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub |
@@ -71,7 +71,7 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `packages/pages/scenarios.yaml` | 365 | Boutons et lancement |
 | `packages/pages/menu.yaml` | 126 | Tuiles de navigation |
 | `packages/pages/reglages.yaml` | 216 | Réglages de la LED et de l'écran, synchronisés avec HA, cadenas si imposés (D031) |
-| `secrets.yaml` | | Wi-Fi et clé d'API des modules privés, hors de Git (G9) |
+| `secrets.yaml` | | Wi-Fi et clé d'API des modules de l'atelier, hors de Git (G9) |
 
 **Pour lire le projet :** `hapanel.yaml`, puis `liaison_ha.yaml`, puis `scenarios.yaml`, qui est la
 page la plus simple à commander. `accueil.yaml` est la plus dense et se lit en dernier.
@@ -588,18 +588,18 @@ message au toucher, après 3 minutes ou à la déconnexion de HA (P2).
 
 ![Chaîne de compilation](images/architecture/12_build.png)
 
-- **Identité :** `tools/build.ps1` injecte `VERSION` et le SHA. Le suffixe `+modif` signale un
+- **Identité :** GitHub Actions (binaire public) et `tools/build.ps1` (atelier) injectent `VERSION` et le SHA. Le suffixe `+modif` signale un
   binaire qui ne correspond à aucun commit et ne vaut pas validation (G5).
 - **Version figée :** ESPHome est fixé par `requirements.txt` (D005).
 - **Vérification :** après une OTA, relire la version et le SHA, puis attendre « Boot seems
   successful », car un échec peut ramener sans bruit au binaire précédent.
 - **Blueprint :** `source_url` pointe sur `main`. Il suit Git et non le firmware : un changement de
   clés demande de mettre à jour les deux.
-- **Dossier de compilation :** production `.esphome/build/hapanel`, banc `hapanel_banc`, public
+- **Dossier de compilation :** atelier `.esphome/build/hapanel`, banc `hapanel_banc`, public
   `hapanel_public` : passer de l'un à l'autre ne recompile pas tout.
-- **Binaire public (D039, maquette) :** une étiquette `v<version>` lance GitHub Actions, qui publie
-  une Release (binaire complet, binaire de mise à jour, manifeste) ; les modules publics la
-  proposent dans HA. Procédure : [DEPLOIEMENT_PUBLIC.md](DEPLOIEMENT_PUBLIC.md).
+- **Binaire public (D039), mode de déploiement de tous les modules de la maison (D037 révisée) :**
+  une étiquette `v<version>` lance GitHub Actions, qui publie une Release (binaire complet, binaire
+  de mise à jour, manifeste) ; chaque module la propose dans HA (entité Firmware). USB en secours. Procédure : [DEPLOIEMENT_PUBLIC.md](DEPLOIEMENT_PUBLIC.md).
 
 ## Sécurité
 
@@ -607,7 +607,7 @@ message au toucher, après 3 minutes ou à la déconnexion de HA (P2).
 
 | Risque | État |
 |---|---|
-| Clé d'API commune aux modules (R8) | Accepté : la clé d'un module ouvre l'API et l'OTA de tous |
+| Clé d'API commune aux modules de l'atelier (R8) | Accepté : la clé d'un module de test ouvre l'API et l'OTA des autres ; binaire public : une clé par module, donnée par HA |
 | `maj_valeur` accessible à tout détenteur de la clé | Peut changer l'affichage, pas commander un appareil |
 | Réglages de la LED modifiables depuis HA (D027) | Peuvent éteindre la LED ou son alerte ; l'écran montre toujours l'état réel |
 | Message d'accueil (D028) | Texte borné à 240 octets, sans commande ; fermé à la déconnexion de HA |

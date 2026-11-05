@@ -1,12 +1,14 @@
-# Déploiement public — HAPanel (maquette D039)
+# Déploiement public — HAPanel (D039, D037 révisée)
 
 Procédure du binaire public, sans secret : publication sur GitHub, première
 installation d'un module, adoption dans Home Assistant, mises à jour depuis Home
-Assistant. **État : maquette** (branche `feature/poc-deploiement`), validée par la
-partie J du cahier de tests.
+Assistant. C'est le mode de déploiement de **tous les modules de la maison** (D037
+révisée), validé par la partie J du cahier de tests. Ce document s'adresse au
+développeur ; le guide pas à pas pour un débutant est à venir (TODO, rang 3).
 
-Les modules du propriétaire compilés avec `hapanel.yaml` (secrets compilés) ne sont
-pas concernés : ils se mettent à jour depuis le PC (`tools/build.ps1 upload`).
+Les configurations privées (`hapanel.yaml`, `hapanel_banc.yaml`, secrets compilés,
+mise à jour depuis le PC par `tools/build.ps1 upload`) ne servent plus qu'aux modules
+de test de l'atelier.
 
 ## 1. Publier une version
 
@@ -20,7 +22,7 @@ pas concernés : ils se mettent à jour depuis le PC (`tools/build.ps1 upload`).
    git push origin v0.8.0-dev.1
    ```
 
-3. GitHub Actions lance « Publication » (onglet **Actions** du dépôt, 15 à 25 min) :
+3. GitHub Actions lance « Publication » (onglet **Actions** du dépôt, environ 3 min) :
    il compile `hapanel_public.yaml` et crée la Release `v0.8.0-dev.1` avec
    `hapanel-factory.bin`, `hapanel-ota.bin` et `manifest.json`.
 4. Vérifier la Release : les trois fichiers sont présents, elle est marquée
@@ -61,8 +63,13 @@ couper et rétablir l'alimentation pour rouvrir la fenêtre.
 3. Importer le blueprint et créer l'automatisation du module :
    `docs/CONFIGURATION.md`.
 
-**Si HA demande une clé :** la maquette n'a pas encore confirmé l'envoi automatique
-(cahier J3). Noter ce que HA affiche et ne rien saisir.
+Aucune clé n'a été demandée lors du test du 5 novembre 2026 (cahier J3, J4). **Si HA
+en demande une**, noter ce que HA affiche et ne rien saisir.
+
+**Module qui tournait avec le binaire privé** (passage au binaire public) : refaire
+le § 2 en acceptant l'effacement ; le Wi-Fi est à ressaisir. Si HA crée un nouvel
+appareil, rouvrir l'automatisation du module et y choisir le nouvel appareil
+(cahier J14).
 
 ## 4. Mettre à jour un module
 

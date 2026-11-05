@@ -109,47 +109,57 @@ def sequence(nom, acteurs, etapes, largeur=1100):
 def contexte():
     s = S(1100, 760)
     s.zone(20, 20, 1060, 540, "Réseau local de la maison")
-    s.boite(50, 90, 290, 200, "Modules HAPanel", "un même binaire pour tous\nhapanel-xxxxxx (MAC)\nécran, tactile, LED, LDR\naucune entité connue", BLEU, B_BLEU)
+    s.boite(50, 90, 290, 200, "Modules HAPanel", "binaire public, sans secret\nhapanel-xxxxxx (MAC)\nécran, tactile, LED, LDR\naucune entité connue", BLEU, B_BLEU)
     s.boite(450, 90, 300, 200, "Home Assistant", "intégration ESPHome\nautomatisation par module\ndepuis le blueprint unique\nmodule.yaml", ORANGE, B_ORANGE)
     s.boite(840, 90, 210, 200, "Appareils", "thermostats\nscènes, scripts\ncalendriers\nmétéo, capteurs", VERT, B_VERT)
     s.fleche([(340, 150), (450, 150)], B_BLEU, "événements", (395, 128))
     s.fleche([(450, 230), (340, 230)], B_ORANGE, "maj_valeur", (395, 252))
     s.etiquette((395, 310), "API native chiffrée (Noise)", DOUX)
     s.fleche([(750, 190), (840, 190)], B_VERT, double=True)
-    s.boite(50, 400, 290, 130, "PC de développement", "ESPHome CLI figé\ntools/build.ps1", GRIS)
-    s.fleche([(195, 400), (195, 290)], DOUX, "OTA chiffrée\nou USB", (280, 345))
-    s.boite(450, 400, 210, 130, "secrets.yaml", "Wi-Fi, clé d'API\nignoré par Git", ROUGE, B_ROUGE)
+    s.boite(50, 400, 290, 130, "PC de l'atelier", "ESPHome CLI figé\nmodules de test seulement", GRIS)
+    s.fleche([(195, 400), (195, 290)], DOUX, "USB, ou OTA\n(atelier)", (280, 345))
+    s.boite(450, 400, 210, 130, "secrets.yaml", "atelier seulement\nignoré par Git", ROUGE, B_ROUGE)
     s.fleche([(450, 465), (340, 465)], B_ROUGE, "à la compilation", (395, 442))
-    s.boite(250, 620, 600, 110, "GitHub : cnuma/HAPanel", "YAML, blueprint et documentation : seule source de vérité", VIOLET, B_VIOLET)
+    s.boite(250, 620, 600, 110, "GitHub : cnuma/HAPanel", "source de vérité ; Actions publie binaire et manifeste\n(Releases), lus par l'entité Firmware de chaque module", VIOLET, B_VIOLET)
     s.fleche([(195, 620), (195, 530)], B_VIOLET, "git", (225, 590))
+    s.fleche([(250, 700), (32, 700), (32, 190), (50, 190)], B_VIOLET)
+    s.etiquette((140, 724), "mise à jour HTTPS", B_VIOLET)
     s.fleche([(700, 620), (700, 290)], B_VIOLET, "import du blueprint (URL)", (860, 590))
     s.sauver("01_contexte.png")
 
 
 def packages():
-    s = S(1100, 900)
-    s.boite(250, 20, 600, 80, "hapanel_banc.yaml", "production + debug mémoire + journaux DEBUG", GRIS)
-    s.fleche([(550, 100), (550, 150)])
-    s.boite(250, 150, 600, 80, "hapanel.yaml", "assemble les packages et les substitutions", BLEU, B_BLEU)
-    s.d.line([(550, 230), (550, 265)], fill=TRAIT, width=3)
-    s.d.line([(150, 265), (950, 265)], fill=TRAIT, width=3)
+    s = S(1100, 965)
+    s.boite(20, 20, 320, 80, "hapanel_banc.yaml", "atelier : + debug, journaux", GRIS)
+    s.boite(390, 20, 320, 80, "hapanel.yaml", "atelier : secrets compilés", GRIS)
+    s.boite(760, 20, 320, 80, "hapanel_public.yaml", "maison : aucun secret", VIOLET, B_VIOLET)
+    s.fleche([(340, 60), (390, 60)])
+    s.boite(20, 170, 320, 80, "acces_prive.yaml", "Wi-Fi, clé, OTA du PC", ROUGE, B_ROUGE)
+    s.boite(390, 170, 320, 80, "application.yaml", "toutes les fonctions", BLEU, B_BLEU)
+    s.boite(760, 170, 320, 80, "acces_public.yaml", "Improv, portail, mise à jour", VIOLET, B_VIOLET)
+    s.fleche([(450, 100), (180, 170)])
+    s.fleche([(550, 100), (550, 170)])
+    s.fleche([(840, 100), (660, 170)], B_VIOLET)
+    s.fleche([(920, 100), (920, 170)], B_VIOLET)
+    s.d.line([(550, 250), (550, 330)], fill=TRAIT, width=3)
+    s.d.line([(150, 330), (950, 330)], fill=TRAIT, width=3)
     for x in (150, 550, 950):
-        s.fleche([(x, 265), (x, 300)])
-    s.zone(20, 300, 260, 390, "Socle")
-    s.boite(40, 345, 220, 150, "base.yaml", "nœud, Wi-Fi, API,\nOTA, journaux,\nidentité de build", GRIS)
-    s.boite(40, 515, 220, 150, "hardware.yaml", "seul propriétaire\ndes broches et bus\n(G2)", GRIS)
-    s.zone(300, 300, 500, 390, "Écran : pages dans l'ordre d'inclusion")
-    pages = [("accueil", 320, 350), ("météo", 560, 350), ("planning", 320, 430), ("scénarios", 560, 430),
-             ("menu", 320, 510), ("réglages", 560, 510)]
+        s.fleche([(x, 330), (x, 365)])
+    s.zone(20, 365, 260, 390, "Socle")
+    s.boite(40, 410, 220, 150, "base.yaml", "nœud, plateforme,\njournaux, réglages,\nidentité de build", GRIS)
+    s.boite(40, 580, 220, 150, "hardware.yaml", "seul propriétaire\ndes broches et bus\n(G2)", GRIS)
+    s.zone(300, 365, 500, 390, "Écran : pages dans l'ordre d'inclusion")
+    pages = [("accueil", 320, 415), ("météo", 560, 415), ("planning", 320, 495), ("scénarios", 560, 495),
+             ("menu", 320, 575), ("réglages", 560, 575)]
     for t, x, y in pages:
         s.boite(x, y, 220, 65, t + ".yaml", "", ORANGE, B_ORANGE)
-    s.boite(320, 595, 220, 65, "lvgl.yaml", "", BLEU, B_BLEU)
-    s.etiquette((670, 627), "lvgl.yaml : À propos,\nnavigation, connexion.\nAccueil inclus d'abord :\npage de démarrage.", DOUX, taille=16)
-    s.zone(820, 300, 260, 390, "Services")
-    s.boite(840, 345, 220, 150, "liaison_ha.yaml", "action maj_valeur,\nétat et péremption\ndes valeurs", VERT, B_VERT)
-    s.boite(840, 515, 220, 150, "led_veille.yaml", "veille, retour accueil,\nLED, rétroéclairage,\nLDR", VERT, B_VERT)
-    s.zone(20, 720, 1060, 160, "Couplage par identifiants ESPHome")
-    s.etiquette((550, 800), "liaison_ha écrit les globals puis appelle accueil / meteo / planning / scenarios_rafraichir.\nLes pages lisent ces globals et ha_connecte_affiche. accueil_rafraichir calcule la couleur de la LED.\nled_veille lit ldr_tension (hardware) et pilote retroeclairage et page_accueil.", ENCRE, taille=20)
+    s.boite(320, 660, 220, 65, "lvgl.yaml", "", BLEU, B_BLEU)
+    s.etiquette((670, 692), "lvgl.yaml : À propos,\nnavigation, connexion.\nAccueil inclus d'abord :\npage de démarrage.", DOUX, taille=16)
+    s.zone(820, 365, 260, 390, "Services")
+    s.boite(840, 410, 220, 150, "liaison_ha.yaml", "action maj_valeur,\nétat et péremption\ndes valeurs", VERT, B_VERT)
+    s.boite(840, 580, 220, 150, "led_veille.yaml", "veille, retour accueil,\nLED, rétroéclairage,\nLDR", VERT, B_VERT)
+    s.zone(20, 785, 1060, 160, "Couplage par identifiants ESPHome")
+    s.etiquette((550, 865), "liaison_ha écrit les globals puis appelle accueil / meteo / planning / scenarios_rafraichir.\nLes pages lisent ces globals et ha_connecte_affiche. accueil_rafraichir calcule la couleur de la LED.\nled_veille lit ldr_tension (hardware) et pilote retroeclairage et page_accueil.", ENCRE, taille=20)
     s.sauver("02_packages.png")
 
 
@@ -262,17 +272,18 @@ def navigation():
 
 def build():
     s = S(1100, 900)
-    entrees = [(30, "VERSION", "0.6.0-dev"), (295, "Git", "SHA, +modif"), (560, "secrets.yaml", "hors dépôt"), (825, "requirements.txt", "ESPHome figé")]
+    version = (RACINE / "VERSION").read_text(encoding="utf-8").split()[0]
+    entrees = [(30, "VERSION", version), (295, "Git", "étiquette v…, SHA"), (560, "secrets.yaml", "atelier seulement"), (825, "requirements.txt", "ESPHome figé")]
     for x, t, d in entrees:
         s.boite(x, 30, 245, 100, t, d, GRIS)
-    s.boite(150, 210, 800, 110, "tools/build.ps1", "injecte version et git_sha par substitution, appelle esphome config / compile / upload / logs", BLEU, B_BLEU)
+    s.boite(150, 210, 800, 110, "GitHub Actions ou tools/build.ps1", "injectent version et git_sha ; Actions compile hapanel_public.yaml\nà chaque étiquette, build.ps1 les configurations de l'atelier", BLEU, B_BLEU)
     for x in (152, 417):
         s.fleche([(x, 130), (x if x > 200 else 200, 210)])
     s.fleche([(682, 130), (682, 210)])
     s.fleche([(947, 130), (900, 210)])
-    s.boite(150, 390, 800, 90, "firmware.bin", "code C++ généré, compilé par ESP-IDF", ORANGE, B_ORANGE)
+    s.boite(150, 390, 800, 90, "firmware.bin", "compilé par ESP-IDF ; public : Release avec manifeste (version, MD5)", ORANGE, B_ORANGE)
     s.fleche([(550, 320), (550, 390)])
-    s.boite(150, 550, 800, 90, "OTA chiffrée vers le module", "clé de l'API ; bloc secteur 1 A", VIOLET, B_VIOLET)
+    s.boite(150, 550, 800, 90, "Maison : entité Firmware de HA", "le module télécharge depuis GitHub ; atelier : OTA chiffrée du PC ; USB en secours", VIOLET, B_VIOLET)
     s.fleche([(550, 480), (550, 550)])
     s.boite(150, 710, 370, 150, "Nouveau binaire", "« Boot seems successful »\naprès 60 s\nversion et SHA relus", VERT, B_VERT)
     s.boite(580, 710, 370, 150, "Rollback du bootloader", "échec de démarrage :\nretour silencieux au binaire\nprécédent (R7)", ROUGE, B_ROUGE)
@@ -288,7 +299,7 @@ def securite():
     s.boite(600, 70, 450, 220, "Autorisation ESPHome", "inutile aux événements du panneau\n(testé le 2 novembre 2026)\nactivée : un firmware modifié\npourrait appeler d'autres actions", ORANGE, B_ORANGE)
     s.zone(20, 410, 1060, 330, "Module : affiche et demande, ne décide pas")
     s.boite(50, 460, 450, 240, "Garde-fous locaux", "aucune commande si HA déconnecté (P2)\nni sur état inconnu ou périmé (P4)\nle premier toucher ne fait que réveiller\nvaleur en attente jusqu'à confirmation", BLEU, B_BLEU)
-    s.boite(600, 460, 450, 240, "Secrets", "clé d'API commune aux modules (R8)\nprotège API et OTA\nWi-Fi et clé dans secrets.yaml\nce fichier reste hors de Git", ROUGE, B_ROUGE)
+    s.boite(600, 460, 450, 240, "Secrets", "binaire public : aucun secret\nWi-Fi saisi à l'installation\nclé d'API envoyée par HA à l'adoption\nmise à jour : MD5, sans signature (R10)", ROUGE, B_ROUGE)
     s.fleche([(275, 410), (275, 320)], B_BLEU, "événements esphome.hapanel_*", (275, 365))
     s.fleche([(825, 320), (825, 410)], B_ORANGE, "maj_valeur : API chiffrée", (825, 365))
     s.sauver("13_securite.png")
@@ -405,7 +416,8 @@ def yaml_matrice():
                       ("pages/menu", ORANGE, B_ORANGE), ("pages/reglages", ORANGE, B_ORANGE),
                       ("lvgl", BLEU, B_BLEU),
                       ("liaison_ha", VERT, B_VERT), ("led_veille", VERT, B_VERT),
-                      ("message_accueil", ORANGE, B_ORANGE)]
+                      ("message_accueil", ORANGE, B_ORANGE),
+                      ("acces_prive", ROUGE, B_ROUGE), ("acces_public", VIOLET, B_VIOLET)]
     lignes, autres = [], []
     for chemin, fond, bord in roles_fichiers:
         texte = (RACINE / "packages" / f"{chemin}.yaml").read_text(encoding="utf-8")
@@ -415,9 +427,18 @@ def yaml_matrice():
         if hors:
             autres.append(f"{', '.join(hors)} ({nom})")
         lignes.append((nom, " ".join(blocs + (["autres"] if hors else [])), fond, bord))
-    s = S(1260, 950)
+    # Liste « autres » coupee en lignes d'au plus 115 caracteres.
+    lignes_autres, ligne = [], "autres : "
+    for i, a in enumerate(autres):
+        morceau = a + (" ; " if i < len(autres) - 1 else ".")
+        if len(ligne) + len(morceau) > 115:
+            lignes_autres.append(ligne.rstrip())
+            ligne = ""
+        ligne += morceau
+    lignes_autres.append(ligne)
     x0, y0, lc, hl = 255, 110, 76, 52
     yf = y0 + len(lignes) * hl
+    s = S(1260, int(yf + 190 + 27 * len(lignes_autres)))
     xf = x0 + len(colonnes) * lc
     # Axes : titre des colonnes centre au-dessus d'elles, titre des lignes
     # vertical a leur gauche, centre sur leur hauteur ; un trait montre l'etendue.
@@ -443,13 +464,15 @@ def yaml_matrice():
     s.d.line([(70, yf), (xf, yf)], fill="#CFD8DC", width=1)
     # Legende : une case = le fichier declare ce bloc ; couleur = role du fichier.
     s.d.text((20, yf + 40), "Légende : une case = ce fichier déclare ce bloc. La couleur donne le rôle du fichier :", fill=ENCRE, font=f(19, True), anchor="lm")
-    roles = [(GRIS, "#607D8B", "socle : carte, Wi-Fi, API"), (ORANGE, B_ORANGE, "écran affiché"),
-             (BLEU, B_BLEU, "graphisme commun, navigation"), (VERT, B_VERT, "service sans écran")]
-    for cx, (fond, bord, texte) in zip([30, 320, 530, 880], roles):
-        s.d.rounded_rectangle([cx, yf + 68, cx + 46, yf + 100], 7, fill=fond, outline=bord, width=2)
-        s.d.text((cx + 56, yf + 84), texte, fill=ENCRE, font=f(18), anchor="lm")
+    roles = [(GRIS, "#607D8B", "socle : nœud, carte"), (ORANGE, B_ORANGE, "écran affiché"),
+             (BLEU, B_BLEU, "graphisme commun"), (VERT, B_VERT, "service sans écran"),
+             (ROUGE, B_ROUGE, "accès atelier"), (VIOLET, B_VIOLET, "accès public")]
+    for cx, (fond, bord, texte) in zip([30, 265, 450, 680, 900, 1080], roles):
+        s.d.rounded_rectangle([cx, yf + 68, cx + 40, yf + 100], 7, fill=fond, outline=bord, width=2)
+        s.d.text((cx + 48, yf + 84), texte, fill=ENCRE, font=f(17), anchor="lm")
     s.d.text((20, yf + 135), "Abréviations : subst. = substitutions ; tactile = touchscreen.", fill=DOUX, font=f(17), anchor="lm")
-    s.d.text((20, yf + 162), "autres : " + " ; ".join(autres) + ".", fill=DOUX, font=f(17), anchor="lm")
+    for i, t in enumerate(lignes_autres):
+        s.d.text((20, yf + 162 + 27 * i), t, fill=DOUX, font=f(17), anchor="lm")
     s.sauver("20_yaml_matrice.png")
 
 

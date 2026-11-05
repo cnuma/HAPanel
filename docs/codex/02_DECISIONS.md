@@ -798,8 +798,8 @@ qui cite la précédente.
 
 ## D037 — Mises à jour du parc depuis Home Assistant
 
-- Date : 4 novembre 2026 — Statut : proposé ; option C choisie par le propriétaire
-  (HAP-R096), à concevoir et tester avant tout code.
+- Date : 4 novembre 2026 — Statut : accepté, **révisé le 5 novembre 2026** (voir
+  « Révision » en fin de décision) ; option C choisie par le propriétaire (HAP-R096).
 - Contexte : le propriétaire prévoit plusieurs modules. Aujourd'hui chaque mise à
   jour part du PC, module par module (`build.ps1 upload`). Le binaire est le même pour
   tous (D012).
@@ -838,6 +838,22 @@ qui cite la précédente.
   de tests ; procédure de publication écrite dans le dépôt (G11).
 - Compatibilité avec D038 : rien de ce qui est conçu ici ne doit empêcher un binaire
   public sans secret (Wi-Fi saisi à l'installation, mêmes entités de mise à jour).
+- **Révision du 5 novembre 2026** (propriétaire, après la maquette D039 : « le
+  binaire privé n'est pas la norme que je veux retenir ») : remplace l'hébergement
+  local et le binaire de production chiffré décrits plus haut.
+  - **Tous les modules de la maison** utilisent le binaire public de D039, publié sur
+    GitHub ; mises à jour par Wi-Fi depuis l'entité « Firmware » de HA. Le binaire ne
+    contient aucun secret : la publication sur Internet n'est plus un problème.
+  - **USB en secours** : première installation, reflash si un module ne se met plus
+    à jour.
+  - **Configurations privées** (`hapanel.yaml`, `hapanel_banc.yaml`, secrets
+    compilés, OTA depuis le PC) : réservées aux modules de test de l'atelier, pour
+    essayer un développement avant de le publier ; jamais sur un module de la maison.
+  - Passage d'un module de production au binaire public : un reflash par USB, Wi-Fi
+    ressaisi par Improv (cahier J14).
+  - Points à trancher restants : installation par bouton seulement ou par une
+    automatisation de HA qui met tout le parc à jour ; vérification nocturne (TODO,
+    mise à jour depuis l'écran).
 
 ## D038 — Orientation : un projet publiable
 
@@ -880,7 +896,8 @@ qui cite la précédente.
 
 ## D039 — Maquette du déploiement public (binaire sans secret, mises à jour depuis HA)
 
-- Date : 4 novembre 2026 — Statut : maquette, branche `feature/poc-deploiement` ;
+- Date : 4 novembre 2026 — Statut : **accepté le 5 novembre 2026** (cahier J OK,
+  J9, J10 et J14 reportés au guide d'installation ; D037 révisée) ; maquette
   demandée par le propriétaire (« valider la faisabilité d'un déploiement de
   nouveaux binaires via une méthode simple depuis HA […] sans avoir à refaire une
   compile en local par l'utilisateur ») ; plusieurs cartes disponibles pour les
@@ -930,17 +947,16 @@ qui cite la précédente.
   téléchargée depuis GitHub en 16 s, Wi-Fi, clé et réglages conservés. Pièges
   (tampons, versions suffixées, vérification au démarrage) : `09_PIEGES.md`. Le
   manifeste désigne le binaire par son étiquette, et non par la dernière Release.
-- Avant fusion : risques au `08`, schémas d'architecture (packages, matrice,
-  compilation, sécurité) régénérés, procédure G11 validée, D037 révisée (hébergement
-  sur GitHub au lieu du réseau local).
+- Avant fusion (faits le 5 novembre 2026) : risques au `08`, schémas d'architecture
+  régénérés, procédure G11 validée, D037 révisée.
 - Limite : un module public n'a pas d'écran d'installation ; sans Wi-Fi, rien ne
   dit à l'utilisateur de se connecter au point d'accès (à concevoir si la maquette
   est retenue).
 
 ## D040 — Nom de la pièce envoyé par le blueprint
 
-- Date : 5 novembre 2026 — Statut : à valider (cahier J12, J13), branche
-  `feature/poc-deploiement`.
+- Date : 5 novembre 2026 — Statut : accepté, validé par le propriétaire (cahier
+  J12, J13 OK le 5 novembre 2026).
 - Contexte : sur le module de la maquette, l'accueil affiche « Séjour » alors que le
   blueprint vise la cuisine (retour du propriétaire, J3). Le mot était écrit dans
   `pages/accueil.yaml` : un réglage propre à la maison dans le firmware, contraire
