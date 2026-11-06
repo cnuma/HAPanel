@@ -34,9 +34,11 @@ substitutions:
 # HARDWARE - 1) : la luminosite posee par son on_value est ecrasee par le 100 % de
 # restore_mode ALWAYS_ON, et retro_niveau, deja a jour, empeche l'intervalle de la
 # corriger. La reappliquer une fois le retroeclairage pret (6 novembre 2026).
+# Priorite commune a tous les packages : leurs on_boot sont fusionnes en une seule
+# automatisation, dont la derniere priorite lue l'emporte.
 esphome:
   on_boot:
-    priority: 600
+    priority: -100
     then:
       - script.execute: retro_cible_calculer
       - lambda: id(retro_niveau) = id(retro_cible);

@@ -47,8 +47,12 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 - Ordre de démarrage : un `number` template (priorité `HARDWARE`) est restauré avant
   une `light` (`HARDWARE - 1`). Un `light.turn_on` lancé par son `on_value` au
   démarrage est écrasé par le `restore_mode` de la lumière (`ALWAYS_ON` : 100 %).
-  Appliquer un réglage restauré dans un `on_boot` de priorité inférieure (600), et
-  tester son **effet** après redémarrage, pas seulement sa valeur (6 novembre 2026).
+  Appliquer un réglage restauré dans l'`on_boot` (priorité -100, après toutes les
+  initialisations), et tester son **effet** après redémarrage, pas seulement sa
+  valeur (6 novembre 2026).
+- Les `esphome: on_boot:` des packages sont fusionnés en **une seule** automatisation :
+  la dernière `priority` lue s'applique à toutes les actions. Garder -100 partout ;
+  vérifier dans la sortie d'`esphome config` (6 novembre 2026).
 
 ## LVGL
 
