@@ -58,9 +58,25 @@ projet.
 
 > 📷 Capture 03 — fenêtre de choix du port (numéro du port masqué).
 
-**La liste est vide ?** Changez de câble. Si rien n'y fait, installez le pilote du
-convertisseur USB-série du module : son nom est écrit sur la petite puce près de la
-prise USB (souvent CH340), le pilote se trouve sur le site de son fabricant.
+**La liste est vide ?** Vérifiez d'abord le navigateur (Chrome ou Edge), puis
+changez de câble. Si rien n'y fait, il manque le **pilote CH340** : c'est la puce
+qui relie la prise USB du module à l'ordinateur (constaté sur le module de
+référence). Windows 10 et 11 l'installent souvent seuls ; sinon :
+
+1. Téléchargez-le **uniquement sur le site de son fabricant**, WCH (Nanjing Qinheng
+   Microelectronics) :
+   - Windows : <https://www.wch-ic.com/downloads/CH341SER_EXE.html>, bouton
+     **Download** (fichier `CH341SER.EXE`, certifié par Microsoft) ;
+   - macOS : <https://www.wch-ic.com/downloads/CH341SER_MAC_ZIP.html>.
+2. Sous Windows, lancez `CH341SER.EXE`, cliquez sur **INSTALL**, puis débranchez et
+   rebranchez le module.
+3. Recommencez l'étape 2 : un port « USB-SERIAL CH340 » apparaît dans la liste.
+
+> [!CAUTION]
+> Ne prenez pas ce pilote sur un site de téléchargement, un forum ou un lien
+> sponsorisé : un pilote s'installe avec les droits les plus élevés de l'ordinateur,
+> et une copie modifiée peut l'infecter. Le site de WCH, fabricant de la puce, est la
+> seule source fiable.
 
 ## 3. Écrire le logiciel dans le module
 
