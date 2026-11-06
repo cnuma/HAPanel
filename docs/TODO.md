@@ -138,3 +138,10 @@ Liste unique du reste à faire (G14).
       5 novembre 2026 ; `VERSION` 0.8.0.
 - [x] D037 révisée : binaire public pour tous les modules de la maison, USB en
       secours ; configurations privées pour l'atelier seulement.
+
+### P8 — Correctif du 6 novembre 2026
+
+- [x] « Intensité écran » appliquée dès le démarrage (défaut présent depuis 0.6.0 :
+      l'écran restait à 100 % jusqu'à la première veille ; H10 ne vérifiait que la
+      valeur) : cahier H20 OK sur `v0.8.1-dev.1`, mise à jour depuis HA ; fusionné dans
+      `main` le 6 novembre 2026 ; `VERSION` 0.8.1.

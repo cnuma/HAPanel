@@ -40,6 +40,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 4 novembre 2026 | `8d21d4e` | I | **I11 OK** : « plus de point blanc, plus de ligne blanche » | Diagnostic provisoire retiré du binaire de banc |
 | 5 novembre 2026 | `67a2674` (public, `v0.8.0-dev.1`) | J | **J1 à J3 OK** : Release publiée par GitHub Actions en 2 min 35 ; carte neuve installée par web.esphome.io, Wi-Fi par Improv, adoption sans clé demandée. L'accueil affiche « Séjour » alors que le blueprint vise la cuisine (calendrier correct) | « Séjour » était écrit dans le firmware : clé `piece` envoyée par le blueprint (D040), à tester avec `v0.8.0-dev.2` (J6, J12, J13) |
 | 5 novembre 2026 | `v0.8.0-dev.1`, puis local `0.8.0-dev.3-usb` | J6 | **J6 KO avec dev.1** : entité Firmware « À jour », versions vides ; au démarrage « HTTP_CLIENT: Out of buffer » puis « Failed to fetch manifest » ; « Mettre à jour l'entité » de HA ne relance pas la vérification | `buffer_size_tx: 2048` ; binaire local flashé par USB : démarrage sans erreur. Publication `v0.8.0-dev.3`, J6 à refaire |
+| 6 novembre 2026 | `v0.8.1-dev.1` (`e1ed3f8`) | H20 | Accord du propriétaire | **Fusion de `fix/intensite-ecran-demarrage` dans `main`**, publication `v0.8.1` |
 | 6 novembre 2026 | `v0.8.1-dev.1` (`e1ed3f8`), mise à jour depuis HA | H20 | **H20 OK** : réglage appliqué dès la fin du démarrage | Mise à jour depuis HA en deux temps : HA proposait encore `0.8.0`, vue à la dernière vérification du module ; installée sans erreur (manifeste lié à son étiquette), puis `0.8.1-dev.1` proposée au redémarrage. Piège ajouté au 09 et procédure (`DEPLOIEMENT_PUBLIC.md` § 4). Fusion de `fix/intensite-ecran-demarrage` à soumettre au propriétaire |
 | 6 novembre 2026 | `0.8.0` et antérieurs | H | **KO, constaté par le propriétaire** : après un redémarrage, « Intensité écran » est conservée dans les réglages, mais l'écran reste à 100 % ou presque ; le réglage ne s'applique qu'après une mise en veille. H10 vérifiait la valeur, pas son effet | Cause : « Intensité écran » est restaurée avant le rétroéclairage, dont le démarrage à 100 % (`ALWAYS_ON`) écrase le réglage ; l'intervalle de la LDR ne corrige pas, sa valeur étant déjà jugée appliquée. Corrigé sur `fix/intensite-ecran-demarrage` ; test H20 |
 | 5 novembre 2026 | `0.8.0-dev.3-usb` → `v0.8.0-dev.4-wifi` (`670e30e`) | J6, J7, J8 | **J6 OK** : HA juge `0.8.0-dev.3-usb` et `0.8.0-dev.3` incomparables (« À jour », `update.install` refusé) ; avec `0.8.0-dev.4-wifi`, « Mise à jour disponible », **Mettre à jour** : téléchargement par Wi-Fi depuis GitHub en 16 s, « Update complete », redémarrage, Wi-Fi et HA retrouvés sans rien ressaisir, À propos en `0.8.0-dev.4-wifi`. Aucune erreur au journal. Accueil « Intérieur » : blueprint de `main`, sans la clé `piece` | Versions sans suffixe (§ 1 de `DEPLOIEMENT_PUBLIC.md`). Le binaire est lu par `releases/latest/…` : une Release publiée entre la vérification et l'installation ferait échouer le MD5 (sans dégât) ; lien vers l'étiquette dans le manifeste, corrigé dans `publication.yml` (effet à la prochaine Release). J7 et J8 OK, constatés par le propriétaire |
@@ -60,7 +61,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | E | LED selon la lumière (D018) et rétroéclairage (D023) | — |
 | F | Cas d'erreur jamais confirmés séparément | — |
 | G | Cas qui demandent une date particulière | — |
-| H | Page Réglages (D031), menu (D025 révisée), tactile (D009 révisée) | `feature/reglages-ecran` (fusionnée) |
+| H | Page Réglages (D031), menu (D025 révisée), tactile (D009 révisée) ; intensité écran au démarrage (H20) | `feature/reglages-ecran` (fusionnée) ; H20 : `fix/intensite-ecran-demarrage` (fusionnée) |
 | I | Barre d'état commune et navigation (D036, D025 révisée) | `feature/barre-etat` (fusionnée) |
 
 ## Préparation (une fois, avant A et B)
@@ -210,7 +211,7 @@ ensuite l'automatisation du module et l'enregistrer.
 | H17 | Déplacer trois fois de suite un curseur, à 2 s d'intervalle | Disquette grise sans interruption, verte seulement 5 s après le dernier geste | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
 | H18 | Écran sur l'Accueil, changer « Intensité écran » sur la page de l'appareil dans HA | La disquette apparaît sur l'Accueil, comme en H16 | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
 | H19 | Couper puis rétablir le courant | Pas de disquette au démarrage | `feature/reglages-ecran` (fusionnée) | OK 4 nov. |
-| H20 | Pièce éclairée : « Intensité écran » à 40 %, attendre 10 s, couper puis rétablir le courant ; comparer avec un réglage à 100 % | Dès la fin du démarrage, l'écran est aussi faible qu'avant la coupure, sans attendre une mise en veille | `fix/intensite-ecran-demarrage` | OK 6 nov. |
+| H20 | Pièce éclairée : « Intensité écran » à 40 %, attendre 10 s, couper puis rétablir le courant ; comparer avec un réglage à 100 % | Dès la fin du démarrage, l'écran est aussi faible qu'avant la coupure, sans attendre une mise en veille | `fix/intensite-ecran-demarrage` (fusionnée) | OK 6 nov. |
 
 ## I — Barre d'état et navigation (D036)
 
