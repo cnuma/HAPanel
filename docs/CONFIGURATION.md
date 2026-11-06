@@ -18,10 +18,10 @@ blueprint, avec une automatisation pour toute la maison (section 6).
 
 **Avant de commencer**, il faut :
 
-- **le module :** compilé, téléversé et relié au Wi-Fi (voir
-  [Compiler et téléverser](#compiler-et-téléverser)) ;
-- **la clé de chiffrement de l'API :** la valeur `api_encryption_key` de
-  `secrets.yaml`, demandée à l'ajout ;
+- **le module :** installé et relié au Wi-Fi, pas à pas dans
+  [INSTALLATION.md](INSTALLATION.md) (binaire public, aucune clé à saisir) ; un
+  module de l'atelier compilé avec `secrets.yaml` demande sa clé
+  `api_encryption_key` à l'ajout ;
 - **dans Home Assistant, les entités que le module affichera :**
   - un thermostat (`climate`, modes `heat` et `off`) ;
   - les capteurs de température de la pièce et de l'extérieur ;
@@ -35,7 +35,8 @@ blueprint, avec une automatisation pour toute la maison (section 6).
    « Nouveaux appareils découverts » : **Ajouter**.
 2. Sinon : **Ajouter une intégration › ESPHome**, puis l'adresse IP du module (port
    6053).
-3. Saisir la clé de chiffrement de l'API.
+3. Binaire public : HA envoie lui-même la clé au module, rien à saisir. Module de
+   l'atelier : saisir la clé de chiffrement de l'API.
 
 L'option « Autoriser l'appareil à effectuer des actions Home Assistant » **n'est pas
 nécessaire** : le module n'envoie que des événements (demande de valeurs, commandes),

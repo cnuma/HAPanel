@@ -4,7 +4,8 @@ Procédure du binaire public, sans secret : publication sur GitHub, première
 installation d'un module, adoption dans Home Assistant, mises à jour depuis Home
 Assistant. C'est le mode de déploiement de **tous les modules de la maison** (D037
 révisée), validé par la partie J du cahier de tests. Ce document s'adresse au
-développeur ; le guide pas à pas pour un débutant est à venir (TODO, rang 3).
+développeur ; le guide pas à pas pour un débutant est
+[INSTALLATION.md](INSTALLATION.md).
 
 Les configurations privées (`hapanel.yaml`, `hapanel_banc.yaml`, secrets compilés,
 mise à jour depuis le PC par `tools/build.ps1 upload`) ne servent plus qu'aux modules

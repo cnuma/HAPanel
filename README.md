@@ -3,6 +3,7 @@
 Panneau de commande mural multi-écrans pour Home Assistant, sur carte
 ESP32-2432S024C, réalisé avec ESPHome.
 
+- Installer un module : [`docs/INSTALLATION.md`](docs/INSTALLATION.md)
 - Utilisation du panneau : [`docs/UTILISATION.md`](docs/UTILISATION.md)
 - Configuration dans Home Assistant : [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md)
 - Architecture : [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
