@@ -13,8 +13,8 @@ au reflash du premier module de production (cahier J14).*
 - **Le module** HAPanel (carte ESP32-2432S024C).
 - **Un câble USB de données.** Certains câbles ne font que charger : si l'ordinateur
   ne voit pas le module (étape 2), essayez-en un autre.
-- **Un ordinateur avec Chrome ou Edge.** Firefox et Safari ne savent pas écrire dans
-  un module.
+- **Un ordinateur avec Google Chrome ou Microsoft Edge**, et uniquement l'un de ces
+  deux navigateurs (voir l'avertissement de l'étape 2).
 - **Un bloc secteur USB de 1 A** pour l'usage normal. Le port USB d'un ordinateur
   suffit pour l'installation, mais peut faire redémarrer le module en boucle ensuite.
 - **Le nom et le mot de passe de votre Wi-Fi.** Le module ne voit que le Wi-Fi
@@ -39,7 +39,16 @@ projet.
 ## 2. Brancher le module à l'ordinateur
 
 1. Branchez le module à l'ordinateur avec le câble USB.
-2. Dans Chrome ou Edge, ouvrez <https://web.esphome.io>.
+2. Ouvrez <https://web.esphome.io> **dans Google Chrome ou Microsoft Edge**.
+
+> [!WARNING]
+> **Uniquement Chrome ou Edge, même si vous utilisez un autre navigateur d'habitude.**
+> Écrire dans le module passe par le port USB, et seuls ces deux navigateurs
+> l'autorisent. Firefox, Safari et Brave ne le permettent pas ; les autres
+> navigateurs ne sont pas garantis. Avec eux, la page s'ouvre normalement, mais le
+> bouton **Connection** ne trouve aucun module ou ne fait rien : on croit à un
+> problème de câble et on perd du temps.
+
 3. Cliquez sur **Connection** (la page est en partie en anglais).
 
 ![Page d'accueil d'ESPHome Web, bouton Connection encadré](images/installation/02_web_esphome.png)
@@ -134,7 +143,7 @@ nouvel appareil dans « Panneau » et enregistrez. Supprimez ensuite l'ancien ap
 
 | Symptôme | Que faire |
 |---|---|
-| web.esphome.io ne liste aucun port | Autre câble USB ; pilote du convertisseur USB-série (étape 2) ; Chrome ou Edge |
+| **Connection** ne fait rien, ou aucun port n'est listé | D'abord le navigateur : **Chrome ou Edge uniquement** (étape 2). Puis un autre câble USB ; puis le pilote du convertisseur USB-série (étape 2) |
 | L'écriture s'arrête en erreur | Débrancher, rebrancher, recommencer l'étape 3 ; essayer un autre port USB de l'ordinateur |
 | Pas de proposition de Wi-Fi après l'écriture | Méthode du téléphone (étape 4) |
 | Le module ne rejoint pas le Wi-Fi | Réseau 2,4 GHz, mot de passe ; module trop loin de la box |
