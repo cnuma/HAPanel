@@ -298,6 +298,9 @@ propose.
 
 1. **Paramètres** : en haut, une ligne « Mise à jour disponible » apparaît pour le
    **Firmware** du module. Le module vérifie au démarrage, puis toutes les 6 heures.
+   Juste après la sortie d'une version, Home Assistant peut encore proposer la
+   précédente : débranchez puis rebranchez le module, attendez une minute et vérifiez
+   le numéro de version proposé avant d'installer.
 2. Cliquez dessus, puis **Installer**. Le module télécharge la nouvelle version,
    l'installe et redémarre, en 2 à 3 minutes. Le Wi-Fi et la clé sont conservés.
 
