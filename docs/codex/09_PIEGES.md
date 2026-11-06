@@ -44,6 +44,11 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 - `restore_value` ne suffit pas : ESPHome n'écrit la flash qu'à
   `flash_write_interval` (60 s par défaut, 5 s ici, D034). Pour tester la
   conservation d'un réglage, attendre au moins 10 s avant de couper.
+- Ordre de démarrage : un `number` template (priorité `HARDWARE`) est restauré avant
+  une `light` (`HARDWARE - 1`). Un `light.turn_on` lancé par son `on_value` au
+  démarrage est écrasé par le `restore_mode` de la lumière (`ALWAYS_ON` : 100 %).
+  Appliquer un réglage restauré dans un `on_boot` de priorité inférieure (600), et
+  tester son **effet** après redémarrage, pas seulement sa valeur (6 novembre 2026).
 
 ## LVGL
 

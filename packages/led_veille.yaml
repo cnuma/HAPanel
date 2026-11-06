@@ -30,6 +30,21 @@ substitutions:
   ecran_intensite_min: "20"
   ecran_intensite_defaut: "100"
 
+# « Intensite ecran » est restauree avant le retroeclairage (priorites HARDWARE et
+# HARDWARE - 1) : la luminosite posee par son on_value est ecrasee par le 100 % de
+# restore_mode ALWAYS_ON, et retro_niveau, deja a jour, empeche l'intervalle de la
+# corriger. La reappliquer une fois le retroeclairage pret (6 novembre 2026).
+esphome:
+  on_boot:
+    priority: 600
+    then:
+      - script.execute: retro_cible_calculer
+      - lambda: id(retro_niveau) = id(retro_cible);
+      - light.turn_on:
+          id: retroeclairage
+          brightness: !lambda return id(retro_niveau);
+          transition_length: 0s
+
 globals:
   # Obscurite de la piece selon la LDR, de 0 (eclairee) a 1 (sombre).
   - id: ldr_obscurite
