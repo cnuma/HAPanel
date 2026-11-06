@@ -96,3 +96,47 @@ Pour un essai au banc, consigner aussi : configuration flashée, port ou IP, ver
 testés, cas testés (Home Assistant connecté, déconnecté, entité
 indisponible, redémarrages), résultat attendu, résultat observé, mémoire
 libre et plus grand bloc libre, tests non effectués.
+
+## Réglages du logiciel
+
+Déplacé de `CONFIGURATION.md` le 6 novembre 2026 (guide pour débutant). Ces valeurs
+sont lues à la compilation : après un changement, il faut recompiler et téléverser
+le module.
+
+| Réglage | Fichier | Valeur | Effet |
+|---|---|---|---|
+| `veille_delai_ms` | `packages/led_veille.yaml` | 60000 | Retour à l'accueil et écran éteint sans toucher |
+| `retro_jour` | `packages/led_veille.yaml` | 1.0 | Luminosité de l'écran, pièce éclairée |
+| `retro_nuit` | `packages/led_veille.yaml` | 0.40 | Luminosité, pièce sombre (après gamma : environ 8 %) |
+| `retro_ecart_min` | `packages/led_veille.yaml` | 0.05 | Écart minimal avant de changer la luminosité |
+| `retro_plancher` | `packages/led_veille.yaml` | 0.30 | Luminosité minimale de l'écran, quel que soit « Intensité écran » |
+| `ecran_intensite_min` / `ecran_intensite_defaut` | `packages/led_veille.yaml` | 20 / 100 | Bornes et valeur d'un module neuf pour « Intensité écran » |
+| `led_plafond_jour` / `led_plafond_nuit` | `packages/led_veille.yaml` | 0.25 / 0.05 | Intensité de la LED à 100 % du réglage « Intensité LED » |
+| `led_intensite_defaut` | `packages/led_veille.yaml` | 20 | « Intensité LED » d'un module neuf |
+| `ldr_tension_jour` / `ldr_tension_nuit` | `packages/led_veille.yaml` | 0.09 / 0.20 | Tensions qui définissent pièce éclairée et pièce sombre |
+| `accueil_envoi_consigne` | `packages/pages/accueil.yaml` | 2s | Attente avant l'envoi de la consigne |
+| `accueil_attente_confirmation` | `packages/pages/accueil.yaml` | 10s | Attente de la confirmation du chauffage |
+| `scenarios_attente_ms` | `packages/pages/scenarios.yaml` | 10000 | Attente de la réponse à un scénario |
+| `scenarios_message_ms` | `packages/pages/scenarios.yaml` | 5000 | Durée d'affichage du résultat |
+| `liaison_peremption_ms` | `packages/liaison_ha.yaml` | 900000 | Délai avant « périmé » |
+| `message_duree_ms` | `packages/message_accueil.yaml` | 180000 | Durée d'affichage du message d'accueil |
+| `led_arc_periode_ms` | `packages/led_veille.yaml` | 2000 | Un tour de l'arc-en-ciel |
+
+La lumière de la pièce est lue par un capteur peu précis : attendez-vous plutôt à un
+réglage jour / nuit qu'à une variation fine.
+
+### Régénérer les images de la documentation
+
+Après une compilation, qui fournit les polices :
+
+```powershell
+.\.venv\Scripts\python tools\generer_images_doc.py
+```
+
+### Blueprint importé depuis une branche
+
+Pour un test, le blueprint peut être importé avec un lien contenant `feature/…`.
+Après la fusion, l'importer de nouveau avec le lien de `main`
+(`CONFIGURATION.md` § 2), en acceptant de remplacer l'existant, puis rouvrir
+l'automatisation du module et l'enregistrer. « Réimporter » reprendrait la branche,
+qui ne sera plus mise à jour.

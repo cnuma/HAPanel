@@ -1,8 +1,9 @@
 # Installer un module HAPanel
 
 Ce guide s'adresse à une personne qui n'a jamais installé de module ESPHome. Il va
-du module neuf, sorti de sa boîte, jusqu'au module qui affiche votre maison. Comptez
-30 minutes. Aucune ligne de commande, aucun mot de passe à inventer.
+du module neuf, sorti de sa boîte, jusqu'au module relié à votre Wi-Fi ; la suite
+est dans [CONFIGURATION.md](CONFIGURATION.md). Comptez 15 minutes. Aucune ligne de
+commande, rien à compiler, aucun mot de passe à inventer.
 
 *Brouillon : les emplacements « 📷 Capture » seront remplacés par les captures prises
 au reflash du premier module de production (cahier J14).*
@@ -30,7 +31,7 @@ au reflash du premier module de production (cahier J14).*
 > 📷 Capture 01 — page de la Release, rubrique Assets, `hapanel-factory.bin` entouré.
 
 Ne prenez pas `hapanel-ota.bin` : il sert aux mises à jour, que Home Assistant fera
-seul (étape 6).
+seul ([CONFIGURATION.md](CONFIGURATION.md), section 7).
 
 ## 2. Brancher le module à l'ordinateur
 
@@ -108,63 +109,19 @@ Tant qu'il n'a pas de Wi-Fi, le module crée son propre réseau Wi-Fi pendant
 **Le réseau `hapanel-…` n'apparaît pas :** les 15 minutes sont passées. Débranchez
 puis rebranchez le module, et recommencez.
 
-## 5. Ajouter le module dans Home Assistant
+## 5. Suite : Home Assistant
 
-1. Dans Home Assistant, **Paramètres › Appareils et services**. Sous « Nouveaux
-   appareils découverts », HAPanel apparaît : **Ajouter**.
-
-> 📷 Capture 13 — appareil découvert dans Appareils et services.
-
-2. Confirmez. Home Assistant crée lui-même la clé qui chiffre les échanges avec le
-   module et la lui envoie : **aucune clé n'est à saisir.**
-
-> 📷 Capture 14 — fenêtre de confirmation de l'ajout.
-
-3. Choisissez la pièce du module, puis **Terminer**.
-
-> 📷 Capture 15 — choix de la pièce.
-
-**Home Assistant demande une clé de chiffrement :** ne saisissez rien, notez ce
-qu'affiche Home Assistant et consultez le [Dépannage](#dépannage).
-
-Le module doit maintenant afficher un point HA vert. Il affiche encore « non reçu » :
-il ne sait pas quoi afficher, c'est l'étape suivante.
-
-## 6. Choisir ce que le module affiche
-
-1. Importez le blueprint HAPanel : [CONFIGURATION.md, section 2](CONFIGURATION.md#2-importer-le-blueprint).
-
-> 📷 Capture 16 — fenêtre « Importer un blueprint » avec le lien collé.
-
-2. Créez l'automatisation du module : [CONFIGURATION.md, section 3](CONFIGURATION.md#3-créer-lautomatisation-du-module).
-   Choisissez le module dans « Panneau », puis vos thermomètres, thermostat, météo et
-   calendriers.
-
-> 📷 Capture 17 — formulaire de l'automatisation, partie haute (Panneau, Thermomètre).
-
-3. Enregistrez. En quelques secondes, le module affiche vos températures.
-
-> 📷 Capture 18 — photo de l'accueil du module avec les valeurs de la maison.
-
-## 7. Recevoir les mises à jour
-
-Rien à installer : quand une nouvelle version est publiée, Home Assistant la propose.
-
-1. **Paramètres** : une ligne « Mise à jour disponible » apparaît pour le Firmware du
-   module (le module vérifie au démarrage, puis toutes les 6 heures).
-2. Ouvrez-la, **Installer**. Le module télécharge la nouvelle version, l'écrit et
-   redémarre (2 à 3 minutes). Le Wi-Fi et la clé sont conservés.
-
-> 📷 Capture 19 — mise à jour du Firmware proposée dans Home Assistant (à prendre à la
-> première version publiée après celle installée).
+Le module est sur votre Wi-Fi. Pour l'ajouter à Home Assistant et choisir ce qu'il
+affiche, suivez [CONFIGURATION.md](CONFIGURATION.md), sections 1 à 3. Les mises à
+jour suivantes passeront par Home Assistant, sans câble (section 7).
 
 ## Remplacer le logiciel d'un module déjà installé
 
-Pour un module qui tournait avec une version compilée sur un ordinateur, ou pour
-repartir de zéro : refaites les étapes 1 à 4. Le Wi-Fi est à ressaisir.
+Pour un module qui tournait avec une version compilée sur un ordinateur, pour le
+céder ou pour repartir de zéro : refaites les étapes 1 à 4. Le Wi-Fi est à ressaisir.
 
 Dans Home Assistant, si l'ancien appareil ne se reconnecte pas et qu'un nouveau est
-découvert : ajoutez-le (étape 5), ouvrez l'automatisation du module, choisissez le
+découvert : ajoutez-le ([CONFIGURATION.md](CONFIGURATION.md), section 1), ouvrez l'automatisation du module, choisissez le
 nouvel appareil dans « Panneau » et enregistrez. Supprimez ensuite l'ancien appareil.
 
 ## Dépannage
@@ -177,6 +134,5 @@ nouvel appareil dans « Panneau » et enregistrez. Supprimez ensuite l'ancien ap
 | Le module ne rejoint pas le Wi-Fi | Réseau 2,4 GHz, mot de passe ; module trop loin de la box |
 | Réseau `hapanel-…` absent | Plus de 15 minutes depuis la mise sous tension : débrancher, rebrancher |
 | Le module redémarre en boucle | Alimentation trop faible : bloc secteur de 1 A |
-| Home Assistant ne découvre pas le module | **Ajouter une intégration › ESPHome**, puis l'adresse IP du module (donnée par la box) |
-| Home Assistant demande une clé | Ne rien saisir ; noter le message. Si le module a déjà été ajouté à un autre Home Assistant, refaire les étapes 1 à 4 pour l'effacer |
-| Point HA vert mais « non reçu » partout | Automatisation du module absente ou incomplète (étape 6) ; voir le [dépannage de la configuration](CONFIGURATION.md#dépannage) |
+
+Problème une fois dans Home Assistant : [dépannage de la configuration](CONFIGURATION.md#dépannage).

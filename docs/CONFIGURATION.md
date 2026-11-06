@@ -1,100 +1,124 @@
-# Configurer HAPanel
+# Configurer HAPanel dans Home Assistant
 
-Ce document s'adresse à la personne qui administre Home Assistant. Il décrit le
-raccordement d'un module déjà installé, le choix de ce qu'il affiche et les réglages
-disponibles. L'usage au quotidien est décrit dans [UTILISATION.md](UTILISATION.md).
+Ce guide relie un module HAPanel à Home Assistant et choisit ce qu'il affiche. Il
+suit le guide [INSTALLATION.md](INSTALLATION.md) : le module doit déjà être relié à
+votre Wi-Fi. Comptez 15 minutes. L'usage au quotidien est dans
+[UTILISATION.md](UTILISATION.md).
 
-*Les images sont des maquettes : les écrans de Home Assistant peuvent différer selon
-sa version.*
+**Rien à compiler, rien à téléverser :** le logiciel du module est un fichier tout
+prêt, publié dans la rubrique **Releases** du dépôt GitHub, et Home Assistant
+installe seul les versions suivantes (section 7).
 
-## Principe
+*Les écrans de Home Assistant peuvent différer légèrement selon sa version.*
 
-Chaque module utilise le même logiciel et ne connaît aucune entité de votre maison.
-Tout se choisit dans Home Assistant, avec **un blueprint et une automatisation par
-module** : 5 modules, 5 automatisations. Seul le message d'accueil a son propre
-blueprint, avec une automatisation pour toute la maison (section 6).
+## Le principe en deux phrases
+
+Le module ne connaît rien de votre maison : c'est Home Assistant qui lui dit quoi
+afficher. Pour cela, on importe **une fois** le « blueprint » HAPanel (un modèle
+d'automatisation), puis on crée **une automatisation par module** à partir de ce
+modèle : 3 modules, 3 automatisations.
+
+## Avant de commencer
+
+Vérifiez que Home Assistant contient déjà les entités que le module affichera :
+
+| Pour | Il faut dans Home Assistant | Obligatoire |
+|---|---|---|
+| La température de la pièce | Un capteur de température | Oui |
+| La température dehors | Un second capteur de température | Oui |
+| Le chauffage | Un thermostat (entité `climate.…`) avec les modes « Chauffage » et « Éteint » | Oui |
+| La page Météo | Une entité météo (`weather.…`) avec prévisions par jour | Oui |
+| La page Planning | 1 à 4 calendriers (`calendar.…`) | Oui |
+| La page Scénarios | Des scènes, scripts ou automatisations | Non |
 
 ## 1. Ajouter le module
 
-**Avant de commencer**, il faut :
+1. Ouvrez Home Assistant, puis **Paramètres › Appareils et services**.
+2. En haut, sous « Nouveaux appareils découverts », le module apparaît sous le nom
+   **HAPanel** : cliquez sur **Ajouter**.
 
-- **le module :** installé et relié au Wi-Fi, pas à pas dans
-  [INSTALLATION.md](INSTALLATION.md) (binaire public, aucune clé à saisir) ; un
-  module de l'atelier compilé avec `secrets.yaml` demande sa clé
-  `api_encryption_key` à l'ajout ;
-- **dans Home Assistant, les entités que le module affichera :**
-  - un thermostat (`climate`, modes `heat` et `off`) ;
-  - les capteurs de température de la pièce et de l'extérieur ;
-  - une météo (`weather`) avec prévisions quotidiennes ;
-  - 1 à 4 calendriers ;
-  - en option, des scènes, scripts ou automatisations pour la page Scénarios.
+> 📷 Capture 13 — appareil découvert dans Appareils et services.
 
-**Ajouter le module :**
+3. Cliquez sur **Valider**. **Aucune clé n'est à saisir** : Home Assistant crée
+   lui-même la clé qui chiffre les échanges et l'envoie au module.
 
-1. **Paramètres › Appareils et services.** Le module découvert apparaît sous
-   « Nouveaux appareils découverts » : **Ajouter**.
-2. Sinon : **Ajouter une intégration › ESPHome**, puis l'adresse IP du module (port
-   6053).
-3. Binaire public : HA envoie lui-même la clé au module, rien à saisir. Module de
-   l'atelier : saisir la clé de chiffrement de l'API.
+> 📷 Capture 14 — fenêtre de confirmation de l'ajout.
 
-L'option « Autoriser l'appareil à effectuer des actions Home Assistant » **n'est pas
-nécessaire** : le module n'envoie que des événements (demande de valeurs, commandes),
-que Home Assistant reçoit sans elle (testé le 2 novembre 2026). La laisser désactivée
-réduit ce qu'un module modifié pourrait faire dans Home Assistant.
+4. Choisissez la pièce du module, puis **Terminer**.
+
+> 📷 Capture 15 — choix de la pièce.
+
+5. Regardez le module : le point en haut à droite passe au **vert**. L'écran affiche
+   encore « non reçu » : c'est normal, il ne sait pas encore quoi afficher.
+
+**Le module n'apparaît pas :** attendez 2 minutes après l'avoir branché, puis
+actualisez la page. Toujours rien : cliquez sur **Ajouter une intégration**,
+cherchez **ESPHome**, puis saisissez l'adresse IP du module (votre box la donne,
+dans sa liste des appareils connectés).
+
+**Home Assistant demande une clé :** ne saisissez rien et voyez le
+[Dépannage](#dépannage).
+
+**À ne pas cocher :** « Autoriser l'appareil à effectuer des actions Home
+Assistant ». Le module n'en a pas besoin ; laissée décochée, l'option limite ce
+qu'un module modifié pourrait faire.
 
 ## 2. Importer le blueprint
 
-**Paramètres › Automatisations et scènes › Blueprints › Importer un blueprint**, puis
-collez ce lien :
+À faire **une seule fois**, quel que soit le nombre de modules.
 
-```
-https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/module.yaml
-```
+1. **Paramètres › Automatisations et scènes**, onglet **Blueprints**.
+2. En bas à droite, **Importer un blueprint**.
+3. Collez ce lien, puis **Aperçu** et **Importer** :
 
-Pour une mise à jour : menu **⋮** du blueprint, puis **Réimporter le blueprint**.
+   ```
+   https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/module.yaml
+   ```
 
-Blueprint importé depuis une branche pour des tests (lien contenant `feature/…`) :
-après la fusion, l'importer de nouveau avec le lien ci-dessus, en acceptant de
-remplacer l'existant, puis rouvrir l'automatisation du module et l'enregistrer.
-« Réimporter » reprendrait la branche, qui ne sera plus mise à jour.
+> 📷 Capture 16 — fenêtre « Importer un blueprint » avec le lien collé.
+
+4. Le blueprint **HAPanel — module** apparaît dans la liste.
 
 ## 3. Créer l'automatisation du module
 
-Créez une automatisation depuis **HAPanel — module**, une seule par module. Deux
-automatisations sur le même module exécuteraient chaque commande deux fois.
+À faire **pour chaque module**, une seule fois par module : deux automatisations
+pour le même module exécuteraient chaque commande deux fois.
 
-| Champ | À choisir | Remarque |
-|---|---|---|
-| Panneau | Le module HAPanel | |
-| Thermomètre | Capteur de température de la pièce | |
-| Nom de la pièce | Texte affiché au-dessus de la température | Facultatif ; vide : zone du thermomètre dans HA, sinon « Intérieur » ; 14 caractères au plus envoyés (D040) |
-| Thermomètre extérieur | Capteur de température extérieure | |
-| Thermostat | Entité `climate` | Modes `heat` et `off` |
-| Consigne minimale / maximale | Bornes de réglage | 15 et 25 °C par défaut ; resserrées à celles du thermostat |
-| Météo | Entité `weather` | Doit fournir des prévisions quotidiennes |
-| Calendriers | 1 à 4 entités `calendar` | Le premier est le principal |
-| Scénarios | Voir ci-dessous | Facultatif ; section repliée |
+1. Onglet **Blueprints**, cliquez sur **HAPanel — module**. Un formulaire s'ouvre.
+2. Remplissez les champs, de haut en bas :
 
-Les préréglages affichés sont `none`, `frost`, `eco`, `comfort` et `boost`. Un
-préréglage que le thermostat ne connaît pas est refusé.
+   | Champ | Que choisir |
+   |---|---|
+   | Panneau | Votre module (son nom commence par HAPanel) |
+   | Thermomètre | Le capteur de température de la pièce |
+   | Nom de la pièce | Facultatif : le texte au-dessus de la température, 14 caractères au plus. Vide : le nom de la pièce du thermomètre dans Home Assistant |
+   | Thermomètre extérieur | Le capteur de température dehors |
+   | Thermostat | Le thermostat de la pièce |
+   | Consigne minimale / maximale | Laissez 15 et 25 °C, sauf besoin particulier |
+   | Météo | Votre entité météo |
+   | Calendriers | 1 à 4 calendriers ; le premier est le principal |
+   | Scénarios, LED et écran | Facultatif, sections repliées : sections 4 et 5 ci-dessous |
 
-Dans le nom d'un calendrier, le mot « Chauffage » est retiré à l'affichage.
+> 📷 Capture 17 — formulaire de l'automatisation, partie haute (Panneau, Thermomètre).
 
-**Vérifier le raccordement :**
+3. **Enregistrer**, puis donnez un nom, par exemple « HAPanel cuisine ».
+4. Regardez le module : en quelques secondes, l'accueil affiche vos températures et
+   votre chauffage.
 
-1. Enregistrer l'automatisation. Les valeurs arrivent au plus tard 5 minutes après,
-   ou aussitôt après une reconnexion du module : **Paramètres › Appareils et
-   services › ESPHome**, menu **⋮** du module, **Recharger**.
-2. Sur le module, page **À propos** : « Home Assistant : connecté ».
-3. Sur l'accueil : températures, préréglage et consigne affichés, sans « non reçu ».
-4. Changer la consigne sur le module : 2 secondes après le dernier toucher, le
-   thermostat suit dans Home Assistant. Sans confirmation en 10 secondes, le module
+> 📷 Capture 18 — photo de l'accueil du module avec les valeurs de la maison.
+
+**Vérifier que tout fonctionne :**
+
+1. Touchez **+** ou **−** sur l'accueil : 2 secondes après, la consigne du
+   thermostat change dans Home Assistant. Sans réponse en 10 secondes, le module
    revient à l'ancienne valeur.
-5. Pages Météo, Planning et Scénarios : valeurs présentes. Lancer un scénario sans
-   conséquence pour vérifier le retour « Lancé ».
-6. En cas de « non reçu » persistant : menu **⋮** de l'automatisation, **Traces**,
-   puis le [Dépannage](#dépannage).
+2. Ouvrez les pages **Météo** et **Planning** (bouton ☰ en haut à gauche) : elles
+   affichent vos valeurs.
+3. Toujours « non reçu » après 5 minutes : voyez le [Dépannage](#dépannage).
+
+Bon à savoir : le mot « Chauffage » est retiré du nom des calendriers à
+l'affichage. Le module propose les préréglages Manuel, Hors-gel, Éco, Confort et
+Boost ; si votre thermostat ne connaît pas l'un d'eux, il le refuse.
 
 ## 4. Choisir les scénarios
 
@@ -110,18 +134,13 @@ Dans le nom d'un calendrier, le mot « Chauffage » est retiré à l'affichage.
   un texte blanc.
 - **Place vide :** un scénario non renseigné laisse un trou dans la grille.
 
-Ajouter une icône ou une couleur à la liste demande de modifier le blueprint et
-`packages/pages/scenarios.yaml`, puis de recompiler le module.
-
 Une automatisation est lancée **sans vérifier ses conditions**, comme avec « Exécuter »
 dans Home Assistant. Il n'y a pas de confirmation à l'écran : évitez d'y mettre une
 action sensible.
 
 ![Trajet d'un scénario](images/schema_scenario.png)
 
-Le bouton n'envoie qu'un numéro : ce chemin ne lance que les entités choisies ici.
-Protégez aussi la clé d'API : avec elle, un module modifié pourrait émettre d'autres
-événements.
+Le bouton n'envoie qu'un numéro : il ne peut lancer que les scénarios choisis ici.
 
 ## 5. Régler la LED et l'écran
 
@@ -152,9 +171,8 @@ l'écran, elle porte un **cadenas** et ne réagit pas ; un cadenas suivi de « i
 par HA » le rappelle en bas de la page. Pour régler depuis
 la page de l'appareil ou depuis l'écran, laissez « Ne pas imposer ».
 
-Après une mise à jour du module qui ajoute « Intensité écran », **réimportez le
-blueprint** (menu **⋮ › Réimporter le blueprint**) : sans cela, la page Réglages ne
-sait pas quels réglages sont libres.
+Après une mise à jour du module, réimportez le blueprint (section 7) : sans cela,
+la page Réglages peut ne pas savoir quels réglages sont libres.
 
 ## 6. Message d'accueil
 
@@ -272,6 +290,23 @@ L'entité **Message d'accueil**, rubrique **Configuration** de la page de l'appa
 désactive l'accueil sur ce module (une chambre par exemple). La LED suit les réglages
 « LED » et « Intensité LED ».
 
+## 7. Mettre à jour le module
+
+Rien à télécharger : quand une nouvelle version est publiée, Home Assistant la
+propose.
+
+1. **Paramètres** : en haut, une ligne « Mise à jour disponible » apparaît pour le
+   **Firmware** du module. Le module vérifie au démarrage, puis toutes les 6 heures.
+2. Cliquez dessus, puis **Installer**. Le module télécharge la nouvelle version,
+   l'installe et redémarre, en 2 à 3 minutes. Le Wi-Fi et la clé sont conservés.
+
+> 📷 Capture 19 — mise à jour du Firmware proposée dans Home Assistant (à prendre à la
+> première version publiée après celle installée).
+
+3. Mettez aussi le blueprint à jour : onglet **Blueprints**, menu **⋮** de
+   **HAPanel — module**, **Réimporter le blueprint**. Une nouvelle version du
+   module peut en avoir besoin (par exemple pour un nouveau réglage).
+
 ## Quand les changements arrivent
 
 | Événement | Délai |
@@ -282,54 +317,6 @@ désactive l'accueil sur ce module (une chambre par exemple). La LED suit les r�
 | Redémarrage du module ou de Home Assistant | Renvoi complet à la connexion |
 
 Sans nouvelle valeur pendant 15 minutes, le module affiche la valeur comme périmée.
-
-## Réglages du logiciel
-
-Ces valeurs sont lues à la compilation : après un changement, il faut recompiler et
-téléverser le module.
-
-| Réglage | Fichier | Valeur | Effet |
-|---|---|---|---|
-| `veille_delai_ms` | `packages/led_veille.yaml` | 60000 | Retour à l'accueil et écran éteint sans toucher |
-| `retro_jour` | `packages/led_veille.yaml` | 1.0 | Luminosité de l'écran, pièce éclairée |
-| `retro_nuit` | `packages/led_veille.yaml` | 0.40 | Luminosité, pièce sombre (après gamma : environ 8 %) |
-| `retro_ecart_min` | `packages/led_veille.yaml` | 0.05 | Écart minimal avant de changer la luminosité |
-| `retro_plancher` | `packages/led_veille.yaml` | 0.30 | Luminosité minimale de l'écran, quel que soit « Intensité écran » |
-| `ecran_intensite_min` / `ecran_intensite_defaut` | `packages/led_veille.yaml` | 20 / 100 | Bornes et valeur d'un module neuf pour « Intensité écran » |
-| `led_plafond_jour` / `led_plafond_nuit` | `packages/led_veille.yaml` | 0.25 / 0.05 | Intensité de la LED à 100 % du réglage « Intensité LED » |
-| `led_intensite_defaut` | `packages/led_veille.yaml` | 20 | « Intensité LED » d'un module neuf |
-| `ldr_tension_jour` / `ldr_tension_nuit` | `packages/led_veille.yaml` | 0.09 / 0.20 | Tensions qui définissent pièce éclairée et pièce sombre |
-| `accueil_envoi_consigne` | `packages/pages/accueil.yaml` | 2s | Attente avant l'envoi de la consigne |
-| `accueil_attente_confirmation` | `packages/pages/accueil.yaml` | 10s | Attente de la confirmation du chauffage |
-| `scenarios_attente_ms` | `packages/pages/scenarios.yaml` | 10000 | Attente de la réponse à un scénario |
-| `scenarios_message_ms` | `packages/pages/scenarios.yaml` | 5000 | Durée d'affichage du résultat |
-| `liaison_peremption_ms` | `packages/liaison_ha.yaml` | 900000 | Délai avant « périmé » |
-| `message_duree_ms` | `packages/message_accueil.yaml` | 180000 | Durée d'affichage du message d'accueil |
-| `led_arc_periode_ms` | `packages/led_veille.yaml` | 2000 | Un tour de l'arc-en-ciel |
-
-La lumière de la pièce est lue par un capteur peu précis : attendez-vous plutôt à un
-réglage jour / nuit qu'à une variation fine.
-
-### Compiler et téléverser
-
-Depuis la racine du dépôt, sous PowerShell, avec `secrets.yaml` créé d'après
-`secrets.example.yaml` :
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-.\tools\build.ps1 run -Config hapanel.yaml -Device <IP_DU_MODULE>
-```
-
-Préférez un bloc secteur de 1 A : le port USB d'un PC peut provoquer des redémarrages.
-La procédure complète est dans [05_BUILD_AND_TEST.md](codex/05_BUILD_AND_TEST.md).
-
-### Régénérer les images de la documentation
-
-Après une compilation, qui fournit les polices :
-
-```powershell
-.\.venv\Scripts\python tools\generer_images_doc.py
-```
 
 ## Dépannage
 
@@ -345,6 +332,8 @@ Après une compilation, qui fournit les polices :
 | Réglage de la LED qui revient tout seul | Valeur imposée par le blueprint | Choisir « Ne pas imposer » dans la section LED, ou régler dans le blueprint |
 | Pas de message d'accueil | Période sans déclenchement non écoulée, hors plage horaire, entité « Message d'accueil » désactivée ou module déconnecté | Consulter les traces de l'automatisation du message d'accueil |
 | Réparation Z-Wave « Obsolescence : Window/door is open » sur le contact de porte | L'entité `…_window_door_is_open` est remplacée par une entité `binary_sensor` du même capteur | Dans l'automatisation qui l'utilise (message d'accueil compris), choisir la nouvelle entité ; désactiver l'ancienne ; redémarrer Home Assistant |
-| Écran trop sombre la nuit | `retro_nuit` trop bas | Augmenter la valeur et recompiler |
+| Écran trop sombre | « Intensité écran » trop basse | Monter « Intensité écran » (section 5). Toujours trop sombre la nuit : réglage du logiciel, à demander au développeur (`docs/codex/05_BUILD_AND_TEST.md`) |
 | Au démarrage de HA : « Automation failed to set up », `Unable to find cnuma/ecran_accueil.yaml` | Automatisation « HAPanel — écran d'accueil » restée dans HA : son blueprint, remplacé par `module.yaml` (D021), a été supprimé | Vérifier qu'une automatisation « HAPanel — module » existe pour le module, puis supprimer l'ancienne |
+| Le module n'apparaît pas dans « Nouveaux appareils découverts » | Module pas encore sur le Wi-Fi, ou découverte bloquée par le réseau | Vérifier le Wi-Fi ([INSTALLATION.md](INSTALLATION.md), étape 4), puis ajouter l'intégration ESPHome avec l'adresse IP du module (section 1) |
+| Home Assistant demande une clé de chiffrement | Module déjà ajouté à un autre Home Assistant, ou module de l'atelier compilé avec `secrets.yaml` | Ne rien saisir. Module public : le réinstaller ([INSTALLATION.md](INSTALLATION.md), étapes 1 à 4) pour l'effacer. Module de l'atelier : saisir sa clé `api_encryption_key` |
 | Point rouge et « Pas de communication » | Home Assistant arrêté, module retiré ou clé d'API différente | Vérifier l'intégration ESPHome |
