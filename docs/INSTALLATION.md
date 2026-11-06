@@ -25,21 +25,24 @@ au reflash du premier module de production (cahier J14).*
 
 1. Ouvrez la page des versions :
    <https://github.com/cnuma/HAPanel/releases/latest>.
-2. En bas de la page, sous **Assets**, cliquez sur `hapanel-factory.bin`. Le fichier
-   arrive dans votre dossier Téléchargements.
+2. En bas de la page, la rubrique **Assets** liste 5 fichiers. Cliquez sur le
+   premier, `hapanel-factory.bin` (encadré en rouge). Il arrive dans votre dossier
+   Téléchargements.
 
-> 📷 Capture 01 — page de la Release, rubrique Assets, `hapanel-factory.bin` entouré.
+![Page de la version, fichier hapanel-factory.bin encadré](images/installation/01_release.png)
 
-Ne prenez pas `hapanel-ota.bin` : il sert aux mises à jour, que Home Assistant fera
-seul ([CONFIGURATION.md](CONFIGURATION.md), section 7).
+Les 4 autres ne servent pas ici : `hapanel-ota.bin` et `manifest.json` servent aux
+mises à jour, que Home Assistant fera seul
+([CONFIGURATION.md](CONFIGURATION.md), section 7) ; « Source code » est le code du
+projet.
 
 ## 2. Brancher le module à l'ordinateur
 
 1. Branchez le module à l'ordinateur avec le câble USB.
 2. Dans Chrome ou Edge, ouvrez <https://web.esphome.io>.
-3. Cliquez sur **Connect**.
+3. Cliquez sur **Connection** (la page est en partie en anglais).
 
-> 📷 Capture 02 — page d'accueil de web.esphome.io, bouton Connect.
+![Page d'accueil d'ESPHome Web, bouton Connection encadré](images/installation/02_web_esphome.png)
 
 4. Une fenêtre liste les ports série. Choisissez celui qui apparaît quand vous
    branchez le module, puis **Connexion**.
@@ -83,8 +86,11 @@ Juste après l'écriture, la page propose de configurer le Wi-Fi.
 Vous pouvez maintenant débrancher le module de l'ordinateur et le brancher sur son
 bloc secteur : il garde le Wi-Fi.
 
-> 📷 Capture 10 — photo de l'écran du module après démarrage : accueil, point HA rouge
-> (Home Assistant n'est pas encore relié).
+L'écran affiche « Pas de communication avec Home Assistant » et un point rouge en
+haut à droite : c'est normal, Home Assistant n'est pas encore relié (étape suivante).
+La date ne s'affiche qu'une fois Home Assistant relié.
+
+![Écran du module avant Home Assistant (maquette)](images/installation/10_module_sans_ha.png)
 
 **La page n'a pas proposé le Wi-Fi, ou le module ne s'y connecte pas :** passez par
 le point d'accès du module, ci-dessous.

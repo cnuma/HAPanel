@@ -48,8 +48,9 @@ Vérifiez que Home Assistant contient déjà les entités que le module afficher
 
 > 📷 Capture 15 — choix de la pièce.
 
-5. Regardez le module : le point en haut à droite passe au **vert**. L'écran affiche
-   encore « non reçu » : c'est normal, il ne sait pas encore quoi afficher.
+5. Regardez le module : le point en haut à droite passe au **vert** et « Pas de
+   communication avec Home Assistant » disparaît. L'écran affiche encore « non
+   reçu » : c'est normal, il ne sait pas encore quoi afficher.
 
 **Le module n'apparaît pas :** attendez 2 minutes après l'avoir branché, puis
 actualisez la page. Toujours rien : cliquez sur **Ajouter une intégration**,
@@ -105,7 +106,7 @@ pour le même module exécuteraient chaque commande deux fois.
 4. Regardez le module : en quelques secondes, l'accueil affiche vos températures et
    votre chauffage.
 
-> 📷 Capture 18 — photo de l'accueil du module avec les valeurs de la maison.
+![Accueil du module avec les valeurs de la maison (maquette)](images/accueil.png)
 
 **Vérifier que tout fonctionne :**
 
