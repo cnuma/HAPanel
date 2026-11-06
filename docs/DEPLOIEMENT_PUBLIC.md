@@ -78,6 +78,9 @@ appareil, rouvrir l'automatisation du module et y choisir le nouvel appareil
    démarrage, puis toutes les 6 h. Pour forcer, redémarrer le module ; l'action
    « Mettre à jour l'entité » de HA ne déclenche pas la vérification (constaté le
    5 nov.).
+   Juste après une publication, HA peut encore proposer la version précédente, vue
+   à la dernière vérification : redémarrer le module, puis vérifier la version
+   proposée avant d'installer (sinon, deux mises à jour successives, sans dégât).
 2. **Installer**. Le module télécharge le binaire depuis GitHub, vérifie son
    empreinte (MD5), l'écrit et redémarre (2 à 3 min).
 3. Vérifier l'entité **Version** : elle donne la nouvelle version et son SHA.
