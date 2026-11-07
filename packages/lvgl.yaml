@@ -17,16 +17,23 @@ font:
   # meteo (weather-partly-cloudy, D019), planning (calendar-clock, D020),
   # scenarios (play-box-multiple, D024), menu et a propos (information-outline, D025),
   # fermeture du message d'accueil (close, D028), reglages (cog, D031),
-  # reglage impose (lock, D031), enregistrement (content-save, D035).
+  # reglage impose (lock, D031), enregistrement (content-save, D035),
+  # mise a jour disponible (arrow-up-bold-circle, D045).
   - file:
       type: web
       url: https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/fonts/materialdesignicons-webfont.ttf
     id: police_icones
     size: 24
     bpp: 4
-    glyphs: ["\U000F02DC", "\U000F09DE", "\U000F0717", "\U000F032A", "\U000F04B9", "\U000F14DE", "\U000F05AA", "\U000F0319", "\U000F0595", "\U000F00F0", "\U000F0D19", "\U000F035C", "\U000F02FD", "\U000F0156", "\U000F0493", "\U000F033E", "\U000F0193"]
+    glyphs: ["\U000F02DC", "\U000F09DE", "\U000F0717", "\U000F032A", "\U000F04B9", "\U000F14DE", "\U000F05AA", "\U000F0319", "\U000F0595", "\U000F00F0", "\U000F0D19", "\U000F035C", "\U000F02FD", "\U000F0156", "\U000F0493", "\U000F033E", "\U000F0193", "\U000F005F"]
 
 globals:
+  # Mise a jour du firmware en attente (D045) : ecrite par acces_public.yaml
+  # (entite maj_firmware) ; toujours fausse dans le binaire prive, qui n'a pas
+  # d'entite de mise a jour. Lue par la barre d'etat et par la LED.
+  - id: maj_disponible
+    type: bool
+    initial_value: "false"
   # Etat de connexion affiche : 0 non connecte, 1 connecte. Le libelle n'est
   # redessine qu'au changement d'etat.
   - id: ha_connecte_affiche
@@ -188,6 +195,18 @@ lvgl:
                 text_font: police_icones
                 text_color: 0x9E9E9E
                 text: "\U000F0193"
+            # Mise a jour disponible (D045) : meme place que la disquette, qui
+            # passe devant pendant un enregistrement. Clignotement par
+            # l'intervalle de 500 ms en bas de ce fichier.
+            - label:
+                id: ico_barre_maj
+                align: TOP_LEFT
+                x: 160
+                y: 6
+                hidden: true
+                text_font: police_icones
+                text_color: 0xAB47BC
+                text: "\U000F005F"
             # Wi-Fi : 4 barres, script accueil_wifi.
             - obj:
                 id: obj_barre_wifi_1
@@ -313,6 +332,19 @@ interval:
                       text_color: 0xF44336
                       text: "Home Assistant : non connecté"
                   - script.execute: liaison_deconnectee
+  # Icone de mise a jour (D045) : allumee 500 ms, eteinte 500 ms, tant qu'une
+  # mise a jour attend et que la disquette n'est pas affichee. Le drapeau n'est
+  # change qu'au besoin : sans mise a jour, rien n'est redessine.
+  - interval: 500ms
+    then:
+      - lambda: |-
+          static bool phase = false;
+          phase = !phase;
+          bool montrer = id(maj_disponible) && phase &&
+                         lv_obj_has_flag(id(ico_barre_enregistrement), LV_OBJ_FLAG_HIDDEN);
+          bool cachee = lv_obj_has_flag(id(ico_barre_maj), LV_OBJ_FLAG_HIDDEN);
+          if (montrer && cachee) lv_obj_remove_flag(id(ico_barre_maj), LV_OBJ_FLAG_HIDDEN);
+          else if (!montrer && !cachee) lv_obj_add_flag(id(ico_barre_maj), LV_OBJ_FLAG_HIDDEN);
   - interval: 10s
     then:
       - lvgl.label.update:

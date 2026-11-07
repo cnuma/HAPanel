@@ -68,6 +68,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | H | Page Réglages (D031), menu (D025 révisée), tactile (D009 révisée) ; intensité écran au démarrage (H20) | `feature/reglages-ecran` (fusionnée) ; H20 : `fix/intensite-ecran-demarrage` (fusionnée) |
 | I | Barre d'état commune et navigation (D036, D025 révisée) | `feature/barre-etat` (fusionnée) |
 | J | Déploiement public (D039) ; guide d'installation (J9, J10, J14) | `feature/poc-deploiement` (fusionnée) ; J9, J10, J14 : `docs/guide-installation` (fusionnée) |
+| L | Mise à jour signalée par la barre d'état et la LED (D045) | `feature/maj-icone` (sauf L11) |
 | 7 novembre 2026 | `9b78597` (S028, USB) | K1, K2, K3 | Écran et couleurs OK (contrôleur ST7789V, sans inversion) ; tactile : x brut décroît de gauche à droite (3605 à 449), y de 419 à 3662. Premier téléversement impossible avec le premier câble USB-C (aucune donnée reçue) ; OK avec un autre câble | Calibrage et `mirror_x` reportés ; K4 sur le binaire suivant |
 | 7 novembre 2026 | `174aa99` (S028, USB) | K4 à K11 | Tout OK ; K5 : glissière Éteint / Chauffage capricieuse au doigt sur dalle résistive, boutons fiables. Mémoire libre 153 Ko, plus grand bloc 96 Ko. Remarque du propriétaire : avoir à configurer le blueprint du message d'accueil en plus de celui du module n'est pas pratique (TODO rang 1) | **Partie K validée**, fusion dans `main` (accord du propriétaire) ; glissière : TODO rang 5 |
 | 7 novembre 2026 | `745126b` (blueprint, branche) | B10 à B19 | Tout OK : migration, module sans section, même texte sur deux modules, message unique, entité désactivée, météo, plage horaire ; B3 refait (B13) | **Fusion de `feature/accueil-blueprint-module` dans `main`**, accord du propriétaire |
@@ -298,3 +299,23 @@ d'AquaLook. Carte du banc à deux prises (USB-C et micro-USB) : modèle d'écran
 | K13 | Adoption dans HA (§ 3) | Aucune clé demandée ; entités « Firmware » et « Version » présentes | — | OK 7 nov. |
 | K14 | Entité « Firmware » après une Release suivante (§ 4) | Mise à jour proposée depuis `manifest-2432s028.json` : le résumé cite la carte `2432s028` ; installée sans erreur, écran et tactile toujours justes | — | OK 7 nov. |
 | K15 | Après K14 : Wi-Fi, clé et réglages du module (LED, intensité) | Conservés sans rien ressaisir | — | OK 7 nov. |
+
+## L — Mise à jour signalée par la barre d'état et la LED (D045)
+
+Binaire public (`hapanel_public.yaml` ou `hapanel_2432s028_public.yaml`) de la branche
+`feature/maj-icone`, sur un module dont la version diffère de la Release « Latest » :
+HA y propose une mise à jour (entité « Firmware »). L9 se fait sur le binaire privé du banc.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| L1 | Mise à jour proposée dans HA : regarder la barre du haut sur l'accueil, le Menu, Réglages et À propos | Flèche violette dans un disque, à gauche du Wi-Fi, qui clignote (environ une fois par seconde) sur chaque page ; rien ne chevauche le titre ni le Wi-Fi | `feature/maj-icone` | |
+| L2 | Même état, chauffage allumé, observer la LED 30 s | Toutes les 10 s, deux éclairs violets brefs, puis la respiration habituelle de la couleur du préréglage ; chauffage éteint : les éclairs seuls | `feature/maj-icone` | |
+| L3 | Sur Réglages, déplacer « Intensité LED » | Disquette grise puis verte à la place de la flèche ; la flèche recommence à clignoter quand la disquette disparaît | `feature/maj-icone` | |
+| L4 | Réglages : « LED » arrêtée, puis remise en marche avec « Intensité LED » à 5 % | Arrêtée : aucun éclair, la flèche clignote toujours. 5 % : éclairs plus faibles qu'à 20 % | `feature/maj-icone` | |
+| L5 | Couper HA (comme A13) | LED : rouge clignotant seul, sans éclair violet ; point rouge ; la flèche clignote toujours | `feature/maj-icone` | |
+| L6 | Envoyer un message d'accueil (comme A1) | LED en arc-en-ciel, sans éclair violet ; à la fermeture, flèche et éclairs reviennent | `feature/maj-icone` | |
+| L7 | Laisser l'écran s'éteindre (1 min), observer la LED, puis toucher l'écran | Éclairs violets écran éteint ; au réveil, la flèche clignote | `feature/maj-icone` | |
+| L8 | Dans HA, entité « Firmware » › Installer (`DEPLOIEMENT_PUBLIC.md` § 4) | Flèche et éclairs s'arrêtent pendant le téléchargement ; après le redémarrage, À propos affiche la nouvelle version, sans flèche ni éclair | `feature/maj-icone` | |
+| L9 | Binaire privé du banc (`hapanel_banc.yaml`) : 2 min sur l'accueil, puis déplacer un curseur de Réglages | Jamais de flèche ni d'éclair violet ; disquette comme en H16 | `feature/maj-icone` | |
+| L10 | Page À propos pendant L1 (le binaire public n'a pas les entités de mémoire du banc) | Mémoire libre et plus grand bloc notés (G6), comparables à K10 | `feature/maj-icone` | |
+| L11 | Module public à jour ; publier une Release suivante, puis redémarrer le module (ou attendre 6 h) | La flèche et les éclairs apparaissent sans autre action | — | |
