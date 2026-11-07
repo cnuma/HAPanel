@@ -8,7 +8,7 @@ d'état et la LED (D045), adresse IP sur la page À propos. Remplace
 
 | Rubrique | Valeur |
 |---|---|
-| Branche | `main`, `2eb813f`, poussée et vérifiée sur le dépôt distant ; `feature/maj-icone` fusionnée, encore présente en local et sur le dépôt distant (suppression à faire par le propriétaire ou avec son autorisation) |
+| Branche | `main`, `2eb813f`, poussée et vérifiée sur le dépôt distant ; `feature/maj-icone` fusionnée puis supprimée en local et sur le dépôt distant |
 | Version | `0.10.0` ; aucune Release `v0.10.0` publiée (choix du propriétaire) |
 | Release GitHub « Latest » | `v0.9.0` (`6bd4b90`), inchangée |
 | S024C du banc | Binaire de banc privé `0.9.0 (66e0b4e)`, code de `0.10.0` (USB) |
