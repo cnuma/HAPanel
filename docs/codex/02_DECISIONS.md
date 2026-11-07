@@ -974,8 +974,8 @@ qui cite la précédente.
 ## D041 — Un fichier matériel et un binaire public par carte
 
 - Date : 7 novembre 2026 — Statut : accepté par le propriétaire (structure validée
-  au banc avec l'ESP32-2432S028, cahier K ; binaire public de la S028 à valider,
-  cahier K12 à K15).
+  au banc avec l'ESP32-2432S028, cahier K ; binaire public de la S028 validé en
+  `v0.9.0`, cahier K12 à K15).
 - Contexte : l'ESP32-2432S024C (D004) semble ne plus être fabriqué ; le propriétaire
   a d'autres cartes en stock, dont l'ESP32-2432S028 à deux prises USB. Flashée avec
   le binaire de la S024C, elle rejoint HA mais l'écran reste noir (rétroéclairage

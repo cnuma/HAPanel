@@ -73,6 +73,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 7 novembre 2026 | `745126b` (blueprint, branche) | B10 à B19 | Tout OK : migration, module sans section, même texte sur deux modules, message unique, entité désactivée, météo, plage horaire ; B3 refait (B13) | **Fusion de `feature/accueil-blueprint-module` dans `main`**, accord du propriétaire |
 | 7 novembre 2026 | `v0.9.0-dev.1` (`3ad92cc`, Release) | J16 (fichiers) | Vérifié par l'agent : six fichiers, Release marquée Latest, `manifest.json` en `0.9.0-dev.1` vers `hapanel-2432s024c-ota.bin` | Reste J16 (mise à jour de la cuisine depuis HA) et K12 à K15 ; puis `v0.9.0` |
 | 7 novembre 2026 | `v0.9.0-dev.1` (Release), module de la cuisine | J16 | **J16 OK** (propriétaire) : mise à jour depuis HA | Publication de `v0.9.0` (accord du propriétaire) ; K12 à K15 (S028) restent à faire, K14 et K15 sur la mise à jour vers `v0.9.0` |
+| 7 novembre 2026 | `v0.9.0-dev.1` puis `v0.9.0` (Release), S028 | K12 à K15 | **OK** (propriétaire) : installation par web.esphome.io, adoption dans HA, mise à jour vers `v0.9.0` depuis HA, réglages conservés | **Partie K terminée** ; binaire public S028 validé |
 
 ## Préparation (une fois, avant A et B)
 
@@ -293,7 +294,7 @@ d'AquaLook. Carte du banc à deux prises (USB-C et micro-USB) : modèle d'écran
 | K9 | Bords haut et bas de l'écran pendant l'usage | Pas de ligne ni de point parasite en haut (piège des bords, D036) | `feature/carte-2432s028` (fusionnée) | OK 7 nov. |
 | K10 | Page À propos ; entités « Mémoire libre » et « Plus grand bloc libre » dans HA | Version et SHA du binaire flashé ; mémoire notée (G6) | `feature/carte-2432s028` (fusionnée) | OK 7 nov. : mémoire libre 153 Ko, plus grand bloc 96 Ko |
 | K11 | Après K1 à K10, refaire G ou un test d'accueil sur la S024C du banc avec le binaire de cette branche | Aucun changement sur la S024C (la configuration fusionnée est identique, à confirmer sur le module) | `feature/carte-2432s028` (fusionnée) | OK 7 nov. |
-| K12 | Binaire public S028 (D041), Release `v0.9.0-dev.1` : installer `hapanel-2432s028-factory.bin` par web.esphome.io, Wi-Fi par Improv (`DEPLOIEMENT_PUBLIC.md` § 2) | Écran allumé, accueil lisible, tactile juste (mêmes réglages que le banc) | — | |
-| K13 | Adoption dans HA (§ 3) | Aucune clé demandée ; entités « Firmware » et « Version » présentes | — | |
-| K14 | Entité « Firmware » après une Release suivante (§ 4) | Mise à jour proposée depuis `manifest-2432s028.json` : le résumé cite la carte `2432s028` ; installée sans erreur, écran et tactile toujours justes | — | À faire sur la mise à jour vers `v0.9.0` |
-| K15 | Après K14 : Wi-Fi, clé et réglages du module (LED, intensité) | Conservés sans rien ressaisir | — | À faire sur la mise à jour vers `v0.9.0` |
+| K12 | Binaire public S028 (D041), Release `v0.9.0-dev.1` : installer `hapanel-2432s028-factory.bin` par web.esphome.io, Wi-Fi par Improv (`DEPLOIEMENT_PUBLIC.md` § 2) | Écran allumé, accueil lisible, tactile juste (mêmes réglages que le banc) | — | OK 7 nov. |
+| K13 | Adoption dans HA (§ 3) | Aucune clé demandée ; entités « Firmware » et « Version » présentes | — | OK 7 nov. |
+| K14 | Entité « Firmware » après une Release suivante (§ 4) | Mise à jour proposée depuis `manifest-2432s028.json` : le résumé cite la carte `2432s028` ; installée sans erreur, écran et tactile toujours justes | — | OK 7 nov. |
+| K15 | Après K14 : Wi-Fi, clé et réglages du module (LED, intensité) | Conservés sans rien ressaisir | — | OK 7 nov. |
