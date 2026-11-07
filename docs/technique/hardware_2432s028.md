@@ -14,8 +14,8 @@ l'un **ou** l'autre fichier, jamais les deux : leurs `id` se heurteraient.
 deux prises USB : écran, couleurs, tactile, veille, LED, LDR. Le brochage vient
 d'AquaLook, qui utilise cette carte avec TFT_eSPI, et du modèle ESPHome. Réserve : la
 glissière Éteint / Chauffage est capricieuse au doigt sur la dalle résistive (K5) ; les
-boutons sont fiables. Binaire public `hapanel-2432s028-factory.bin` à partir de la
-version qui suit `0.8.1` (D041, cahier K12 à K15).
+boutons sont fiables. Binaire public `hapanel-2432s028-factory.bin` publié à partir de
+`v0.9.0-dev.1` (D041, cahier K12 à K15).
 
 ## Dépendances
 

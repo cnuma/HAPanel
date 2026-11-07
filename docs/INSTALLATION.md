@@ -36,7 +36,7 @@ commande, rien à compiler, aucun mot de passe à inventer.
    `hapanel-2432s024c-factory (1).bin`, et l'on risquerait de choisir l'ancien à
    l'étape 3.
 
-![Page de la version, fichier hapanel-factory.bin encadré](images/installation/01_release.png)
+![Page de la version, fichier …-factory.bin encadré](images/installation/01_release.png)
 
 Les autres ne servent pas ici : les fichiers `…-ota.bin` et `manifest….json` servent
 aux mises à jour, que Home Assistant fera seul
@@ -110,7 +110,7 @@ Si le pilote manque :
    explications numérotées de la fenêtre ne vous concernent pas : elles visent ceux
    qui compilent leur propre logiciel.
 
-![Fenêtre de choix du fichier, hapanel-factory.bin choisi](images/installation/05_choisir_fichier.png)
+![Fenêtre de choix du fichier, …-factory.bin choisi](images/installation/05_choisir_fichier.png)
 
 3. L'écriture efface tout ce que le module contenait, puis écrit le logiciel, en
    2 minutes environ. **Gardez cette fenêtre visible** : passer à un autre onglet ou

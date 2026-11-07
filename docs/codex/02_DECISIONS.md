@@ -997,11 +997,11 @@ qui cite la précédente.
   l'installation (impossible avec ESPHome) ; un binaire unique contenant les pilotes
   de toutes les cartes (broches en conflit, GPIO25, 32 et 33 servent à la fois au
   tactile I²C de la S024C et au tactile SPI de la S028).
-- Conséquences : à partir de la version qui suit `0.8.1`, la Release contient six
-  fichiers ; `hapanel-factory.bin` et `hapanel-ota.bin` deviennent
+- Conséquences : à partir de `v0.9.0-dev.1` (publiée le 7 novembre 2026), la Release
+  contient six fichiers ; `hapanel-factory.bin` et `hapanel-ota.bin` deviennent
   `hapanel-2432s024c-factory.bin` et `hapanel-2432s024c-ota.bin` (guide
   d'installation : captures à refaire). Interface encore calée sur 240 × 320 et
-  glissière peu adaptée au tactile résistif : TODO rang 4.
+  glissière peu adaptée au tactile résistif : TODO rang 5.
 
 ## D042 — Message d'accueil réglé dans le blueprint du module
 
