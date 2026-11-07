@@ -155,6 +155,10 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   capture réelle, jamais de mémoire. Écrits d'avance, « Install », la case
   d'effacement, « USB-SERIAL CH340 » dans la liste du navigateur (en fait « USB Serial
   (COMx) ») et « Nouveaux appareils découverts » étaient faux (7 novembre 2026).
+- Capture d'une page publique (Release GitHub) : Edge sans fenêtre,
+  `msedge --headless=new --window-size=1280,1000 --virtual-time-budget=15000
+  --screenshot=<fichier> <adresse>`. Sans `--virtual-time-budget`, la liste des
+  fichiers n'est pas encore chargée (7 novembre 2026).
 - Captures du propriétaire : masquer en entier numéros COM, noms de réseaux (les siens
   et ceux des voisins) et mots de passe (G9) ; un masque partiel laisse lire la
   première et la dernière lettre. Captures de téléphone : trois fois la taille
