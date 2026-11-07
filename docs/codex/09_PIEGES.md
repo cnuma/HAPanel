@@ -28,6 +28,9 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   le BOM entre dans le titre du commit.
 - Une capture de journaux lancée en arrière-plan continue jusqu'à son arrêt, et une
   OTA la coupe : se synchroniser avec le propriétaire avant un test matériel.
+- `git branch -d` refuse une branche fusionnée dans `main` si sa copie distante n'a pas
+  le dernier commit : vérifier `git merge-base --is-ancestor <branche> main`, supprimer
+  la branche distante, puis la locale.
 
 ## Module
 
@@ -103,6 +106,16 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 - Un réglage imposé par le blueprint (`led_*`, `ecran_intensite`) l'emporte sur l'écran
   et sur la page de l'appareil : vérifier l'automatisation avant de conclure à une panne
   (journaux : `hapanel.liaison: led_alerte on`).
+- Mode `queued` : les conditions de l'automatisation sont évaluées au déclenchement,
+  les actions peuvent attendre derrière un envoi en cours (D042). Ce qui doit être
+  jugé à l'instant de l'arrivée va dans `conditions:`.
+- Une date mise dans `variables:` devient du texte : la relire dans chaque modèle
+  (`trigger.to_state.last_changed | as_local`).
+- « Exécuter les actions » saute le déclencheur : `trigger.id` est absent et la
+  branche par défaut s'exécute. Le message d'accueil se teste par l'action
+  `esphome.<nœud>_message_accueil`.
+- Un déclencheur `state` dont la liste d'entités est vide est accepté et ne surveille
+  rien (cahier B11, 7 novembre 2026).
 
 ## Binaire public et mises à jour (D039)
 
