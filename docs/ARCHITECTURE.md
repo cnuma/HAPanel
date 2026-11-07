@@ -53,14 +53,16 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 
 | Fichier | Lignes | Responsabilité |
 |---|---|---|
-| `hapanel.yaml` | 17 | Atelier (modules de test) : substitutions, fonctions (`application`) et accès privé |
+| `hapanel.yaml` | 19 | Atelier (modules de test) : substitutions, fonctions (`application`) et accès privé |
 | `hapanel_banc.yaml` | 33 | Banc de l'atelier : `hapanel.yaml`, plus mémoire mesurée, journaux DEBUG et dossier de compilation propre |
-| `hapanel_public.yaml` | 23 | Modules de la maison : binaire public sans secret, fonctions et accès public (D039, D037 révisée) |
-| `packages/application.yaml` | 19 | Liste ordonnée des fichiers de fonctions, commune aux configurations |
+| `hapanel_public.yaml` | 25 | Modules de la maison : binaire public sans secret, fonctions et accès public (D039, D037 révisée) |
+| `packages/application.yaml` | 20 | Liste ordonnée des fichiers de fonctions, commune aux configurations |
 | `packages/acces_prive.yaml` | 15 | Wi-Fi, clé de l'API et OTA depuis le PC, lus dans `secrets.yaml` |
 | `packages/acces_public.yaml` | 47 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub |
 | `packages/base.yaml` | 57 | Nœud, ESP32, journaux, écriture des réglages, identité de build |
-| `packages/hardware.yaml` | 116 | Broches, bus, écran, tactile, sorties PWM, LDR (G2) |
+| `packages/hardware.yaml` | 116 | Carte ESP32-2432S024C : broches, bus, écran, tactile, sorties PWM, LDR (G2) |
+| `packages/hardware_2432s028.yaml` | 118 | Carte ESP32-2432S028, en essai : mêmes `id`, rétroéclairage GPIO21, tactile résistif XPT2046 |
+| `hapanel_2432s028_banc.yaml` | 38 | Banc sur carte ESP32-2432S028 |
 | `packages/lvgl.yaml` | 324 | Polices communes, À propos, barre d'état en haut (titre, disquette, Wi-Fi, HA, ☰, D036) et bouton Accueil en bas, suivi de la connexion |
 | `packages/liaison_ha.yaml` | 489 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
 | `packages/led_veille.yaml` | 286 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
@@ -87,13 +89,13 @@ substitutions:
   node_name: hapanel
   version: "0.0.0-non-injectee"
 packages:
+  hardware: !include packages/hardware.yaml   # la carte : un fichier par modele
   application: !include packages/application.yaml
   acces: !include packages/acces_prive.yaml
 
 # packages/application.yaml
 packages:
   base: !include base.yaml
-  hardware: !include hardware.yaml
   accueil: !include pages/accueil.yaml
   # autres pages, puis lvgl, liaison, led_veille, message_accueil
 ```
@@ -202,7 +204,7 @@ toutes les 2 s.
 
 | Besoin | Fichier |
 |---|---|
-| Broche ou composant matériel | `hardware.yaml` |
+| Broche ou composant matériel | Fichier matériel de la carte (`hardware.yaml`, `hardware_2432s028.yaml`) |
 | Disposition ou texte d'une page | `lvgl.pages` de `pages/<page>.yaml` |
 | Logique d'affichage | Script `*_rafraichir` de la page |
 | Nouvelle clé reçue de HA | `liaison_ha.yaml` et le blueprint |

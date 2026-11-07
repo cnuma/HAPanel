@@ -49,6 +49,7 @@ def fichiers_yaml():
     yield RACINE / "hapanel.yaml"
     yield RACINE / "hapanel_banc.yaml"
     yield RACINE / "hapanel_public.yaml"
+    yield RACINE / "hapanel_2432s028_banc.yaml"
     yield from sorted((RACINE / "packages").rglob("*.yaml"))
 
 
@@ -56,7 +57,7 @@ def page_de(fichier):
     """Page de docs/technique qui documente ce fichier YAML."""
     rel = fichier.relative_to(RACINE)
     if rel.parts[0] != "packages":
-        return DOC / "hapanel.md"  # hapanel.yaml, hapanel_banc.yaml, hapanel_public.yaml
+        return DOC / "hapanel.md"  # hapanel.yaml, hapanel_banc.yaml, hapanel_public.yaml...
     return DOC.joinpath(*rel.parts[1:]).with_suffix(".md")
 
 

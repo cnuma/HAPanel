@@ -1,9 +1,10 @@
 # Fonctions du panneau, communes a toutes les configurations (hapanel.yaml,
 # hapanel_public.yaml). L'acces au reseau et a Home Assistant (Wi-Fi, cle de
 # l'API) n'est pas ici : acces_prive.yaml ou acces_public.yaml (D039).
+# La carte non plus : chaque configuration inclut son fichier materiel
+# (hardware.yaml pour l'ESP32-2432S024C, hardware_2432s028.yaml...).
 packages:
   base: !include base.yaml
-  hardware: !include hardware.yaml
   # Avant lvgl : ESPHome garde l'ordre des packages pour les pages, et la
   # premiere page est celle affichee au demarrage (accueil).
   accueil: !include pages/accueil.yaml

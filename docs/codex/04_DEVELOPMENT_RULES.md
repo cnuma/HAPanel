@@ -15,9 +15,12 @@ du C++ au YAML.
   journaux ; `hardware.yaml` pour écran, tactile, bus et broches ;
   `lvgl.yaml` pour le socle graphique ; `pages/<écran>.yaml` pour chaque
   écran).
-- Les broches et réglages matériels vivent uniquement dans
-  `packages/hardware.yaml`, sous forme de substitutions, relevés sur la carte
-  réelle et jamais supposés.
+- Les broches et réglages matériels vivent uniquement dans le fichier
+  matériel de la carte (`packages/hardware.yaml` pour l'ESP32-2432S024C,
+  `packages/hardware_2432s028.yaml` pour la S028), sous forme de
+  substitutions, relevés sur la carte réelle et jamais supposés. Chaque
+  configuration de tête inclut un seul fichier matériel ; tous déclarent les
+  mêmes `id`.
 - `secrets.yaml` (ignoré) et `secrets.example.yaml` (versionné, sans valeur
   réelle).
 

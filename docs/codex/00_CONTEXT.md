@@ -51,6 +51,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Liaison USB | Convertisseur USB-série CH340 (Windows : « USB-SERIAL CH340 », relevé le 6 novembre 2026 ; liste de Chrome et Edge : « USB Serial (COMx) », le 7 novembre) ; pilote, si Windows ne l'installe pas : site du fabricant WCH uniquement (guide d'installation) |
 | Alimentation | Bloc secteur externe 1 A validé au banc ; port USB du PC insuffisant (R7) |
 | Montage mural | À définir |
+| Autre carte, en essai | ESP32-2432S028 à deux prises USB (2,8", contrôleur ST7789V, tactile résistif XPT2046, rétroéclairage GPIO21) : `packages/hardware_2432s028.yaml`, validée au banc le 7 novembre 2026 (cahier K ; mémoire libre 153 Ko, plus grand bloc 96 Ko) ; binaire privé de banc seulement |
 
 ## Environnement de développement
 
