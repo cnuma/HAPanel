@@ -1,4 +1,4 @@
-# hapanel.yaml, hapanel_banc.yaml, hapanel_public.yaml et hapanel_2432s028_banc.yaml
+# Configurations de tête : hapanel.yaml, hapanel_banc.yaml, hapanel_public.yaml, hapanel_2432s028_banc.yaml et hapanel_2432s028_public.yaml
 
 ## Rôle
 
@@ -11,7 +11,8 @@ substitutions communes.
 | `hapanel.yaml` | Configuration de production | Les modules de la maison |
 | `hapanel_banc.yaml` | Production plus outils de mise au point | Le panneau de banc |
 | `hapanel_public.yaml` | Mêmes fonctions, sans aucun secret, publiable (D039, maquette) | Les modules installés depuis GitHub |
-| `hapanel_2432s028_banc.yaml` | Banc sur carte ESP32-2432S028, en essai | Une carte S028 de l'atelier |
+| `hapanel_2432s028_banc.yaml` | Banc sur carte ESP32-2432S028 | Une carte S028 de l'atelier |
+| `hapanel_2432s028_public.yaml` | Binaire public de la carte ESP32-2432S028 (D041) | Les modules S028 installés depuis GitHub |
 
 **Un fichier matériel par carte :** chaque point d'entrée inclut le sien
 (`hardware.yaml` pour l'ESP32-2432S024C, `hardware_2432s028.yaml` pour la S028).
@@ -117,7 +118,7 @@ droit vers 240,320.
 
 ## hapanel_2432s028_banc.yaml
 
-Banc sur carte ESP32-2432S028 (en essai, cahier K). Il n'inclut pas `hapanel.yaml`, qui
+Banc sur carte ESP32-2432S028 (validé le 7 novembre 2026, cahier K). Il n'inclut pas `hapanel.yaml`, qui
 apporte la carte S024C : il reprend ses substitutions et assemble lui-même
 `hardware: hardware_2432s028.yaml`, `application` et `acces: acces_prive.yaml`.
 
@@ -128,6 +129,19 @@ apporte la carte S024C : il reprend ses substitutions et assemble lui-même
 | `debug`, `banc_memoire_libre`, `banc_plus_grand_bloc` | Comme `hapanel_banc.yaml` | Mémoire mesurée (G6). |
 | `touchscreen` (`!extend tactile`) | Journal `toucher x=… y=… brut x=… y=…` | Les valeurs brutes servent au calibrage du tactile résistif (`hardware_2432s028.md`). |
 
+## hapanel_2432s028_public.yaml
+
+Binaire public de la carte ESP32-2432S028 (D041) : même contenu que
+`hapanel_public.yaml`, autre fichier matériel et autre manifeste.
+
+| Bloc | Contenu | Rôle |
+|---|---|---|
+| `substitutions` | Celles de `hapanel_public.yaml` ; `source_mise_a_jour` vise `manifest-2432s028.json` | Un module S028 ne reçoit jamais le binaire de la S024C. |
+| `packages` | `hardware: hardware_2432s028.yaml`, `application`, `acces: acces_public.yaml` | |
+| `esphome.build_path` | `build/hapanel_2432s028_public` | Dossier de compilation propre. |
+
+Publié par `.github/workflows/publication.yml` avec la configuration de la S024C.
+
 ## Maintenance
 
 | Pour | Faire |
@@ -136,6 +150,7 @@ apporte la carte S024C : il reprend ses substitutions et assemble lui-même
 | Ajouter un écran | Package dans `packages/pages/`, inclus **avant** `lvgl`. |
 | Changer l'écran de démarrage | Mettre son package en premier parmi les pages. |
 | Ajouter un outil de mise au point | Dans `hapanel_banc.yaml` uniquement : la production reste inchangée. |
+| Ajouter une carte | Fichier matériel `packages/hardware_<carte>.yaml` avec les mêmes `id`, configurations de banc et publique, ligne dans `publier` de `.github/workflows/publication.yml`, page dans `docs/technique/`, tests au cahier (D041). |
 | Changer la version | Modifier le fichier `VERSION`, jamais `version` ici (G5). |
 
 **Pièges :**

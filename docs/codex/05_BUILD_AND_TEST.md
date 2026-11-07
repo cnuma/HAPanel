@@ -26,8 +26,9 @@ par Git.
 |---|---|
 | `hapanel.yaml` | production |
 | `hapanel_banc.yaml` | banc : production + composant `debug` (mémoire libre, plus grand bloc) et journaux `DEBUG` |
-| `hapanel_public.yaml` | binaire public, sans secret (D039) |
-| `hapanel_2432s028_banc.yaml` | banc sur carte ESP32-2432S028 (en essai) : `.	oolsuild.ps1 run -Config hapanel_2432s028_banc.yaml -Device <PORT_COM>` |
+| `hapanel_public.yaml` | binaire public de la S024C, sans secret (D039) |
+| `hapanel_2432s028_public.yaml` | binaire public de la S028 (D041) |
+| `hapanel_2432s028_banc.yaml` | banc sur carte ESP32-2432S028 : `.	oolsuild.ps1 run -Config hapanel_2432s028_banc.yaml -Device <PORT_COM>` |
 
 ## Port série et adresse
 

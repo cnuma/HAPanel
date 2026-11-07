@@ -1,0 +1,24 @@
+# HAPanel : configuration publique de la carte ESP32-2432S028 (D041). Memes
+# fonctions et meme acces que hapanel_public.yaml, autre fichier materiel et
+# manifeste de mise a jour propre a cette carte.
+#
+# version et git_sha sont injectes par tools/build.ps1 ou par la publication
+# GitHub (G5).
+substitutions:
+  node_name: hapanel
+  friendly_name: HAPanel
+  version: "0.0.0-non-injectee"
+  git_sha: "inconnu"
+  log_level: INFO
+  # Manifeste de cette carte : un module S028 ne recoit jamais le binaire S024C.
+  source_mise_a_jour: https://github.com/cnuma/HAPanel/releases/latest/download/manifest-2432s028.json
+
+packages:
+  # Carte ESP32-2432S028, deux prises USB (cahier K).
+  hardware: !include packages/hardware_2432s028.yaml
+  application: !include packages/application.yaml
+  acces: !include packages/acces_public.yaml
+
+# Dossier de compilation propre : meme nom de noeud que les autres configurations.
+esphome:
+  build_path: build/hapanel_2432s028_public

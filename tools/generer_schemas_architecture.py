@@ -147,7 +147,7 @@ def packages():
         s.fleche([(x, 330), (x, 365)])
     s.zone(20, 365, 260, 390, "Socle")
     s.boite(40, 410, 220, 150, "base.yaml", "nœud, plateforme,\njournaux, réglages,\nidentité de build", GRIS)
-    s.boite(40, 580, 220, 150, "hardware.yaml", "seul propriétaire\ndes broches et bus\n(G2)", GRIS)
+    s.boite(40, 580, 220, 150, "hardware*.yaml", "un par carte, inclus\npar chaque fichier\nde tête (G2, D041)", GRIS)
     s.zone(300, 365, 500, 390, "Écran : pages dans l'ordre d'inclusion")
     pages = [("accueil", 320, 415), ("météo", 560, 415), ("planning", 320, 495), ("scénarios", 560, 495),
              ("menu", 320, 575), ("réglages", 560, 575)]
@@ -281,7 +281,7 @@ def build():
         s.fleche([(x, 130), (x if x > 200 else 200, 210)])
     s.fleche([(682, 130), (682, 210)])
     s.fleche([(947, 130), (900, 210)])
-    s.boite(150, 390, 800, 90, "firmware.bin", "compilé par ESP-IDF ; public : Release avec manifeste (version, MD5)", ORANGE, B_ORANGE)
+    s.boite(150, 390, 800, 90, "firmware.bin", "compilé par ESP-IDF ; public : un binaire et un manifeste par carte (D041)", ORANGE, B_ORANGE)
     s.fleche([(550, 320), (550, 390)])
     s.boite(150, 550, 800, 90, "Maison : entité Firmware de HA", "le module télécharge depuis GitHub ; atelier : OTA chiffrée du PC ; USB en secours", VIOLET, B_VIOLET)
     s.fleche([(550, 480), (550, 550)])

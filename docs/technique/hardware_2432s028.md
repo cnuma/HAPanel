@@ -14,14 +14,15 @@ l'un **ou** l'autre fichier, jamais les deux : leurs `id` se heurteraient.
 deux prises USB : écran, couleurs, tactile, veille, LED, LDR. Le brochage vient
 d'AquaLook, qui utilise cette carte avec TFT_eSPI, et du modèle ESPHome. Réserve : la
 glissière Éteint / Chauffage est capricieuse au doigt sur la dalle résistive (K5) ; les
-boutons sont fiables. Pas encore de binaire public pour cette carte (TODO rang 5).
+boutons sont fiables. Binaire public `hapanel-2432s028-factory.bin` à partir de la
+version qui suit `0.8.1` (D041, cahier K12 à K15).
 
 ## Dépendances
 
 - **Utilise :** rien des autres fichiers.
 - **Fournit :** les mêmes `id` que `hardware.yaml` (tableau « Dépendances » de
   [hardware.md](hardware.md)), sauf `bus_i2c_tactile`, remplacé par `bus_spi_tactile`.
-- **Inclus par :** `hapanel_2432s028_banc.yaml`.
+- **Inclus par :** `hapanel_2432s028_banc.yaml` et `hapanel_2432s028_public.yaml` (D041).
 
 ## Différences avec la S024C
 

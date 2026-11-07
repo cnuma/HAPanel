@@ -50,6 +50,7 @@ def fichiers_yaml():
     yield RACINE / "hapanel_banc.yaml"
     yield RACINE / "hapanel_public.yaml"
     yield RACINE / "hapanel_2432s028_banc.yaml"
+    yield RACINE / "hapanel_2432s028_public.yaml"
     yield from sorted((RACINE / "packages").rglob("*.yaml"))
 
 

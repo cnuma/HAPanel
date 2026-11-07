@@ -7,7 +7,14 @@ commande, rien à compiler, aucun mot de passe à inventer.
 
 ## Ce qu'il vous faut
 
-- **Le module** HAPanel (carte ESP32-2432S024C).
+- **Le module** HAPanel, et le nom de sa carte, imprimé au dos ou sur la boîte :
+
+  | Carte | Écran | Fichier à télécharger |
+  |---|---|---|
+  | ESP32-2432S024C | 2,4 pouces, tactile capacitif | `hapanel-2432s024c-factory.bin` |
+  | ESP32-2432S028, prises USB-C **et** micro-USB | 2,8 pouces, tactile résistif (appui franc) | `hapanel-2432s028-factory.bin` |
+
+  Une S028 avec une seule prise micro-USB n'est pas encore prise en charge.
 - **Un câble USB de données.** Certains câbles ne font que charger : si l'ordinateur
   ne voit pas le module (étape 2), essayez-en un autre.
 - **Un ordinateur avec Google Chrome ou Microsoft Edge**, et uniquement l'un de ces
@@ -22,16 +29,18 @@ commande, rien à compiler, aucun mot de passe à inventer.
 
 1. Ouvrez la page des versions :
    <https://github.com/cnuma/HAPanel/releases/latest>.
-2. En bas de la page, la rubrique **Assets** liste 5 fichiers. Cliquez sur le
-   premier, `hapanel-factory.bin` (encadré en rouge). Il arrive dans votre dossier
-   Téléchargements. S'il y en a déjà un, d'une installation précédente, supprimez
-   l'ancien d'abord : le nouveau s'appellerait `hapanel-factory (1).bin`, et l'on
-   risquerait de choisir l'ancien à l'étape 3.
+2. En bas de la page, la rubrique **Assets** liste les fichiers. Cliquez sur le
+   fichier `…-factory.bin` **de votre carte** (tableau ci-dessus). Il arrive dans
+   votre dossier Téléchargements. S'il y en a déjà un, d'une installation précédente,
+   supprimez l'ancien d'abord : le nouveau s'appellerait par exemple
+   `hapanel-2432s024c-factory (1).bin`, et l'on risquerait de choisir l'ancien à
+   l'étape 3. Jusqu'à la version 0.8.1, il n'y avait qu'une carte et un seul fichier,
+   `hapanel-factory.bin`, celui des captures ci-dessous.
 
 ![Page de la version, fichier hapanel-factory.bin encadré](images/installation/01_release.png)
 
-Les 4 autres ne servent pas ici : `hapanel-ota.bin` et `manifest.json` servent aux
-mises à jour, que Home Assistant fera seul
+Les autres ne servent pas ici : les fichiers `…-ota.bin` et `manifest….json` servent
+aux mises à jour, que Home Assistant fera seul
 ([CONFIGURATION.md](CONFIGURATION.md), section 7) ; « Source code » est le code du
 projet.
 
@@ -97,7 +106,8 @@ Si le pilote manque :
 > installerait un logiciel ESPHome de base, pas HAPanel.
 
 2. Dans la fenêtre qui s'ouvre, cliquez sur **Choisir un fichier**, prenez
-   `hapanel-factory.bin` dans votre dossier Téléchargements, puis **Installer**. Les
+   le fichier `…-factory.bin` de votre carte dans votre dossier Téléchargements, puis
+   **Installer**. Les
    explications numérotées de la fenêtre ne vous concernent pas : elles visent ceux
    qui compilent leur propre logiciel.
 

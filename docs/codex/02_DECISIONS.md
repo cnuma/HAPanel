@@ -969,3 +969,35 @@ qui cite la précédente.
 - Conséquences : un ancien blueprint n'envoie pas `piece` : l'accueil affiche
   « Intérieur » jusqu'à la réimportation. L'`id` interne `lbl_acc_sejour` est
   gardé (aucune entité de HA touchée, G10).
+
+## D041 — Un fichier matériel et un binaire public par carte
+
+- Date : 7 novembre 2026 — Statut : accepté par le propriétaire (structure validée
+  au banc avec l'ESP32-2432S028, cahier K ; binaire public de la S028 à valider,
+  cahier K12 à K15).
+- Contexte : l'ESP32-2432S024C (D004) semble ne plus être fabriqué ; le propriétaire
+  a d'autres cartes en stock, dont l'ESP32-2432S028 à deux prises USB. Flashée avec
+  le binaire de la S024C, elle rejoint HA mais l'écran reste noir (rétroéclairage
+  sur GPIO21, tactile résistif sur un autre bus). ESPHome fixe pilotes et broches à
+  la compilation : un binaire ne peut pas changer de carte une fois installé.
+- Décision :
+  - un fichier matériel par carte (`packages/hardware.yaml` pour la S024C,
+    `packages/hardware_<carte>.yaml` pour les autres), qui déclare tous les mêmes
+    `id` ; `packages/application.yaml` ne contient aucun matériel, chaque
+    configuration de tête inclut son fichier matériel ;
+  - une configuration publique et un jeu de fichiers publiés par carte :
+    `hapanel-<carte>-factory.bin`, `hapanel-<carte>-ota.bin` et un manifeste propre ;
+    le manifeste de la S024C garde le nom `manifest.json`, compilé dans les modules
+    déjà installés ; chaque module ne lit que le manifeste de sa carte ;
+  - l'utilisateur choisit sa carte à l'installation parmi les cartes validées
+    (« propositions validées », demande du propriétaire du 7 novembre 2026) ; une
+    carte hors catalogue demande d'écrire et de compiler son propre fichier matériel.
+- Options écartées : réglage des broches et des pilotes depuis HA après
+  l'installation (impossible avec ESPHome) ; un binaire unique contenant les pilotes
+  de toutes les cartes (broches en conflit, GPIO25, 32 et 33 servent à la fois au
+  tactile I²C de la S024C et au tactile SPI de la S028).
+- Conséquences : à partir de la version qui suit `0.8.1`, la Release contient six
+  fichiers ; `hapanel-factory.bin` et `hapanel-ota.bin` deviennent
+  `hapanel-2432s024c-factory.bin` et `hapanel-2432s024c-ota.bin` (guide
+  d'installation : captures à refaire). Interface encore calée sur 240 × 320 et
+  glissière peu adaptée au tactile résistif : TODO rang 5.

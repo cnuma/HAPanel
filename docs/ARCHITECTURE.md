@@ -61,8 +61,9 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `packages/acces_public.yaml` | 47 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub |
 | `packages/base.yaml` | 57 | Nœud, ESP32, journaux, écriture des réglages, identité de build |
 | `packages/hardware.yaml` | 116 | Carte ESP32-2432S024C : broches, bus, écran, tactile, sorties PWM, LDR (G2) |
-| `packages/hardware_2432s028.yaml` | 118 | Carte ESP32-2432S028, en essai : mêmes `id`, rétroéclairage GPIO21, tactile résistif XPT2046 |
+| `packages/hardware_2432s028.yaml` | 122 | Carte ESP32-2432S028 : mêmes `id`, rétroéclairage GPIO21, tactile résistif XPT2046 |
 | `hapanel_2432s028_banc.yaml` | 38 | Banc sur carte ESP32-2432S028 |
+| `hapanel_2432s028_public.yaml` | 24 | Binaire public de la carte ESP32-2432S028 (D041) |
 | `packages/lvgl.yaml` | 324 | Polices communes, À propos, barre d'état en haut (titre, disquette, Wi-Fi, HA, ☰, D036) et bouton Accueil en bas, suivi de la connexion |
 | `packages/liaison_ha.yaml` | 489 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
 | `packages/led_veille.yaml` | 286 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
@@ -219,8 +220,10 @@ Le second blueprint, `envoyer_valeur.yaml`, reste un outil générique : `module
 
 ![Matériel et brochage](images/architecture/03_materiel.png)
 
-La carte est une ESP32-2432S024C (D004), au brochage publié sans documentation vendeur
-et confirmé au banc (R6). Deux particularités :
+Le schéma montre la carte de référence, une ESP32-2432S024C (D004), au brochage
+publié sans documentation vendeur et confirmé au banc (R6). L'ESP32-2432S028 a son
+propre fichier matériel, avec les mêmes `id` : rétroéclairage GPIO21, tactile résistif
+XPT2046 sur un second bus SPI (`docs/technique/hardware_2432s028.md`, D041). Deux particularités :
 
 - Aucune interruption n'arrive sur GPIO21 : le tactile est lu toutes les 50 ms (D009, dette T1).
 - Un pic de courant au démarrage du Wi-Fi peut faire redémarrer la carte sur un port

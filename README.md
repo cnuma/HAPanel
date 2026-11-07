@@ -1,7 +1,9 @@
 # HAPanel
 
-Panneau de commande mural multi-écrans pour Home Assistant, sur carte
-ESP32-2432S024C, réalisé avec ESPHome.
+Panneau de commande mural multi-écrans pour Home Assistant, réalisé avec ESPHome.
+Cartes prises en charge : ESP32-2432S024C (écran 2,4", tactile capacitif) et
+ESP32-2432S028 à deux prises USB (écran 2,8", tactile résistif), un binaire par carte
+(D041).
 
 - Installer un module : [`docs/INSTALLATION.md`](docs/INSTALLATION.md)
 - Utilisation du panneau : [`docs/UTILISATION.md`](docs/UTILISATION.md)
