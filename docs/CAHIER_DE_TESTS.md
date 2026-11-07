@@ -77,6 +77,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 7 novembre 2026 | `v0.9.0-dev.1` (Release), module de la cuisine | J16 | **J16 OK** (propriétaire) : mise à jour depuis HA | Publication de `v0.9.0` (accord du propriétaire) ; K12 à K15 (S028) restent à faire, K14 et K15 sur la mise à jour vers `v0.9.0` |
 | 7 novembre 2026 | `v0.9.0-dev.1` puis `v0.9.0` (Release), S028 | K12 à K15 | **OK** (propriétaire) : installation par web.esphome.io, adoption dans HA, mise à jour vers `v0.9.0` depuis HA, réglages conservés | **Partie K terminée** ; binaire public S028 validé |
 | 7 novembre 2026 | Public S028 `0.9.0-dev.99` (`66e0b4e`), écrit **par erreur** sur la S024C du banc (COM6) | L2 (partiel) | Écran noir (binaire d'une autre carte) ; LED : éclairs violets réguliers, donc mise à jour détectée et D045 actif côté LED | Erreur de l'agent (carte non demandée), piège ajouté au 09. Banc reflashé par USB en `hapanel_banc.yaml` `0.9.0 (66e0b4e)` : tactile CST820, Wi-Fi et HA retrouvés. L1 à L8 à faire sur la S028, L9 et M sur ce banc |
+| 7 novembre 2026 | Banc S024C `hapanel_banc.yaml` `0.9.0 (66e0b4e)` | M1 à M3, L9 | **OK** (propriétaire) : adresse IP sur À propos, « aucune » puis l'adresse au démarrage, aucune entité de plus dans HA ; binaire privé sans flèche ni éclair, disquette normale | Restent L1 à L8 (bloquants) et L10 sur un binaire public |
 
 ## Préparation (une fois, avant A et B)
 
@@ -318,7 +319,7 @@ HA y propose une mise à jour (entité « Firmware »). L9 se fait sur le binair
 | L6 | Envoyer un message d'accueil (comme A1) | LED en arc-en-ciel, sans éclair violet ; à la fermeture, flèche et éclairs reviennent | `feature/maj-icone` | |
 | L7 | Laisser l'écran s'éteindre (1 min), observer la LED, puis toucher l'écran | Éclairs violets écran éteint ; au réveil, la flèche clignote | `feature/maj-icone` | |
 | L8 | Dans HA, entité « Firmware » › Installer (`DEPLOIEMENT_PUBLIC.md` § 4) | Flèche et éclairs s'arrêtent pendant le téléchargement ; après le redémarrage, À propos affiche la nouvelle version, sans flèche ni éclair | `feature/maj-icone` | |
-| L9 | Binaire privé du banc (`hapanel_banc.yaml`) : 2 min sur l'accueil, puis déplacer un curseur de Réglages | Jamais de flèche ni d'éclair violet ; disquette comme en H16 | `feature/maj-icone` | |
+| L9 | Binaire privé du banc (`hapanel_banc.yaml`) : 2 min sur l'accueil, puis déplacer un curseur de Réglages | Jamais de flèche ni d'éclair violet ; disquette comme en H16 | `feature/maj-icone` | OK 7 nov. |
 | L10 | Page À propos pendant L1 (le binaire public n'a pas les entités de mémoire du banc) | Mémoire libre et plus grand bloc notés (G6), comparables à K10 | `feature/maj-icone` | |
 | L11 | Module public à jour ; publier une Release suivante, puis redémarrer le module (ou attendre 6 h) | La flèche et les éclairs apparaissent sans autre action | — | |
 
@@ -328,6 +329,6 @@ Demande du propriétaire du 7 novembre 2026. Tout binaire (public ou privé).
 
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
-| M1 | Module relié au Wi-Fi : ouvrir À propos | Ligne « Adresse IP : … » sous la connexion à HA, avec l'adresse du module (la même que dans la box ou dans HA) ; mémoire en dessous, sur deux lignes, sans chevauchement ni débordement sous la barre du bas | `feature/maj-icone` | |
-| M2 | Redémarrer le module, ouvrir aussitôt À propos | « Adresse IP : aucune », puis l'adresse dès que le Wi-Fi est rejoint | `feature/maj-icone` | |
-| M3 | Dans HA, liste des entités du module | Aucune nouvelle entité « Adresse IP » (capteur interne) | `feature/maj-icone` | |
+| M1 | Module relié au Wi-Fi : ouvrir À propos | Ligne « Adresse IP : … » sous la connexion à HA, avec l'adresse du module (la même que dans la box ou dans HA) ; mémoire en dessous, sur deux lignes, sans chevauchement ni débordement sous la barre du bas | `feature/maj-icone` | OK 7 nov. |
+| M2 | Redémarrer le module, ouvrir aussitôt À propos | « Adresse IP : aucune », puis l'adresse dès que le Wi-Fi est rejoint | `feature/maj-icone` | OK 7 nov. |
+| M3 | Dans HA, liste des entités du module | Aucune nouvelle entité « Adresse IP » (capteur interne) | `feature/maj-icone` | OK 7 nov. |
