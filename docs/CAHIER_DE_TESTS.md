@@ -256,3 +256,23 @@ module de banc. Procédure : `docs/DEPLOIEMENT_PUBLIC.md`.
 | J12 | Après J6 : réimporter le blueprint depuis la branche (`CONFIGURATION.md` § 2), laisser « Nom de la pièce » vide, enregistrer l'automatisation | L'accueil affiche la zone du thermomètre (« Cuisine ») au lieu de « Séjour » | `feature/poc-deploiement` | OK 5 nov. |
 | J13 | Saisir « Chambre des parents » dans « Nom de la pièce » | « Chambre des pa… » ou le nom coupé proprement, sans chevaucher « indisponible » à droite | `feature/poc-deploiement` | OK 5 nov. |
 | J14 | Module de production : reflasher le binaire public par USB (`hapanel-factory.bin`), Wi-Fi par Improv, puis HA | Le module retrouve HA ; si HA demande une clé ou crée un nouvel appareil, le noter et réassocier l'automatisation du module | `docs/guide-installation` (fusionnée) | OK 7 nov. (connexion non chiffrée proposée par HA, refusée) |
+
+## K — Carte ESP32-2432S028 (écran 2,8", tactile résistif)
+
+Configuration `hapanel_2432s028_banc.yaml` (binaire privé, clé de `secrets.yaml`),
+premier flash par USB. Fichier matériel `packages/hardware_2432s028.yaml`, brochage repris
+d'AquaLook. Préciser au rapport : une seule prise micro-USB, ou micro-USB et USB-C.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| K1 | Flasher par USB, alimentation sur bloc secteur | Écran allumé, page d'accueil lisible, barre d'état en haut | `feature/carte-2432s028` | |
+| K2 | Regarder les couleurs : barre d'état, icônes, température extérieure | Mêmes couleurs que sur la S024C (pas de négatif, pas de rouge et bleu échangés) | `feature/carte-2432s028` | |
+| K3 | Toucher les quatre coins de l'écran, puis le centre ; envoyer les lignes `toucher … brut` des journaux | Une ligne par toucher ; valeurs brutes relevées pour le calibrage | `feature/carte-2432s028` | |
+| K4 | Après calibrage et nouveau flash : ☰, puis chaque page du Menu, puis le bouton Accueil | Chaque bouton répond du premier coup, à l'endroit touché | `feature/carte-2432s028` | |
+| K5 | Accueil : glissière Éteint / Chauffage et consigne ± (HA connecté) | Même comportement que sur la S024C | `feature/carte-2432s028` | |
+| K6 | Laisser le module sans toucher 1 min, puis toucher l'écran | Écran éteint puis rallumé au toucher, retour à l'accueil | `feature/carte-2432s028` | |
+| K7 | LED : couleur à l'accueil selon le chauffage | LED allumée de la bonne couleur (pas éteinte quand elle devrait être allumée) | `feature/carte-2432s028` | |
+| K8 | Cacher puis éclairer la LDR, lire les lignes `LDR … V` | La tension monte dans le noir ; l'écran baisse dans le noir | `feature/carte-2432s028` | |
+| K9 | Bords haut et bas de l'écran pendant l'usage | Pas de ligne ni de point parasite en haut (piège des bords, D036) | `feature/carte-2432s028` | |
+| K10 | Page À propos ; entités « Mémoire libre » et « Plus grand bloc libre » dans HA | Version et SHA du binaire flashé ; mémoire notée (G6) | `feature/carte-2432s028` | |
+| K11 | Après K1 à K10, refaire G ou un test d'accueil sur la S024C du banc avec le binaire de cette branche | Aucun changement sur la S024C (la configuration fusionnée est identique, à confirmer sur le module) | `feature/carte-2432s028` | |

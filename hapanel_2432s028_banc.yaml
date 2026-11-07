@@ -1,0 +1,38 @@
+# HAPanel : panneau de banc sur carte ESP32-2432S028 (ecran 2,8" resistif).
+# Memes fonctions et meme acces que hapanel_banc.yaml, autre fichier materiel.
+substitutions:
+  node_name: hapanel
+  friendly_name: HAPanel
+  version: "0.0.0-non-injectee"
+  git_sha: "inconnu"
+  log_level: DEBUG
+
+packages:
+  hardware: !include packages/hardware_2432s028.yaml
+  application: !include packages/application.yaml
+  acces: !include packages/acces_prive.yaml
+
+# Dossier de compilation propre a cette carte : .esphome/build/hapanel_2432s028.
+esphome:
+  build_path: build/hapanel_2432s028
+
+debug:
+  update_interval: 30s
+
+sensor:
+  - platform: debug
+    free:
+      id: banc_memoire_libre
+      name: "Mémoire libre"
+    block:
+      id: banc_plus_grand_bloc
+      name: "Plus grand bloc libre"
+
+# Calibrage : toucher les quatre coins et relever les valeurs brutes ; les
+# plus petites et les plus grandes vont dans calibration (hardware_2432s028.yaml).
+touchscreen:
+  - id: !extend tactile
+    on_touch:
+      - lambda: |-
+          ESP_LOGI("hapanel.banc", "toucher x=%d y=%d brut x=%d y=%d",
+                   touch.x, touch.y, touch.x_raw, touch.y_raw);

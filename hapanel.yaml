@@ -11,6 +11,8 @@ substitutions:
   log_level: INFO
 
 packages:
+  # Carte ESP32-2432S024C (D004).
+  hardware: !include packages/hardware.yaml
   # Fonctions du panneau, communes au binaire public (D039).
   application: !include packages/application.yaml
   # Wi-Fi et cle de l'API compiles depuis secrets.yaml : binaire prive.

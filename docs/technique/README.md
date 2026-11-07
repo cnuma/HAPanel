@@ -14,9 +14,10 @@ ajouter une valeur, changer un écran. Il décrit chaque fichier YAML bloc par b
 
 | Page | Fichier documenté | État |
 |---|---|---|
-| [hapanel.md](hapanel.md) | `hapanel.yaml`, `hapanel_banc.yaml` | Rédigée |
+| [hapanel.md](hapanel.md) | `hapanel.yaml`, `hapanel_banc.yaml`, `hapanel_public.yaml`, `hapanel_2432s028_banc.yaml` | Rédigée |
 | [base.md](base.md) | `packages/base.yaml` | Rédigée |
-| [hardware.md](hardware.md) | `packages/hardware.yaml` | Rédigée |
+| [hardware.md](hardware.md) | `packages/hardware.yaml` (ESP32-2432S024C) | Rédigée |
+| [hardware_2432s028.md](hardware_2432s028.md) | `packages/hardware_2432s028.yaml` (ESP32-2432S028, en essai) | Rédigée |
 | lvgl.md | `packages/lvgl.yaml` | À venir |
 | liaison_ha.md | `packages/liaison_ha.yaml` | À venir |
 | led_veille.md | `packages/led_veille.yaml` | À venir |

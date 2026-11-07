@@ -1,0 +1,118 @@
+# Materiel : ESP32-2432S028, ecran 2,8" resistif, une seule prise micro-USB.
+# Seul fichier qui declare broches et bus pour cette carte (invariant G2) ;
+# memes id que hardware.yaml (ESP32-2432S024C), le reste du panneau ne change pas.
+#
+# Brochage repris d'AquaLook (meme carte, TFT_eSPI) et du modele ESP32-2432S028
+# d'ESPHome. A confirmer au banc : ecran, couleurs, tactile, LED, LDR.
+# Variantes a deux prises (USB-C et micro-USB) : controleur ST7789V ou
+# ILI9342, modeles ESPHome ESP32-2432S028-7789 et -9342.
+substitutions:
+  display_model: ILI9341
+  pin_spi_clk: GPIO14
+  pin_spi_mosi: GPIO13
+  pin_spi_miso: GPIO12
+  pin_ecran_cs: GPIO15
+  pin_ecran_dc: GPIO2
+  # GPIO21 ici, GPIO27 sur la S024C : sans lui, l'ecran reste noir.
+  pin_retroeclairage: GPIO21
+  # Tactile XPT2046 sur un second bus SPI.
+  pin_tactile_clk: GPIO25
+  pin_tactile_mosi: GPIO32
+  pin_tactile_miso: GPIO39
+  pin_tactile_cs: GPIO33
+  pin_tactile_irq: GPIO36
+  pin_led_rouge: GPIO4
+  pin_led_vert: GPIO16
+  pin_led_bleu: GPIO17
+  pin_ldr: GPIO34
+
+spi:
+  - id: bus_spi_ecran
+    clk_pin: ${pin_spi_clk}
+    mosi_pin: ${pin_spi_mosi}
+    # GPIO12 est une broche de demarrage : cablage d'origine de la carte.
+    miso_pin:
+      number: ${pin_spi_miso}
+      ignore_strapping_warning: true
+  - id: bus_spi_tactile
+    clk_pin: ${pin_tactile_clk}
+    mosi_pin: ${pin_tactile_mosi}
+    miso_pin: ${pin_tactile_miso}
+
+output:
+  - platform: ledc
+    id: sortie_retroeclairage
+    pin: ${pin_retroeclairage}
+  - platform: ledc
+    id: sortie_led_rouge
+    pin:
+      number: ${pin_led_rouge}
+      inverted: true
+  - platform: ledc
+    id: sortie_led_vert
+    pin:
+      number: ${pin_led_vert}
+      inverted: true
+  - platform: ledc
+    id: sortie_led_bleu
+    pin:
+      number: ${pin_led_bleu}
+      inverted: true
+
+sensor:
+  # Identique a hardware.yaml (D023) ; sens de la tension a confirmer.
+  - platform: adc
+    id: ldr_tension
+    pin: ${pin_ldr}
+    attenuation: 0db
+    samples: 8
+    update_interval: 1s
+    filters:
+      - sliding_window_moving_average:
+          window_size: 5
+          send_every: 2
+          send_first_at: 1
+    on_value:
+      - logger.log:
+          tag: hapanel.led
+          level: DEBUG
+          format: "LDR %.3f V"
+          args: [x]
+
+light:
+  - platform: monochromatic
+    id: retroeclairage
+    name: "Rétroéclairage"
+    output: sortie_retroeclairage
+    restore_mode: ALWAYS_ON
+    internal: true
+
+display:
+  - platform: mipi_spi
+    id: ecran
+    model: ${display_model}
+    spi_id: bus_spi_ecran
+    data_rate: 40MHz
+    cs_pin:
+      number: ${pin_ecran_cs}
+      ignore_strapping_warning: true
+    dc_pin:
+      number: ${pin_ecran_dc}
+      ignore_strapping_warning: true
+
+touchscreen:
+  - platform: xpt2046
+    id: tactile
+    spi_id: bus_spi_tactile
+    display: ecran
+    cs_pin: ${pin_tactile_cs}
+    # Si aucun toucher n'arrive, retirer cette ligne (meme cas que D009).
+    interrupt_pin: ${pin_tactile_irq}
+    update_interval: 20ms
+    # Valeurs brutes courantes pour cette dalle, a remplacer par celles
+    # relevees au banc (journal « brut » de hapanel_2432s028_banc.yaml).
+    calibration:
+      x_min: 200
+      x_max: 3900
+      y_min: 200
+      y_max: 3900

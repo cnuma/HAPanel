@@ -1,23 +1,29 @@
-# hapanel.yaml, hapanel_banc.yaml et hapanel_public.yaml
+# hapanel.yaml, hapanel_banc.yaml, hapanel_public.yaml et hapanel_2432s028_banc.yaml
 
 ## Rôle
 
-Ce sont les trois points d'entrée qu'on donne à ESPHome. Ils ne contiennent aucune
-fonction : ils **assemblent** les packages et fixent les substitutions communes.
+Ce sont les points d'entrée qu'on donne à ESPHome. Ils ne contiennent aucune
+fonction : ils **assemblent** les packages, choisissent la carte et fixent les
+substitutions communes.
 
 | Fichier | Sert à | Flashé sur |
 |---|---|---|
 | `hapanel.yaml` | Configuration de production | Les modules de la maison |
 | `hapanel_banc.yaml` | Production plus outils de mise au point | Le panneau de banc |
 | `hapanel_public.yaml` | Mêmes fonctions, sans aucun secret, publiable (D039, maquette) | Les modules installés depuis GitHub |
+| `hapanel_2432s028_banc.yaml` | Banc sur carte ESP32-2432S028, en essai | Une carte S028 de l'atelier |
+
+**Un fichier matériel par carte :** chaque point d'entrée inclut le sien
+(`hardware.yaml` pour l'ESP32-2432S024C, `hardware_2432s028.yaml` pour la S028).
+`application.yaml` ne contient aucune broche.
 
 Sans `hapanel.yaml`, il n'y a rien à compiler. `hapanel_banc.yaml` n'existe que pour
 le banc : il n'est jamais flashé sur un module de la maison.
 
 ## Dépendances
 
-- **Utilise :** `packages/application.yaml`, qui inclut les 12 fichiers de fonctions,
-  et un fichier d'accès : `acces_prive.yaml` (lit `secrets.yaml`) pour `hapanel.yaml`,
+- **Utilise :** un fichier matériel, `packages/application.yaml`, qui inclut les 11
+  fichiers de fonctions, et un fichier d'accès : `acces_prive.yaml` (lit `secrets.yaml`) pour `hapanel.yaml`,
   `acces_public.yaml` pour `hapanel_public.yaml`.
 - **Fournit :** les substitutions ci-dessous à tous les packages.
 - **Outil :** `tools/build.ps1` remplace `version` et `git_sha` au lancement (G5).
@@ -42,6 +48,7 @@ substitution déclarée ici **prime** sur la même substitution d'un package.
 
 | Package | Fichier | Rôle |
 |---|---|---|
+| `hardware` | `packages/hardware.yaml` | Carte ESP32-2432S024C (D004) : broches, bus, écran, tactile |
 | `application` | `packages/application.yaml` | Toutes les fonctions du panneau, communes au binaire public |
 | `acces` | `packages/acces_prive.yaml` | Wi-Fi, clé de l'API et OTA depuis le PC, compilés depuis `secrets.yaml` |
 
@@ -50,13 +57,12 @@ substitution déclarée ici **prime** sur la même substitution d'un package.
 | Ordre | Package | Contrainte d'ordre |
 |---|---|---|
 | 1 | `base` | |
-| 2 | `hardware` | |
-| 3 | `accueil` | **Première page déclarée : c'est l'écran affiché au démarrage.** Doit rester avant `lvgl`. |
-| 4 à 8 | `meteo`, `planning`, `scenarios`, `menu`, `reglages` | Leur ordre est celui des pages dans LVGL. |
-| 9 | `lvgl` | Déclare la page À propos et la barre de navigation (`top_layer`). |
-| 10 | `liaison_ha` | |
-| 11 | `led_veille` | |
-| 12 | `message_accueil` | **Après `lvgl`** : son calque est ajouté après la barre de navigation dans `top_layer`, donc dessiné par-dessus. |
+| 2 | `accueil` | **Première page déclarée : c'est l'écran affiché au démarrage.** Doit rester avant `lvgl`. |
+| 3 à 7 | `meteo`, `planning`, `scenarios`, `menu`, `reglages` | Leur ordre est celui des pages dans LVGL. |
+| 8 | `lvgl` | Déclare la page À propos et la barre de navigation (`top_layer`). |
+| 9 | `liaison_ha` | |
+| 10 | `led_veille` | |
+| 11 | `message_accueil` | **Après `lvgl`** : son calque est ajouté après la barre de navigation dans `top_layer`, donc dessiné par-dessus. |
 
 ## hapanel_public.yaml
 
@@ -65,7 +71,7 @@ Maquette D039, procédure dans `docs/DEPLOIEMENT_PUBLIC.md`.
 | Bloc | Contenu | Rôle |
 |---|---|---|
 | `substitutions` | Celles de `hapanel.yaml`, plus `source_mise_a_jour` | Adresse du manifeste de la dernière Release du dépôt public, lue par l'entité « Firmware ». |
-| `packages` | `application`, puis `acces: acces_public.yaml` | Mêmes fonctions ; accès sans secret. |
+| `packages` | `hardware`, `application`, puis `acces: acces_public.yaml` | Même carte et mêmes fonctions ; accès sans secret. |
 | `esphome.build_path` | `build/hapanel_public` | Même nom de nœud que la production : sans dossier propre, les deux compilations s'écraseraient. |
 
 Compilé par GitHub Actions (`.github/workflows/publication.yml`) à l'envoi d'une
@@ -108,6 +114,19 @@ Complète l'écran tactile `tactile`, déclaré dans `hardware.yaml`, sans modif
 fichier : chaque toucher est journalisé (`hapanel.banc`, coordonnées `x` et `y`). Sert
 à vérifier que le tactile correspond à l'écran : coin haut gauche vers 0,0, coin bas
 droit vers 240,320.
+
+## hapanel_2432s028_banc.yaml
+
+Banc sur carte ESP32-2432S028 (en essai, cahier K). Il n'inclut pas `hapanel.yaml`, qui
+apporte la carte S024C : il reprend ses substitutions et assemble lui-même
+`hardware: hardware_2432s028.yaml`, `application` et `acces: acces_prive.yaml`.
+
+| Bloc | Contenu | Rôle |
+|---|---|---|
+| `substitutions` | Celles de `hapanel.yaml`, `log_level` à `DEBUG` | Comme le banc. |
+| `esphome.build_path` | `build/hapanel_2432s028` | Dossier de compilation propre à cette carte. |
+| `debug`, `banc_memoire_libre`, `banc_plus_grand_bloc` | Comme `hapanel_banc.yaml` | Mémoire mesurée (G6). |
+| `touchscreen` (`!extend tactile`) | Journal `toucher x=… y=… brut x=… y=…` | Les valeurs brutes servent au calibrage du tactile résistif (`hardware_2432s028.md`). |
 
 ## Maintenance
 
