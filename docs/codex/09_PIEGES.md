@@ -44,6 +44,15 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 - `restore_value` ne suffit pas : ESPHome n'écrit la flash qu'à
   `flash_write_interval` (60 s par défaut, 5 s ici, D034). Pour tester la
   conservation d'un réglage, attendre au moins 10 s avant de couper.
+- Ordre de démarrage : un `number` template (priorité `HARDWARE`) est restauré avant
+  une `light` (`HARDWARE - 1`). Un `light.turn_on` lancé par son `on_value` au
+  démarrage est écrasé par le `restore_mode` de la lumière (`ALWAYS_ON` : 100 %).
+  Appliquer un réglage restauré dans l'`on_boot` (priorité -100, après toutes les
+  initialisations), et tester son **effet** après redémarrage, pas seulement sa
+  valeur (6 novembre 2026).
+- Les `esphome: on_boot:` des packages sont fusionnés en **une seule** automatisation :
+  la dernière `priority` lue s'applique à toutes les actions. Garder -100 partout ;
+  vérifier dans la sortie d'`esphome config` (6 novembre 2026).
 
 ## LVGL
 
@@ -91,6 +100,11 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   écrit qu'au démarrage, vers 20 s : capturer le journal dès le reset.
 - L'action « Mettre à jour l'entité » de HA ne fait pas vérifier le module : il ne
   vérifie qu'au démarrage, puis toutes les 6 h. Pour forcer, redémarrer le module.
+- HA propose la version vue à la **dernière vérification** du module. Juste après une
+  publication, il propose encore l'ancienne : l'installer est sans dégât (manifeste lié
+  à son étiquette), puis la nouvelle arrive au redémarrage, soit deux mises à jour au
+  lieu d'une (6 novembre 2026 : `0.8.0`, puis `0.8.1-dev.1`). Redémarrer le module
+  avant d'installer, et vérifier la version proposée.
 - HA ne propose une mise à jour que si la version publiée est plus récente : une
   version suffixée (`0.8.0-dev.3-usb`) est incomparable avec `0.8.0-dev.N`, l'entité
   reste « À jour » et `update.install` est refusé. Versions sans suffixe ; le module

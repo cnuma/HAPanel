@@ -48,6 +48,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | LED | RVB de face avant, allumée à l'état bas : GPIO4 rouge, GPIO16 vert, GPIO17 bleu (D017) ; mode, intensité et alerte réglables par module (D027) |
 | LDR | GPIO34, relevée le 31 octobre 2026, règle l'intensité de la LED (D018) et le rétroéclairage (D023), pièce sombre non testée |
 | Flash | 4 Mo (détectée au premier flash) ; ESP32 rev 3.1 |
+| Liaison USB | Convertisseur USB-série CH340 (Windows : « USB-SERIAL CH340 », relevé le 6 novembre 2026) ; pilote, si Windows ne l'installe pas : site du fabricant WCH uniquement (guide d'installation) |
 | Alimentation | Bloc secteur externe 1 A validé au banc ; port USB du PC insuffisant (R7) |
 | Montage mural | À définir |
 
