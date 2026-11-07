@@ -5,8 +5,8 @@ du module neuf, sorti de sa boîte, jusqu'au module relié à votre Wi-Fi ; la s
 est dans [CONFIGURATION.md](CONFIGURATION.md). Comptez 15 minutes. Aucune ligne de
 commande, rien à compiler, aucun mot de passe à inventer.
 
-*Brouillon : les emplacements « 📷 Capture » restants seront remplacés au prochain
-reflash du module de test (cahier J9, J10).*
+*Brouillon : restent à vérifier la fermeture du réseau du module après 15 minutes
+(cahier J10) et la reprise par Home Assistant d'un module reflashé (cahier J14).*
 
 ## Ce qu'il vous faut
 
@@ -106,12 +106,15 @@ Si le pilote manque :
 
 ![Fenêtre de choix du fichier, hapanel-factory.bin choisi](images/installation/05_choisir_fichier.png)
 
-3. Attendez la fin de l'écriture, environ 2 minutes, sans débrancher. Elle efface
-   tout ce que le module contenait.
+3. L'écriture efface tout ce que le module contenait, puis écrit le logiciel, en
+   2 minutes environ. **Gardez cette fenêtre visible** : passer à un autre onglet ou
+   à une autre fenêtre peut interrompre l'écriture. Ne débranchez pas le module.
 
-> 📷 Capture 06 — barre de progression.
->
-> 📷 Capture 07 — écriture terminée.
+![Écriture en cours](images/installation/06_ecriture.png)
+
+4. À la fin, la fenêtre affiche **Installation finie**.
+
+![Écriture terminée : Installation finie](images/installation/07_ecriture_finie.png)
 
 ## 4. Relier le module au Wi-Fi
 
@@ -146,17 +149,22 @@ le point d'accès du module, ci-dessous.
 Tant qu'il n'a pas de Wi-Fi, le module crée son propre réseau Wi-Fi pendant
 15 minutes après sa mise sous tension.
 
-1. Sur le téléphone, ouvrez les réglages Wi-Fi et choisissez le réseau
-   `hapanel-` suivi de six caractères.
+1. Sur le téléphone, ouvrez la liste des réseaux Wi-Fi et choisissez le réseau
+   `hapanel-` suivi de six caractères. Il n'a pas de mot de passe.
 
-> 📷 Capture 11 — liste des réseaux du téléphone, réseau `hapanel-xxxxxx`.
+![Liste des réseaux du téléphone, réseau hapanel-583c28, autres réseaux masqués](images/installation/11_telephone_reseaux.png)
 
-2. Une page s'ouvre seule (sinon, ouvrez <http://192.168.4.1> dans le navigateur
-   du téléphone). Choisissez votre réseau, saisissez son mot de passe, **Save**.
+2. Une page « Wi-Fi captif » s'ouvre seule (sinon, ouvrez <http://192.168.4.1> dans
+   le navigateur du téléphone). Touchez votre réseau dans la liste **WiFi Networks** :
+   son nom se recopie dans **SSID**. Saisissez son mot de passe dans **Password**,
+   puis **Save**.
 
-> 📷 Capture 12 — page du module sur le téléphone (noms des réseaux masqués).
+![Page du module sur le téléphone, noms des réseaux masqués](images/installation/12_portail.png)
 
-3. Le module redémarre et rejoint votre Wi-Fi ; son réseau `hapanel-…` disparaît.
+3. La page affiche « Saved. Connecting... » : le module rejoint votre Wi-Fi, et son
+   réseau `hapanel-…` disparaît.
+
+![Saved. Connecting...](images/installation/12b_portail_enregistre.png)
 
 **Le réseau `hapanel-…` n'apparaît pas :** les 15 minutes sont passées. Débranchez
 puis rebranchez le module, et recommencez.
