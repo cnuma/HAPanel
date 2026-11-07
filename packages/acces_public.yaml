@@ -43,6 +43,14 @@ update:
     name: "Firmware"
     source: ${source_mise_a_jour}
 
+# Icone de la barre d'etat et eclairs violets de la LED (D045) : seulement
+# quand une mise a jour attend ; pendant l'installation, plus rien (le module
+# redemarre ensuite dans la nouvelle version).
+interval:
+  - interval: 1s
+    then:
+      - lambda: id(maj_disponible) = id(maj_firmware).state == update::UPDATE_STATE_AVAILABLE;
+
 # Adoption dans le module ESPHome de Home Assistant : configuration reprise
 # depuis le depot public, a recompiler avec sa propre cle si on le souhaite.
 dashboard_import:

@@ -1053,3 +1053,38 @@ qui cite la précédente.
 - Conséquences : chacun peut copier, modifier et vendre le projet, y compris fermé, en
   gardant la mention de copyright. Les composants compilés gardent leur licence
   (ESPHome, LVGL : MIT ; ESP-IDF : Apache 2.0).
+
+## D045 — Mise à jour signalée par la barre d'état et la LED
+
+- Date : 7 novembre 2026 — Statut : choisi par le propriétaire (HAP-R001), implémenté
+  sur `feature/maj-icone`, validé sur la S028 le 7 novembre 2026 (cahier L1 à L10), en
+  0.10.0. Premier point du
+  TODO rang 2 (mise à jour depuis l'écran) ; les points 2 à 4 restent à faire.
+- Contexte : une Release publiée n'est visible que dans HA (entité « Firmware ») ; le
+  propriétaire veut la voir sur le module, comme dans AquaLook (demande du 5 novembre
+  2026, précisée le 6 novembre).
+- Décision :
+  - **icône :** `mdi:arrow-up-bold-circle`, violette (`#AB47BC`, le violet de Manuel,
+    D016), dans la barre d'état à la place de la disquette (x = 160) ; elle clignote
+    (500 ms allumée, 500 ms éteinte) ; pendant un enregistrement, la disquette passe
+    devant, puis l'icône revient ;
+  - **LED :** toutes les 10 s, deux éclairs violets de 150 ms séparés par 150 ms
+    d'extinction, puis la respiration du chauffage reprend ; même plafond que la
+    respiration (« Intensité LED », lumière de la pièce) : rien avec « LED : Éteinte ».
+    Priorités : alerte rouge, puis arc-en-ciel du message d'accueil, puis éclairs de
+    mise à jour, puis respiration ;
+  - **condition :** entité `maj_firmware` dans l'état « mise à jour disponible » ;
+    pendant l'installation, plus rien ; après le redémarrage dans la nouvelle
+    version, plus rien. Binaire public seulement : le binaire privé de l'atelier n'a
+    pas d'entité de mise à jour et n'affiche jamais rien ;
+  - **recherche :** inchangée (au démarrage dès que le Wi-Fi est là, puis toutes les
+    6 h, réglage d'ESPHome) : une Release est vue en 6 h au plus. Recherche à 3 h du
+    matin et bouton « Rechercher » : TODO rang 2.
+- Options écartées : `mdi:package-up` (icône de HA, trop détaillée à 24 px) ; LED en
+  clignotement violet continu (la couleur du chauffage disparaîtrait jusqu'à
+  l'installation) ; LED à pleine intensité (gênante la nuit, ce n'est pas une alarme).
+- Justification : le double éclair ne se confond ni avec Manuel (violet qui respire)
+  ni avec l'alerte (rouge, 1 Hz) ; aucune action HA ni surface nouvelle (`08`
+  inchangé), le module ne fait que lire l'état de son entité de mise à jour.
+- Conséquences : tous les modules publics clignotent dès qu'une Release est publiée,
+  y compris une Release de développement marquée « Latest ».

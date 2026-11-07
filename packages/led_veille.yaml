@@ -16,6 +16,10 @@ substitutions:
   led_intensite_defaut: "20"
   # Arc-en-ciel du message d'accueil (D028) : un tour de couleurs.
   led_arc_periode_ms: "2000"
+  # Mise a jour en attente (D045) : deux eclairs violets au debut de chaque
+  # periode, separes par un eclair eteint de meme duree.
+  led_maj_periode_ms: "10000"
+  led_maj_eclair_ms: "150"
   ldr_tension_jour: "0.09"
   ldr_tension_nuit: "0.20"
   # Luminosite du retroeclairage (D023), a ajuster au banc. La correction gamma
@@ -295,6 +299,19 @@ interval:
             id(sortie_led_vert).set_level(g * plafond);
             id(sortie_led_bleu).set_level(b * plafond);
             return;
+          }
+          // Mise a jour en attente (D045) : double eclair violet (rouge et bleu,
+          // comme Manuel) au plafond, puis la respiration reprend. Rythme distinct
+          // de Manuel (respiration) et de l'alerte (rouge, 1 Hz), prioritaire.
+          if (id(maj_disponible)) {
+            uint32_t t = millis() % ${led_maj_periode_ms};
+            if (t < 3 * ${led_maj_eclair_ms}) {
+              float v = t < ${led_maj_eclair_ms} || t >= 2 * ${led_maj_eclair_ms} ? plafond : 0.0f;
+              id(sortie_led_rouge).set_level(v);
+              id(sortie_led_vert).set_level(0.0f);
+              id(sortie_led_bleu).set_level(v);
+              return;
+            }
           }
           float s =0.5f - 0.5f * cos(2.0f * M_PI * (millis() % ${led_periode_ms}) / ${led_periode_ms});
           float k = plafond * (${led_plancher} + (1.0f - ${led_plancher}) * s * s);

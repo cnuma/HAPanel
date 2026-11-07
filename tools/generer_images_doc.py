@@ -274,8 +274,10 @@ def apropos():
     e.texte(12, 60, "HAPanel 0.7.0")
     e.texte(12, 88, "SHA 3e880f3")
     e.texte(12, 128, "Home Assistant : connecté", VERT)
-    e.texte(12, 168, "Mémoire : 162 Ko libres,")
-    e.texte(12, 188, "plus grand bloc 108 Ko")
+    # Adresse masquee : aucune adresse reelle dans le depot (G9).
+    e.texte(12, 156, "Adresse IP : 192.168.x.x")
+    e.texte(12, 196, "Mémoire : 162 Ko libres,")
+    e.texte(12, 216, "plus grand bloc 108 Ko")
     e.finir("apropos.png")
 
 

@@ -12,7 +12,9 @@ peut légèrement différer.*
 - **La barre du haut** est présente sur toutes les pages, comme sur un téléphone :
   à gauche le bouton **☰**, qui ouvre le Menu (il n'apparaît pas sur le Menu), puis le
   titre de la page (la date et l'heure sur l'accueil) ; à droite le Wi-Fi et le point
-  de connexion à Home Assistant (vert : relié, rouge : non relié).
+  de connexion à Home Assistant (vert : relié, rouge : non relié). Une **flèche
+  violette qui clignote** à côté du Wi-Fi annonce une nouvelle version du logiciel
+  (voir « Mise à jour » plus bas).
 - **La maison**, en bas au centre, ramène à l'accueil. L'accueil n'a pas de barre en
   bas.
 - La LED et la luminosité de l'écran se règlent depuis le panneau lui-même :
@@ -108,8 +110,8 @@ Un bouton marqué **Indisponible** ne peut pas être touché.
 
 ![Page À propos](images/apropos.png)
 
-Version du logiciel, connexion à Home Assistant et mémoire. Ces informations sont
-utiles en cas de dépannage.
+Version du logiciel, connexion à Home Assistant, adresse IP du panneau sur le réseau
+(« aucune » sans Wi-Fi) et mémoire. Ces informations sont utiles en cas de dépannage.
 
 ## Réglages
 
@@ -161,12 +163,30 @@ Réglages) la diminue en plus, partout.
 | Couleur qui « respire » | Chauffage allumé, dans le préréglage de cette couleur. |
 | Éteinte | Chauffage éteint. |
 | Rouge clignotant | Anomalie : Home Assistant déconnecté, ou température ou chauffage non reçu, ancien ou indisponible. |
+| Deux éclairs violets toutes les 10 s | Une nouvelle version du logiciel attend (voir « Mise à jour »). Entre les éclairs, la LED montre le chauffage comme d'habitude. |
 
 Boost est un rouge qui respire doucement, l'anomalie un rouge qui clignote franchement.
+Manuel est un violet qui respire, la mise à jour deux éclairs violets brefs.
 
 La respiration s'éteint un instant au creux de chaque cycle. Selon les réglages du
 module (page Réglages, une chambre par exemple), la LED peut être éteinte en
 permanence et l'alerte désactivée : seul l'écran montre alors une anomalie.
+
+## Mise à jour
+
+Quand une nouvelle version du logiciel est publiée, le panneau la voit dans les 6 heures
+(ou à son prochain démarrage) :
+
+- une **flèche violette clignote** dans la barre du haut, à côté du Wi-Fi ; pendant
+  l'enregistrement d'un réglage, la disquette prend sa place quelques secondes ;
+- la **LED** fait deux éclairs violets toutes les 10 secondes, à son intensité
+  habituelle ; avec « LED » arrêtée dans les Réglages, seule la flèche le montre.
+
+La mise à jour s'installe depuis Home Assistant : page de l'appareil, entité
+**Firmware**, **Installer** (voir [le déploiement](DEPLOIEMENT_PUBLIC.md), § 4). La
+flèche et les éclairs disparaissent pendant l'installation, puis le panneau redémarre
+dans la nouvelle version. Un panneau installé depuis un ordinateur de l'atelier
+(binaire privé) n'affiche jamais la flèche.
 
 ## Message d'accueil
 

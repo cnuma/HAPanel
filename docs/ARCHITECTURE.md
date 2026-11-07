@@ -58,15 +58,15 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `hapanel_public.yaml` | 25 | Modules de la maison : binaire public sans secret, fonctions et accès public (D039, D037 révisée) |
 | `packages/application.yaml` | 20 | Liste ordonnée des fichiers de fonctions, commune aux configurations |
 | `packages/acces_prive.yaml` | 15 | Wi-Fi, clé de l'API et OTA depuis le PC, lus dans `secrets.yaml` |
-| `packages/acces_public.yaml` | 47 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub |
+| `packages/acces_public.yaml` | 57 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub, mise à jour en attente signalée (D045) |
 | `packages/base.yaml` | 57 | Nœud, ESP32, journaux, écriture des réglages, identité de build |
 | `packages/hardware.yaml` | 116 | Carte ESP32-2432S024C : broches, bus, écran, tactile, sorties PWM, LDR (G2) |
 | `packages/hardware_2432s028.yaml` | 122 | Carte ESP32-2432S028 : mêmes `id`, rétroéclairage GPIO21, tactile résistif XPT2046 |
 | `hapanel_2432s028_banc.yaml` | 38 | Banc sur carte ESP32-2432S028 |
 | `hapanel_2432s028_public.yaml` | 24 | Binaire public de la carte ESP32-2432S028 (D041) |
-| `packages/lvgl.yaml` | 324 | Polices communes, À propos, barre d'état en haut (titre, disquette, Wi-Fi, HA, ☰, D036) et bouton Accueil en bas, suivi de la connexion |
+| `packages/lvgl.yaml` | 378 | Polices communes, À propos (version, SHA, connexion, adresse IP, mémoire), barre d'état en haut (titre, disquette, mise à jour, Wi-Fi, HA, ☰, D036, D045) et bouton Accueil en bas, suivi de la connexion |
 | `packages/liaison_ha.yaml` | 489 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
-| `packages/led_veille.yaml` | 286 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
+| `packages/led_veille.yaml` | 320 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
 | `packages/message_accueil.yaml` | 160 | Action `message_accueil`, message plein écran, entité « Message d'accueil » |
 | `packages/pages/accueil.yaml` | 764 | Température, chauffage, commandes, couleur de la LED |
 | `packages/pages/meteo.yaml` | 194 | Conditions et prévisions |
@@ -175,11 +175,13 @@ Les tâches périodiques donnent le rythme du module :
 
 | Période | Fichier | Tâche |
 |---|---|---|
-| 50 ms | `led_veille.yaml` | Respiration de la LED, arc-en-ciel du message d'accueil |
+| 50 ms | `led_veille.yaml` | Respiration de la LED, arc-en-ciel du message d'accueil, éclairs de mise à jour (D045) |
 | 500 ms | `led_veille.yaml` | Clignotement d'alerte |
+| 500 ms | `lvgl.yaml` | Clignotement de l'icône de mise à jour (D045) |
 | 1 s | `led_veille.yaml` | Retour à l'accueil, veille, réveil sans HA |
 | 1 s | `scenarios.yaml` | Délais de réponse et de message |
 | 1 s | `message_accueil.yaml` | Fermeture du message d'accueil après 3 min |
+| 1 s | `acces_public.yaml` | Mise à jour en attente (`maj_disponible`, binaire public seulement) |
 | 2 s | `lvgl.yaml` | Connexion à HA |
 | 10 s | `led_veille.yaml` | Obscurité et rétroéclairage |
 | 10 s | `lvgl.yaml` | Mémoire affichée dans À propos |
@@ -541,7 +543,7 @@ l'action, pas qu'elle a abouti (D024).
 ![Navigation](images/architecture/11_navigation.png)
 
 Les deux barres sont dans le `top_layer` de LVGL, donc communes à toutes les pages (D025,
-D036) : en haut la barre d'état (titre, disquette, Wi-Fi, point HA, bouton Menu ☰), en bas
+D036) : en haut la barre d'état (titre, disquette ou mise à jour, Wi-Fi, point HA, bouton Menu ☰), en bas
 le bouton Accueil, masqué avec sa barre sur l'accueil. Une page visible ou non reçoit ses
 mises à jour de la même façon : les widgets vivent en mémoire pour toute la durée
 d'exécution.

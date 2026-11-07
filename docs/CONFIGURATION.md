@@ -315,7 +315,9 @@ automatisation. La LED suit les réglages
 ## 7. Mettre à jour le module
 
 Rien à télécharger : quand une nouvelle version est publiée, Home Assistant la
-propose.
+propose. Le module le signale aussi (depuis la version 0.10.0) : une flèche violette
+clignote dans sa barre du haut et sa LED fait deux éclairs violets toutes les
+10 secondes, jusqu'à l'installation ([utilisation](UTILISATION.md#mise-à-jour)).
 
 1. **Paramètres** : en haut, la carte des mises à jour liste le module, sous son nom.
    Le module vérifie au démarrage, puis toutes les 6 heures.
