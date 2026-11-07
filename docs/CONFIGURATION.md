@@ -106,7 +106,7 @@ pour le même module exécuteraient chaque commande deux fois.
    | Consigne minimale / maximale | Laissez 15 et 25 °C, sauf besoin particulier |
    | Météo | Votre entité météo |
    | Calendriers | 1 à 4 calendriers ; le premier est le principal |
-   | Scénarios, LED et écran | Facultatif, sections repliées : sections 4 et 5 ci-dessous |
+   | Scénarios, LED et écran, Message d'accueil | Facultatif, sections repliées : sections 4, 5 et 6 ci-dessous |
 
 ![Formulaire de l'automatisation, partie haute, champ Panneau encadré](images/installation/17_ha_automatisation.png)
 
@@ -189,7 +189,9 @@ Quand quelqu'un arrive après une absence, les modules affichent un message pend
 3 minutes, LED en arc-en-ciel. La croix en haut à droite, ou un toucher ailleurs, le
 ferme.
 
-**Une seule automatisation pour toute la maison**, depuis un second blueprint.
+Il se règle dans la section repliée **Message d'accueil** du blueprint du module
+(section 3), **pour chaque module** qui doit l'afficher. Chaque module décide seul ;
+avec les mêmes réglages, tous les modules affichent le même message.
 
 ### Avant de commencer
 
@@ -225,37 +227,44 @@ Sans liste, le module affiche « Bonjour » ou « Bonsoir, bienvenue à la maiso
 **Écrire les messages.** Chaque tâche non cochée est un message. Dans sa description,
 des mots le réservent à une saison (printemps, été, automne, hiver) ou à un moment
 (matin, après-midi, soir, nuit) ; sans ces mots, il convient toujours. Un message est
-tiré au hasard parmi ceux qui conviennent. Cochez une tâche pour la mettre de côté.
+choisi parmi ceux qui conviennent, d'après l'instant de l'arrivée : le choix paraît
+fait au hasard, mais il est le même sur tous les modules. Le même message peut
+revenir deux fois de suite. Cochez une tâche pour la mettre de côté.
 Les textes longs sont coupés : visez 100 caractères au plus.
 
 **Messages uniques.** Dans la seconde liste, la première tâche non cochée passe avant
-tout le reste, puis le blueprint la coche : elle ne s'affiche qu'une fois.
+tout le reste, puis l'automatisation la coche : elle ne s'affiche qu'une fois.
+Avec plusieurs modules, un module occupé à ce moment (envoi de ses valeurs) peut lire
+la liste après qu'un autre l'a cochée : il affiche alors le message unique suivant, et
+le coche aussi. Mettre un seul message unique à la fois évite ce cas.
 
-### Importer le blueprint
+### Remplir la section du module
 
-**Paramètres › Automatisations et scènes › Blueprints › Importer un blueprint**, puis
-collez ce lien :
-
-```
-https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/message_accueil.yaml
-```
-
-Pour une mise à jour : menu **⋮** du blueprint, puis **Réimporter le blueprint**.
-
-### Créer l'automatisation
-
-Créez **une seule** automatisation depuis **HAPanel — message d'accueil**, pour toute
-la maison.
+Dans l'automatisation du module (section 3), ouvrez la section **Message d'accueil**,
+puis enregistrez. À refaire dans l'automatisation de chaque module qui doit afficher
+le message.
 
 | Champ | À choisir | Par défaut |
 |---|---|---|
-| Panneaux | Les modules qui affichent le message | |
-| Déclencheurs | Contacts de porte, lumières, interrupteurs : l'arrivée est leur passage à « on » | |
+| Déclencheurs | Contacts de porte, lumières, interrupteurs : l'arrivée est leur passage à « on ». Vide : pas de message sur ce module | Vide |
 | Période sans déclenchement | Aucun déclencheur ne doit avoir changé pendant ce temps | 30 min |
 | Accueil à partir de / jusqu'à | Plage horaire ; elle peut passer minuit | 6 h à 23 h |
 | Liste des messages | Liste de tâches de HA | Facultatif |
 | Liste des messages uniques | Liste de tâches de HA, prioritaire | Facultatif |
-| Météo | Entité `weather` : « Dehors : 12 °C, nuageux » sous le message | Facultatif |
+| Météo sous le message | « Dehors : 12 °C, nuageux », d'après le champ Météo du module | Activée |
+
+### Venir de l'ancien blueprint « HAPanel — message d'accueil »
+
+Jusqu'au 7 novembre 2026, le message avait son propre blueprint, une automatisation
+pour toute la maison. Il est retiré du dépôt (D042). Une seule fois :
+
+1. Notez les réglages de l'automatisation « HAPanel — message d'accueil »
+   (déclencheurs, période, plage, listes), puis **supprimez-la**.
+2. Réimportez le blueprint du module (section 7, « Réimporter le blueprint »).
+3. Dans l'automatisation de chaque module, remplissez la section **Message
+   d'accueil** avec ces réglages, puis enregistrez.
+4. **Paramètres › Automatisations et scènes › Blueprints** : menu **⋮** de
+   **HAPanel — message d'accueil**, **Supprimer le blueprint**.
 
 ### Comment le message se déclenche
 
@@ -266,7 +275,7 @@ porte : l'ouverture) et que :
 2. ce déclencheur était au repos depuis la période choisie (30 min par défaut) ;
 3. aucun autre déclencheur n'est à « on » ni n'a changé pendant cette période : la
    maison était inoccupée ;
-4. au moins un module est connecté, avec son entité « Message d'accueil » activée.
+4. le module est connecté, avec son entité « Message d'accueil » activée.
 
 Un passage par « indisponible » ne déclenche rien. Après un redémarrage de Home
 Assistant, l'accueil attend la période choisie.
@@ -285,18 +294,22 @@ déclenche plus jamais. Le blueprint
 
 ### Vérifier
 
-1. **Affichage :** menu **⋮** de l'automatisation, **Exécuter les actions**. Le
-   déclencheur et les conditions sont sautés : le message part aussitôt vers les
-   modules connectés.
+1. **Affichage :** **Outils de développement › Actions**, action
+   `esphome.<nom du module>_message_accueil` (par exemple
+   `esphome.hapanel_583c28_message_accueil`), champ `texte` rempli : le message
+   s'affiche aussitôt. « Exécuter les actions » de l'automatisation n'envoie pas le
+   message : sans déclencheur, elle envoie les valeurs du module.
 2. **Chaîne complète :** régler la période à 5 minutes, laisser les déclencheurs au
    repos 5 minutes, puis ouvrir la porte. Remettre ensuite la période voulue.
-3. **Si rien ne s'affiche :** menu **⋮** de l'automatisation, **Traces** : la trace
-   indique la condition qui a bloqué.
+3. **Si rien ne s'affiche :** menu **⋮** de l'automatisation du module, **Traces** :
+   choisir la trace de l'ouverture de la porte, qui indique la condition qui a
+   bloqué.
 
 ### Par module
 
 L'entité **Message d'accueil**, rubrique **Configuration** de la page de l'appareil,
-désactive l'accueil sur ce module (une chambre par exemple). La LED suit les réglages
+désactive l'accueil sur ce module (une chambre par exemple), sans toucher à son
+automatisation. La LED suit les réglages
 « LED » et « Intensité LED ».
 
 ## 7. Mettre à jour le module
@@ -343,9 +356,10 @@ Sans nouvelle valeur pendant 15 minutes, le module affiche la valeur comme péri
 | « Refusé par HA » | Entité indisponible ou supprimée | Vérifier l'entité ; voir aussi le journal de Home Assistant (`hapanel.blueprint`) |
 | « Pas de réponse de HA » | Automatisation absente ou action en échec | Consulter les traces de l'automatisation |
 | Réglage de la LED qui revient tout seul | Valeur imposée par le blueprint | Choisir « Ne pas imposer » dans la section LED, ou régler dans le blueprint |
-| Pas de message d'accueil | Période sans déclenchement non écoulée, hors plage horaire, entité « Message d'accueil » désactivée ou module déconnecté | Consulter les traces de l'automatisation du message d'accueil |
-| Réparation Z-Wave « Obsolescence : Window/door is open » sur le contact de porte | L'entité `…_window_door_is_open` est remplacée par une entité `binary_sensor` du même capteur | Dans l'automatisation qui l'utilise (message d'accueil compris), choisir la nouvelle entité ; désactiver l'ancienne ; redémarrer Home Assistant |
+| Pas de message d'accueil | Période sans déclenchement non écoulée, hors plage horaire, entité « Message d'accueil » désactivée ou module déconnecté | Consulter les traces de l'automatisation du module |
+| Réparation Z-Wave « Obsolescence : Window/door is open » sur le contact de porte | L'entité `…_window_door_is_open` est remplacée par une entité `binary_sensor` du même capteur | Dans l'automatisation qui l'utilise (section Message d'accueil de chaque module comprise), choisir la nouvelle entité ; désactiver l'ancienne ; redémarrer Home Assistant |
 | Écran trop sombre | « Intensité écran » trop basse | Monter « Intensité écran » (section 5). Toujours trop sombre la nuit : réglage du logiciel, à demander au développeur (`docs/codex/05_BUILD_AND_TEST.md`) |
+| Au démarrage de HA : « Automation failed to set up », `Unable to find …/message_accueil.yaml` | Automatisation « HAPanel — message d'accueil » restée dans HA : son blueprint, remplacé par la section Message d'accueil du module (D042), a été supprimé | Suivre la section 6, « Venir de l'ancien blueprint » |
 | Au démarrage de HA : « Automation failed to set up », `Unable to find cnuma/ecran_accueil.yaml` | Automatisation « HAPanel — écran d'accueil » restée dans HA : son blueprint, remplacé par `module.yaml` (D021), a été supprimé | Vérifier qu'une automatisation « HAPanel — module » existe pour le module, puis supprimer l'ancienne |
 | Le module n'apparaît pas parmi les appareils découverts | Module pas encore sur le Wi-Fi, ou découverte bloquée par le réseau | Vérifier le Wi-Fi ([INSTALLATION.md](INSTALLATION.md), étape 4), puis ajouter l'intégration ESPHome avec l'adresse IP du module (section 1) |
 | Home Assistant demande une clé de chiffrement | Module déjà ajouté à un autre Home Assistant, ou module de l'atelier compilé avec `secrets.yaml` | Ne rien saisir. Module public : le réinstaller ([INSTALLATION.md](INSTALLATION.md), étapes 1 à 4) pour l'effacer. Module de l'atelier : saisir sa clé `api_encryption_key` |

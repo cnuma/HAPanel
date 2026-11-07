@@ -1,5 +1,5 @@
-# Message d'accueil (D028) : texte choisi par le blueprint
-# blueprints/automation/hapanel/message_accueil.yaml quand quelqu'un arrive.
+# Message d'accueil (D028) : texte choisi par la section Message d'accueil du
+# blueprint blueprints/automation/hapanel/module.yaml (D042) quand quelqu'un arrive.
 # Plein ecran par-dessus les deux barres, ferme par un toucher ou apres
 # 3 min. LED en arc-en-ciel pendant l'affichage (packages/led_veille.yaml).
 substitutions:
