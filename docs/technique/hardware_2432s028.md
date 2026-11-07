@@ -3,7 +3,7 @@
 ## Rôle
 
 La description de la carte ESP32-2432S028 : écran 2,8" de 240 × 320, tactile
-**résistif**, une seule prise micro-USB. Même rôle que [hardware.md](hardware.md) pour
+**résistif**, prises USB-C et micro-USB (carte du banc). Même rôle que [hardware.md](hardware.md) pour
 l'ESP32-2432S024C : seul fichier qui nomme une broche ou un bus pour cette carte (G2).
 
 Il déclare **les mêmes `id`** que `hardware.yaml`. Le reste du panneau (pages, LVGL,
@@ -28,7 +28,8 @@ d'ESPHome. Il n'est pas encore confirmé sur la carte.
 | Rétroéclairage `pin_retroeclairage` | GPIO27 | **GPIO21** : avec le binaire de la S024C, l'écran de la S028 reste noir |
 | Tactile | Capacitif CST820, bus I²C | Résistif XPT2046, second bus SPI `bus_spi_tactile` |
 | Calibrage du tactile | Aucun | **Obligatoire** : valeurs brutes de 0 à 4095 converties en pixels |
-| Écran, LED, LDR | ILI9341, GPIO4/16/17, GPIO34 | Identiques |
+| Contrôleur de l'écran | ILI9341 | ST7789V (variante à deux prises USB) |
+| Écran (bus), LED, LDR | GPIO14/13/12/15/2, GPIO4/16/17, GPIO34 | Identiques |
 
 ## Bloc par bloc
 
@@ -36,7 +37,7 @@ d'ESPHome. Il n'est pas encore confirmé sur la carte.
 
 | Substitution | Valeur | Rôle |
 |---|---|---|
-| `display_model` | `ILI9341` | Contrôleur de l'écran. Variantes à deux prises : `ESP32-2432S028-7789` (ST7789V) ou `ESP32-2432S028-9342` (ILI9342), modèles d'ESPHome. |
+| `display_model` | `ESP32-2432S028-7789` | Modèle d'ESPHome pour la variante à deux prises USB, contrôleur ST7789V. Une seule prise micro-USB : `ILI9341`. Écran brouillé : `ESP32-2432S028-9342` (ILI9342, paysage natif, mise en page à reprendre). |
 | `pin_spi_clk`, `pin_spi_mosi`, `pin_spi_miso` | `GPIO14`, `GPIO13`, `GPIO12` | Bus SPI de l'écran, comme la S024C. |
 | `pin_ecran_cs`, `pin_ecran_dc` | `GPIO15`, `GPIO2` | Sélection de l'écran, commande ou donnée. |
 | `pin_retroeclairage` | `GPIO21` | Rétroéclairage, variable. |
@@ -80,8 +81,9 @@ inversé ou si les axes sont croisés, ajouter `transform` (`mirror_x`, `mirror_
 
 **Pièges :**
 - Même piège des bords de la dalle que la S024C (D036) : à vérifier sur cette carte.
-- Les variantes à deux prises USB ont un autre contrôleur : un écran blanc ou brouillé
-  avec le rétroéclairage allumé fait penser à `display_model`.
+- Les variantes de la S028 n'ont pas le même contrôleur : un écran blanc ou brouillé
+  avec le rétroéclairage allumé fait penser à `display_model`. Couleurs en négatif :
+  ajouter `invert_colors: true` sous `ecran`.
 
 **Contrôle après modification :**
 `.\tools\build.ps1 compile -Config hapanel_2432s028_banc.yaml`, puis au banc : affichage

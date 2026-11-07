@@ -261,7 +261,8 @@ module de banc. Procédure : `docs/DEPLOIEMENT_PUBLIC.md`.
 
 Configuration `hapanel_2432s028_banc.yaml` (binaire privé, clé de `secrets.yaml`),
 premier flash par USB. Fichier matériel `packages/hardware_2432s028.yaml`, brochage repris
-d'AquaLook. Préciser au rapport : une seule prise micro-USB, ou micro-USB et USB-C.
+d'AquaLook. Carte du banc à deux prises (USB-C et micro-USB) : modèle d'écran
+`ESP32-2432S028-7789`.
 
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|

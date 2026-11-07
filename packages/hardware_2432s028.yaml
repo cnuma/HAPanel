@@ -1,13 +1,14 @@
-# Materiel : ESP32-2432S028, ecran 2,8" resistif, une seule prise micro-USB.
+# Materiel : ESP32-2432S028, ecran 2,8" resistif, prises USB-C et micro-USB.
 # Seul fichier qui declare broches et bus pour cette carte (invariant G2) ;
 # memes id que hardware.yaml (ESP32-2432S024C), le reste du panneau ne change pas.
 #
 # Brochage repris d'AquaLook (meme carte, TFT_eSPI) et du modele ESP32-2432S028
 # d'ESPHome. A confirmer au banc : ecran, couleurs, tactile, LED, LDR.
-# Variantes a deux prises (USB-C et micro-USB) : controleur ST7789V ou
-# ILI9342, modeles ESPHome ESP32-2432S028-7789 et -9342.
+# Carte du banc a deux prises (7 novembre 2026) : controleur ST7789V, modele
+# ESPHome dedie. Une seule prise micro-USB : ILI9341. Ecran brouille : essayer
+# ESP32-2432S028-9342 (ILI9342, paysage natif, mise en page a reprendre).
 substitutions:
-  display_model: ILI9341
+  display_model: ESP32-2432S028-7789
   pin_spi_clk: GPIO14
   pin_spi_mosi: GPIO13
   pin_spi_miso: GPIO12
