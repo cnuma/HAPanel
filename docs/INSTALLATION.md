@@ -34,8 +34,7 @@ commande, rien à compiler, aucun mot de passe à inventer.
    votre dossier Téléchargements. S'il y en a déjà un, d'une installation précédente,
    supprimez l'ancien d'abord : le nouveau s'appellerait par exemple
    `hapanel-2432s024c-factory (1).bin`, et l'on risquerait de choisir l'ancien à
-   l'étape 3. Jusqu'à la version 0.8.1, il n'y avait qu'une carte et un seul fichier,
-   `hapanel-factory.bin`, celui des captures ci-dessous.
+   l'étape 3.
 
 ![Page de la version, fichier hapanel-factory.bin encadré](images/installation/01_release.png)
 
