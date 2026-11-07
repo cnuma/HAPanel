@@ -9,6 +9,16 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 - Lancer ESPHome depuis PowerShell, jamais depuis Git Bash : ESP-IDF refuse MSys/Mingw.
 - Activer d'abord l'environnement Python (`.\.venv\Scripts\Activate.ps1`), sinon
   `build.ps1` répond « esphome n'est pas reconnu ».
+- Deux cartes (S024C, S028) : avant tout téléversement, demander **quelle carte est sur
+  quel port** et choisir le YAML de cette carte. Le 7 novembre 2026, un binaire S028
+  écrit sur la S024C de COM6 a laissé l'écran noir (autre pilote, autres broches ;
+  GPIO21, rétroéclairage sur S028, est l'interruption du tactile sur S024C) ; reflash
+  du banc par USB, tactile retrouvé. Le journal le dit : `cst816` sur S024C, `xpt2046`
+  sur S028.
+- Version de test d'un binaire public : la prendre **plus ancienne** que la Release
+  (`0.9.0-dev.99` sous `0.9.0`), sinon HA la juge à jour et refuse d'installer la
+  Release, alors que le module signale une mise à jour dès que les versions diffèrent
+  (D045).
 - `build.ps1 upload` ne compile pas : enchaîner `compile` puis `upload`, ou utiliser
   `run`, avec `-Config hapanel_banc.yaml` pour le banc.
 - `build.ps1 logs` exige un YAML présent sur la branche courante et affiche le SHA du

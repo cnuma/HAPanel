@@ -76,6 +76,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 7 novembre 2026 | `v0.9.0-dev.1` (`3ad92cc`, Release) | J16 (fichiers) | Vérifié par l'agent : six fichiers, Release marquée Latest, `manifest.json` en `0.9.0-dev.1` vers `hapanel-2432s024c-ota.bin` | Reste J16 (mise à jour de la cuisine depuis HA) et K12 à K15 ; puis `v0.9.0` |
 | 7 novembre 2026 | `v0.9.0-dev.1` (Release), module de la cuisine | J16 | **J16 OK** (propriétaire) : mise à jour depuis HA | Publication de `v0.9.0` (accord du propriétaire) ; K12 à K15 (S028) restent à faire, K14 et K15 sur la mise à jour vers `v0.9.0` |
 | 7 novembre 2026 | `v0.9.0-dev.1` puis `v0.9.0` (Release), S028 | K12 à K15 | **OK** (propriétaire) : installation par web.esphome.io, adoption dans HA, mise à jour vers `v0.9.0` depuis HA, réglages conservés | **Partie K terminée** ; binaire public S028 validé |
+| 7 novembre 2026 | Public S028 `0.9.0-dev.99` (`66e0b4e`), écrit **par erreur** sur la S024C du banc (COM6) | L2 (partiel) | Écran noir (binaire d'une autre carte) ; LED : éclairs violets réguliers, donc mise à jour détectée et D045 actif côté LED | Erreur de l'agent (carte non demandée), piège ajouté au 09. Banc reflashé par USB en `hapanel_banc.yaml` `0.9.0 (66e0b4e)` : tactile CST820, Wi-Fi et HA retrouvés. L1 à L8 à faire sur la S028, L9 et M sur ce banc |
 
 ## Préparation (une fois, avant A et B)
 
