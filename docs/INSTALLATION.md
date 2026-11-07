@@ -5,9 +5,6 @@ du module neuf, sorti de sa boîte, jusqu'au module relié à votre Wi-Fi ; la s
 est dans [CONFIGURATION.md](CONFIGURATION.md). Comptez 15 minutes. Aucune ligne de
 commande, rien à compiler, aucun mot de passe à inventer.
 
-*Brouillon : reste à vérifier la fermeture du réseau du module après 15 minutes
-(cahier J10).*
-
 ## Ce qu'il vous faut
 
 - **Le module** HAPanel (carte ESP32-2432S024C).
