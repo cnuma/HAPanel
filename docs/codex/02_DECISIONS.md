@@ -835,7 +835,7 @@ qui cite la précédente.
 - Conséquences : nouvelle surface au `08` avant fusion : le module ne vérifie que
   l'intégrité (MD5), pas l'auteur ; quiconque peut écrire à l'emplacement du
   manifeste, ou se placer entre le module et le serveur en HTTP, installe son
-  firmware (à évaluer avec la sécurité, rang 2 du TODO). Nouvelle partie du cahier
+  firmware (à évaluer avec la sécurité, rang 1 du TODO). Nouvelle partie du cahier
   de tests ; procédure de publication écrite dans le dépôt (G11).
 - Compatibilité avec D038 : rien de ce qui est conçu ici ne doit empêcher un binaire
   public sans secret (Wi-Fi saisi à l'installation, mêmes entités de mise à jour).
@@ -1001,12 +1001,12 @@ qui cite la précédente.
   fichiers ; `hapanel-factory.bin` et `hapanel-ota.bin` deviennent
   `hapanel-2432s024c-factory.bin` et `hapanel-2432s024c-ota.bin` (guide
   d'installation : captures à refaire). Interface encore calée sur 240 × 320 et
-  glissière peu adaptée au tactile résistif : TODO rang 5.
+  glissière peu adaptée au tactile résistif : TODO rang 4.
 
 ## D042 — Message d'accueil réglé dans le blueprint du module
 
 - Date : 7 novembre 2026 — Statut : choisi par le propriétaire (option A, HAP-R001) ;
-  à valider sur le module et dans HA (cahier B10 à B19). Remplace, dans D028, le
+  validé dans HA sur deux modules le 7 novembre 2026 (cahier B10 à B19). Remplace, dans D028, le
   blueprint de la maison `message_accueil.yaml`.
 - Contexte : deux blueprints à configurer ; à chaque nouveau module, le message
   d'accueil est oublié puis cherché (remarque du propriétaire du 7 novembre 2026,
