@@ -12,6 +12,7 @@ ESP32-2432S028 à deux prises USB (écran 2,8", tactile résistif), un binaire p
 - Point d'entrée de la documentation : `docs/START_HERE.md`
 - Règles de développement (humains et agents) : `AGENTS.md`
 - Version : fichier `VERSION`
+- Licence : MIT, fichier [`LICENSE`](LICENSE) (D043)
 
 Projet en phase de démarrage : les écrans sont définis pas à pas
 (`docs/TODO.md`).

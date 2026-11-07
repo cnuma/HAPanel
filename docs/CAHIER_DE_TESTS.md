@@ -72,6 +72,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 7 novembre 2026 | `174aa99` (S028, USB) | K4 à K11 | Tout OK ; K5 : glissière Éteint / Chauffage capricieuse au doigt sur dalle résistive, boutons fiables. Mémoire libre 153 Ko, plus grand bloc 96 Ko. Remarque du propriétaire : avoir à configurer le blueprint du message d'accueil en plus de celui du module n'est pas pratique (TODO rang 1) | **Partie K validée**, fusion dans `main` (accord du propriétaire) ; glissière : TODO rang 5 |
 | 7 novembre 2026 | `745126b` (blueprint, branche) | B10 à B19 | Tout OK : migration, module sans section, même texte sur deux modules, message unique, entité désactivée, météo, plage horaire ; B3 refait (B13) | **Fusion de `feature/accueil-blueprint-module` dans `main`**, accord du propriétaire |
 | 7 novembre 2026 | `v0.9.0-dev.1` (`3ad92cc`, Release) | J16 (fichiers) | Vérifié par l'agent : six fichiers, Release marquée Latest, `manifest.json` en `0.9.0-dev.1` vers `hapanel-2432s024c-ota.bin` | Reste J16 (mise à jour de la cuisine depuis HA) et K12 à K15 ; puis `v0.9.0` |
+| 7 novembre 2026 | `v0.9.0-dev.1` (Release), module de la cuisine | J16 | **J16 OK** (propriétaire) : mise à jour depuis HA | Publication de `v0.9.0` (accord du propriétaire) ; K12 à K15 (S028) restent à faire, K14 et K15 sur la mise à jour vers `v0.9.0` |
 
 ## Préparation (une fois, avant A et B)
 
@@ -270,7 +271,7 @@ module de banc. Procédure : `docs/DEPLOIEMENT_PUBLIC.md`.
 | J12 | Après J6 : réimporter le blueprint depuis la branche (`CONFIGURATION.md` § 2), laisser « Nom de la pièce » vide, enregistrer l'automatisation | L'accueil affiche la zone du thermomètre (« Cuisine ») au lieu de « Séjour » | `feature/poc-deploiement` | OK 5 nov. |
 | J13 | Saisir « Chambre des parents » dans « Nom de la pièce » | « Chambre des pa… » ou le nom coupé proprement, sans chevaucher « indisponible » à droite | `feature/poc-deploiement` | OK 5 nov. |
 | J14 | Module de production : reflasher le binaire public par USB (`hapanel-factory.bin`), Wi-Fi par Improv, puis HA | Le module retrouve HA ; si HA demande une clé ou crée un nouvel appareil, le noter et réassocier l'automatisation du module | `docs/guide-installation` (fusionnée) | OK 7 nov. (connexion non chiffrée proposée par HA, refusée) |
-| J16 | Release `v0.9.0-dev.1` (D041) : vérifier ses fichiers, puis mettre à jour le module de la cuisine depuis HA (§ 4) | Six fichiers : `hapanel-2432s024c-factory.bin`, `hapanel-2432s024c-ota.bin`, `manifest.json`, et les trois de la S028 ; la cuisine voit la mise à jour, l'installe et garde Wi-Fi, clé et réglages | — | |
+| J16 | Release `v0.9.0-dev.1` (D041) : vérifier ses fichiers, puis mettre à jour le module de la cuisine depuis HA (§ 4) | Six fichiers : `hapanel-2432s024c-factory.bin`, `hapanel-2432s024c-ota.bin`, `manifest.json`, et les trois de la S028 ; la cuisine voit la mise à jour, l'installe et garde Wi-Fi, clé et réglages | — | OK 7 nov. |
 
 ## K — Carte ESP32-2432S028 (écran 2,8", tactile résistif)
 
@@ -294,5 +295,5 @@ d'AquaLook. Carte du banc à deux prises (USB-C et micro-USB) : modèle d'écran
 | K11 | Après K1 à K10, refaire G ou un test d'accueil sur la S024C du banc avec le binaire de cette branche | Aucun changement sur la S024C (la configuration fusionnée est identique, à confirmer sur le module) | `feature/carte-2432s028` (fusionnée) | OK 7 nov. |
 | K12 | Binaire public S028 (D041), Release `v0.9.0-dev.1` : installer `hapanel-2432s028-factory.bin` par web.esphome.io, Wi-Fi par Improv (`DEPLOIEMENT_PUBLIC.md` § 2) | Écran allumé, accueil lisible, tactile juste (mêmes réglages que le banc) | — | |
 | K13 | Adoption dans HA (§ 3) | Aucune clé demandée ; entités « Firmware » et « Version » présentes | — | |
-| K14 | Entité « Firmware » après une Release suivante (§ 4) | Mise à jour proposée depuis `manifest-2432s028.json` : le résumé cite la carte `2432s028` ; installée sans erreur, écran et tactile toujours justes | — | |
-| K15 | Après K14 : Wi-Fi, clé et réglages du module (LED, intensité) | Conservés sans rien ressaisir | — | |
+| K14 | Entité « Firmware » après une Release suivante (§ 4) | Mise à jour proposée depuis `manifest-2432s028.json` : le résumé cite la carte `2432s028` ; installée sans erreur, écran et tactile toujours justes | — | À faire sur la mise à jour vers `v0.9.0` |
+| K15 | Après K14 : Wi-Fi, clé et réglages du module (LED, intensité) | Conservés sans rien ressaisir | — | À faire sur la mise à jour vers `v0.9.0` |

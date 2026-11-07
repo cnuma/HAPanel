@@ -885,7 +885,7 @@ qui cite la précédente.
   - configuration de la maison entièrement dans le blueprint (déjà le cas, D012).
 - À cadrer avec le propriétaire : licence (le dépôt est déjà public, constaté le
   4 novembre 2026, mais sans licence : personne n'a légalement le droit de le
-  réutiliser) ;
+  réutiliser ; tranché le 7 novembre 2026 : MIT, D043) ;
   relecture de la documentation pour en retirer ce qui est personnel (pièces,
   nœuds, maison) ; page d'installation ; choix entre « adoption obligatoire » et
   binaire public non chiffré (API et OTA ouvertes sur le réseau local, à refuser
@@ -1036,3 +1036,20 @@ qui cite la précédente.
   coche alors le message unique suivant, ou un message ordinaire. Migration une
   fois : supprimer l'automatisation et le blueprint « HAPanel — message d'accueil »
   (`CONFIGURATION.md` § 6). Le firmware ne change pas.
+
+## D043 — Licence MIT
+
+- Date : 7 novembre 2026 — Statut : accepté par le propriétaire (HAP-R013).
+- Contexte : dépôt public depuis le 4 novembre 2026, sans licence : personne n'avait
+  le droit de réutiliser le projet (D038).
+- Décision : licence MIT pour tout le dépôt (configuration, blueprints, outils,
+  documentation et captures), fichier `LICENSE` à la racine ; titulaire : `cnuma`,
+  pseudonyme GitHub, sans nom personnel (D038, relecture du personnel).
+- Options écartées : Apache 2.0 (même liberté, texte plus long, clause de brevets sans
+  objet ici) ; GPL v3 (empêcherait une reprise fermée, mais freine l'adoption, que
+  D038 recherche).
+- Justification : licence la plus répandue autour de Home Assistant et d'ESPHome ;
+  ESPHome (partie firmware) et LVGL sont eux-mêmes sous MIT.
+- Conséquences : chacun peut copier, modifier et vendre le projet, y compris fermé, en
+  gardant la mention de copyright. Les composants compilés gardent leur licence
+  (ESPHome, LVGL : MIT ; ESP-IDF : Apache 2.0).
