@@ -110,8 +110,8 @@ Un bouton marqué **Indisponible** ne peut pas être touché.
 
 ![Page À propos](images/apropos.png)
 
-Version du logiciel, connexion à Home Assistant et mémoire. Ces informations sont
-utiles en cas de dépannage.
+Version du logiciel, connexion à Home Assistant, adresse IP du panneau sur le réseau
+(« aucune » sans Wi-Fi) et mémoire. Ces informations sont utiles en cas de dépannage.
 
 ## Réglages
 

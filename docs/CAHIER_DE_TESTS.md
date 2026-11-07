@@ -69,6 +69,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | I | Barre d'état commune et navigation (D036, D025 révisée) | `feature/barre-etat` (fusionnée) |
 | J | Déploiement public (D039) ; guide d'installation (J9, J10, J14) | `feature/poc-deploiement` (fusionnée) ; J9, J10, J14 : `docs/guide-installation` (fusionnée) |
 | L | Mise à jour signalée par la barre d'état et la LED (D045) | `feature/maj-icone` (sauf L11) |
+| M | Adresse IP sur la page À propos | `feature/maj-icone` |
 | 7 novembre 2026 | `9b78597` (S028, USB) | K1, K2, K3 | Écran et couleurs OK (contrôleur ST7789V, sans inversion) ; tactile : x brut décroît de gauche à droite (3605 à 449), y de 419 à 3662. Premier téléversement impossible avec le premier câble USB-C (aucune donnée reçue) ; OK avec un autre câble | Calibrage et `mirror_x` reportés ; K4 sur le binaire suivant |
 | 7 novembre 2026 | `174aa99` (S028, USB) | K4 à K11 | Tout OK ; K5 : glissière Éteint / Chauffage capricieuse au doigt sur dalle résistive, boutons fiables. Mémoire libre 153 Ko, plus grand bloc 96 Ko. Remarque du propriétaire : avoir à configurer le blueprint du message d'accueil en plus de celui du module n'est pas pratique (TODO rang 1) | **Partie K validée**, fusion dans `main` (accord du propriétaire) ; glissière : TODO rang 5 |
 | 7 novembre 2026 | `745126b` (blueprint, branche) | B10 à B19 | Tout OK : migration, module sans section, même texte sur deux modules, message unique, entité désactivée, météo, plage horaire ; B3 refait (B13) | **Fusion de `feature/accueil-blueprint-module` dans `main`**, accord du propriétaire |
@@ -319,3 +320,13 @@ HA y propose une mise à jour (entité « Firmware »). L9 se fait sur le binair
 | L9 | Binaire privé du banc (`hapanel_banc.yaml`) : 2 min sur l'accueil, puis déplacer un curseur de Réglages | Jamais de flèche ni d'éclair violet ; disquette comme en H16 | `feature/maj-icone` | |
 | L10 | Page À propos pendant L1 (le binaire public n'a pas les entités de mémoire du banc) | Mémoire libre et plus grand bloc notés (G6), comparables à K10 | `feature/maj-icone` | |
 | L11 | Module public à jour ; publier une Release suivante, puis redémarrer le module (ou attendre 6 h) | La flèche et les éclairs apparaissent sans autre action | — | |
+
+## M — Adresse IP sur la page À propos
+
+Demande du propriétaire du 7 novembre 2026. Tout binaire (public ou privé).
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| M1 | Module relié au Wi-Fi : ouvrir À propos | Ligne « Adresse IP : … » sous la connexion à HA, avec l'adresse du module (la même que dans la box ou dans HA) ; mémoire en dessous, sur deux lignes, sans chevauchement ni débordement sous la barre du bas | `feature/maj-icone` | |
+| M2 | Redémarrer le module, ouvrir aussitôt À propos | « Adresse IP : aucune », puis l'adresse dès que le Wi-Fi est rejoint | `feature/maj-icone` | |
+| M3 | Dans HA, liste des entités du module | Aucune nouvelle entité « Adresse IP » (capteur interne) | `feature/maj-icone` | |

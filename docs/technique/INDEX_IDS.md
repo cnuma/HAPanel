@@ -22,6 +22,7 @@ Relancer le script après toute modification du YAML.
 | `accueil_rafraichir` | script | packages/pages/accueil.yaml | packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml |
 | `accueil_regler_consigne` | script | packages/pages/accueil.yaml | — |
 | `accueil_wifi` | script | packages/pages/accueil.yaml | packages/lvgl.yaml |
+| `apropos_ip` | text_sensor (ip_address) | packages/lvgl.yaml | — |
 | `banc_memoire_libre` | sensor (free) | hapanel_banc.yaml | hapanel_2432s028_banc.yaml |
 | `banc_memoire_libre` | sensor (free) | hapanel_2432s028_banc.yaml | hapanel_banc.yaml |
 | `banc_plus_grand_bloc` | sensor (block) | hapanel_banc.yaml | hapanel_2432s028_banc.yaml |
@@ -81,6 +82,7 @@ Relancer le script après toute modification du YAML.
 | `lbl_acc_temperature` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_acc_temperature_etat` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_apropos_connexion` | widget label | packages/lvgl.yaml | — |
+| `lbl_apropos_ip` | widget label | packages/lvgl.yaml | — |
 | `lbl_apropos_memoire` | widget label | packages/lvgl.yaml | — |
 | `lbl_apropos_sha` | widget label | packages/lvgl.yaml | — |
 | `lbl_apropos_version` | widget label | packages/lvgl.yaml | — |

@@ -27,6 +27,20 @@ font:
     bpp: 4
     glyphs: ["\U000F02DC", "\U000F09DE", "\U000F0717", "\U000F032A", "\U000F04B9", "\U000F14DE", "\U000F05AA", "\U000F0319", "\U000F0595", "\U000F00F0", "\U000F0D19", "\U000F035C", "\U000F02FD", "\U000F0156", "\U000F0493", "\U000F033E", "\U000F0193", "\U000F005F"]
 
+# Adresse IP pour la page A propos, publiee par ESPHome a chaque changement
+# (connexion, perte du Wi-Fi). Interne : aucune entite de plus dans HA (G10).
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      id: apropos_ip
+      internal: true
+      on_value:
+        - lvgl.label.update:
+            id: lbl_apropos_ip
+            text: !lambda |-
+              if (x.empty() || x == "0.0.0.0") return std::string("Adresse IP : aucune");
+              return "Adresse IP : " + x;
+
 globals:
   # Mise a jour du firmware en attente (D045) : ecrite par acces_public.yaml
   # (entite maj_firmware) ; toujours fausse dans le binaire prive, qui n'a pas
@@ -76,11 +90,19 @@ lvgl:
             y: 128
             text_color: 0xF44336
             text: "Home Assistant : non connecté"
+        # Adresse IP du module (demande du proprietaire, 7 novembre 2026) : trop
+        # d'adresses en service pour s'en souvenir. Capteur apropos_ip.
+        - label:
+            id: lbl_apropos_ip
+            align: TOP_LEFT
+            x: 12
+            y: 156
+            text: "Adresse IP : aucune"
         - label:
             id: lbl_apropos_memoire
             align: TOP_LEFT
             x: 12
-            y: 168
+            y: 196
             long_mode: WRAP
             width: 216
             text: "Mémoire : mesure en cours"
