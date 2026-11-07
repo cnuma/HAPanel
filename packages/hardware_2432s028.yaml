@@ -110,10 +110,13 @@ touchscreen:
     # Si aucun toucher n'arrive, retirer cette ligne (meme cas que D009).
     interrupt_pin: ${pin_tactile_irq}
     update_interval: 20ms
-    # Valeurs brutes courantes pour cette dalle, a remplacer par celles
-    # relevees au banc (journal « brut » de hapanel_2432s028_banc.yaml).
+    # Releve au banc le 7 novembre 2026 (cahier K3), 4 coins et centre : x brut
+    # de 449 a 3605, y brut de 419 a 3662, elargis d'environ 10 pixels (appuis
+    # juste a l'interieur des bords). x brut decroit de gauche a droite.
     calibration:
-      x_min: 200
-      x_max: 3900
-      y_min: 200
-      y_max: 3900
+      x_min: 300
+      x_max: 3750
+      y_min: 310
+      y_max: 3770
+    transform:
+      mirror_x: true

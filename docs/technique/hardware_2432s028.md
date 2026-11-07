@@ -12,7 +12,8 @@ l'un **ou** l'autre fichier, jamais les deux : leurs `id` se heurteraient.
 
 **État : en essai au banc** (branche `feature/carte-2432s028`, cahier K). Le brochage
 vient d'AquaLook, qui utilise cette carte avec TFT_eSPI, et du modèle `ESP32-2432S028`
-d'ESPHome. Il n'est pas encore confirmé sur la carte.
+d'ESPHome. Confirmé le 7 novembre 2026 : écran, couleurs et rétroéclairage (K1, K2),
+tactile et sens des axes (K3) ; le reste est à confirmer.
 
 ## Dépendances
 
@@ -69,7 +70,8 @@ la broche du rétroéclairage change. Voir [hardware.md](hardware.md) pour le d�
 | | `display` | `ecran` | Coordonnées rapportées à l'écran. |
 | | `interrupt_pin` | `${pin_tactile_irq}` | Lecture seulement quand la dalle est appuyée. Si aucun toucher n'arrive, retirer cette ligne (même cas que D009 sur la S024C). |
 | | `update_interval` | `20ms` | Même cadence que la S024C. |
-| | `calibration` | 200 à 3900 sur les deux axes | Valeurs provisoires, à remplacer par celles relevées au banc. |
+| | `calibration` | x de 300 à 3750, y de 310 à 3770 | Relevé au banc le 7 novembre 2026 (cahier K3) : valeurs brutes des quatre coins et du centre, élargies d'environ 10 pixels, les appuis étant juste à l'intérieur des bords. |
+| | `transform` | `mirror_x: true` | Sur cette dalle, la valeur brute de x **décroît** de gauche à droite (3605 en haut à gauche, 449 en haut à droite). |
 
 **Calibrer :** flasher `hapanel_2432s028_banc.yaml`, toucher les quatre coins, lire
 dans les journaux les lignes `toucher … brut x=… y=…`. La plus petite et la plus grande

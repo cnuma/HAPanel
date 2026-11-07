@@ -68,6 +68,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | H | Page Réglages (D031), menu (D025 révisée), tactile (D009 révisée) ; intensité écran au démarrage (H20) | `feature/reglages-ecran` (fusionnée) ; H20 : `fix/intensite-ecran-demarrage` (fusionnée) |
 | I | Barre d'état commune et navigation (D036, D025 révisée) | `feature/barre-etat` (fusionnée) |
 | J | Déploiement public (D039) ; guide d'installation (J9, J10, J14) | `feature/poc-deploiement` (fusionnée) ; J9, J10, J14 : `docs/guide-installation` (fusionnée) |
+| 7 novembre 2026 | `9b78597` (S028, USB) | K1, K2, K3 | Écran et couleurs OK (contrôleur ST7789V, sans inversion) ; tactile : x brut décroît de gauche à droite (3605 à 449), y de 419 à 3662. Premier téléversement impossible avec le premier câble USB-C (aucune donnée reçue) ; OK avec un autre câble | Calibrage et `mirror_x` reportés ; K4 sur le binaire suivant |
 
 ## Préparation (une fois, avant A et B)
 
@@ -266,9 +267,9 @@ d'AquaLook. Carte du banc à deux prises (USB-C et micro-USB) : modèle d'écran
 
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
-| K1 | Flasher par USB, alimentation sur bloc secteur | Écran allumé, page d'accueil lisible, barre d'état en haut | `feature/carte-2432s028` | |
-| K2 | Regarder les couleurs : barre d'état, icônes, température extérieure | Mêmes couleurs que sur la S024C (pas de négatif, pas de rouge et bleu échangés) | `feature/carte-2432s028` | |
-| K3 | Toucher les quatre coins de l'écran, puis le centre ; envoyer les lignes `toucher … brut` des journaux | Une ligne par toucher ; valeurs brutes relevées pour le calibrage | `feature/carte-2432s028` | |
+| K1 | Flasher par USB, alimentation sur bloc secteur | Écran allumé, page d'accueil lisible, barre d'état en haut | `feature/carte-2432s028` | OK 7 nov. |
+| K2 | Regarder les couleurs : barre d'état, icônes, température extérieure | Mêmes couleurs que sur la S024C (pas de négatif, pas de rouge et bleu échangés) | `feature/carte-2432s028` | OK 7 nov. |
+| K3 | Toucher les quatre coins de l'écran, puis le centre ; envoyer les lignes `toucher … brut` des journaux | Une ligne par toucher ; valeurs brutes relevées pour le calibrage | `feature/carte-2432s028` | OK 7 nov. (x inversé, calibrage reporté) |
 | K4 | Après calibrage et nouveau flash : ☰, puis chaque page du Menu, puis le bouton Accueil | Chaque bouton répond du premier coup, à l'endroit touché | `feature/carte-2432s028` | |
 | K5 | Accueil : glissière Éteint / Chauffage et consigne ± (HA connecté) | Même comportement que sur la S024C | `feature/carte-2432s028` | |
 | K6 | Laisser le module sans toucher 1 min, puis toucher l'écran | Écran éteint puis rallumé au toucher, retour à l'accueil | `feature/carte-2432s028` | |
