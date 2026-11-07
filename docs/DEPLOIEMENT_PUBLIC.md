@@ -88,7 +88,9 @@ le § 2 ; le Wi-Fi est à ressaisir. Même démarche dans HA qu'au § 5.
 ## 4. Mettre à jour un module
 
 1. Une fois la nouvelle Release publiée (§ 1), l'entité **Firmware** du module
-   passe à « Mise à jour disponible ». Le module vérifie environ 20 s après son
+   passe à « Mise à jour disponible » ; depuis 0.10.0, le module le montre aussi : flèche
+   violette qui clignote dans la barre du haut, deux éclairs violets de la LED toutes les
+   10 s (D045, [UTILISATION.md](UTILISATION.md)). Le module vérifie environ 20 s après son
    démarrage, puis toutes les 6 h. Pour forcer, redémarrer le module ; l'action
    « Mettre à jour l'entité » de HA ne déclenche pas la vérification (constaté le
    5 nov.).

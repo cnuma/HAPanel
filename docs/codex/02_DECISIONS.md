@@ -1057,7 +1057,8 @@ qui cite la précédente.
 ## D045 — Mise à jour signalée par la barre d'état et la LED
 
 - Date : 7 novembre 2026 — Statut : choisi par le propriétaire (HAP-R001), implémenté
-  sur `feature/maj-icone`, **non validé sur le module** (cahier L). Premier point du
+  sur `feature/maj-icone`, validé sur la S028 le 7 novembre 2026 (cahier L1 à L10), en
+  0.10.0. Premier point du
   TODO rang 2 (mise à jour depuis l'écran) ; les points 2 à 4 restent à faire.
 - Contexte : une Release publiée n'est visible que dans HA (entité « Firmware ») ; le
   propriétaire veut la voir sur le module, comme dans AquaLook (demande du 5 novembre
