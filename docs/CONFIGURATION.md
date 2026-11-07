@@ -304,16 +304,17 @@ désactive l'accueil sur ce module (une chambre par exemple). La LED suit les r�
 Rien à télécharger : quand une nouvelle version est publiée, Home Assistant la
 propose.
 
-1. **Paramètres** : en haut, une ligne « Mise à jour disponible » apparaît pour le
-   **Firmware** du module. Le module vérifie au démarrage, puis toutes les 6 heures.
+1. **Paramètres** : en haut, la carte des mises à jour liste le module, sous son nom.
+   Le module vérifie au démarrage, puis toutes les 6 heures.
    Juste après la sortie d'une version, Home Assistant peut encore proposer la
    précédente : débranchez puis rebranchez le module, attendez une minute et vérifiez
    le numéro de version proposé avant d'installer.
-2. Cliquez dessus, puis **Installer**. Le module télécharge la nouvelle version,
-   l'installe et redémarre, en 2 à 3 minutes. Le Wi-Fi et la clé sont conservés.
+2. Cliquez dessus : la fenêtre **Firmware** indique « Mise à jour disponible », la
+   version installée et la dernière version. Cliquez sur **Mettre à jour**. Le module
+   télécharge la nouvelle version, l'installe et redémarre, en 2 à 3 minutes. Le
+   Wi-Fi et la clé sont conservés.
 
-> 📷 Capture 19 — mise à jour du Firmware proposée dans Home Assistant (à prendre à la
-> première version publiée après celle installée).
+![Fenêtre Firmware, mise à jour disponible (capture retouchée, versions d'exemple)](images/installation/19_ha_mise_a_jour.png)
 
 3. Mettez aussi le blueprint à jour : onglet **Blueprints**, menu **⋮** de
    **HAPanel — module**, **Réimporter le blueprint**. Une nouvelle version du
