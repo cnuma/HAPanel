@@ -4,7 +4,8 @@ Procédure du binaire public, sans secret : publication sur GitHub, première
 installation d'un module, adoption dans Home Assistant, mises à jour depuis Home
 Assistant. C'est le mode de déploiement de **tous les modules de la maison** (D037
 révisée), validé par la partie J du cahier de tests. Ce document s'adresse au
-développeur ; le guide pas à pas pour un débutant est à venir (TODO, rang 3).
+développeur ; le guide pas à pas pour un débutant est
+[INSTALLATION.md](INSTALLATION.md).
 
 Les configurations privées (`hapanel.yaml`, `hapanel_banc.yaml`, secrets compilés,
 mise à jour depuis le PC par `tools/build.ps1 upload`) ne servent plus qu'aux modules
@@ -43,11 +44,14 @@ aucun (`secrets.yaml` n'existe pas sur GitHub).
 Il faut un ordinateur avec Chrome ou Edge, un câble USB de données et le module.
 
 1. Télécharger `hapanel-factory.bin` depuis la Release.
-2. Ouvrir <https://web.esphome.io>, brancher le module, **Connect**, choisir son port.
-3. **Install**, choisir `hapanel-factory.bin`, accepter l'effacement. Attendre la
+2. Ouvrir <https://web.esphome.io>, brancher le module, **Connection**, choisir son
+   port (« USB Serial (COM…) »), **Connexion**.
+3. Petite flèche « Installer » (pas « Préparation pour la première utilisation »,
+   qui installe le logiciel ESPHome de base), **Choisir un fichier** :
+   `hapanel-factory.bin`, **Installer**. L'écriture efface le module. Attendre la
    fin (environ 2 min).
-4. Quand la page propose de configurer le Wi-Fi (Improv), choisir le réseau et
-   saisir son mot de passe. Le module redémarre et rejoint le réseau.
+4. Fenêtre « Configure Wi-Fi » (Improv) : choisir le réseau, saisir son mot de
+   passe, **Connect** ; « Provisioned! » quand le module a rejoint le réseau.
 
 **Sans câble ou si Improv échoue :** dans les 15 min qui suivent la mise sous
 tension, le module ouvre un point d'accès Wi-Fi à son nom (`hapanel-xxxxxx`). S'y
@@ -57,7 +61,8 @@ couper et rétablir l'alimentation pour rouvrir la fenêtre.
 ## 3. Adoption dans Home Assistant
 
 1. **Paramètres › Appareils et services** : HA signale un appareil ESPHome découvert,
-   `hapanel-xxxxxx`. **Configurer**.
+   `HAPanel xxxxxx (hapanel-xxxxxx)`. **Ajouter**, **Valider**, puis pièce et
+   **Terminer**.
 2. HA envoie au module une clé de chiffrement qu'il crée lui-même ; le module la garde
    et n'accepte plus que cette clé. Aucune clé n'est à saisir.
 3. Importer le blueprint et créer l'automatisation du module :
@@ -67,9 +72,7 @@ Aucune clé n'a été demandée lors du test du 5 novembre 2026 (cahier J3, J4).
 en demande une**, noter ce que HA affiche et ne rien saisir.
 
 **Module qui tournait avec le binaire privé** (passage au binaire public) : refaire
-le § 2 en acceptant l'effacement ; le Wi-Fi est à ressaisir. Si HA crée un nouvel
-appareil, rouvrir l'automatisation du module et y choisir le nouvel appareil
-(cahier J14).
+le § 2 ; le Wi-Fi est à ressaisir. Même démarche dans HA qu'au § 5.
 
 ## 4. Mettre à jour un module
 
@@ -81,7 +84,7 @@ appareil, rouvrir l'automatisation du module et y choisir le nouvel appareil
    Juste après une publication, HA peut encore proposer la version précédente, vue
    à la dernière vérification : redémarrer le module, puis vérifier la version
    proposée avant d'installer (sinon, deux mises à jour successives, sans dégât).
-2. **Installer**. Le module télécharge le binaire depuis GitHub, vérifie son
+2. **Mettre à jour** (fenêtre « Firmware »). Le module télécharge le binaire depuis GitHub, vérifie son
    empreinte (MD5), l'écrit et redémarre (2 à 3 min).
 3. Vérifier l'entité **Version** : elle donne la nouvelle version et son SHA.
 
@@ -89,6 +92,11 @@ Le Wi-Fi et la clé ne sont pas à ressaisir : ils sont gardés en flash.
 
 ## 5. Remise à zéro
 
-Pour céder un module ou repartir de zéro : refaire le § 2 en acceptant
-l'effacement. Le Wi-Fi et la clé sont effacés ; dans HA, supprimer l'ancien appareil
-avant de l'adopter de nouveau.
+Pour céder un module ou repartir de zéro : refaire le § 2, dont l'écriture efface le
+module. Le Wi-Fi et la clé sont effacés ; dans HA, supprimer l'ancien appareil
+avant de l'adopter de nouveau, puis rouvrir l'automatisation du module et l'y choisir
+de nouveau dans « Panneau » : sans cela, l'accueil n'affiche rien de la maison.
+Sans suppression préalable, HA propose de réassocier le module en prévenant que la
+connexion ne sera plus chiffrée : refuser (D010), supprimer l'appareil, puis
+l'adopter de nouveau ; il reçoit une nouvelle clé (constaté le 7 novembre 2026,
+cahier J14).

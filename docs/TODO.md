@@ -14,19 +14,18 @@ Liste unique du reste à faire (G14).
 
 | Prio | Sujet | Dépend de | Branche | Pourquoi à ce rang |
 |---|---|---|---|---|
-| 1 | Message d'accueil : confirmer B3 (même texte deux fois) ; décider s'il faut empêcher deux fois de suite le même message (entrée texte dans HA, procédure G11) | Cahier B3 refait | à créer | Ne touche que le blueprint de la maison ; à trancher avant de l'enrichir (rangs 9 et 11). |
+| 1 | Message d'accueil : confirmer B3 (même texte deux fois) ; décider s'il faut empêcher deux fois de suite le même message (entrée texte dans HA, procédure G11) | Cahier B3 refait | à créer | Ne touche que le blueprint de la maison ; à trancher avant de l'enrichir (rangs 8 et 10). |
 | 2 | Sécurité : décider de laisser ou non l'autorisation des actions HA sur chaque module (surface plus petite, `08`) ; évaluer l'usurpation de `device_id` (un firmware modifié, avec la clé d'API, pourrait se faire passer pour un autre panneau) et l'inscrire au `08` | — | `docs/…` | À décider avant d'ajouter des commandes (infrarouge) et la mise à jour par HA (D039, faite : surface déjà au `08`), sinon elles seraient à reprendre. |
-| 3 | Guide d'installation pour débutant (demande du propriétaire du 5 novembre 2026) : remplacer la procédure de technicien par un pas à pas avec une capture d'écran précise à chaque étape (téléchargement, web.esphome.io, Wi-Fi par Improv, adoption dans HA, blueprint, mise à jour) ; captures prises par le propriétaire en reflashant le premier module de production (cahier J14), recadrées sans nom de réseau, adresse ni clé (G9) ; tester aussi le point d'accès (J9, J10) | — | `docs/guide-installation` | Le premier module de production passe au binaire public (D037 révisée) : les captures se prennent à ce moment. Condition de la publication (rang 5). |
-| 4 | Mise à jour depuis l'écran (demande du propriétaire du 5 novembre 2026, décision à rédiger) : 1. icône violette **qui clignote** dans la barre d'état quand une mise à jour attend ce module, comme dans AquaLook (précision du 6 novembre 2026 ; icône d'AquaLook à fournir par le propriétaire). Proposition du 6 novembre 2026, à trancher : `mdi:arrow-up-bold-circle` (la plus lisible à 24 px) ou `mdi:package-up` (celle de HA pour une mise à jour disponible), à la place de la disquette, qui passe devant pendant un enregistrement : la barre n'est pas à tasser ; 2. bouton « Rechercher une mise à jour » sur la page À propos ; 3. recherche chaque nuit à 3 h (au lieu de toutes les 6 h ; heure de HA) ; 4. bouton violet dans le Menu pour lancer la mise à jour, avec confirmation puis message « Mise à jour en cours, module indisponible ». Binaire public seulement (entité `maj_firmware`) : le binaire privé de l'atelier n'affiche rien | D039 (acceptée) | à créer | Complète l'installation sans HA ; place dans la barre à vérifier (entre le titre et la disquette). |
-| 5 | Projet publiable (D038) : cadrer avec le propriétaire la licence (dépôt déjà public, sans licence), la relecture de la doc (retirer le personnel), l'adoption par chaque utilisateur ; binaire générique, Wi-Fi saisi à l'installation et publication sur GitHub faits (D039) | Rang 3 (guide d'installation) | à créer | Orientation du projet : à cadrer tôt pour que l'infrarouge et la suite ne mettent rien de propre à la maison dans le firmware. |
-| 6 | Indépendance du matériel (demande du propriétaire du 5 novembre 2026, décision à rédiger ; l'ESP32-2432S024C de 2,4 pouces semble ne plus être fabriqué) : 1. interface construite selon la taille de l'écran déclarée dans les paramètres, et non plus calée sur 320 × 240 ; 2. GPIO configurables : écran, tactile, diode infrarouge, LED d'état, LDR ; 3. pilotes d'écran et de tactile configurables ; 4. au total, un firmware indépendant de la carte. Point à trancher : ESPHome fixe pilotes et broches à la compilation, donc « paramètres » veut dire un fichier de carte par modèle (substitutions et package), et un binaire public par modèle de carte | Rang 5 (cadrage du public visé) ; choix des nouvelles cartes par le propriétaire | à créer | Avant l'infrarouge, dont la broche doit déjà être un paramètre ; chaque page écrite d'ici là serait sinon à reprendre. |
-| 7 | Infrarouge (P5) : 1. marque et modèle exacts des clims (Midea ou compatible pour la chambre des parents) et emplacement des panneaux ; 2. schéma de la diode sur GPIO22 (transistor, résistances, 3,3 V, connecteur avec GND) ; 3. code (`remote_transmitter`, `midea_ir`, repris de `clim-parents`) | Rang 2 ; rang 6 (broche en paramètre) ; réponses du propriétaire au point 1 | à créer | Plus gros chantier : sur une base stable et des règles de sécurité fixées. Le matériel avant le code. En attendant les réponses, passer au rang 8. |
-| 8 | Documentation technique, lots 3 à 6 : `lvgl.md`, `liaison_ha.md` ; `led_veille.md`, `message_accueil.md` ; `pages/` ; blueprints (avec extension du script de contrôle) | Rang 6 (pages reprises) | `docs/…` | Après l'indépendance du matériel, qui modifie toutes les pages. |
-| 9 | Saint du jour : choisir la source (calendrier dans le blueprint, sans Internet, proposé ; ou service en ligne lu par HA). Il s'affiche sur la ligne de la météo, sans changer le firmware | Rang 1 | à créer | Blueprint de la maison seulement. |
-| 10 | LDR : les seuils (0,09 à 0,20 V) viennent du relevé du 31 octobre ; les journaux du 3 novembre montrent 0,9 à 1,094 V (plafond de l'ADC). Le cahier E est validé à l'œil : relever les tensions jour et nuit dans les journaux pour confirmer ou recaler | — | à créer | Petit et isolé ; à faire à l'occasion d'un flash. |
-| 11 | Message d'accueil : citer la personne qui arrive (présence des téléphones dans HA) | Rang 1 ; tous les téléphones de la maison connus dans HA | à créer | Dépend d'un préalable du propriétaire. |
-| 12 | LED de face avant : autres informations (alerte météo…), à spécifier | D017, rang 7 | à créer | À spécifier après l'infrarouge, pour ne revoir la logique de la LED qu'une fois. |
-| 13 | Outillage : mesurer le gain du dossier de compilation séparé du banc | Prochaine fusion | — | Constat seulement, sans développement. |
+| 3 | Mise à jour depuis l'écran (demande du propriétaire du 5 novembre 2026, décision à rédiger) : 1. icône violette **qui clignote** dans la barre d'état quand une mise à jour attend ce module, comme dans AquaLook (précision du 6 novembre 2026 ; icône d'AquaLook à fournir par le propriétaire). Proposition du 6 novembre 2026, à trancher : `mdi:arrow-up-bold-circle` (la plus lisible à 24 px) ou `mdi:package-up` (celle de HA pour une mise à jour disponible), à la place de la disquette, qui passe devant pendant un enregistrement : la barre n'est pas à tasser ; 2. bouton « Rechercher une mise à jour » sur la page À propos ; 3. recherche chaque nuit à 3 h (au lieu de toutes les 6 h ; heure de HA) ; 4. bouton violet dans le Menu pour lancer la mise à jour, avec confirmation puis message « Mise à jour en cours, module indisponible ». Binaire public seulement (entité `maj_firmware`) : le binaire privé de l'atelier n'affiche rien | D039 (acceptée) | à créer | Complète l'installation sans HA ; place dans la barre à vérifier (entre le titre et la disquette). |
+| 4 | Projet publiable (D038) : cadrer avec le propriétaire la licence (dépôt déjà public, sans licence), la relecture de la doc (retirer le personnel), l'adoption par chaque utilisateur ; binaire générique, Wi-Fi saisi à l'installation et publication sur GitHub faits (D039) | — | à créer | Orientation du projet : à cadrer tôt pour que l'infrarouge et la suite ne mettent rien de propre à la maison dans le firmware. |
+| 5 | Indépendance du matériel (demande du propriétaire du 5 novembre 2026, décision à rédiger ; l'ESP32-2432S024C de 2,4 pouces semble ne plus être fabriqué) : 1. interface construite selon la taille de l'écran déclarée dans les paramètres, et non plus calée sur 320 × 240 ; 2. GPIO configurables : écran, tactile, diode infrarouge, LED d'état, LDR ; 3. pilotes d'écran et de tactile configurables ; 4. au total, un firmware indépendant de la carte. Point à trancher : ESPHome fixe pilotes et broches à la compilation, donc « paramètres » veut dire un fichier de carte par modèle (substitutions et package), et un binaire public par modèle de carte | Rang 4 (cadrage du public visé) ; choix des nouvelles cartes par le propriétaire | à créer | Avant l'infrarouge, dont la broche doit déjà être un paramètre ; chaque page écrite d'ici là serait sinon à reprendre. |
+| 6 | Infrarouge (P5) : 1. marque et modèle exacts des clims (Midea ou compatible pour la chambre des parents) et emplacement des panneaux ; 2. schéma de la diode sur GPIO22 (transistor, résistances, 3,3 V, connecteur avec GND) ; 3. code (`remote_transmitter`, `midea_ir`, repris de `clim-parents`) | Rang 2 ; rang 5 (broche en paramètre) ; réponses du propriétaire au point 1 | à créer | Plus gros chantier : sur une base stable et des règles de sécurité fixées. Le matériel avant le code. En attendant les réponses, passer au rang 7. |
+| 7 | Documentation technique, lots 3 à 6 : `lvgl.md`, `liaison_ha.md` ; `led_veille.md`, `message_accueil.md` ; `pages/` ; blueprints (avec extension du script de contrôle) | Rang 5 (pages reprises) | `docs/…` | Après l'indépendance du matériel, qui modifie toutes les pages. |
+| 8 | Saint du jour : choisir la source (calendrier dans le blueprint, sans Internet, proposé ; ou service en ligne lu par HA). Il s'affiche sur la ligne de la météo, sans changer le firmware | Rang 1 | à créer | Blueprint de la maison seulement. |
+| 9 | LDR : les seuils (0,09 à 0,20 V) viennent du relevé du 31 octobre ; les journaux du 3 novembre montrent 0,9 à 1,094 V (plafond de l'ADC). Le cahier E est validé à l'œil : relever les tensions jour et nuit dans les journaux pour confirmer ou recaler | — | à créer | Petit et isolé ; à faire à l'occasion d'un flash. |
+| 10 | Message d'accueil : citer la personne qui arrive (présence des téléphones dans HA) | Rang 1 ; tous les téléphones de la maison connus dans HA | à créer | Dépend d'un préalable du propriétaire. |
+| 11 | LED de face avant : autres informations (alerte météo…), à spécifier | D017, rang 6 | à créer | À spécifier après l'infrarouge, pour ne revoir la logique de la LED qu'une fois. |
+| 12 | Outillage : mesurer le gain du dossier de compilation séparé du banc | Prochaine fusion | — | Constat seulement, sans développement. |
 
 ## Reporté
 
@@ -93,7 +92,7 @@ Liste unique du reste à faire (G14).
 - [x] Autorisation des actions HA : inutile, testé le 2 novembre 2026 (option
       réactivée ; décision au rang 2).
 - [x] Outillage : dossier de compilation séparé du banc, accepté le 3 novembre 2026
-      (mesure du gain au rang 13).
+      (mesure du gain au rang 12).
 
 ### P4 — Idées du propriétaire du 2 novembre 2026
 
@@ -125,10 +124,10 @@ Liste unique du reste à faire (G14).
       dalle laissés noirs. Cahier I1 à I12 OK, fusionnée dans `main` le 4 novembre
       2026 ; `VERSION` 0.7.0.
 - [x] Mises à jour du parc : option C retenue (D037, HAP-R096) ; conception au rang 3.
-- [x] Orientation : projet publiable (D038, HAP-R099) ; cadrage au rang 5.
-- [x] Mise à jour depuis l'écran demandée le 5 novembre 2026 : rang 4.
+- [x] Orientation : projet publiable (D038, HAP-R099) ; cadrage au rang 4.
+- [x] Mise à jour depuis l'écran demandée le 5 novembre 2026 : rang 3.
 - [x] Indépendance du matériel demandée le 5 novembre 2026 (2,4 pouces introuvable) :
-      rang 6.
+      rang 5.
 
 ### P7 — Déploiement public (5 novembre 2026)
 
@@ -145,3 +144,11 @@ Liste unique du reste à faire (G14).
       l'écran restait à 100 % jusqu'à la première veille ; H10 ne vérifiait que la
       valeur) : cahier H20 OK sur `v0.8.1-dev.1`, mise à jour depuis HA ; fusionné dans
       `main` le 6 novembre 2026 ; `VERSION` 0.8.1.
+
+### P9 — Guide d'installation (7 novembre 2026)
+
+- [x] Guide d'installation pour débutant (`docs/INSTALLATION.md`) et configuration
+      dans HA réécrite (`docs/CONFIGURATION.md`), avec les captures du propriétaire
+      prises au reflash du module de la cuisine, masquées (G9) : cahier J9 et J14 OK,
+      J10 clôturé sans essai par le propriétaire ; fusionné dans `main` le
+      7 novembre 2026 ; `VERSION` inchangée (documentation seule).

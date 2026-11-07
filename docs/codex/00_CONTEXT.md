@@ -35,7 +35,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Installation | HA OS, en natif sur Raspberry Pi |
 | Version | Core 2026.9.4, Supervisor 2026.10.4, OS 18.3 (relevé le 27 octobre 2026) |
 | Intégration | ESPHome, API native chiffrée (D005) |
-| Modules | Plusieurs prévus, un seul binaire : nœud `hapanel-xxxxxx` (D012) |
+| Modules | Plusieurs prévus, un seul binaire : nœud `hapanel-xxxxxx` (D012) ; en service : banc `hapanel-a85bfc` (binaire d'atelier), cuisine `hapanel-583c28` (binaire public) |
 | Liaison | Valeurs poussées par le blueprint unique `blueprints/automation/hapanel/module.yaml`, une automatisation par module (D021 ; action `maj_valeur`, clés listées en D014, D019, D020, D024, D026, D027) ; demande de renvoi par l'événement `esphome.hapanel_demande_valeurs` (D012) ; commandes par l'événement `esphome.hapanel_commande` (D014). Le blueprint générique `envoyer_valeur.yaml` reste disponible |
 
 ## Matériel de référence
@@ -48,7 +48,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | LED | RVB de face avant, allumée à l'état bas : GPIO4 rouge, GPIO16 vert, GPIO17 bleu (D017) ; mode, intensité et alerte réglables par module (D027) |
 | LDR | GPIO34, relevée le 31 octobre 2026, règle l'intensité de la LED (D018) et le rétroéclairage (D023), pièce sombre non testée |
 | Flash | 4 Mo (détectée au premier flash) ; ESP32 rev 3.1 |
-| Liaison USB | Convertisseur USB-série CH340 (Windows : « USB-SERIAL CH340 », relevé le 6 novembre 2026) ; pilote, si Windows ne l'installe pas : site du fabricant WCH uniquement (guide d'installation) |
+| Liaison USB | Convertisseur USB-série CH340 (Windows : « USB-SERIAL CH340 », relevé le 6 novembre 2026 ; liste de Chrome et Edge : « USB Serial (COMx) », le 7 novembre) ; pilote, si Windows ne l'installe pas : site du fabricant WCH uniquement (guide d'installation) |
 | Alimentation | Bloc secteur externe 1 A validé au banc ; port USB du PC insuffisant (R7) |
 | Montage mural | À définir |
 

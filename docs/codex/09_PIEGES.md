@@ -111,6 +111,12 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   POC, en `0.8.0-dev.4-wifi`, ne verra que des versions suffixées ou `0.8.0`.
 - Un binaire public déjà installé qui ne lit pas le manifeste ne peut plus se corriger
   par Wi-Fi : seul l'USB le rattrape. Tester la lecture du manifeste avant de publier.
+- Reflasher par USB un module encore connu de HA efface sa clé : HA propose de le
+  réassocier en prévenant que **la connexion ne sera plus chiffrée** (7 novembre 2026,
+  cahier J14). Refuser (D010) : supprimer l'appareil dans HA, l'adopter de nouveau,
+  il reçoit une nouvelle clé. Supprimé puis rajouté, il n'est plus celui que désigne
+  « Panneau » dans son automatisation : l'y choisir de nouveau, sinon l'accueil
+  n'affiche rien de la maison. Le plus simple : supprimer l'appareil avant le reflash.
 
 ## Documentation
 
@@ -120,6 +126,14 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   (`[a-z0-9_]`), sinon `i2c` et `esp32` disparaissent.
 - Sur GitHub, la page du dépôt montre `main`, avec quelques minutes de retard après un
   `push` : choisir la branche dans le menu pour voir le travail en cours.
+- Libellés d'une interface (web.esphome.io, navigateur, HA) : les relever sur une
+  capture réelle, jamais de mémoire. Écrits d'avance, « Install », la case
+  d'effacement, « USB-SERIAL CH340 » dans la liste du navigateur (en fait « USB Serial
+  (COMx) ») et « Nouveaux appareils découverts » étaient faux (7 novembre 2026).
+- Captures du propriétaire : masquer en entier numéros COM, noms de réseaux (les siens
+  et ceux des voisins) et mots de passe (G9) ; un masque partiel laisse lire la
+  première et la dernière lettre. Captures de téléphone : trois fois la taille
+  d'affichage, les réduire au tiers.
 
 ## Échanges avec le propriétaire
 
