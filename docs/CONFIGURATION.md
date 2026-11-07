@@ -73,14 +73,18 @@ qu'un module modifié pourrait faire.
 À faire **une seule fois**, quel que soit le nombre de modules.
 
 1. **Paramètres › Automatisations et scènes**, onglet **Blueprints**.
+
+![Paramètres, puis Automatisations et scènes, encadrés](images/installation/16a_ha_parametres.png)
+
 2. En bas à droite, **Importer un blueprint**.
-3. Collez ce lien, puis **Aperçu** et **Importer** :
+3. Collez ce lien dans **Adresse du Blueprint**, cliquez sur **Aperçu**, puis
+   confirmez l'importation sous l'aperçu :
 
    ```
    https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/module.yaml
    ```
 
-> 📷 Capture 16 — fenêtre « Importer un blueprint » avec le lien collé.
+![Fenêtre « Importer un Blueprint », lien collé](images/installation/16_ha_import_blueprint.png)
 
 4. Le blueprint **HAPanel — module** apparaît dans la liste.
 
@@ -104,7 +108,7 @@ pour le même module exécuteraient chaque commande deux fois.
    | Calendriers | 1 à 4 calendriers ; le premier est le principal |
    | Scénarios, LED et écran | Facultatif, sections repliées : sections 4 et 5 ci-dessous |
 
-> 📷 Capture 17 — formulaire de l'automatisation, partie haute (Panneau, Thermomètre).
+![Formulaire de l'automatisation, partie haute, champ Panneau encadré](images/installation/17_ha_automatisation.png)
 
 3. **Enregistrer**, puis donnez un nom, par exemple « HAPanel cuisine ».
 4. Regardez le module : en quelques secondes, l'accueil affiche vos températures et
