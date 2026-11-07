@@ -126,6 +126,14 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   (`[a-z0-9_]`), sinon `i2c` et `esp32` disparaissent.
 - Sur GitHub, la page du dépôt montre `main`, avec quelques minutes de retard après un
   `push` : choisir la branche dans le menu pour voir le travail en cours.
+- Libellés d'une interface (web.esphome.io, navigateur, HA) : les relever sur une
+  capture réelle, jamais de mémoire. Écrits d'avance, « Install », la case
+  d'effacement, « USB-SERIAL CH340 » dans la liste du navigateur (en fait « USB Serial
+  (COMx) ») et « Nouveaux appareils découverts » étaient faux (7 novembre 2026).
+- Captures du propriétaire : masquer en entier numéros COM, noms de réseaux (les siens
+  et ceux des voisins) et mots de passe (G9) ; un masque partiel laisse lire la
+  première et la dernière lettre. Captures de téléphone : trois fois la taille
+  d'affichage, les réduire au tiers.
 
 ## Échanges avec le propriétaire
 
