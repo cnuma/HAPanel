@@ -10,10 +10,11 @@ Il déclare **les mêmes `id`** que `hardware.yaml`. Le reste du panneau (pages,
 veille, LED) les utilise sans savoir quelle carte est montée. Une configuration inclut
 l'un **ou** l'autre fichier, jamais les deux : leurs `id` se heurteraient.
 
-**État : en essai au banc** (branche `feature/carte-2432s028`, cahier K). Le brochage
-vient d'AquaLook, qui utilise cette carte avec TFT_eSPI, et du modèle `ESP32-2432S028`
-d'ESPHome. Confirmé le 7 novembre 2026 : écran, couleurs et rétroéclairage (K1, K2),
-tactile et sens des axes (K3) ; le reste est à confirmer.
+**État : validé au banc le 7 novembre 2026** (cahier K, binaire `174aa99`), variante à
+deux prises USB : écran, couleurs, tactile, veille, LED, LDR. Le brochage vient
+d'AquaLook, qui utilise cette carte avec TFT_eSPI, et du modèle ESPHome. Réserve : la
+glissière Éteint / Chauffage est capricieuse au doigt sur la dalle résistive (K5) ; les
+boutons sont fiables. Pas encore de binaire public pour cette carte (TODO rang 5).
 
 ## Dépendances
 
@@ -82,7 +83,10 @@ inversé ou si les axes sont croisés, ajouter `transform` (`mirror_x`, `mirror_
 ## Maintenance
 
 **Pièges :**
-- Même piège des bords de la dalle que la S024C (D036) : à vérifier sur cette carte.
+- Même piège des bords de la dalle que la S024C (D036) : rien constaté sur cette carte
+  (K9), garder les 2 rangées noires.
+- Le journal signale `gpio_pullup_en … input-only pad has no internal PU` pour GPIO36 :
+  sans effet, la carte a sa propre résistance de rappel.
 - Les variantes de la S028 n'ont pas le même contrôleur : un écran blanc ou brouillé
   avec le rétroéclairage allumé fait penser à `display_model`. Couleurs en négatif :
   ajouter `invert_colors: true` sous `ecran`.

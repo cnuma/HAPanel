@@ -69,6 +69,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | I | Barre d'état commune et navigation (D036, D025 révisée) | `feature/barre-etat` (fusionnée) |
 | J | Déploiement public (D039) ; guide d'installation (J9, J10, J14) | `feature/poc-deploiement` (fusionnée) ; J9, J10, J14 : `docs/guide-installation` (fusionnée) |
 | 7 novembre 2026 | `9b78597` (S028, USB) | K1, K2, K3 | Écran et couleurs OK (contrôleur ST7789V, sans inversion) ; tactile : x brut décroît de gauche à droite (3605 à 449), y de 419 à 3662. Premier téléversement impossible avec le premier câble USB-C (aucune donnée reçue) ; OK avec un autre câble | Calibrage et `mirror_x` reportés ; K4 sur le binaire suivant |
+| 7 novembre 2026 | `174aa99` (S028, USB) | K4 à K11 | Tout OK ; K5 : glissière Éteint / Chauffage capricieuse au doigt sur dalle résistive, boutons fiables. Mémoire libre 153 Ko, plus grand bloc 96 Ko. Remarque du propriétaire : avoir à configurer le blueprint du message d'accueil en plus de celui du module n'est pas pratique (TODO rang 1) | **Partie K validée** ; fusion soumise au propriétaire ; glissière : TODO rang 5 |
 
 ## Préparation (une fois, avant A et B)
 
@@ -270,11 +271,11 @@ d'AquaLook. Carte du banc à deux prises (USB-C et micro-USB) : modèle d'écran
 | K1 | Flasher par USB, alimentation sur bloc secteur | Écran allumé, page d'accueil lisible, barre d'état en haut | `feature/carte-2432s028` | OK 7 nov. |
 | K2 | Regarder les couleurs : barre d'état, icônes, température extérieure | Mêmes couleurs que sur la S024C (pas de négatif, pas de rouge et bleu échangés) | `feature/carte-2432s028` | OK 7 nov. |
 | K3 | Toucher les quatre coins de l'écran, puis le centre ; envoyer les lignes `toucher … brut` des journaux | Une ligne par toucher ; valeurs brutes relevées pour le calibrage | `feature/carte-2432s028` | OK 7 nov. (x inversé, calibrage reporté) |
-| K4 | Après calibrage et nouveau flash : ☰, puis chaque page du Menu, puis le bouton Accueil | Chaque bouton répond du premier coup, à l'endroit touché | `feature/carte-2432s028` | |
-| K5 | Accueil : glissière Éteint / Chauffage et consigne ± (HA connecté) | Même comportement que sur la S024C | `feature/carte-2432s028` | |
-| K6 | Laisser le module sans toucher 1 min, puis toucher l'écran | Écran éteint puis rallumé au toucher, retour à l'accueil | `feature/carte-2432s028` | |
-| K7 | LED : couleur à l'accueil selon le chauffage | LED allumée de la bonne couleur (pas éteinte quand elle devrait être allumée) | `feature/carte-2432s028` | |
-| K8 | Cacher puis éclairer la LDR, lire les lignes `LDR … V` | La tension monte dans le noir ; l'écran baisse dans le noir | `feature/carte-2432s028` | |
-| K9 | Bords haut et bas de l'écran pendant l'usage | Pas de ligne ni de point parasite en haut (piège des bords, D036) | `feature/carte-2432s028` | |
-| K10 | Page À propos ; entités « Mémoire libre » et « Plus grand bloc libre » dans HA | Version et SHA du binaire flashé ; mémoire notée (G6) | `feature/carte-2432s028` | |
-| K11 | Après K1 à K10, refaire G ou un test d'accueil sur la S024C du banc avec le binaire de cette branche | Aucun changement sur la S024C (la configuration fusionnée est identique, à confirmer sur le module) | `feature/carte-2432s028` | |
+| K4 | Après calibrage et nouveau flash : ☰, puis chaque page du Menu, puis le bouton Accueil | Chaque bouton répond du premier coup, à l'endroit touché | `feature/carte-2432s028` | OK 7 nov. |
+| K5 | Accueil : glissière Éteint / Chauffage et consigne ± (HA connecté) | Même comportement que sur la S024C | `feature/carte-2432s028` | OK 7 nov., avec réserve : glissière capricieuse (dalle résistive), boutons fiables |
+| K6 | Laisser le module sans toucher 1 min, puis toucher l'écran | Écran éteint puis rallumé au toucher, retour à l'accueil | `feature/carte-2432s028` | OK 7 nov. |
+| K7 | LED : couleur à l'accueil selon le chauffage | LED allumée de la bonne couleur (pas éteinte quand elle devrait être allumée) | `feature/carte-2432s028` | OK 7 nov. |
+| K8 | Cacher puis éclairer la LDR, lire les lignes `LDR … V` | La tension monte dans le noir ; l'écran baisse dans le noir | `feature/carte-2432s028` | OK 7 nov. |
+| K9 | Bords haut et bas de l'écran pendant l'usage | Pas de ligne ni de point parasite en haut (piège des bords, D036) | `feature/carte-2432s028` | OK 7 nov. |
+| K10 | Page À propos ; entités « Mémoire libre » et « Plus grand bloc libre » dans HA | Version et SHA du binaire flashé ; mémoire notée (G6) | `feature/carte-2432s028` | OK 7 nov. : mémoire libre 153 Ko, plus grand bloc 96 Ko |
+| K11 | Après K1 à K10, refaire G ou un test d'accueil sur la S024C du banc avec le binaire de cette branche | Aucun changement sur la S024C (la configuration fusionnée est identique, à confirmer sur le module) | `feature/carte-2432s028` | OK 7 nov. |

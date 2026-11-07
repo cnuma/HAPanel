@@ -53,6 +53,18 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 - Les `esphome: on_boot:` des packages sont fusionnés en **une seule** automatisation :
   la dernière `priority` lue s'applique à toutes les actions. Garder -100 partout ;
   vérifier dans la sortie d'`esphome config` (6 novembre 2026).
+- **ESP32-2432S028 (7 novembre 2026) :** rétroéclairage sur GPIO21, pas GPIO27 : avec
+  le binaire de la S024C, l'écran reste noir alors que Wi-Fi, HA et LED fonctionnent.
+  La variante à deux prises USB a un contrôleur ST7789V (modèle ESPHome
+  `ESP32-2432S028-7789`, couleurs justes sans inversion, contrairement au réglage
+  TFT_eSPI d'AquaLook). Tactile résistif : x brut décroît de gauche à droite
+  (`mirror_x`).
+- Téléversement « No serial data received », même avec BOOT tenu, et CH340 bien vu
+  par Windows : câble USB de charge seule. Test sans risque : écouter le port et
+  appuyer sur RST ; un ESP32 envoie toujours ses lignes de démarrage (7 novembre 2026).
+- Ouvrir le port série (journaux, script d'écoute) redémarre la carte : la broche EN
+  est reliée au port. Un `POWERON_RESET` à ce moment n'est pas une coupure
+  d'alimentation (7 novembre 2026).
 
 ## LVGL
 
