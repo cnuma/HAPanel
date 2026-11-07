@@ -72,9 +72,7 @@ Aucune clé n'a été demandée lors du test du 5 novembre 2026 (cahier J3, J4).
 en demande une**, noter ce que HA affiche et ne rien saisir.
 
 **Module qui tournait avec le binaire privé** (passage au binaire public) : refaire
-le § 2 ; le Wi-Fi est à ressaisir. Si HA crée un nouvel
-appareil, rouvrir l'automatisation du module et y choisir le nouvel appareil
-(cahier J14).
+le § 2 ; le Wi-Fi est à ressaisir. Même démarche dans HA qu'au § 5.
 
 ## 4. Mettre à jour un module
 
@@ -97,5 +95,8 @@ Le Wi-Fi et la clé ne sont pas à ressaisir : ils sont gardés en flash.
 Pour céder un module ou repartir de zéro : refaire le § 2, dont l'écriture efface le
 module. Le Wi-Fi et la clé sont effacés ; dans HA, supprimer l'ancien appareil
 avant de l'adopter de nouveau, puis rouvrir l'automatisation du module et l'y choisir
-de nouveau dans « Panneau » : sans cela, l'accueil n'affiche rien de la maison
-(constaté le 7 novembre 2026, cahier J14).
+de nouveau dans « Panneau » : sans cela, l'accueil n'affiche rien de la maison.
+Sans suppression préalable, HA propose de réassocier le module en prévenant que la
+connexion ne sera plus chiffrée : refuser (D010), supprimer l'appareil, puis
+l'adopter de nouveau ; il reçoit une nouvelle clé (constaté le 7 novembre 2026,
+cahier J14).

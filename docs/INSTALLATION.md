@@ -5,8 +5,8 @@ du module neuf, sorti de sa boîte, jusqu'au module relié à votre Wi-Fi ; la s
 est dans [CONFIGURATION.md](CONFIGURATION.md). Comptez 15 minutes. Aucune ligne de
 commande, rien à compiler, aucun mot de passe à inventer.
 
-*Brouillon : restent à vérifier la fermeture du réseau du module après 15 minutes
-(cahier J10) et la reprise par Home Assistant d'un module reflashé (cahier J14).*
+*Brouillon : reste à vérifier la fermeture du réseau du module après 15 minutes
+(cahier J10).*
 
 ## Ce qu'il vous faut
 
@@ -174,17 +174,6 @@ puis rebranchez le module, et recommencez.
 Le module est sur votre Wi-Fi. Pour l'ajouter à Home Assistant et choisir ce qu'il
 affiche, suivez [CONFIGURATION.md](CONFIGURATION.md), sections 1 à 3. Les mises à
 jour suivantes passeront par Home Assistant, sans câble (section 7).
-
-## Remplacer le logiciel d'un module déjà installé
-
-Pour un module qui tournait avec une version compilée sur un ordinateur, pour le
-céder ou pour repartir de zéro : refaites les étapes 1 à 4. Le Wi-Fi est à ressaisir.
-
-Dans Home Assistant, si le module apparaît comme un nouvel appareil (c'est le cas si
-l'ancien a été supprimé) : ajoutez-le ([CONFIGURATION.md](CONFIGURATION.md),
-section 1), puis ouvrez l'automatisation du module, choisissez-le de nouveau dans
-« Panneau » et enregistrez ; sinon, l'accueil n'affiche rien de la maison. Supprimez
-ensuite l'ancien appareil s'il est encore listé.
 
 ## Dépannage
 

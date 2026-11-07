@@ -111,6 +111,12 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   POC, en `0.8.0-dev.4-wifi`, ne verra que des versions suffixées ou `0.8.0`.
 - Un binaire public déjà installé qui ne lit pas le manifeste ne peut plus se corriger
   par Wi-Fi : seul l'USB le rattrape. Tester la lecture du manifeste avant de publier.
+- Reflasher par USB un module encore connu de HA efface sa clé : HA propose de le
+  réassocier en prévenant que **la connexion ne sera plus chiffrée** (7 novembre 2026,
+  cahier J14). Refuser (D010) : supprimer l'appareil dans HA, l'adopter de nouveau,
+  il reçoit une nouvelle clé. Supprimé puis rajouté, il n'est plus celui que désigne
+  « Panneau » dans son automatisation : l'y choisir de nouveau, sinon l'accueil
+  n'affiche rien de la maison. Le plus simple : supprimer l'appareil avant le reflash.
 
 ## Documentation
 
