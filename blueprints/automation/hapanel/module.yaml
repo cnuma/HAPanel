@@ -7,14 +7,15 @@ blueprint:
     conditions actuelles et prévisions sur 3 jours. Planning : créneaux du jour
     de 1 à 4 calendriers. Scénarios : 6 scènes, scripts ou automatisations au
     plus, lancés depuis le panneau. LED : réglages facultatifs, imposés au
-    module. Envoi à chaque changement, toutes les 5 minutes, au
+    module. Message d'accueil : facultatif, à l'arrivée de quelqu'un. Envoi à chaque changement, toutes les 5 minutes, au
     démarrage de Home Assistant et quand le panneau le demande (connexion).
     Exécute les commandes du panneau (allumer, couper, consigne, préréglage)
     seulement si elles viennent de ce panneau, si le thermostat est disponible
     et non verrouillé et si la consigne est dans les bornes ; consigne et
     préréglage exigent un chauffage allumé. Le module n'a pas besoin d'être
     autorisé à effectuer des actions Home Assistant.
-    Décisions D014, D015, D019, D020, D021, D024 et D026 du dépôt cnuma/HAPanel.
+    Décisions D014, D015, D019, D020, D021, D024, D026, D028 et D042 du dépôt
+    cnuma/HAPanel.
   domain: automation
   source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/module.yaml
   input:
@@ -349,6 +350,85 @@ blueprint:
                 - { label: "80 %", value: "80" }
                 - { label: "90 %", value: "90" }
                 - { label: "100 %", value: "100" }
+    accueil:
+      name: Message d'accueil
+      description: >-
+        Facultatif. Quand quelqu'un arrive, le module affiche un message 3 minutes,
+        LED en arc-en-ciel. Sans déclencheur, pas de message. Le déclencheur ne
+        compte qu'après une période sans aucun déclenchement, et seulement dans la
+        plage horaire. Message tiré d'une liste de tâches selon la saison et le
+        moment ; une seconde liste donne des messages affichés une seule fois. Les
+        modules qui ont les mêmes réglages affichent le même message. L'entité
+        « Message d'accueil » du module désactivée : rien ne s'affiche (D028, D042).
+      collapsed: true
+      input:
+        accueil_declencheurs:
+          name: Déclencheurs
+          description: >-
+            Entités qui signalent une arrivée en passant de « off » à « on » :
+            contact de porte, lumière, interrupteur.
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain:
+                    - binary_sensor
+                    - light
+                    - switch
+                    - input_boolean
+        accueil_inactivite:
+          name: Période sans déclenchement
+          description: >-
+            Aucun déclencheur ne doit avoir changé pendant ce temps. Après un
+            redémarrage de Home Assistant, il faut aussi attendre cette durée.
+          default: 30
+          selector:
+            number:
+              min: 1
+              max: 720
+              step: 1
+              unit_of_measurement: min
+        accueil_debut:
+          name: Accueil à partir de
+          default: "06:00:00"
+          selector:
+            time:
+        accueil_fin:
+          name: Accueil jusqu'à
+          description: La plage peut passer minuit.
+          default: "23:00:00"
+          selector:
+            time:
+        accueil_liste_messages:
+          name: Liste des messages
+          description: >-
+            Liste de tâches : chaque tâche non cochée est un message. Dans sa
+            description, des mots facultatifs le réservent à une saison (printemps,
+            été, automne, hiver) ou à un moment (matin, après-midi, soir, nuit).
+            Sans liste ou sans message possible : « Bonjour » ou « Bonsoir »,
+            bienvenue à la maison.
+          default: ""
+          selector:
+            entity:
+              filter:
+                - domain: todo
+        accueil_liste_uniques:
+          name: Liste des messages uniques
+          description: >-
+            Liste de tâches prioritaire : la première tâche non cochée est
+            affichée, puis cochée.
+          default: ""
+          selector:
+            entity:
+              filter:
+                - domain: todo
+        accueil_meteo:
+          name: Météo sous le message
+          description: Température et conditions de l'entité Météo ci-dessus.
+          default: true
+          selector:
+            boolean:
 
 mode: queued
 max: 20
@@ -400,6 +480,11 @@ variables:
       valeur: !input led_alerte
     - cle: ecran_intensite
       valeur: !input ecran_intensite
+  accueil_declencheurs: !input accueil_declencheurs
+  accueil_inactivite: !input accueil_inactivite
+  accueil_liste_messages: !input accueil_liste_messages
+  accueil_liste_uniques: !input accueil_liste_uniques
+  accueil_meteo: !input accueil_meteo
   # Action ESPHome du module : esphome.<nom du noeud>_maj_valeur.
   action_maj: "esphome.{{ device_attr(panneau, 'name') | slugify }}_maj_valeur"
 
@@ -432,6 +517,12 @@ triggers:
   - trigger: event
     id: commande
     event_type: esphome.hapanel_commande
+  # Sans déclencheur choisi, ce déclencheur ne surveille rien.
+  - trigger: state
+    id: accueil
+    entity_id: !input accueil_declencheurs
+    from: "off"
+    to: "on"
 
 conditions:
   # Une demande ou une commande ne concerne que le panneau qui l'a émise.
@@ -439,6 +530,26 @@ conditions:
     value_template: >-
       {{ trigger.id not in ['demande', 'commande']
          or trigger.event.data.get('device_id') == panneau }}
+  # Accueil : évalué au déclenchement, avant la file d'attente, pour que tous
+  # les modules jugent l'arrivée de la même façon.
+  - condition: or
+    conditions:
+      - condition: template
+        value_template: "{{ trigger.id != 'accueil' }}"
+      - condition: and
+        conditions:
+          - condition: time
+            after: !input accueil_debut
+            before: !input accueil_fin
+          # Le déclencheur était au repos depuis la période choisie, et les
+          # autres aussi : la maison était inoccupée.
+          - condition: template
+            value_template: >-
+              {% set limite = now() - timedelta(minutes=accueil_inactivite | int) %}
+              {% set autres = accueil_declencheurs | reject('eq', trigger.entity_id) | list %}
+              {{ trigger.from_state.last_changed < limite
+                 and expand(autres) | selectattr('state', 'eq', 'on') | list | count == 0
+                 and expand(autres) | selectattr('last_changed', 'gt', limite) | list | count == 0 }}
 
 actions:
   - variables:
@@ -539,6 +650,116 @@ actions:
                   message: >-
                     HAPanel : commande refusée ({{ commande }} {{ valeur }},
                     thermostat {{ etat }}, verrou {{ verrou }})
+      # Message d'accueil (D028, D042) : conditions vérifiées plus haut.
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id == 'accueil' }}"
+        sequence:
+          - variables:
+              # Entité de configuration « Message d'accueil », indisponible si le
+              # panneau est déconnecté.
+              accueil_entite: >-
+                {{ (device_entities(panneau)
+                    | select('search', '^switch\..*message_d_accueil') | list + [''])[0] }}
+              # Instant du déclenchement, le même pour tous les modules : saison,
+              # moment et tirage en dépendent, donc le message aussi. Une date
+              # serait rendue en texte : chaque modèle la relit.
+              arrivee_ms: "{{ (as_timestamp(trigger.to_state.last_changed) * 1000) | int }}"
+              saison: >-
+                {% set a = trigger.to_state.last_changed | as_local %}
+                {% set j = a.month * 100 + a.day %}
+                {{ 'hiver' if j < 320 or j >= 1221 else 'printemps' if j < 621
+                   else 'ete' if j < 922 else 'automne' }}
+              moment: >-
+                {% set h = (trigger.to_state.last_changed | as_local).hour %}
+                {{ 'nuit' if h < 5 or h >= 22 else 'matin' if h < 12
+                   else 'apres-midi' if h < 18 else 'soir' }}
+              # Tâches non cochées des deux listes, remplies ci-dessous. L'action
+              # variables d'un bloc met à jour ces variables (Home Assistant 2025.4
+              # et suivants).
+              uniques: []
+              messages: []
+          - condition: template
+            value_template: "{{ accueil_entite != '' and is_state(accueil_entite, 'on') }}"
+          # Liste indisponible : l'action échoue, le message par défaut reste possible.
+          - if:
+              - condition: template
+                value_template: "{{ accueil_liste_uniques != '' }}"
+            then:
+              - action: todo.get_items
+                continue_on_error: true
+                target:
+                  entity_id: "{{ accueil_liste_uniques }}"
+                data:
+                  status: needs_action
+                response_variable: reponse
+              - variables:
+                  uniques: >-
+                    {{ reponse[accueil_liste_uniques]['items']
+                       if reponse is defined and accueil_liste_uniques in reponse else [] }}
+          - if:
+              - condition: template
+                value_template: "{{ uniques | count == 0 and accueil_liste_messages != '' }}"
+            then:
+              - action: todo.get_items
+                continue_on_error: true
+                target:
+                  entity_id: "{{ accueil_liste_messages }}"
+                data:
+                  status: needs_action
+                response_variable: reponse
+              - variables:
+                  messages: >-
+                    {{ reponse[accueil_liste_messages]['items']
+                       if reponse is defined and accueil_liste_messages in reponse else [] }}
+          # Message unique d'abord, puis un message de la liste qui convient à la
+          # saison et au moment. Le tirage dépend de l'instant de l'arrivée, et
+          # non du hasard, pour que tous les modules affichent le même.
+          - variables:
+              unique: "{{ uniques[0] if uniques | count > 0 else {} }}"
+              texte: >-
+                {% if unique %}{{ unique.summary }}{% else %}
+                {% set r = namespace(l=[]) %}
+                {% for it in messages %}
+                  {% set mots = (it.description or '') | lower | replace('é', 'e')
+                     | replace('è', 'e') | regex_findall('[a-z-]+') %}
+                  {% set s = mots | select('in', ['printemps', 'ete', 'automne', 'hiver']) | list %}
+                  {% set m = mots | select('in', ['matin', 'apres-midi', 'soir', 'nuit']) | list %}
+                  {% if (not s or saison in s) and (not m or moment in m) %}
+                    {% set r.l = r.l + [it.summary] %}
+                  {% endif %}
+                {% endfor %}
+                {{ r.l[arrivee_ms | int % (r.l | count)] if r.l
+                   else ('Bonsoir' if moment in ['soir', 'nuit'] else 'Bonjour') ~ ', bienvenue à la maison !' }}
+                {% endif %}
+              infos: >-
+                {% set noms = {'clear-night': 'nuit claire', 'cloudy': 'nuageux',
+                   'exceptional': 'exceptionnel', 'fog': 'brouillard', 'hail': 'grêle',
+                   'lightning': 'orage', 'lightning-rainy': 'orage et pluie',
+                   'partlycloudy': 'éclaircies', 'pouring': 'averses', 'rainy': 'pluie',
+                   'snowy': 'neige', 'snowy-rainy': 'neige et pluie', 'sunny': 'ensoleillé',
+                   'windy': 'venteux', 'windy-variant': 'vent et nuages'} %}
+                {% set t = state_attr(meteo, 'temperature') %}
+                {% if accueil_meteo and states(meteo) in noms %}Dehors : {{ (t | round(0) | int ~ ' °C, ')
+                   if t is number else '' }}{{ noms[states(meteo)] }}{% endif %}
+          # Action ESPHome du module : esphome.<nom du noeud>_message_accueil.
+          - action: "esphome.{{ device_attr(panneau, 'name') | slugify }}_message_accueil"
+            continue_on_error: true
+            data:
+              texte: "{{ texte | trim }}"
+              infos: "{{ infos | trim }}"
+          # Plusieurs modules peuvent cocher la même tâche : sans effet.
+          - if:
+              - condition: template
+                value_template: "{{ unique.uid is defined }}"
+            then:
+              - action: todo.update_item
+                continue_on_error: true
+                target:
+                  entity_id: "{{ accueil_liste_uniques }}"
+                data:
+                  item: "{{ unique.uid }}"
+                  status: completed
     default:
       # Accueil : tout déclencheur, sauf ceux propres à la météo et au planning.
       - if:

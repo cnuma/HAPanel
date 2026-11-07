@@ -27,7 +27,7 @@ Trois idées structurent tout le reste :
 | Action `maj_valeur(cle, valeur)` | API native chiffrée | HA vers module | Toutes les valeurs affichées |
 | Événement `esphome.hapanel_demande_valeurs` | API native | Module vers HA | Demande un envoi complet à la connexion |
 | Événement `esphome.hapanel_commande` | API native | Module vers HA | Toutes les commandes |
-| Action `message_accueil(texte, infos)` | API native chiffrée | HA vers module | Message d'accueil (D028), blueprint `message_accueil.yaml` |
+| Action `message_accueil(texte, infos)` | API native chiffrée | HA vers module | Message d'accueil (D028), section du blueprint `module.yaml` (D042) |
 | OTA | Réseau local chiffré | PC vers module | Mise à jour du firmware (modules privés, `hapanel.yaml`) |
 | Entité « Firmware » | HTTPS depuis GitHub | GitHub vers module, lancée depuis HA | Mise à jour du binaire public (D039, maquette) |
 
@@ -583,9 +583,10 @@ sans émettre d'événement LVGL, donc sans boucle. Le blueprint envoie chaque c
 drapeau `reglage_impose_*` correspondant, et la page affiche un cadenas et désactive la
 commande.
 
-**Message d'accueil (D028) :** le blueprint de la maison `message_accueil.yaml` choisit le
-texte et la ligne de météo, puis appelle `message_accueil` sur chaque panneau dont l'entité
-« Message d'accueil » est activée. Le module l'affiche par-dessus les deux barres,
+**Message d'accueil (D028, D042) :** la section « Message d'accueil » du blueprint
+`module.yaml` choisit le texte et la ligne de météo, puis appelle `message_accueil` sur son
+module si l'entité « Message d'accueil » est activée ; le choix dépend de l'instant du
+déclenchement, donc les modules réglés de même affichent le même texte. Le module l'affiche par-dessus les deux barres,
 garde l'écran allumé, passe la LED en arc-en-ciel (l'alerte reste prioritaire) et ferme le
 message au toucher, après 3 minutes ou à la déconnexion de HA (P2).
 

@@ -592,7 +592,8 @@ qui cite la précédente.
 - Date : 2 novembre 2026 — Statut : demandé par le propriétaire, qui a répondu
   aux questions de cadrage (TODO P4) ; validé par lui sur le module et dans HA le
   3 novembre 2026 (texte blanc et police du projet ajoutés au banc). Le saint du
-  jour est reporté (source à choisir).
+  jour est reporté (source à choisir). Blueprint de la maison remplacé par une
+  section du blueprint du module : D042.
 - Contexte : quand quelqu'un arrive après une absence, les panneaux affichent un
   message selon la saison et l'heure, tiré d'une bibliothèque facile à modifier.
 - Décision :
@@ -1001,3 +1002,37 @@ qui cite la précédente.
   `hapanel-2432s024c-factory.bin` et `hapanel-2432s024c-ota.bin` (guide
   d'installation : captures à refaire). Interface encore calée sur 240 × 320 et
   glissière peu adaptée au tactile résistif : TODO rang 5.
+
+## D042 — Message d'accueil réglé dans le blueprint du module
+
+- Date : 7 novembre 2026 — Statut : choisi par le propriétaire (option A, HAP-R001) ;
+  à valider sur le module et dans HA (cahier B10 à B19). Remplace, dans D028, le
+  blueprint de la maison `message_accueil.yaml`.
+- Contexte : deux blueprints à configurer ; à chaque nouveau module, le message
+  d'accueil est oublié puis cherché (remarque du propriétaire du 7 novembre 2026,
+  cahier K).
+- Décision :
+  - section repliée et facultative « Message d'accueil » dans `module.yaml`
+    (déclencheurs, période sans déclenchement, plage horaire, deux listes, météo
+    sous le message), remplie dans l'automatisation de chaque module ; sans
+    déclencheur, rien ; `message_accueil.yaml` est retiré du dépôt ;
+  - chaque module décide seul : les conditions (plage, période sans déclenchement)
+    sont évaluées au déclenchement, avant la file d'attente de l'automatisation, et
+    le message ne part que vers ce module, s'il a son entité « Message d'accueil »
+    activée ;
+  - même texte sur tous les modules réglés de la même façon : saison, moment et
+    choix du message dépendent de l'instant du déclenchement (millisecondes), et non
+    plus d'un tirage au hasard ;
+  - météo sous le message prise dans l'entité Météo du module, désactivable ;
+  - pas de protection contre deux fois de suite le même message (choix du
+    propriétaire).
+- Options écartées : un module « pilote » qui sert tous les modules trouvés
+  automatiquement (option B, recommandée par l'agent : un seul tirage, messages
+  uniques sûrs) ; garder deux blueprints en trouvant les panneaux automatiquement
+  (option C).
+- Conséquences : réglages à recopier dans chaque module. Un module dont
+  l'automatisation est occupée au déclenchement (envoi périodique) peut lire la
+  liste des messages uniques après qu'un autre module l'a cochée : il affiche et
+  coche alors le message unique suivant, ou un message ordinaire. Migration une
+  fois : supprimer l'automatisation et le blueprint « HAPanel — message d'accueil »
+  (`CONFIGURATION.md` § 6). Le firmware ne change pas.

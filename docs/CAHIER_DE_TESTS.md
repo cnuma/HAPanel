@@ -59,7 +59,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | Partie | Sujet | Bloque la fusion de |
 |---|---|---|
 | A | Message d'accueil, côté module (D028) | `feature/message-accueil` (fusionnée) |
-| B | Message d'accueil, côté blueprint (D028) | `feature/message-accueil` (fusionnée) |
+| B | Message d'accueil, côté blueprint (D028) ; réglé dans le blueprint du module (D042, B10 à B19) | `feature/message-accueil` (fusionnée) ; B10 à B19 : `feature/accueil-blueprint-module` |
 | C | Réglages de la LED par module (D027) et bouton Accueil (D025) | `feature/reglages-ecran` (fusionnée ; C2 seulement) |
 | D | Icônes et couleurs des scénarios (D026) | — |
 | E | LED selon la lumière (D018) et rétroéclairage (D023) | — |
@@ -118,6 +118,16 @@ Chaque déclenchement : noter le message affiché. En cas d'absence, ouvrir les
 | B7 | Changer temporairement la plage (« jusqu'à » une heure déjà passée), attendre 1 min, ouvrir | Pas de message ; la trace montre la condition d'horaire | `feature/message-accueil` (fusionnée) | |
 | B8 | Remettre la plage ; mettre l'entité « LED » sur éteinte (D027), déclencher | Message affiché, **sans** arc-en-ciel | `feature/message-accueil` (fusionnée) | |
 | B9 | **Fin des tests :** remettre la période sans déclenchement à 30 min et la LED à son réglage | Réglages de tous les jours rétablis | `feature/message-accueil` (fusionnée) | |
+| B10 | Migration (`CONFIGURATION.md` § 6, « Venir de l'ancien blueprint ») : noter les réglages de l'automatisation « HAPanel — message d'accueil », la supprimer ; réimporter `module.yaml` depuis la branche `feature/accueil-blueprint-module` ; dans l'automatisation du module de l'atelier, section **Message d'accueil** : la porte d'entrée, période **1 min**, les deux listes ; enregistrer ; supprimer le blueprint « HAPanel — message d'accueil » | Automatisation enregistrée sans erreur ; plus aucune automatisation ni blueprint « message d'accueil » dans HA | `feature/accueil-blueprint-module` | |
+| B11 | Automatisation du module de la cuisine : l'ouvrir et l'enregistrer **sans** remplir la section Message d'accueil | Enregistrée sans erreur ; accueil, consigne (+/−), météo, planning et scénarios du module de la cuisine fonctionnent comme avant | `feature/accueil-blueprint-module` | |
+| B12 | Porte fermée, rien touché depuis plus d'1 min, entre 6 h et 23 h : ouvrir la porte | Message avec la ligne météo sur le module de l'atelier ; **rien** sur le module de la cuisine (pas de déclencheur) | `feature/accueil-blueprint-module` | |
+| B13 | B3 refait : trois fois, attendre 1 min de calme puis ouvrir ; noter les trois textes | Un message à chaque fois. Le même texte peut revenir deux fois de suite (accepté, D042) | `feature/accueil-blueprint-module` | |
+| B14 | Remplir la section Message d'accueil du module de la cuisine avec les mêmes réglages qu'en B10 ; attendre 1 min, ouvrir | Le **même** texte sur les deux modules | `feature/accueil-blueprint-module` | |
+| B15 | Ajouter une tâche « Test unique » dans « Messages uniques » ; attendre 1 min, ouvrir | « Test unique » sur les deux modules, puis la tâche est **cochée**. Si un module montre un autre texte, le noter (cas prévu en D042) | `feature/accueil-blueprint-module` | |
+| B16 | Désactiver l'entité « Message d'accueil » du module de la cuisine ; attendre 1 min, ouvrir | Message sur l'atelier seulement ; la trace de l'automatisation de la cuisine s'arrête sur la condition de l'entité | `feature/accueil-blueprint-module` | |
+| B17 | Section Message d'accueil de l'atelier : désactiver **Météo sous le message** ; attendre 1 min, ouvrir | Message sans ligne météo | `feature/accueil-blueprint-module` | |
+| B18 | Changer la plage (« jusqu'à » une heure déjà passée) ; attendre 1 min, ouvrir | Pas de message ; la trace montre la condition d'horaire | `feature/accueil-blueprint-module` | |
+| B19 | **Fin des tests :** remettre la plage, la météo, l'entité « Message d'accueil » de la cuisine et la période à 30 min sur les deux modules | Réglages de tous les jours rétablis | `feature/accueil-blueprint-module` | |
 
 ## C — Réglages de la LED par module (D027) et bouton Accueil (D025)
 
