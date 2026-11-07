@@ -5,8 +5,8 @@ du module neuf, sorti de sa boîte, jusqu'au module relié à votre Wi-Fi ; la s
 est dans [CONFIGURATION.md](CONFIGURATION.md). Comptez 15 minutes. Aucune ligne de
 commande, rien à compiler, aucun mot de passe à inventer.
 
-*Brouillon : les emplacements « 📷 Capture » seront remplacés par les captures prises
-au reflash du premier module de production (cahier J14).*
+*Brouillon : les emplacements « 📷 Capture » restants seront remplacés au prochain
+reflash du module de test (cahier J9, J10).*
 
 ## Ce qu'il vous faut
 
@@ -27,7 +27,9 @@ au reflash du premier module de production (cahier J14).*
    <https://github.com/cnuma/HAPanel/releases/latest>.
 2. En bas de la page, la rubrique **Assets** liste 5 fichiers. Cliquez sur le
    premier, `hapanel-factory.bin` (encadré en rouge). Il arrive dans votre dossier
-   Téléchargements.
+   Téléchargements. S'il y en a déjà un, d'une installation précédente, supprimez
+   l'ancien d'abord : le nouveau s'appellerait `hapanel-factory (1).bin`, et l'on
+   risquerait de choisir l'ancien à l'étape 3.
 
 ![Page de la version, fichier hapanel-factory.bin encadré](images/installation/01_release.png)
 
@@ -53,15 +55,23 @@ projet.
 
 ![Page d'accueil d'ESPHome Web, bouton Connection encadré](images/installation/02_web_esphome.png)
 
-4. Une fenêtre liste les ports série. Choisissez celui qui apparaît quand vous
-   branchez le module, puis **Connexion**.
+4. Une fenêtre liste les ports série. Choisissez **USB Serial (COM…)**, puis
+   **Connexion**. Le numéro varie d'un ordinateur à l'autre, et « associé » peut
+   suivre.
 
-> 📷 Capture 03 — fenêtre de choix du port (numéro du port masqué).
+![Fenêtre de choix du port, ligne USB Serial sélectionnée](images/installation/03_choix_port.png)
 
 **La liste est vide ?** Vérifiez d'abord le navigateur (Chrome ou Edge), puis
-changez de câble. Si rien n'y fait, il manque le **pilote CH340** : c'est la puce
-qui relie la prise USB du module à l'ordinateur (constaté sur le module de
-référence). Windows 10 et 11 l'installent souvent seuls ; sinon :
+changez de câble. Si rien n'y fait, il manque sans doute le **pilote CH340** : c'est
+la puce qui relie la prise USB du module à l'ordinateur (constaté sur le module de
+référence). Windows 10 et 11 l'installent souvent seuls. Pour le vérifier : clic
+droit sur le bouton Démarrer, **Gestionnaire de périphériques**, rubrique
+**Ports (COM et LPT)** ; le module y figure sous le nom « USB-SERIAL CH340 (COM…) »
+quand le pilote est installé.
+
+![Clic droit sur le bouton Démarrer, Gestionnaire de périphériques encadré](images/installation/03b_menu_demarrer.png)
+
+Si le pilote manque :
 
 1. Téléchargez-le **uniquement sur le site de son fabricant**, WCH (Nanjing Qinheng
    Microelectronics) :
@@ -70,7 +80,7 @@ référence). Windows 10 et 11 l'installent souvent seuls ; sinon :
    - macOS : <https://www.wch-ic.com/downloads/CH341SER_MAC_ZIP.html>.
 2. Sous Windows, lancez `CH341SER.EXE`, cliquez sur **INSTALL**, puis débranchez et
    rebranchez le module.
-3. Recommencez l'étape 2 : un port « USB-SERIAL CH340 » apparaît dans la liste.
+3. Recommencez l'étape 2 : la ligne « USB Serial (COM…) » apparaît dans la liste.
 
 > [!CAUTION]
 > Ne prenez pas ce pilote sur un site de téléchargement, un forum ou un lien
@@ -80,16 +90,24 @@ référence). Windows 10 et 11 l'installent souvent seuls ; sinon :
 
 ## 3. Écrire le logiciel dans le module
 
-1. Cliquez sur **Install**.
+1. La page indique **Connecté**. Cliquez sur la **petite flèche** à droite du grand
+   bouton bleu : « Installer » s'affiche au survol.
 
-> 📷 Capture 04 — module connecté, bouton Install.
+![Module connecté, bouton Installer encadré](images/installation/04_installer.png)
 
-2. Choisissez le fichier `hapanel-factory.bin` téléchargé à l'étape 1.
-3. Cochez l'effacement du module et confirmez. Tout ce qu'il contenait est effacé.
+> [!IMPORTANT]
+> Pas sur le grand bouton **Préparation pour la première utilisation** : il
+> installerait un logiciel ESPHome de base, pas HAPanel.
 
-> 📷 Capture 05 — fenêtre de confirmation de l'effacement.
+2. Dans la fenêtre qui s'ouvre, cliquez sur **Choisir un fichier**, prenez
+   `hapanel-factory.bin` dans votre dossier Téléchargements, puis **Installer**. Les
+   explications numérotées de la fenêtre ne vous concernent pas : elles visent ceux
+   qui compilent leur propre logiciel.
 
-4. Attendez la fin de l'écriture, environ 2 minutes, sans débrancher.
+![Fenêtre de choix du fichier, hapanel-factory.bin choisi](images/installation/05_choisir_fichier.png)
+
+3. Attendez la fin de l'écriture, environ 2 minutes, sans débrancher. Elle efface
+   tout ce que le module contenait.
 
 > 📷 Capture 06 — barre de progression.
 >
@@ -97,16 +115,19 @@ référence). Windows 10 et 11 l'installent souvent seuls ; sinon :
 
 ## 4. Relier le module au Wi-Fi
 
-Juste après l'écriture, la page propose de configurer le Wi-Fi.
+Juste après l'écriture, la page propose de configurer le Wi-Fi : fenêtre
+**Configure Wi-Fi**, qui rappelle le nom du module (`hapanel-` suivi de six
+caractères) et sa version.
 
-1. Cliquez sur **Configure Wi-Fi** (ou **Connect to Wi-Fi**).
-2. Choisissez votre réseau 2,4 GHz, saisissez son mot de passe, **Connect**.
+1. Dans **Network**, choisissez votre réseau 2,4 GHz ; dans **Password**, saisissez
+   son mot de passe ; puis **Connect**.
 
-> 📷 Capture 08 — choix du réseau et mot de passe (nom du réseau masqué).
+![Fenêtre Configure Wi-Fi, nom du réseau et mot de passe masqués](images/installation/08_wifi.png)
 
-3. Le module redémarre et rejoint le Wi-Fi. La page l'indique.
+2. Le module rejoint le Wi-Fi : la fenêtre affiche **Provisioned!**. Cliquez sur
+   **Close**.
 
-> 📷 Capture 09 — Wi-Fi configuré.
+![Wi-Fi configuré : Provisioned!](images/installation/09_wifi_ok.png)
 
 Vous pouvez maintenant débrancher le module de l'ordinateur et le brancher sur son
 bloc secteur : il garde le Wi-Fi.
@@ -151,9 +172,11 @@ jour suivantes passeront par Home Assistant, sans câble (section 7).
 Pour un module qui tournait avec une version compilée sur un ordinateur, pour le
 céder ou pour repartir de zéro : refaites les étapes 1 à 4. Le Wi-Fi est à ressaisir.
 
-Dans Home Assistant, si l'ancien appareil ne se reconnecte pas et qu'un nouveau est
-découvert : ajoutez-le ([CONFIGURATION.md](CONFIGURATION.md), section 1), ouvrez l'automatisation du module, choisissez le
-nouvel appareil dans « Panneau » et enregistrez. Supprimez ensuite l'ancien appareil.
+Dans Home Assistant, si le module apparaît comme un nouvel appareil (c'est le cas si
+l'ancien a été supprimé) : ajoutez-le ([CONFIGURATION.md](CONFIGURATION.md),
+section 1), puis ouvrez l'automatisation du module, choisissez-le de nouveau dans
+« Panneau » et enregistrez ; sinon, l'accueil n'affiche rien de la maison. Supprimez
+ensuite l'ancien appareil s'il est encore listé.
 
 ## Dépannage
 

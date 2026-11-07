@@ -34,19 +34,23 @@ Vérifiez que Home Assistant contient déjà les entités que le module afficher
 ## 1. Ajouter le module
 
 1. Ouvrez Home Assistant, puis **Paramètres › Appareils et services**.
-2. En haut, sous « Nouveaux appareils découverts », le module apparaît sous le nom
-   **HAPanel** : cliquez sur **Ajouter**.
+2. En haut, parmi les appareils découverts, le module apparaît sous le nom
+   **HAPanel** suivi de six caractères, par exemple « HAPanel 583c28
+   (hapanel-583c28) » : cliquez sur **Ajouter**. Si vous avez déjà un appareil
+   ESPHome, il peut aussi apparaître en ouvrant **ESPHome**, rubrique
+   **Découvertes** (capture ci-dessous).
 
-> 📷 Capture 13 — appareil découvert dans Appareils et services.
+![Module découvert, rubrique Découvertes de la page ESPHome](images/installation/13_ha_decouvert.png)
 
 3. Cliquez sur **Valider**. **Aucune clé n'est à saisir** : Home Assistant crée
    lui-même la clé qui chiffre les échanges et l'envoie au module.
 
-> 📷 Capture 14 — fenêtre de confirmation de l'ajout.
+![Fenêtre « Appareil ESPHome découvert », bouton Valider](images/installation/14_ha_ajouter.png)
 
-4. Choisissez la pièce du module, puis **Terminer**.
+4. Dans « Nommer et attribuer », gardez ou changez le nom, choisissez la pièce du
+   module, puis **Terminer**.
 
-> 📷 Capture 15 — choix de la pièce.
+![Fenêtre « Nommer et attribuer » : nom et pièce](images/installation/15_ha_nommer.png)
 
 5. Regardez le module : le point en haut à droite passe au **vert** et « Pas de
    communication avec Home Assistant » disparaît. L'écran affiche encore « non
@@ -338,6 +342,6 @@ Sans nouvelle valeur pendant 15 minutes, le module affiche la valeur comme péri
 | Réparation Z-Wave « Obsolescence : Window/door is open » sur le contact de porte | L'entité `…_window_door_is_open` est remplacée par une entité `binary_sensor` du même capteur | Dans l'automatisation qui l'utilise (message d'accueil compris), choisir la nouvelle entité ; désactiver l'ancienne ; redémarrer Home Assistant |
 | Écran trop sombre | « Intensité écran » trop basse | Monter « Intensité écran » (section 5). Toujours trop sombre la nuit : réglage du logiciel, à demander au développeur (`docs/codex/05_BUILD_AND_TEST.md`) |
 | Au démarrage de HA : « Automation failed to set up », `Unable to find cnuma/ecran_accueil.yaml` | Automatisation « HAPanel — écran d'accueil » restée dans HA : son blueprint, remplacé par `module.yaml` (D021), a été supprimé | Vérifier qu'une automatisation « HAPanel — module » existe pour le module, puis supprimer l'ancienne |
-| Le module n'apparaît pas dans « Nouveaux appareils découverts » | Module pas encore sur le Wi-Fi, ou découverte bloquée par le réseau | Vérifier le Wi-Fi ([INSTALLATION.md](INSTALLATION.md), étape 4), puis ajouter l'intégration ESPHome avec l'adresse IP du module (section 1) |
+| Le module n'apparaît pas parmi les appareils découverts | Module pas encore sur le Wi-Fi, ou découverte bloquée par le réseau | Vérifier le Wi-Fi ([INSTALLATION.md](INSTALLATION.md), étape 4), puis ajouter l'intégration ESPHome avec l'adresse IP du module (section 1) |
 | Home Assistant demande une clé de chiffrement | Module déjà ajouté à un autre Home Assistant, ou module de l'atelier compilé avec `secrets.yaml` | Ne rien saisir. Module public : le réinstaller ([INSTALLATION.md](INSTALLATION.md), étapes 1 à 4) pour l'effacer. Module de l'atelier : saisir sa clé `api_encryption_key` |
 | Point rouge et « Pas de communication » | Home Assistant arrêté, module retiré ou clé d'API différente | Vérifier l'intégration ESPHome |
