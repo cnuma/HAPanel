@@ -70,10 +70,11 @@ lvgl:
         - lvgl.label.update:
             id: lbl_barre_titre
             text: "À propos"
-        # Resultat d'une recherche precedente efface (D047).
+        # Resultat d'une recherche precedente efface (D047), couleur d'origine.
         - lvgl.label.update:
             id: lbl_apropos_maj
             text: "Rechercher une mise à jour"
+        - lambda: lv_obj_remove_local_style_prop(id(btn_apropos_maj), LV_STYLE_BG_COLOR, LV_PART_MAIN);
       widgets:
         - label:
             id: lbl_apropos_version

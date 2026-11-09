@@ -14,7 +14,10 @@ de test de l'atelier.
 ## 1. Publier une version
 
 1. Le commit à publier est poussé sur GitHub. Le fichier `VERSION` donne la base de
-   la version, par exemple `0.8.0-dev`.
+   la version, par exemple `0.8.0-dev`. `NOUVEAUTES.md` contient une ligne courte pour
+   cette version, sous `## <version>` (`## 0.8.0` suffit pour `0.8.0-dev.1`) : c'est le
+   résumé affiché par le module avant l'installation et par HA (D047). Sans ligne,
+   la publication le signale (avertissement dans Actions) et rien ne s'affiche.
 2. Créer et pousser l'étiquette, dont la version commence par le contenu de
    `VERSION` :
 

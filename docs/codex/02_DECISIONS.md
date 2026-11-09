@@ -1150,7 +1150,15 @@ qui cite la précédente.
     il revient au libellé de départ à chaque ouverture de la page ;
   - **Menu :** tuile violette « Mise à jour » (`#AB47BC`, D045) à la 6e place, visible
     seulement quand une mise à jour attend ; elle ouvre une confirmation « Installer
-    la version X.Y.Z ? » (Annuler, Installer) ;
+    la version X.Y.Z ? » (Annuler, Installer), avec en dessous, en gris, le résumé de
+    la version (160 octets au plus) ;
+  - **résumé (retour du propriétaire, 9 novembre 2026, cahier O5) :** une ligne par
+    version dans `NOUVEAUTES.md`, sous `## <version>` (ou la version sans suffixe :
+    `0.11.0-dev.1` lit `0.11.0`) ; la publication la copie dans le champ « summary »
+    du manifeste, lu par le module et affiché aussi par HA. Sans ligne : rien. Le
+    résumé générique « HAPanel X (SHA), carte » disparaît du manifeste ;
+  - **bouton de la page À propos violet** quand la recherche trouve une version
+    (retour du propriétaire, cahier O2) ; couleur d'origine à la réouverture ;
   - **installation :** « Mise à jour en cours, module indisponible » reste affiché
     jusqu'au redémarrage dans la nouvelle version (le téléchargement bloque la boucle
     principale : l'écran ne bouge plus) ; en cas d'échec, « Échec de la mise à jour.
@@ -1159,6 +1167,9 @@ qui cite la précédente.
     est encore « mise à jour disponible » ; sinon, rien n'est lancé. Sans toucher
     pendant 1 min, la confirmation ou le message d'échec se ferment (comme le retour
     à l'accueil, D022), jamais pendant l'installation.
+- Options écartées pour le résumé : message de l'étiquette git (relu seulement à la
+  publication, invisible dans les fichiers) ; texte générique actuel (sans intérêt
+  pour l'utilisateur).
 - Options écartées : tuile toujours visible et grisée (Menu changeant pour rien,
   installation sans objet) ; recherche toutes les 6 h en plus de 3 h (requêtes
   inutiles : la nuit suffit, le bouton couvre l'urgence) ; installation automatique

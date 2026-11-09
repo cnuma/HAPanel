@@ -106,14 +106,26 @@ lvgl:
                 text_font: police_icones
                 text_color: 0xAB47BC
                 text: "\U000F005F"
+            # Titre remonte pour laisser la place au resume (retour du
+            # proprietaire, O5 du 9 novembre 2026).
             - label:
                 id: lbl_maj_texte
-                align: CENTER
-                y: -30
+                align: TOP_MID
+                y: 80
                 width: 216
                 long_mode: WRAP
                 text_align: CENTER
                 text_font: police_titre
+                text: ""
+            # Resume de la Release (champ « summary » du manifeste), vide sinon.
+            - label:
+                id: lbl_maj_resume
+                align: TOP_MID
+                y: 150
+                width: 216
+                long_mode: WRAP
+                text_align: CENTER
+                text_color: 0xB0BEC5
                 text: ""
             - button:
                 id: btn_maj_annuler
@@ -220,6 +232,11 @@ script:
                 }
                 ESP_LOGI("hapanel.maj", "recherche depuis l'ecran : %s", texte.c_str());
                 lv_label_set_text(id(lbl_apropos_maj), texte.c_str());
+                // Violet de la tuile du Menu (D045) quand une version attend
+                // (retour du proprietaire, 9 novembre 2026).
+                if (id(maj_firmware).state == update::UPDATE_STATE_AVAILABLE &&
+                    id(maj_reponses) != id(maj_recherche_debut))
+                  lv_obj_set_style_bg_color(id(btn_apropos_maj), lv_color_hex(0xAB47BC), LV_PART_MAIN);
 
   # Bouton violet du Menu (D047) : confirmation, seulement si une mise a jour
   # attend encore.
@@ -234,6 +251,15 @@ script:
                 std::string texte = "Installer la version " +
                                     id(maj_firmware).update_info.latest_version + " ?";
                 lv_label_set_text(id(lbl_maj_texte), texte.c_str());
+                // Resume borne : 160 octets, coupe avant un caractere UTF-8 incomplet.
+                std::string resume = id(maj_firmware).update_info.summary;
+                if (resume.size() > 160) {
+                  size_t n = 160;
+                  while (n > 0 && (resume[n] & 0xC0) == 0x80) n--;
+                  resume = resume.substr(0, n) + "…";
+                }
+                lv_label_set_text(id(lbl_maj_resume), resume.c_str());
+                lv_obj_remove_flag(id(lbl_maj_resume), LV_OBJ_FLAG_HIDDEN);
                 lv_obj_remove_flag(id(btn_maj_annuler), LV_OBJ_FLAG_HIDDEN);
                 lv_obj_remove_flag(id(btn_maj_installer), LV_OBJ_FLAG_HIDDEN);
                 lv_obj_add_flag(id(btn_maj_fermer), LV_OBJ_FLAG_HIDDEN);
@@ -252,6 +278,7 @@ script:
             - lambda: |-
                 id(maj_installation) = true;
                 lv_label_set_text(id(lbl_maj_texte), "Mise à jour en cours, module indisponible");
+                lv_obj_add_flag(id(lbl_maj_resume), LV_OBJ_FLAG_HIDDEN);
                 lv_obj_add_flag(id(btn_maj_annuler), LV_OBJ_FLAG_HIDDEN);
                 lv_obj_add_flag(id(btn_maj_installer), LV_OBJ_FLAG_HIDDEN);
                 ESP_LOGI("hapanel.maj", "installation de la version %s depuis l'ecran",

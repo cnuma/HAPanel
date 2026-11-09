@@ -94,6 +94,7 @@ Relancer le script après toute modification du YAML.
 | `lbl_apropos_version` | widget label | packages/lvgl.yaml | — |
 | `lbl_barre_date` | widget label | packages/lvgl.yaml | packages/pages/accueil.yaml |
 | `lbl_barre_titre` | widget label | packages/lvgl.yaml | packages/pages/accueil.yaml, packages/pages/menu.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
+| `lbl_maj_resume` | widget label | packages/acces_public.yaml | — |
 | `lbl_maj_texte` | widget label | packages/acces_public.yaml | — |
 | `lbl_met_condition` | widget label | packages/pages/meteo.yaml | — |
 | `lbl_met_etat` | widget label | packages/pages/meteo.yaml | — |
