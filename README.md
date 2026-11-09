@@ -6,6 +6,7 @@ ESP32-2432S028 à deux prises USB (écran 2,8", tactile résistif), un binaire p
 (D041).
 
 - Installer un module : [`docs/INSTALLATION.md`](docs/INSTALLATION.md)
+- Télécharger la dernière version : [page des Releases](https://github.com/cnuma/HAPanel/releases/latest)
 - Utilisation du panneau : [`docs/UTILISATION.md`](docs/UTILISATION.md)
 - Configuration dans Home Assistant : [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md)
 - Architecture : [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
