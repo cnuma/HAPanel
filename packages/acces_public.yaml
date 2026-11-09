@@ -75,6 +75,7 @@ time:
         then:
           - logger.log:
               tag: hapanel.maj
+              level: INFO
               format: "recherche de 3 h"
           - update.check: maj_firmware
 
@@ -173,6 +174,7 @@ script:
       - delay: 10s
       - logger.log:
           tag: hapanel.maj
+          level: INFO
           format: "recherche du demarrage"
       - update.check: maj_firmware
 
