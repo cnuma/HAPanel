@@ -22,6 +22,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | Date | Binaire | Partie | Résultat | Suite |
 |---|---|---|---|---|
 | 9 novembre 2026 | `0.11.0-dev (807f372)`, module de la cuisine, par USB | O | OK : O1, O2, O4 à O7, O12 ; O3 sans retour | Demandes du propriétaire : bouton violet (O13), descriptif dans la confirmation (O14, `NOUVEAUTES.md`). Module revenu sur `0.10.0 (99a9a10)` par O7 |
+| 9 novembre 2026 | `0.11.0-dev (e1407a4)`, module de la cuisine | O3, O13 | **OK** (propriétaire) | O14 à faire |
 | 3 novembre 2026 | `6ec8bc4` | A | OK, sauf texte gris sombre sur noir, illisible | Corrigé (`5134e69`) : texte blanc ; à revoir après flash |
 | 3 novembre 2026 | `6ec8bc4` | B | OK, même défaut de couleur | Idem |
 | 3 novembre 2026 | `6ec8bc4` | C | KO : « pas de menu de réglage sur le module » | À préciser : les réglages D027 sont sur la page de l'appareil dans HA, pas sur l'écran du module |
@@ -361,7 +362,7 @@ sur le binaire publié. O10 se fait sur le binaire privé du banc.
 |---|---|---|---|---|
 | O1 | Démarrer le module, attendre 1 min, ouvrir À propos | Bouton « Rechercher une mise à jour » sous la mémoire, sans chevauchement ni débordement sous la barre du bas ; flèche violette dans la barre (recherche du démarrage) | `feature/maj-ecran` | OK 9 nov. (`807f372`) : journal « recherche du demarrage » 10 s après le Wi-Fi |
 | O2 | Toucher « Rechercher une mise à jour » | « Recherche… », puis en quelques secondes « Version 0.10.0 disponible » ; journal : « recherche depuis l'ecran » | `feature/maj-ecran` | OK 9 nov. (`807f372`). Mémoire libre 98 Ko pendant la recherche (connexion chiffrée), 144 Ko après. Demande : bouton violet quand une version est trouvée (O13) |
-| O3 | Quitter À propos, y revenir | Le bouton affiche de nouveau « Rechercher une mise à jour » | `feature/maj-ecran` | |
+| O3 | Quitter À propos, y revenir | Le bouton affiche de nouveau « Rechercher une mise à jour » | `feature/maj-ecran` | OK 9 nov. (`e1407a4`) |
 | O4 | Ouvrir le Menu | Tuile violette « Mise à jour » à droite d'À propos ; les autres tuiles inchangées | `feature/maj-ecran` | OK 9 nov. (`807f372`) |
 | O5 | Toucher la tuile, puis Annuler | Fenêtre « Installer la version 0.10.0 ? » ; Annuler la ferme, le Menu revient, rien n'est installé | `feature/maj-ecran` | OK 9 nov. (`807f372`). Demande : court descriptif de la version, titre remonté (O14) |
 | O6 | Rouvrir la confirmation, ne rien toucher 1 min | La fenêtre se ferme ; l'accueil est affiché | `feature/maj-ecran` | OK 9 nov. (`807f372`) |
@@ -371,7 +372,7 @@ sur le binaire publié. O10 se fait sur le binaire privé du banc.
 | O10 | Binaire privé du banc (`hapanel_banc.yaml`) : ouvrir À propos et le Menu | Ni bouton de recherche, ni tuile « Mise à jour » | `feature/maj-ecran` | |
 | O11 | Module public, mise à jour disponible, laissé la nuit, HA connecté | Historique de l'entité « Firmware » dans HA ou journal : une vérification vers 3 h | — | |
 | O12 | Page À propos pendant O1 | Mémoire libre et plus grand bloc notés (G6), comparables à L10 (149 Ko, 60 Ko) | `feature/maj-ecran` | OK 9 nov. (`807f372`) : 144 Ko libres, plus grand bloc 54 Ko |
-| O13 | Binaire de test suivant, mise à jour disponible : À propos, toucher « Rechercher », puis quitter et revenir | Bouton violet avec « Version … disponible » ; au retour, couleur d'origine et « Rechercher une mise à jour » | `feature/maj-ecran` | |
+| O13 | Binaire de test suivant, mise à jour disponible : À propos, toucher « Rechercher », puis quitter et revenir | Bouton violet avec « Version … disponible » ; au retour, couleur d'origine et « Rechercher une mise à jour » | `feature/maj-ecran` | OK 9 nov. (`e1407a4`) |
 | O14 | Même binaire : Menu, tuile « Mise à jour » | Titre « Installer la version 0.10.0 ? » plus haut ; en dessous, en gris : « HAPanel 0.10.0 (99a9a10), carte 2432s024c » (manifeste de `v0.10.0`, publié avant `NOUVEAUTES.md`) ; pendant l'installation, le résumé disparaît. Annuler | `feature/maj-ecran` | |
 | O15 | Première Release publiée avec `NOUVEAUTES.md` : un module encore sur la version précédente, Menu, tuile | Sous le titre, la ligne de `NOUVEAUTES.md` pour cette version ; même texte dans HA, fenêtre « Firmware » | — (à la publication) | |
 
