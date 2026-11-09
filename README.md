@@ -7,7 +7,8 @@ JC4827W543 (écran 4,3", tactile capacitif, ESP32-S3, en portrait provisoire), u
 par carte (D041, D049).
 
 - Installer un module : [`docs/INSTALLATION.md`](docs/INSTALLATION.md)
-- Télécharger la dernière version : [page des Releases](https://github.com/cnuma/HAPanel/releases/latest)
+- Page d'installation, depuis Chrome ou Edge : <https://cnuma.github.io/HAPanel/> (D044)
+- Versions publiées : [page des Releases](https://github.com/cnuma/HAPanel/releases/latest)
 - Utilisation du panneau : [`docs/UTILISATION.md`](docs/UTILISATION.md)
 - Configuration dans Home Assistant : [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md)
 - Architecture : [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)

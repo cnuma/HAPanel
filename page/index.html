@@ -1,0 +1,176 @@
+<!doctype html>
+<!-- Page d'installation par carte (D044). Construite par tools/construire_page.sh,
+     qui remplace @VERSION@ et ajoute ESP Web Tools et un dossier par carte. -->
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Installer HAPanel</title>
+  <meta name="description" content="Installer HAPanel, panneau mural pour Home Assistant, depuis le navigateur.">
+  <script type="module" src="esp-web-tools/install-button.js"></script>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fond: #f6f7f9;
+      --carte: #ffffff;
+      --texte: #1d2330;
+      --discret: #5b6475;
+      --bord: #dde1e8;
+      --accent: #0b6bcb;
+      --accent-texte: #ffffff;
+      --alerte-fond: #fff4e5;
+      --alerte-bord: #f0b35a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fond: #14171c;
+        --carte: #1d2128;
+        --texte: #e7eaf0;
+        --discret: #a3abba;
+        --bord: #2f3540;
+        --accent: #4c9be8;
+        --accent-texte: #0c1420;
+        --alerte-fond: #33281a;
+        --alerte-bord: #a8742c;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fond);
+      color: var(--texte);
+      font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 48px; }
+    h1 { font-size: 1.8rem; margin: 0 0 4px; }
+    h2 { font-size: 1.15rem; margin: 0 0 6px; }
+    p { margin: 0 0 12px; }
+    a { color: var(--accent); }
+    .version { color: var(--discret); margin-bottom: 24px; }
+    .alerte {
+      background: var(--alerte-fond);
+      border-left: 4px solid var(--alerte-bord);
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin: 0 0 24px;
+    }
+    ol.etapes { padding-left: 1.3em; margin: 0 0 28px; }
+    ol.etapes li { margin-bottom: 4px; }
+    .carte {
+      background: var(--carte);
+      border: 1px solid var(--bord);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .carte .infos { flex: 1 1 320px; }
+    .carte ul { margin: 0; padding-left: 1.1em; color: var(--discret); }
+    .essai {
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--alerte-bord);
+      border-radius: 999px;
+      padding: 1px 8px;
+      margin-left: 6px;
+      vertical-align: 2px;
+    }
+    button.installer {
+      background: var(--accent);
+      color: var(--accent-texte);
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 22px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button.installer:focus-visible { outline: 3px solid var(--alerte-bord); outline-offset: 2px; }
+    .impossible { color: var(--discret); font-size: 0.95rem; max-width: 260px; }
+    footer { margin-top: 36px; color: var(--discret); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Installer HAPanel</h1>
+  <p class="version">Panneau mural pour Home Assistant. Version installée par cette page : <strong>@VERSION@</strong>.</p>
+
+  <div class="alerte">
+    <strong>Ordinateur avec Google Chrome ou Microsoft Edge uniquement.</strong>
+    L'installation passe par le port USB, que les autres navigateurs, les téléphones
+    et les tablettes ne permettent pas d'utiliser.
+  </div>
+
+  <ol class="etapes">
+    <li>Branchez le module à l'ordinateur avec un câble USB <strong>de données</strong>.</li>
+    <li>Cliquez sur <strong>Installer</strong> sous votre carte, puis choisissez le port du module.</li>
+    <li>Suivez la fenêtre (en anglais), puis saisissez votre Wi-Fi.</li>
+  </ol>
+  <p>Le guide pas à pas, avec les captures et le dépannage :
+    <a href="https://github.com/cnuma/HAPanel/blob/main/docs/INSTALLATION.md">guide d'installation</a>.</p>
+
+  <section class="carte">
+    <div class="infos">
+      <h2>ESP32-2432S024C</h2>
+      <ul>
+        <li>Écran 2,4 pouces, tactile capacitif</li>
+        <li>Une prise USB-C ; puce ESP32</li>
+      </ul>
+    </div>
+    <esp-web-install-button manifest="2432s024c/manifest.json">
+      <button class="installer" slot="activate">Installer</button>
+      <span slot="unsupported" class="impossible">Navigateur non compatible : ouvrez cette page dans Chrome ou Edge, sur un ordinateur.</span>
+      <span slot="not-allowed" class="impossible">Installation impossible depuis cette adresse.</span>
+    </esp-web-install-button>
+  </section>
+
+  <section class="carte">
+    <div class="infos">
+      <h2>ESP32-2432S028</h2>
+      <ul>
+        <li>Écran 2,8 pouces, tactile résistif (appui franc)</li>
+        <li>Deux prises : USB-C <strong>et</strong> micro-USB ; puce ESP32</li>
+        <li>Une S028 avec une seule prise micro-USB n'est pas encore prise en charge</li>
+      </ul>
+    </div>
+    <esp-web-install-button manifest="2432s028/manifest.json">
+      <button class="installer" slot="activate">Installer</button>
+      <span slot="unsupported" class="impossible">Navigateur non compatible : ouvrez cette page dans Chrome ou Edge, sur un ordinateur.</span>
+      <span slot="not-allowed" class="impossible">Installation impossible depuis cette adresse.</span>
+    </esp-web-install-button>
+  </section>
+
+  <section class="carte">
+    <div class="infos">
+      <h2>Guition JC4827W543 <span class="essai">en essai</span></h2>
+      <ul>
+        <li>Écran 4,3 pouces, tactile capacitif ; puce ESP32-S3</li>
+        <li>Pages en portrait au centre de l'écran, bande noire en bas ; pas de LED</li>
+      </ul>
+    </div>
+    <esp-web-install-button manifest="jc4827w543/manifest.json">
+      <button class="installer" slot="activate">Installer</button>
+      <span slot="unsupported" class="impossible">Navigateur non compatible : ouvrez cette page dans Chrome ou Edge, sur un ordinateur.</span>
+      <span slot="not-allowed" class="impossible">Installation impossible depuis cette adresse.</span>
+    </esp-web-install-button>
+  </section>
+
+  <p>Le nom de la carte est imprimé au dos du module ou sur sa boîte. Le logiciel d'une
+    autre carte s'installe aussi, mais l'écran reste noir ou le toucher ne répond pas.</p>
+
+  <footer>
+    <p>Après l'installation : débranchez puis rebranchez le module avant de juger
+      l'écran, puis ajoutez-le à Home Assistant
+      (<a href="https://github.com/cnuma/HAPanel/blob/main/docs/CONFIGURATION.md">configuration</a>).
+      Les mises à jour suivantes passent par Home Assistant ou par l'écran du module, sans câble.</p>
+    <p><a href="https://github.com/cnuma/HAPanel">Projet HAPanel sur GitHub</a> · licence MIT ·
+      installation par <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a>
+      (licence Apache 2.0). Cette page ne collecte aucune donnée.</p>
+  </footer>
+</main>
+</body>
+</html>

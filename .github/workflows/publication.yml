@@ -9,6 +9,10 @@
 #
 # Declenche par l'envoi d'une etiquette v<version>, par exemple v0.8.0-dev.1 :
 # la version doit commencer par le contenu du fichier VERSION (G5).
+#
+# Version sans suffixe (0.12.0) : la page d'installation par carte est aussi
+# construite (tools/construire_page.sh) et publiee sur GitHub Pages (D044) ; une
+# version -dev ne la change pas.
 name: Publication
 
 on:
@@ -21,6 +25,8 @@ permissions:
 jobs:
   publier:
     runs-on: ubuntu-latest
+    outputs:
+      finale: ${{ steps.id.outputs.finale }}
     steps:
       - uses: actions/checkout@v5
 
@@ -39,6 +45,11 @@ jobs:
           esac
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+          # Version finale : chiffres et points seulement (D044)
+          case "$version" in
+            *[!0-9.]*) echo "finale=false" >> "$GITHUB_OUTPUT" ;;
+            *) echo "finale=true" >> "$GITHUB_OUTPUT" ;;
+          esac
 
       - name: ESPHome
         run: pip install -r requirements.txt
@@ -110,3 +121,29 @@ jobs:
           --title "HAPanel ${{ steps.id.outputs.version }}"
           --notes "Binaires publics sans secret (D039, D041). Premiere installation : hapanel-2432s024c-factory.bin (ecran 2,4 pouces capacitif), hapanel-2432s028-factory.bin (2,8 pouces resistif) ou hapanel-jc4827w543-factory.bin (Guition 4,3 pouces, ESP32-S3). Mise a jour : depuis le module (Menu, Mise a jour) ou entite Firmware dans Home Assistant."
           --latest
+
+      - name: Page d'installation (D044)
+        if: steps.id.outputs.finale == 'true'
+        run: bash tools/construire_page.sh publication "${{ steps.id.outputs.version }}" site
+
+      - uses: actions/upload-pages-artifact@v5
+        if: steps.id.outputs.finale == 'true'
+        with:
+          path: site
+
+  # Publication de la page sur GitHub Pages (source « GitHub Actions » dans les
+  # reglages du depot ; environnement github-pages ouvert aux etiquettes v*,
+  # docs/DEPLOIEMENT_PUBLIC.md § 1).
+  page:
+    needs: publier
+    if: needs.publier.outputs.finale == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - id: deploiement
+        uses: actions/deploy-pages@v5

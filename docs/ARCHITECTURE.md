@@ -614,7 +614,8 @@ message au toucher, après 3 minutes ou à la déconnexion de HA (P2).
 - **Binaire public (D039), mode de déploiement de tous les modules de la maison (D037 révisée) :**
   une étiquette `v<version>` lance GitHub Actions, qui publie une Release (binaire complet, binaire
   de mise à jour, manifeste avec le résumé lu dans `NOUVEAUTES.md`) ; chaque module la propose dans
-  HA (entité Firmware) et sur son écran (tuile du Menu, D047). USB en secours. Procédure : [DEPLOIEMENT_PUBLIC.md](DEPLOIEMENT_PUBLIC.md).
+  HA (entité Firmware) et sur son écran (tuile du Menu, D047). Version finale : la même publication met
+  à jour la page d'installation par carte sur GitHub Pages (D044). USB en secours. Procédure : [DEPLOIEMENT_PUBLIC.md](DEPLOIEMENT_PUBLIC.md).
 
 ## Sécurité
 

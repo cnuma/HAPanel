@@ -76,6 +76,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | L | Mise à jour signalée par la barre d'état et la LED (D045) | `feature/maj-icone` (fusionnée) ; L11 sur la Release `v0.10.0` |
 | M | Adresse IP sur la page À propos | `feature/maj-icone` (fusionnée) |
 | R | Documentation publique sans élément personnel (D052) | `docs/t02-projet-publiable` (fusionnée) |
+| S | Page d'installation par carte (D044) | `feature/page-installation` ; S5, S6 à la publication |
 | 7 novembre 2026 | `9b78597` (S028, USB) | K1, K2, K3 | Écran et couleurs OK (contrôleur ST7789V, sans inversion) ; tactile : x brut décroît de gauche à droite (3605 à 449), y de 419 à 3662. Premier téléversement impossible avec le premier câble USB-C (aucune donnée reçue) ; OK avec un autre câble | Calibrage et `mirror_x` reportés ; K4 sur le binaire suivant |
 | 7 novembre 2026 | `174aa99` (S028, USB) | K4 à K11 | Tout OK ; K5 : glissière Éteint / Chauffage capricieuse au doigt sur dalle résistive, boutons fiables. Mémoire libre 153 Ko, plus grand bloc 96 Ko. Remarque du propriétaire : avoir à configurer le blueprint du message d'accueil en plus de celui du module n'est pas pratique (TODO rang 1) | **Partie K validée**, fusion dans `main` (accord du propriétaire) ; glissière : TODO T04 |
 | 7 novembre 2026 | `745126b` (blueprint, branche) | B10 à B19 | Tout OK : migration, module sans section, même texte sur deux modules, message unique, entité désactivée, météo, plage horaire ; B3 refait (B13) | **Fusion de `feature/accueil-blueprint-module` dans `main`**, accord du propriétaire |
@@ -410,3 +411,22 @@ Sur GitHub, branche `docs/t02-projet-publiable` choisie dans le menu des branche
 |---|---|---|---|---|
 | R1 | Lire le README, puis `INSTALLATION.md`, `CONFIGURATION.md` et `UTILISATION.md` | Aucun nom réel de module (seulement `hapanel-1a2b3c` en exemple), aucune de vos pièces, aucun nom de réseau ; capture 11 d'`INSTALLATION.md` : suffixe du réseau du module masqué | `docs/t02-projet-publiable` (fusionnée) | OK 9 nov. (`512ca63`) |
 | R2 | README, paragraphe sur le journal de développement | Clair pour un visiteur : il comprend que le reste de `docs/` décrit votre installation à titre d'exemple | `docs/t02-projet-publiable` (fusionnée) | OK 9 nov. (`512ca63`) |
+
+## S — Page d'installation par carte (D044)
+
+Avant la fusion : page construite et servie en local depuis la Release `v0.11.0`
+(`DEPLOIEMENT_PUBLIC.md` § 1, « Essayer la page en local »), adresse
+<http://localhost:8765>. S1 à S4 se font en suivant `INSTALLATION.md`, étapes 1 à 3,
+en remplaçant l'adresse de la page par celle-ci. S2 efface la carte : si le module est
+connu de HA, le supprimer de HA avant (`09_PIEGES.md`). S5 et S6 se font à la
+publication.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| S1 | Ouvrir la page dans Chrome ou Edge | Titre « Installer HAPanel », version `0.11.0`, trois cartes, un bouton **Installer** bleu sous chacune ; textes lisibles, rien qui déborde | `feature/page-installation` | |
+| S2 | Carte branchée : **Installer** sous sa carte, port, **Install HAPanel**, **Erase device** cochée, **Next**, **Install** | Libellés du guide ; **Installation complete!** après environ 2 min ; noter si une fenêtre ou un bouton diffère du guide | `feature/page-installation` | |
+| S3 | **Next**, puis Wi-Fi : réseau, mot de passe, **Connect** | « Configure Wi-Fi » avec le nom `hapanel-…` et la version `0.11.0` ; le module rejoint le Wi-Fi ; noter le message et les boutons de fin | `feature/page-installation` | |
+| S4 | Couper l'alimentation, rebrancher sur le bloc secteur ; dans HA, ajouter le module (`CONFIGURATION.md` § 1) et le rattacher à son automatisation | Écran juste ; module découvert et ajouté sans clé à saisir ; accueil rempli | `feature/page-installation` | |
+| S5 | À la publication de la première version finale qui contient D044 : réglage unique fait (`DEPLOIEMENT_PUBLIC.md` § 1), puis Actions › Publication | Tâches « publier » et « page » réussies ; <https://cnuma.github.io/HAPanel/> affiche la nouvelle version ; S1 sur cette adresse | — (à la publication) | |
+| S6 | Première version `-dev` publiée après D044 | La Release est créée, la tâche « page » est sautée, la page garde la version finale | — (à la publication) | |
+| S7 | Ouvrir la page sur un téléphone | « Navigateur non compatible… » à la place des boutons **Installer** | — | |
