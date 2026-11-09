@@ -80,8 +80,8 @@ tactile, à 400 kHz comme sur la S024C.
 | Bloc | Contenu | Rôle |
 |---|---|---|
 | `display` | `mipi_spi`, modèle `JC4827W543` | Le modèle d'ESPHome fournit la séquence d'initialisation du NV3041A, `cs` sur GPIO45, couleurs inversées, 20 MHz. |
-| `touchscreen` | `gt911`, interruption et remise à zéro | Le GT911 donne sa propre résolution ; pas de calibrage. |
-| `lvgl.rotation` | `90` | Portrait. Le NV3041A n'échange pas les axes : LVGL tourne l'image en mémoire (PSRAM), le tactile suit. |
+| `touchscreen` | `gt911`, interruption et remise à zéro, `transform` : `mirror_x` et `mirror_y` | Le GT911 donne sa propre résolution ; pas de calibrage. Il est monté à 180° de l'écran : ses deux axes sont inversés, comme dans AquaLook (cahier Q3). |
+| `lvgl.rotation` | `270` | Portrait, barre d'état du côté opposé au port USB (cahier Q2). Le NV3041A n'échange pas les axes : LVGL tourne l'image en mémoire (PSRAM), le tactile suit. |
 
 ### Bloc `esphome.on_boot` : marges des pages
 
@@ -94,11 +94,14 @@ cartes. Priorité `-100`, comme les autres `on_boot` (fusionnés).
 
 | Opération | Méthode |
 |---|---|
-| Écran à l'envers ou tactile inversé | Changer `lvgl.rotation` (`90` ou `270`) ; si seul le tactile est inversé, ajouter `transform` (`mirror_x`, `mirror_y`) au bloc `touchscreen` (AquaLook a dû inverser les deux axes du GT911). |
+| Écran à l'envers ou tactile inversé | **D'abord couper le courant** (piège ci-dessous). Puis changer `lvgl.rotation` (`90` ou `270`) : l'image et le toucher tournent ensemble ; si seul le tactile est inversé, changer `transform` (`mirror_x`, `mirror_y`) du bloc `touchscreen`. |
 | Passer en paysage | Pages redessinées pour 480 × 272 (TODO T04), puis retirer `lvgl.rotation`, les marges et le bloc `on_boot`. |
 | Nouvelle page | L'ajouter à la lambda du bloc `on_boot`, sinon elle est décalée de 16 px. |
 
 **Pièges :**
+- L'écran n'a pas de broche de remise à zéro : après un flash par USB, il garde l'état
+  du firmware précédent (couleurs inversées, image à 180°) jusqu'à une coupure de
+  courant. Juger l'image après avoir débranché et rebranché la carte (cahier Q2).
 - Un binaire d'une autre carte s'installe sur celle-ci (et inversement) seulement par USB ;
   la mise à jour par Wi-Fi le refuse grâce au champ `chipFamily` du manifeste
   (`ESP32-S3`).

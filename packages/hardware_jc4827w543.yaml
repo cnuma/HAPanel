@@ -109,11 +109,18 @@ touchscreen:
       number: ${pin_tactile_int}
       ignore_strapping_warning: true
     reset_pin: ${pin_tactile_rst}
+    # LVGL tourne l'image et le toucher de 270 degres ; le GT911 est monte a
+    # 180 degres de l'ecran : ses deux axes sont inverses (comme dans AquaLook).
+    transform:
+      swap_xy: false
+      mirror_x: true
+      mirror_y: true
 
-# Portrait : rotation logicielle de LVGL (le controleur NV3041A n'echange pas
-# les axes) ; le tactile suit.
+# Portrait, barre d'etat du cote oppose au port USB (cahier Q2) : rotation
+# logicielle de LVGL (le controleur NV3041A n'echange pas les axes) ; le
+# tactile suit.
 lvgl:
-  rotation: 90
+  rotation: 270
 
 # Pages de 240 x 320 centrees en largeur, en haut de l'ecran tourne : marges
 # de l'ecran de chaque page et de la couche commune (barres, messages), d'ou

@@ -89,6 +89,13 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 - Téléversement « No serial data received », même avec BOOT tenu, et CH340 bien vu
   par Windows : câble USB de charge seule. Test sans risque : écouter le port et
   appuyer sur RST ; un ESP32 envoie toujours ses lignes de démarrage (7 novembre 2026).
+- Guition 4,3" (NV3041A, sans broche de remise à zéro de l'écran) : après un flash par
+  USB, l'écran garde l'état du firmware précédent (couleurs inversées, image à 180°)
+  jusqu'à une coupure de courant ; ESPHome n'envoie pas de remise à zéro logicielle.
+  Juger l'image et le toucher seulement après avoir débranché et rebranché ; déjà vu
+  avec AquaLook (9 novembre 2026, cahier Q2). Une OTA garde l'état du même firmware.
+- Guition 4,3" : le port USB est celui de l'ESP32-S3 (303A:1001), il disparaît à chaque
+  redémarrage : le journal ne montre jamais les premières lignes du démarrage.
 - Ouvrir le port série (journaux, script d'écoute) redémarre la carte : la broche EN
   est reliée au port. Un `POWERON_RESET` à ce moment n'est pas une coupure
   d'alimentation (7 novembre 2026).
