@@ -10,7 +10,7 @@ ou un bus pour cette carte (G2).
 Il déclare **les mêmes `id`** que `hardware.yaml`. Le reste du panneau (pages, LVGL,
 veille, LED) les utilise sans savoir quelle carte est montée.
 
-**État : à valider au banc** (cahier P). Le brochage vient d'AquaLook, qui a validé cette
+**État : à valider au banc** (cahier Q). Le brochage vient d'AquaLook, qui a validé cette
 carte sur matériel le 27 août 2026 (`docs/architecture/HW_JC4827W543_PORT_IMPACT.md` du
 dépôt `cnuma/AquaLook`), et du modèle `JC4827W543` d'ESPHome.
 
@@ -104,4 +104,4 @@ cartes. Priorité `-100`, comme les autres `on_boot` (fusionnés).
   (`ESP32-S3`).
 - AquaLook a vu des redémarrages par chien de garde en parcourant le tas avec 8 Mo de
   PSRAM (`heap_caps_get_largest_free_block`) ; la page À propos ne parcourt que la
-  mémoire interne, mais un redémarrage toutes les 10 s environ viendrait de là (cahier P).
+  mémoire interne, mais un redémarrage toutes les 10 s environ viendrait de là (cahier Q).

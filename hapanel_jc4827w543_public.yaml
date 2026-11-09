@@ -14,7 +14,7 @@ substitutions:
   source_mise_a_jour: https://github.com/cnuma/HAPanel/releases/latest/download/manifest-jc4827w543.json
 
 packages:
-  # Guition JC4827W543C_I, ecran 4,3" capacitif (cahier P).
+  # Guition JC4827W543C_I, ecran 4,3" capacitif (cahier Q).
   hardware: !include packages/hardware_jc4827w543.yaml
   application: !include packages/application.yaml
   acces: !include packages/acces_public.yaml

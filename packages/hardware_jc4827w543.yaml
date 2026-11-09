@@ -5,7 +5,7 @@
 # Brochage confirme sur cette carte par AquaLook le 27 aout 2026
 # (docs/architecture/HW_JC4827W543_PORT_IMPACT.md du depot cnuma/AquaLook) :
 # ecran NV3041A en QSPI, tactile GT911, retroeclairage GPIO1. A confirmer
-# avec ESPHome au banc (cahier P).
+# avec ESPHome au banc (cahier Q).
 #
 # Ni LED RVB ni LDR sur cette carte (choix du proprietaire, 9 novembre 2026) :
 # sorties et capteur sans effet, memes id que les autres cartes.

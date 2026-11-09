@@ -375,23 +375,23 @@ sur le binaire publié. O10 se fait sur le binaire privé du banc.
 | O14 | Même binaire : Menu, tuile « Mise à jour » | Titre « Installer la version 0.10.0 ? » plus haut ; en dessous, en gris : « HAPanel 0.10.0 (99a9a10), carte 2432s024c » (manifeste de `v0.10.0`, publié avant `NOUVEAUTES.md`) ; pendant l'installation, le résumé disparaît. Annuler | `feature/maj-ecran` | |
 | O15 | Première Release publiée avec `NOUVEAUTES.md` : un module encore sur la version précédente, Menu, tuile | Sous le titre, la ligne de `NOUVEAUTES.md` pour cette version ; même texte dans HA, fenêtre « Firmware » | — (à la publication) | |
 
-## P — Carte Guition JC4827W543, 4,3" (D048)
+## Q — Carte Guition JC4827W543, 4,3" (D048)
 
 Binaire public `hapanel_jc4827w543_public.yaml` de la branche
 `feature/carte-jc4827w543`, écrit par USB sur une carte JC4827W543C_I neuve (procédure
-dans le message de livraison). P10 et P11 se font après la publication de la Release.
+dans le message de livraison). Q10 et Q11 se font après la publication de la Release.
 
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
-| P1 | Écrire le binaire par USB, lire le journal du démarrage | « HAPanel … », PSRAM de 8 Mo détectée, aucun redémarrage en boucle | `feature/carte-jc4827w543` | |
-| P2 | Regarder l'écran (accueil) | Image droite en portrait, couleurs justes (comme sur la S024C), accents lisibles ; pages centrées en largeur, barre d'état en haut, bouton Accueil à 320 px, bande noire en dessous | `feature/carte-jc4827w543` | |
-| P3 | Toucher le bouton Menu (en haut à gauche), une tuile, puis le bouton Accueil | Chaque toucher agit là où le doigt appuie ; sinon noter le sens de l'écart (gauche-droite, haut-bas) | `feature/carte-jc4827w543` | |
-| P4 | Saisir le Wi-Fi (point d'accès du module ou USB), puis ajouter le module dans HA, option « actions HA » décochée (D046) | Module joint, point vert ; entité « Firmware » présente | `feature/carte-jc4827w543` | |
-| P5 | Blueprint `module.yaml` pour ce module, puis régler la consigne et lancer Météo, Planning | Mêmes affichages et commandes que la S024C | `feature/carte-jc4827w543` | |
-| P6 | Réglages : déplacer « Intensité écran » ; puis ne rien toucher 1 min, et toucher l'écran | Luminosité qui suit le curseur ; écran éteint après 1 min, rallumé au toucher | `feature/carte-jc4827w543` | |
-| P7 | Réglages de la LED | Affichés, sans effet (pas de LED sur la carte, D048) | — | |
-| P8 | Laisser tourner 15 min, page À propos ouverte | Aucun redémarrage (le journal ne montre pas un nouveau « HAPanel … ») ; mémoire libre et plus grand bloc notés (G6) | `feature/carte-jc4827w543` | |
-| P9 | Message d'accueil (comme A1) et confirmation de mise à jour (O5) | Plein écran dans la zone de 240 × 320, centrés comme les pages | `feature/carte-jc4827w543` | |
-| P10 | Après la publication : sur la 4,3" en binaire de la branche, Menu, tuile « Mise à jour », Installer | Installation depuis `manifest-jc4827w543.json`, redémarrage dans la version publiée | — (à la publication) | |
-| P11 | Après la publication : Release | Neuf fichiers (trois par carte) ; dans `manifest-jc4827w543.json`, `"chipFamily": "ESP32-S3"` ; dans les deux autres, `"ESP32"` | — (à la publication) | |
-| P12 | Binaires S024C et S028 de la branche (bloc `esp32` déplacé) : un module de chaque, après la publication | Mise à jour depuis l'écran réussie, fonctions inchangées | — (à la publication) | |
+| Q1 | Écrire le binaire par USB, lire le journal du démarrage | « HAPanel … », PSRAM de 8 Mo détectée, aucun redémarrage en boucle | `feature/carte-jc4827w543` | |
+| Q2 | Regarder l'écran (accueil) | Image droite en portrait, couleurs justes (comme sur la S024C), accents lisibles ; pages centrées en largeur, barre d'état en haut, bouton Accueil à 320 px, bande noire en dessous | `feature/carte-jc4827w543` | |
+| Q3 | Toucher le bouton Menu (en haut à gauche), une tuile, puis le bouton Accueil | Chaque toucher agit là où le doigt appuie ; sinon noter le sens de l'écart (gauche-droite, haut-bas) | `feature/carte-jc4827w543` | |
+| Q4 | Saisir le Wi-Fi (point d'accès du module ou USB), puis ajouter le module dans HA, option « actions HA » décochée (D046) | Module joint, point vert ; entité « Firmware » présente | `feature/carte-jc4827w543` | |
+| Q5 | Blueprint `module.yaml` pour ce module, puis régler la consigne et lancer Météo, Planning | Mêmes affichages et commandes que la S024C | `feature/carte-jc4827w543` | |
+| Q6 | Réglages : déplacer « Intensité écran » ; puis ne rien toucher 1 min, et toucher l'écran | Luminosité qui suit le curseur ; écran éteint après 1 min, rallumé au toucher | `feature/carte-jc4827w543` | |
+| Q7 | Réglages de la LED | Affichés, sans effet (pas de LED sur la carte, D048) | — | |
+| Q8 | Laisser tourner 15 min, page À propos ouverte | Aucun redémarrage (le journal ne montre pas un nouveau « HAPanel … ») ; mémoire libre et plus grand bloc notés (G6) | `feature/carte-jc4827w543` | |
+| Q9 | Message d'accueil (comme A1) et confirmation de mise à jour (O5) | Plein écran dans la zone de 240 × 320, centrés comme les pages | `feature/carte-jc4827w543` | |
+| Q10 | Après la publication : sur la 4,3" en binaire de la branche, Menu, tuile « Mise à jour », Installer | Installation depuis `manifest-jc4827w543.json`, redémarrage dans la version publiée | — (à la publication) | |
+| Q11 | Après la publication : Release | Neuf fichiers (trois par carte) ; dans `manifest-jc4827w543.json`, `"chipFamily": "ESP32-S3"` ; dans les deux autres, `"ESP32"` | — (à la publication) | |
+| Q12 | Binaires S024C et S028 de la branche (bloc `esp32` déplacé) : un module de chaque, après la publication | Mise à jour depuis l'écran réussie, fonctions inchangées | — (à la publication) | |

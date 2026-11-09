@@ -1185,7 +1185,7 @@ qui cite la précédente.
 
 - Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R011 : « portrait ce
   soir, paysage ensuite », « sans LED ni LDR »), implémenté sur
-  `feature/carte-jc4827w543`, à valider au banc (cahier P). TODO rang 4.
+  `feature/carte-jc4827w543`, à valider au banc (cahier Q). TODO rang 4.
 - Contexte : le propriétaire a des cartes Guition JC4827W543C_I, déjà portées et
   validées sur matériel par AquaLook (27 août 2026) : ESP32-S3, 4 Mo de flash, 8 Mo de
   PSRAM, écran NV3041A de 480 × 272 en QSPI, tactile GT911, rétroéclairage GPIO1, ni LED
