@@ -1092,6 +1092,15 @@ qui cite la précédente.
   Tools est en anglais.
 - Limite : les Releases `-dev` restent « Latest », donc proposées par HA à tous les
   modules publics : TODO T18.
+- Complément du 9 novembre 2026 (HAP-R009, accord du propriétaire) : **effacement
+  imposé**. Essai sur le module de la cuisine : la case « Erase device », décochée par
+  défaut, a été oubliée ; le module a gardé une clé que HA avait oubliée. La copie du
+  manifeste servie par la page porte `new_install_prompt_erase: false` : ESP Web Tools
+  efface alors toujours (vérifié dans son code), sans poser la question. Une
+  réinstallation sans effacement n'est plus possible depuis la page (les mises à jour
+  passent par HA ou par l'écran). Le guide dit en tête de l'étape d'écriture de
+  supprimer d'abord de HA un module déjà ajouté. Captures du guide : maquettes du vrai
+  composant (`tools/maquette_fenetre_installation.html`).
 
 ## D045 — Mise à jour signalée par la barre d'état et la LED
 

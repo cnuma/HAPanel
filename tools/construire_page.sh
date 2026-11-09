@@ -41,9 +41,14 @@ cp "$tmp/package/LICENSE" "$site/esp-web-tools/LICENSE"
 while read -r carte manifeste; do
   mkdir "$site/$carte"
   cp "$publication/hapanel-$carte-factory.bin" "$site/$carte/"
-  cp "$publication/$manifeste" "$site/$carte/manifest.json"
+  # Effacement impose (D044, complement) : sans la question « Erase device », ESP
+  # Web Tools efface toujours le module ; la case, decochee par defaut, s'oubliait.
+  sed 's/"new_install_prompt_erase": true/"new_install_prompt_erase": false/' \
+    "$publication/$manifeste" > "$site/$carte/manifest.json"
   grep -q "\"version\": \"$version\"" "$site/$carte/manifest.json" \
     || { echo "$manifeste : version differente de $version"; exit 1; }
+  grep -q '"new_install_prompt_erase": false' "$site/$carte/manifest.json" \
+    || { echo "$manifeste : effacement non impose"; exit 1; }
 done <<'CARTES'
 2432s024c manifest.json
 2432s028 manifest-2432s028.json

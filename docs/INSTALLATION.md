@@ -44,6 +44,18 @@ commande, rien à compiler, aucun mot de passe à inventer.
 
 ## 2. Écrire le logiciel dans le module
 
+> [!IMPORTANT]
+> **La page efface toujours tout le module** avant d'écrire : logiciel, Wi-Fi et clé
+> de chiffrement. Pour un module neuf, c'est ce qu'il faut.
+>
+> **Module déjà ajouté à Home Assistant** (réinstallation) : avant de cliquer sur
+> **Installer**, supprimez-le de Home Assistant (**Paramètres › Appareils et
+> services › ESPHome**, le module, menu **⋮**). Après l'installation, ajoutez-le de
+> nouveau ([CONFIGURATION.md](CONFIGURATION.md), section 1), puis choisissez-le de
+> nouveau dans « Panneau » de son automatisation. Si Home Assistant demande une clé,
+> ne saisissez rien : ajoutez le module **par son adresse IP**, affichée sur sa page
+> **Menu › À propos** ([Dépannage](CONFIGURATION.md#dépannage)).
+
 1. Cliquez sur **Installer** sous **votre carte**. Le logiciel d'une autre carte
    s'installe aussi, mais l'écran reste noir ou le toucher ne répond pas.
 2. Une fenêtre du navigateur liste les ports série. Choisissez **USB Serial (COM…)**,
@@ -80,36 +92,44 @@ Si le pilote manque :
 > et une copie modifiée peut l'infecter. Le site de WCH, fabricant de la puce, est la
 > seule source fiable.
 
+Les captures de la fenêtre d'installation, ci-dessous, sont des maquettes de la
+fenêtre réelle, avec un module et un réseau fictifs.
+
 3. La fenêtre d'installation s'ouvre ; elle est en anglais. Cliquez sur
    **Install HAPanel**.
-4. Fenêtre **Erase device** : cochez la case **Erase device**, puis **Next**.
-   L'effacement retire tout ce que le module contenait (logiciel d'origine, ancien
-   Wi-Fi, ancienne clé) : c'est ce qu'il faut pour un module neuf ou à réinstaller.
-5. Fenêtre **Confirm Installation** : **Install**.
-6. **Installing** : effacement, puis écriture, en 2 minutes environ. **Gardez cette
+
+![Fenêtre d'installation : Install HAPanel](images/installation/04_installer.png)
+
+4. Fenêtre **Confirm Installation** : elle rappelle que tout sera effacé (« All data
+   on the device will be erased. »). Cliquez sur **Install**.
+
+![Confirm Installation : Install](images/installation/05_confirmer.png)
+
+5. **Installing** : effacement, puis écriture, en 2 minutes environ. **Gardez cette
    fenêtre visible** : passer à un autre onglet ou à une autre fenêtre peut
    interrompre l'écriture. Ne débranchez pas le module.
-7. À la fin, la fenêtre affiche **Installation complete!** : cliquez sur **Next**.
+
+![Installing : écriture en cours](images/installation/06_ecriture.png)
+
+6. À la fin, la fenêtre affiche **Installation complete!** : cliquez sur **Next**.
+
+![Installation complete! : Next](images/installation/07_ecriture_finie.png)
 
 ## 3. Relier le module au Wi-Fi
 
 Juste après l'écriture, la fenêtre propose de configurer le Wi-Fi : **Configure
-Wi-Fi**, qui rappelle le nom du module (`hapanel-` suivi de six caractères) et sa
-version.
+Wi-Fi**.
 
 1. Dans **Network**, choisissez votre réseau 2,4 GHz ; dans **Password**, saisissez
    son mot de passe ; puis **Connect**.
 
-![Fenêtre Configure Wi-Fi, nom du module, du réseau et mot de passe masqués](images/installation/08_wifi.png)
+![Configure Wi-Fi : réseau, mot de passe, Connect](images/installation/08_wifi.png)
 
 2. Le module rejoint le Wi-Fi : la fenêtre l'annonce (**Device connected to the
    network!**). Fermez-la ; le lien **Add to Home Assistant** qu'elle propose mène
    au même endroit que l'étape suivante.
 
-Les deux captures de cette étape viennent d'une version précédente de la fenêtre : les
-boutons du bas et le message de réussite peuvent différer légèrement.
-
-![Wi-Fi configuré, nom du module masqué](images/installation/09_wifi_ok.png)
+![Device connected to the network!](images/installation/09_wifi_ok.png)
 
 Vous pouvez maintenant débrancher le module de l'ordinateur et le brancher sur son
 bloc secteur : il garde le Wi-Fi.

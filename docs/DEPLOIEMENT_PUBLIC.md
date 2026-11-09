@@ -79,6 +79,23 @@ gh release download v0.11.0 -D "$env:TEMP\hapanel_rel" --clobber
 Ouvrir <http://localhost:8765> dans Chrome ou Edge ; **Ctrl+C** arrête le serveur. La
 page installe alors la version de cette Release.
 
+### Captures de la fenêtre d'installation
+
+Les captures 04 à 09 d'`INSTALLATION.md` sont des maquettes : le vrai composant d'ESP
+Web Tools, placé dans chaque état sans carte branchée, avec un module et un réseau
+fictifs (aucune donnée à masquer). Après avoir construit la page en local (ci-dessus) :
+
+```powershell
+Copy-Item tools\maquette_fenetre_installation.html "$env:TEMP\hapanel_site\"
+```
+
+Le serveur lancé, ouvrir
+`http://localhost:8765/maquette_fenetre_installation.html?etat=<état>` pour chaque
+état (`tableau`, `confirmation`, `ecriture`, `fin`, `wifi`, `connecte`), capturer
+(Edge sans fenêtre, `09_PIEGES.md`, avec `--window-size=700,700`) et recadrer sur la
+fenêtre. Le nom du fichier `install-dialog-….js` chargé par la maquette change avec la
+version d'ESP Web Tools : le mettre à jour en même temps qu'`EWT_VERSION`.
+
 **Forme des versions :** toujours `X.Y.Z-dev.N`, puis `X.Y.Z`, sans suffixe ajouté.
 HA ne propose une mise à jour que si la version publiée est plus récente que
 l'installée ; or il juge incomparables `0.8.0-dev.3-usb` et `0.8.0-dev.4` (constaté le
@@ -97,9 +114,11 @@ guide pas à pas, avec les captures, est [INSTALLATION.md](INSTALLATION.md).
 1. Ouvrir la page d'installation <https://cnuma.github.io/HAPanel/> (D044), brancher
    le module, **Installer** sous sa carte, choisir son port (« USB Serial (COM…) »),
    **Connexion**.
-2. Fenêtre d'ESP Web Tools : **Install HAPanel** ; fenêtre **Erase device**, case
-   cochée, **Next** ; **Confirm Installation**, **Install**. Attendre **Installation
-   complete!** (environ 2 min), puis **Next**.
+2. Fenêtre d'ESP Web Tools : **Install HAPanel** ; **Confirm Installation**,
+   **Install** (la page efface toujours le module, D044). Attendre **Installation
+   complete!** (environ 2 min), puis **Next**. Module déjà connu de HA : le supprimer
+   de HA avant, l'ajouter de nouveau ensuite, par son adresse IP si HA demande une clé
+   (`09_PIEGES.md`).
 3. Fenêtre « Configure Wi-Fi » (Improv) : choisir le réseau, saisir son mot de
    passe, **Connect**.
 4. **Couper l'alimentation** (débrancher, rebrancher), puis seulement juger l'écran
