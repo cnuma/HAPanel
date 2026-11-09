@@ -1092,8 +1092,8 @@ qui cite la précédente.
 ## D046 — Actions Home Assistant refusées aux modules, usurpation de `device_id` acceptée
 
 - Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R001, option A),
-  sur `docs/securite-actions-ha` ; option à décocher sur les trois modules (cahier N).
-  TODO rang 1.
+  sur `docs/securite-actions-ha` ; option décochée sur les trois modules (cahier N1).
+  TODO rang 1 du 9 novembre 2026 ; validé et fusionné dans `main` le même jour.
 - Contexte : l'intégration ESPHome de HA a une option par module, « Autoriser
   l'appareil à effectuer des actions Home Assistant ». Le firmware n'appelle aucune
   action, il n'émet que des événements `esphome.hapanel_*` (testé le 2 novembre
@@ -1112,7 +1112,7 @@ qui cite la précédente.
     un firmware modifié muni de la clé du module, donc en pratique l'accès physique à
     un panneau (flash non chiffrée lisible par USB) ; elle ne donne que les commandes
     que les blueprints autorisent, mais pour tous les panneaux ;
-  - toute commande nouvelle (infrarouge, TODO rang 6) passe par un événement traduit
+  - toute commande nouvelle (infrarouge) passe par un événement traduit
     par le blueprint, avec bornes et liste fermée, jamais par une action HA appelée
     par le module.
 - Options écartées : laisser l'option cochée (un firmware modifié pourrait lancer
