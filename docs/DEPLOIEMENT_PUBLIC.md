@@ -61,7 +61,8 @@ gh api repos/cnuma/HAPanel/pages -q .html_url
 La première ligne active GitHub Pages, publié par GitHub Actions. Les deux suivantes
 ouvrent l'environnement `github-pages` aux étiquettes `v*` : sans elles, il n'accepte
 que la branche par défaut, et la tâche « page » d'une publication serait refusée. La
-dernière doit répondre `https://cnuma.github.io/HAPanel/`.
+dernière doit répondre `https://cnuma.github.io/HAPanel/`. Fait le 9 novembre 2026 ;
+GitHub a aussi créé une règle pour la branche `main`, laissée en place.
 
 ### Essayer la page en local
 
