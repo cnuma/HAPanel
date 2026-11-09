@@ -89,6 +89,18 @@ du C++ au YAML.
 - Pas de `web_server` ni de point d'accès de secours sans décision et ligne
   au registre des risques.
 
+## Documentation publique
+
+- Pages pour l'utilisateur (README, `INSTALLATION.md`, `CONFIGURATION.md`,
+  `UTILISATION.md`, `ARCHITECTURE.md`, `docs/technique/`) : aucun nom réel de
+  module, de pièce, de réseau ni de chemin du poste du propriétaire (D052) ;
+  nom de module d'exemple : `hapanel-1a2b3c`. Captures : masquer aussi le suffixe
+  du nom du module (`09_PIEGES.md`, G9).
+- Le journal de développement (`docs/codex/`, cahier, TODO, checkpoints) peut citer
+  l'installation réelle ; il ne contient jamais de secret, d'adresse IP ni de port
+  COM (G9).
+- Documentation en français seulement (D052).
+
 ## Journaux
 
 - Niveau `INFO` en production, `DEBUG` sur le banc.

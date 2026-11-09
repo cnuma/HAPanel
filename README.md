@@ -18,3 +18,8 @@ par carte (D041, D049).
 
 Projet en phase de démarrage : les écrans sont définis pas à pas
 (`docs/TODO.md`).
+
+Les pages ci-dessus sont écrites pour tout utilisateur. Le reste de `docs/`
+(`codex/`, `CAHIER_DE_TESTS.md`, `TODO.md`, `checkpoints/`) est le journal de
+développement d'une installation réelle : il cite ses pièces et ses modules, à
+titre d'exemple seulement (D052).

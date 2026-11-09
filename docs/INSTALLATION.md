@@ -164,7 +164,7 @@ Tant qu'il n'a pas de Wi-Fi, le module crée son propre réseau Wi-Fi pendant
 1. Sur le téléphone, ouvrez la liste des réseaux Wi-Fi et choisissez le réseau
    `hapanel-` suivi de six caractères. Il n'a pas de mot de passe.
 
-![Liste des réseaux du téléphone, réseau hapanel-583c28, autres réseaux masqués](images/installation/11_telephone_reseaux.png)
+![Liste des réseaux du téléphone, réseau hapanel- suivi de six caractères masqués, autres réseaux masqués](images/installation/11_telephone_reseaux.png)
 
 2. Une page « Wi-Fi captif » s'ouvre seule (sinon, ouvrez <http://192.168.4.1> dans
    le navigateur du téléphone). Touchez votre réseau dans la liste **WiFi Networks** :

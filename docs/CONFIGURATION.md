@@ -35,8 +35,8 @@ Vérifiez que Home Assistant contient déjà les entités que le module afficher
 
 1. Ouvrez Home Assistant, puis **Paramètres › Appareils et services**.
 2. En haut, parmi les appareils découverts, le module apparaît sous le nom
-   **HAPanel** suivi de six caractères, par exemple « HAPanel 583c28
-   (hapanel-583c28) » : cliquez sur **Ajouter**. Si vous avez déjà un appareil
+   **HAPanel** suivi de six caractères, par exemple « HAPanel 1a2b3c
+   (hapanel-1a2b3c) » : cliquez sur **Ajouter**. Si vous avez déjà un appareil
    ESPHome, il peut aussi apparaître en ouvrant **ESPHome**, rubrique
    **Découvertes** (capture ci-dessous).
 
@@ -309,7 +309,7 @@ déclenche plus jamais. Le blueprint
 
 1. **Affichage :** **Outils de développement › Actions**, action
    `esphome.<nom du module>_message_accueil` (par exemple
-   `esphome.hapanel_583c28_message_accueil`), champ `texte` rempli : le message
+   `esphome.hapanel_1a2b3c_message_accueil`), champ `texte` rempli : le message
    s'affiche aussitôt. « Exécuter les actions » de l'automatisation n'envoie pas le
    message : sans déclencheur, elle envoie les valeurs du module.
 2. **Chaîne complète :** régler la période à 5 minutes, laisser les déclencheurs au

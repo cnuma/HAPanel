@@ -75,6 +75,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | J | Déploiement public (D039) ; guide d'installation (J9, J10, J14) | `feature/poc-deploiement` (fusionnée) ; J9, J10, J14 : `docs/guide-installation` (fusionnée) |
 | L | Mise à jour signalée par la barre d'état et la LED (D045) | `feature/maj-icone` (fusionnée) ; L11 sur la Release `v0.10.0` |
 | M | Adresse IP sur la page À propos | `feature/maj-icone` (fusionnée) |
+| R | Documentation publique sans élément personnel (D052) | `docs/t02-projet-publiable` |
 | 7 novembre 2026 | `9b78597` (S028, USB) | K1, K2, K3 | Écran et couleurs OK (contrôleur ST7789V, sans inversion) ; tactile : x brut décroît de gauche à droite (3605 à 449), y de 419 à 3662. Premier téléversement impossible avec le premier câble USB-C (aucune donnée reçue) ; OK avec un autre câble | Calibrage et `mirror_x` reportés ; K4 sur le binaire suivant |
 | 7 novembre 2026 | `174aa99` (S028, USB) | K4 à K11 | Tout OK ; K5 : glissière Éteint / Chauffage capricieuse au doigt sur dalle résistive, boutons fiables. Mémoire libre 153 Ko, plus grand bloc 96 Ko. Remarque du propriétaire : avoir à configurer le blueprint du message d'accueil en plus de celui du module n'est pas pratique (TODO rang 1) | **Partie K validée**, fusion dans `main` (accord du propriétaire) ; glissière : TODO T04 |
 | 7 novembre 2026 | `745126b` (blueprint, branche) | B10 à B19 | Tout OK : migration, module sans section, même texte sur deux modules, message unique, entité désactivée, météo, plage horaire ; B3 refait (B13) | **Fusion de `feature/accueil-blueprint-module` dans `main`**, accord du propriétaire |
@@ -87,6 +88,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 8 novembre 2026 | `v0.10.0` (Release, `99a9a10`), les trois modules | — | Publiée par l'agent (accord du propriétaire). Le « banc S024C » du 7 novembre était **le module de la cuisine** : resté en binaire de banc privé `0.9.0 (66e0b4e)`, sans entité Firmware ; séjour installé par USB en public `0.9.0` (HA demandait une clé : fenêtre de 15 min dépassée) ; GitHub a répondu `504` une partie de la matinée, champs de l'entité Firmware vides. Cuisine reflashée en public par USB, puis les trois modules en `0.10.0` | Les trois modules en public `0.10.0` ; piège ajouté au 09 |
 | 9 novembre 2026 | `v0.10.0`, manifestes de la Release annonçant `0.10.1` (binaire inchangé), les trois modules | L11 | **OK** (propriétaire) : mise à jour proposée dans HA, flèche et éclairs violets sur les trois modules, rien installé | Manifestes d'origine remis par l'agent, vérifiés (`0.10.0`). **Partie L terminée** |
 | 9 novembre 2026 | `v0.10.0`, les trois modules | N1 à N3 | **N1, N2 OK** (propriétaire) : option « actions HA » décochée sur les trois modules, consigne et chauffage commandés depuis chacun. **N3 non fait** : aucun scénario choisi dans les blueprints | N3 reporté au premier scénario choisi (accord du propriétaire) ; N4 le 10 novembre, ne bloque pas la fusion |
+| 9 novembre 2026 | `512ca63`, documentation (branche `docs/t02-projet-publiable`) | R | **R1, R2 OK** (propriétaire) | Fusion dans `main` à l'accord du propriétaire |
 
 ## Préparation (une fois, avant A et B)
 
@@ -399,3 +401,12 @@ dans le message de livraison). Q10 et Q11 se font après la publication de la Re
 | Q10 | Après la publication : sur la 4,3" en binaire de la branche, Menu, tuile « Mise à jour », Installer | Installation depuis `manifest-jc4827w543.json`, redémarrage dans la version publiée | — (à la publication) | OK 9 nov. par HA (`v0.11.0`) : installé depuis `manifest-jc4827w543.json`, redémarré en 0.11.0. Depuis l'écran : à la prochaine Release |
 | Q11 | Après la publication : Release | Neuf fichiers (trois par carte) ; dans `manifest-jc4827w543.json`, `"chipFamily": "ESP32-S3"` ; dans les deux autres, `"ESP32"` | — (à la publication) | OK 9 nov. (`v0.11.0`, vérifié par l'agent) : 9 fichiers ; `ESP32-S3` pour la 4,3", `ESP32` pour les deux autres ; résumé de `NOUVEAUTES.md` dans les trois |
 | Q12 | Binaires S024C et S028 de la branche (bloc `esp32` déplacé) : un module de chaque, après la publication | Mise à jour depuis l'écran réussie, fonctions inchangées | — (à la publication) | OK 9 nov. par HA (`v0.11.0`) : cuisine, séjour (S024C), salle de bain (S028), fonctions inchangées ; cuisine : tactile muet après la mise à jour, revenu après un redémarrage (T17). Depuis l'écran : à la prochaine Release |
+
+## R — Documentation publique sans élément personnel (D052)
+
+Sur GitHub, branche `docs/t02-projet-publiable` choisie dans le menu des branches.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| R1 | Lire le README, puis `INSTALLATION.md`, `CONFIGURATION.md` et `UTILISATION.md` | Aucun nom réel de module (seulement `hapanel-1a2b3c` en exemple), aucune de vos pièces, aucun nom de réseau ; capture 11 d'`INSTALLATION.md` : suffixe du réseau du module masqué | `docs/t02-projet-publiable` | OK 9 nov. (`512ca63`) |
+| R2 | README, paragraphe sur le journal de développement | Clair pour un visiteur : il comprend que le reste de `docs/` décrit votre installation à titre d'exemple | `docs/t02-projet-publiable` | OK 9 nov. (`512ca63`) |
