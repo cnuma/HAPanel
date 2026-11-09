@@ -61,7 +61,8 @@ pastille de la glissière devient grise.
 ![Page Menu](images/menu.png)
 
 Touchez une tuile pour ouvrir la page correspondante : Météo, Planning, Scénarios,
-Réglages ou À propos. Pour revenir à l'accueil, touchez la maison en bas. Le bouton
+Réglages ou À propos. Une tuile violette « Mise à jour » s'ajoute quand une nouvelle
+version attend (voir [Mise à jour](#mise-à-jour)). Pour revenir à l'accueil, touchez la maison en bas. Le bouton
 ☰ n'apparaît pas ici : vous êtes déjà sur le Menu.
 
 ## Météo
@@ -112,6 +113,9 @@ Un bouton marqué **Indisponible** ne peut pas être touché.
 
 Version du logiciel, connexion à Home Assistant, adresse IP du panneau sur le réseau
 (« aucune » sans Wi-Fi) et mémoire. Ces informations sont utiles en cas de dépannage.
+En dessous, le bouton **Rechercher une mise à jour** demande tout de suite s'il existe
+une nouvelle version ; il affiche ensuite « À jour », « Version … disponible »,
+« Recherche impossible » ou « Pas de Wi-Fi ».
 
 ## Réglages
 
@@ -174,19 +178,25 @@ permanence et l'alerte désactivée : seul l'écran montre alors une anomalie.
 
 ## Mise à jour
 
-Quand une nouvelle version du logiciel est publiée, le panneau la voit dans les 6 heures
-(ou à son prochain démarrage) :
+Quand une nouvelle version du logiciel est publiée, le panneau la voit la nuit suivante
+(il vérifie chaque nuit à 3 h), à son prochain démarrage, ou tout de suite avec le bouton
+**Rechercher une mise à jour** de la page À propos :
 
 - une **flèche violette clignote** dans la barre du haut, à côté du Wi-Fi ; pendant
   l'enregistrement d'un réglage, la disquette prend sa place quelques secondes ;
 - la **LED** fait deux éclairs violets toutes les 10 secondes, à son intensité
   habituelle ; avec « LED » arrêtée dans les Réglages, seule la flèche le montre.
 
-La mise à jour s'installe depuis Home Assistant : page de l'appareil, entité
-**Firmware**, **Installer** (voir [le déploiement](DEPLOIEMENT_PUBLIC.md), § 4). La
-flèche et les éclairs disparaissent pendant l'installation, puis le panneau redémarre
-dans la nouvelle version. Un panneau installé depuis un ordinateur de l'atelier
-(binaire privé) n'affiche jamais la flèche.
+Pour l'installer depuis le panneau : **Menu**, tuile violette **Mise à jour**, puis
+**Installer**. Le message « Mise à jour en cours, module indisponible » reste affiché
+2 à 3 minutes, sans réagir au toucher, puis le panneau redémarre dans la nouvelle
+version. En cas d'échec, un message le dit : touchez **Fermer** et réessayez plus tard.
+
+Elle s'installe aussi depuis Home Assistant : page de l'appareil, entité **Firmware**,
+**Installer** (voir [le déploiement](DEPLOIEMENT_PUBLIC.md), § 4). La flèche et les
+éclairs disparaissent pendant l'installation. Un panneau installé depuis un ordinateur
+de l'atelier (binaire privé) n'affiche jamais la flèche, ni le bouton de recherche, ni
+la tuile.
 
 ## Message d'accueil
 

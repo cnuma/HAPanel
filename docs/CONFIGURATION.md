@@ -333,7 +333,9 @@ clignote dans sa barre du haut et sa LED fait deux éclairs violets toutes les
 10 secondes, jusqu'à l'installation ([utilisation](UTILISATION.md#mise-à-jour)).
 
 1. **Paramètres** : en haut, la carte des mises à jour liste le module, sous son nom.
-   Le module vérifie au démarrage, puis toutes les 6 heures.
+   Le module vérifie au démarrage, puis chaque nuit à 3 h ; le bouton **Rechercher une
+   mise à jour** de sa page À propos vérifie tout de suite. La mise à jour peut aussi
+   s'installer sur le module : Menu, tuile violette **Mise à jour**.
    Juste après la sortie d'une version, Home Assistant peut encore proposer la
    précédente : débranchez puis rebranchez le module, attendez une minute et vérifiez
    le numéro de version proposé avant d'installer.

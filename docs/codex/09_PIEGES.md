@@ -24,7 +24,8 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 - Entité Firmware avec « Version installée » et « Dernière version » vides : la
   dernière lecture du manifeste a échoué (GitHub en `504` le 8 novembre 2026 au
   matin) ; « À jour » n'a alors pas de sens. Le module ne réessaie qu'au démarrage
-  ou 6 h plus tard : le redémarrer une fois le manifeste lisible dans un navigateur.
+  ou à 3 h (D047) : bouton « Rechercher une mise à jour » une fois le manifeste lisible
+  dans un navigateur.
 - Ajouter dans HA un module public réinstallé : dans les 15 min après son démarrage.
   Passé ce délai, HA demande une clé de chiffrement qu'aucune saisie ne satisfait
   (8 novembre 2026) : redémarrer le module, puis ajouter.
@@ -150,7 +151,12 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   « HTTP_CLIENT: Out of buffer », puis « Failed to fetch manifest ». Ce message n'est
   écrit qu'au démarrage, vers 20 s : capturer le journal dès le reset.
 - L'action « Mettre à jour l'entité » de HA ne fait pas vérifier le module : il ne
-  vérifie qu'au démarrage, puis toutes les 6 h. Pour forcer, redémarrer le module.
+  vérifie qu'au démarrage, puis chaque nuit à 3 h (D047). Pour forcer : bouton
+  « Rechercher une mise à jour » de la page À propos, ou redémarrer le module.
+- `update_interval: never` sur l'`update` `http_request` supprime **aussi** la
+  vérification du démarrage (ESPHome ne la programme que si l'intervalle dépasse
+  60 s) : elle est relancée par `wifi: on_connect` (D047). Une vérification qui échoue
+  ne publie aucun état : la page À propos le détecte par l'absence de réponse en 30 s.
 - HA propose la version vue à la **dernière vérification** du module. Juste après une
   publication, il propose encore l'ancienne : l'installer est sans dégât (manifeste lié
   à son étiquette), puis la nouvelle arrive au redémarrage, soit deux mises à jour au

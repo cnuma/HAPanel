@@ -70,6 +70,10 @@ lvgl:
         - lvgl.label.update:
             id: lbl_barre_titre
             text: "À propos"
+        # Resultat d'une recherche precedente efface (D047).
+        - lvgl.label.update:
+            id: lbl_apropos_maj
+            text: "Rechercher une mise à jour"
       widgets:
         - label:
             id: lbl_apropos_version
@@ -106,6 +110,24 @@ lvgl:
             long_mode: WRAP
             width: 216
             text: "Mémoire : mesure en cours"
+        # Recherche d'une mise a jour (D047) : binaire public seulement, qui
+        # l'affiche (acces_public.yaml) ; masque dans le binaire prive, sans
+        # entite de mise a jour. Le libelle donne aussi le resultat.
+        - button:
+            id: btn_apropos_maj
+            align: TOP_LEFT
+            x: 12
+            y: 238
+            width: 216
+            height: 34
+            hidden: true
+            widgets:
+              - label:
+                  id: lbl_apropos_maj
+                  align: CENTER
+                  text: "Rechercher une mise à jour"
+            on_click:
+              - script.execute: maj_rechercher
   # Navigation (D025 revisee par D036) : bouton Menu dans la barre d'etat en
   # haut, bouton Accueil centre en bas ; pas de barre du bas sur l'accueil.
   top_layer:

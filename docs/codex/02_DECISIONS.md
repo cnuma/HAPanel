@@ -1079,7 +1079,8 @@ qui cite la précédente.
     pas d'entité de mise à jour et n'affiche jamais rien ;
   - **recherche :** inchangée (au démarrage dès que le Wi-Fi est là, puis toutes les
     6 h, réglage d'ESPHome) : une Release est vue en 6 h au plus. Recherche à 3 h du
-    matin et bouton « Rechercher » : TODO rang 2.
+    matin et bouton « Rechercher » : TODO rang 2. Remplacée par D047 (recherche au
+    démarrage, à 3 h et par le bouton de la page À propos).
 - Options écartées : `mdi:package-up` (icône de HA, trop détaillée à 24 px) ; LED en
   clignotement violet continu (la couleur du chauffage disparaîtrait jusqu'à
   l'installation) ; LED à pleine intensité (gênante la nuit, ce n'est pas une alarme).
@@ -1128,3 +1129,43 @@ qui cite la précédente.
   sécurité. Pas de signalement à l'équipe de HA : hors du périmètre de sa politique de
   sécurité (appareil compromis, accès physique), décision du propriétaire du
   9 novembre 2026 (HAP-R005).
+
+## D047 — Mise à jour depuis l'écran : recherche et installation
+
+- Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R002), implémenté
+  sur `feature/maj-ecran`, à valider (cahier O). TODO rang 1, points 2 à 4 ; complète
+  D045.
+- Contexte : une mise à jour publiée ne s'installait que depuis HA (entité
+  « Firmware »), ce qui oblige à se connecter à HA ; le module ne cherchait qu'au
+  démarrage, puis toutes les 6 h (demande du propriétaire du 5 novembre 2026).
+- Décision (binaire public seulement ; le binaire privé n'a pas d'entité de mise à
+  jour, ses boutons restent masqués et ses scripts `maj_rechercher`, `maj_proposer`
+  sont vides) :
+  - **recherche :** une fois par démarrage, 10 s après la première connexion au
+    Wi-Fi ; chaque nuit à 3 h, heure de HA (sans heure reçue, pas de recherche de
+    nuit) ; plus de recherche toutes les 6 h (`update_interval: never`) ;
+  - **page À propos :** bouton « Rechercher une mise à jour » ; son libellé passe à
+    « Recherche… », puis « À jour », « Version X.Y.Z disponible », « Recherche
+    impossible » (pas de réponse en 30 s, GitHub inaccessible) ou « Pas de Wi-Fi » ;
+    il revient au libellé de départ à chaque ouverture de la page ;
+  - **Menu :** tuile violette « Mise à jour » (`#AB47BC`, D045) à la 6e place, visible
+    seulement quand une mise à jour attend ; elle ouvre une confirmation « Installer
+    la version X.Y.Z ? » (Annuler, Installer) ;
+  - **installation :** « Mise à jour en cours, module indisponible » reste affiché
+    jusqu'au redémarrage dans la nouvelle version (le téléchargement bloque la boucle
+    principale : l'écran ne bouge plus) ; en cas d'échec, « Échec de la mise à jour.
+    Réessayez plus tard. » et un bouton Fermer ; la mise à jour reste proposée ;
+  - **sécurité de l'état :** la confirmation et l'installation vérifient que l'entité
+    est encore « mise à jour disponible » ; sinon, rien n'est lancé. Sans toucher
+    pendant 1 min, la confirmation ou le message d'échec se ferment (comme le retour
+    à l'accueil, D022), jamais pendant l'installation.
+- Options écartées : tuile toujours visible et grisée (Menu changeant pour rien,
+  installation sans objet) ; recherche toutes les 6 h en plus de 3 h (requêtes
+  inutiles : la nuit suffit, le bouton couvre l'urgence) ; installation automatique
+  la nuit (R10 : une Release compromise s'installerait sans personne).
+- Justification : l'installation reste un geste volontaire devant le module, comme
+  dans HA ; seule la source déjà utilisée par HA (Release « Latest », MD5 du
+  manifeste) est installée ; aucune entité ni action HA nouvelle.
+- Conséquences : toute personne devant un module peut installer la version publiée
+  (`08`, surfaces) ; une Release publiée est vue au plus tard à 3 h le lendemain, au
+  redémarrage, ou par le bouton. HA continue de proposer la mise à jour.

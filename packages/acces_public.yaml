@@ -5,6 +5,9 @@
 wifi:
   # Point d'acces du module et portail captif, tant qu'aucun Wi-Fi ne repond.
   ap: {}
+  # Premiere connexion apres le demarrage : une recherche de mise a jour (D047).
+  on_connect:
+    - script.execute: maj_recherche_demarrage
 
 captive_portal:
 
@@ -42,14 +45,257 @@ update:
     id: maj_firmware
     name: "Firmware"
     source: ${source_mise_a_jour}
+    # Recherche au demarrage, a 3 h et par le bouton de la page A propos
+    # (D047), au lieu de toutes les 6 h. « never » supprime aussi la recherche
+    # automatique du demarrage : script maj_recherche_demarrage.
+    update_interval: never
+
+globals:
+  # Nombre de reponses de la recherche (etat publie par maj_firmware) : une
+  # recherche qui echoue ne publie rien (D047).
+  - id: maj_reponses
+    type: uint32_t
+    initial_value: "0"
+  # Valeur de maj_reponses au lancement d'une recherche depuis l'ecran.
+  - id: maj_recherche_debut
+    type: uint32_t
+    initial_value: "0"
+  # Installation lancee depuis l'ecran : la fenetre ne se ferme pas seule.
+  - id: maj_installation
+    type: bool
+    initial_value: "false"
+
+# Recherche chaque nuit a 3 h, heure de HA (D047) ; sans heure recue, rien.
+time:
+  - id: !extend heure_ha
+    on_time:
+      - hours: 3
+        minutes: 0
+        seconds: 0
+        then:
+          - logger.log:
+              tag: hapanel.maj
+              format: "recherche de 3 h"
+          - update.check: maj_firmware
+
+# Confirmation, puis installation (D047). Au-dessus de tout, y compris du
+# message d'accueil (paquet inclus apres application.yaml).
+lvgl:
+  top_layer:
+    widgets:
+      - obj:
+          id: obj_maj
+          hidden: true
+          # Les touchers ne traversent pas vers la page en dessous.
+          clickable: true
+          align: TOP_LEFT
+          width: 240
+          height: 320
+          radius: 0
+          border_width: 0
+          pad_all: 0
+          bg_color: 0x000000
+          text_color: 0xFFFFFF
+          text_font: police_texte
+          scrollable: false
+          widgets:
+            - label:
+                align: TOP_MID
+                y: 40
+                text_font: police_icones
+                text_color: 0xAB47BC
+                text: "\U000F005F"
+            - label:
+                id: lbl_maj_texte
+                align: CENTER
+                y: -30
+                width: 216
+                long_mode: WRAP
+                text_align: CENTER
+                text_font: police_titre
+                text: ""
+            - button:
+                id: btn_maj_annuler
+                align: BOTTOM_LEFT
+                x: 12
+                y: -24
+                width: 102
+                height: 48
+                bg_color: 0x424242
+                widgets:
+                  - label:
+                      align: CENTER
+                      text: "Annuler"
+                on_click:
+                  - script.execute: maj_fermer
+            - button:
+                id: btn_maj_installer
+                align: BOTTOM_RIGHT
+                x: -12
+                y: -24
+                width: 102
+                height: 48
+                bg_color: 0xAB47BC
+                widgets:
+                  - label:
+                      align: CENTER
+                      text: "Installer"
+                on_click:
+                  - script.execute: maj_installer
+            # Apres un echec seulement.
+            - button:
+                id: btn_maj_fermer
+                align: BOTTOM_MID
+                y: -24
+                width: 102
+                height: 48
+                hidden: true
+                bg_color: 0x424242
+                widgets:
+                  - label:
+                      align: CENTER
+                      text: "Fermer"
+                on_click:
+                  - script.execute: maj_fermer
+
+script:
+  # Une seule fois par demarrage, a la premiere connexion au Wi-Fi ; 10 s pour
+  # laisser le reseau s'etablir (resolution des noms).
+  - id: maj_recherche_demarrage
+    then:
+      - lambda: |-
+          static bool faite = false;
+          if (faite) return;
+          faite = true;
+          id(maj_recherche_demarrage_lancer).execute();
+  - id: maj_recherche_demarrage_lancer
+    then:
+      - delay: 10s
+      - logger.log:
+          tag: hapanel.maj
+          format: "recherche du demarrage"
+      - update.check: maj_firmware
+
+  # Bouton de la page A propos (D047) : « Recherche... », puis le resultat dans
+  # le libelle du bouton.
+  - id: maj_rechercher
+    mode: single
+    then:
+      - if:
+          condition:
+            lambda: return !network::is_connected();
+          then:
+            - lvgl.label.update:
+                id: lbl_apropos_maj
+                text: "Pas de Wi-Fi"
+          else:
+            - lambda: |-
+                static bool abonne = false;
+                if (!abonne) {
+                  abonne = true;
+                  id(maj_firmware).add_on_state_callback([]() { id(maj_reponses)++; });
+                }
+            - lvgl.label.update:
+                id: lbl_apropos_maj
+                text: "Recherche…"
+            - lambda: |-
+                id(maj_recherche_debut) = id(maj_reponses);
+                id(maj_firmware).check();
+            - wait_until:
+                condition:
+                  lambda: return id(maj_reponses) != id(maj_recherche_debut);
+                timeout: 30s
+            - lambda: |-
+                std::string texte;
+                if (id(maj_reponses) == id(maj_recherche_debut)) {
+                  texte = "Recherche impossible";
+                } else if (id(maj_firmware).state == update::UPDATE_STATE_AVAILABLE) {
+                  texte = "Version " + id(maj_firmware).update_info.latest_version + " disponible";
+                } else if (id(maj_firmware).state == update::UPDATE_STATE_NO_UPDATE) {
+                  texte = "À jour";
+                } else {
+                  texte = "Recherche impossible";
+                }
+                ESP_LOGI("hapanel.maj", "recherche depuis l'ecran : %s", texte.c_str());
+                lv_label_set_text(id(lbl_apropos_maj), texte.c_str());
+
+  # Bouton violet du Menu (D047) : confirmation, seulement si une mise a jour
+  # attend encore.
+  - id: maj_proposer
+    then:
+      - if:
+          condition:
+            update.is_available: maj_firmware
+          then:
+            - lambda: |-
+                id(maj_installation) = false;
+                std::string texte = "Installer la version " +
+                                    id(maj_firmware).update_info.latest_version + " ?";
+                lv_label_set_text(id(lbl_maj_texte), texte.c_str());
+                lv_obj_remove_flag(id(btn_maj_annuler), LV_OBJ_FLAG_HIDDEN);
+                lv_obj_remove_flag(id(btn_maj_installer), LV_OBJ_FLAG_HIDDEN);
+                lv_obj_add_flag(id(btn_maj_fermer), LV_OBJ_FLAG_HIDDEN);
+                lv_obj_remove_flag(id(obj_maj), LV_OBJ_FLAG_HIDDEN);
+
+  # Installation : le message reste jusqu'au redemarrage dans la nouvelle
+  # version. Le telechargement bloque la boucle principale : l'ecran ne bouge
+  # plus jusque-la. Un echec rend la main avec un message.
+  - id: maj_installer
+    mode: single
+    then:
+      - if:
+          condition:
+            update.is_available: maj_firmware
+          then:
+            - lambda: |-
+                id(maj_installation) = true;
+                lv_label_set_text(id(lbl_maj_texte), "Mise à jour en cours, module indisponible");
+                lv_obj_add_flag(id(btn_maj_annuler), LV_OBJ_FLAG_HIDDEN);
+                lv_obj_add_flag(id(btn_maj_installer), LV_OBJ_FLAG_HIDDEN);
+                ESP_LOGI("hapanel.maj", "installation de la version %s depuis l'ecran",
+                         id(maj_firmware).update_info.latest_version.c_str());
+            # Laisse LVGL dessiner le message avant le blocage.
+            - delay: 500ms
+            - update.perform: maj_firmware
+            - delay: 1s
+            - wait_until:
+                condition:
+                  lambda: return id(maj_firmware).state != update::UPDATE_STATE_INSTALLING;
+                timeout: 15min
+            - lambda: |-
+                id(maj_installation) = false;
+                ESP_LOGW("hapanel.maj", "installation echouee");
+                lv_label_set_text(id(lbl_maj_texte), "Échec de la mise à jour. Réessayez plus tard.");
+                lv_obj_remove_flag(id(btn_maj_fermer), LV_OBJ_FLAG_HIDDEN);
+          else:
+            - script.execute: maj_fermer
+
+  - id: maj_fermer
+    then:
+      - lambda: |-
+          id(maj_installation) = false;
+          lv_obj_add_flag(id(obj_maj), LV_OBJ_FLAG_HIDDEN);
 
 # Icone de la barre d'etat et eclairs violets de la LED (D045) : seulement
 # quand une mise a jour attend ; pendant l'installation, plus rien (le module
-# redemarre ensuite dans la nouvelle version).
+# redemarre ensuite dans la nouvelle version). Boutons de D047.
 interval:
   - interval: 1s
     then:
-      - lambda: id(maj_disponible) = id(maj_firmware).state == update::UPDATE_STATE_AVAILABLE;
+      - lambda: |-
+          id(maj_disponible) = id(maj_firmware).state == update::UPDATE_STATE_AVAILABLE;
+          // Bouton violet du Menu : seulement quand une mise a jour attend.
+          bool cache = lv_obj_has_flag(id(btn_men_maj), LV_OBJ_FLAG_HIDDEN);
+          if (id(maj_disponible) && cache) lv_obj_remove_flag(id(btn_men_maj), LV_OBJ_FLAG_HIDDEN);
+          else if (!id(maj_disponible) && !cache) lv_obj_add_flag(id(btn_men_maj), LV_OBJ_FLAG_HIDDEN);
+          // Bouton de recherche de la page A propos : toujours dans ce binaire.
+          if (lv_obj_has_flag(id(btn_apropos_maj), LV_OBJ_FLAG_HIDDEN))
+            lv_obj_remove_flag(id(btn_apropos_maj), LV_OBJ_FLAG_HIDDEN);
+          // Confirmation ou echec laisses sans toucher : fermes comme le retour
+          // a l'accueil (D022), jamais pendant l'installation.
+          if (!id(maj_installation) && !lv_obj_has_flag(id(obj_maj), LV_OBJ_FLAG_HIDDEN) &&
+              lv_display_get_inactive_time(nullptr) > ${veille_delai_ms})
+            lv_obj_add_flag(id(obj_maj), LV_OBJ_FLAG_HIDDEN);
 
 # Adoption dans le module ESPHome de Home Assistant : configuration reprise
 # depuis le depot public, a recompiler avec sa propre cle si on le souhaite.

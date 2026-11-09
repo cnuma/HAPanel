@@ -348,3 +348,25 @@ Procédure : `CONFIGURATION.md` § 1, « Module déjà ajouté ».
 | N2 | Sur chaque module, après N1 : régler la consigne de l'accueil, puis allumer et couper le chauffage | Le thermostat de la pièce suit dans HA ; l'écran affiche le nouvel état | `docs/securite-actions-ha` | OK 9 nov. |
 | N3 | Sur chaque module : lancer un scénario | « OK » à l'écran, scénario exécuté dans HA | — (reporté) | Reporté le 9 nov. (accord du propriétaire) : aucun scénario choisi ; à faire avec le premier scénario. Même chemin (événement) que N2 |
 | N4 | Le lendemain (10 novembre 2026) : Paramètres › Réparations, et journal de HA filtré sur `esphome` | Aucune réparation « … n'est pas autorisé à effectuer des actions » ni « Service call … rejected » : le panneau n'appelle aucune action | — | |
+
+## O — Mise à jour depuis l'écran (D047)
+
+Binaire public de la branche `feature/maj-ecran`, compilé avec une version différente
+de la Release « Latest » (`0.11.0-dev`, procédure dans le message de livraison) et
+écrit par USB : la Release `0.10.0` est alors proposée, et l'installer ramène le module
+sur le binaire publié. O10 se fait sur le binaire privé du banc.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| O1 | Démarrer le module, attendre 1 min, ouvrir À propos | Bouton « Rechercher une mise à jour » sous la mémoire, sans chevauchement ni débordement sous la barre du bas ; flèche violette dans la barre (recherche du démarrage) | `feature/maj-ecran` | |
+| O2 | Toucher « Rechercher une mise à jour » | « Recherche… », puis en quelques secondes « Version 0.10.0 disponible » ; journal : « recherche depuis l'ecran » | `feature/maj-ecran` | |
+| O3 | Quitter À propos, y revenir | Le bouton affiche de nouveau « Rechercher une mise à jour » | `feature/maj-ecran` | |
+| O4 | Ouvrir le Menu | Tuile violette « Mise à jour » à droite d'À propos ; les autres tuiles inchangées | `feature/maj-ecran` | |
+| O5 | Toucher la tuile, puis Annuler | Fenêtre « Installer la version 0.10.0 ? » ; Annuler la ferme, le Menu revient, rien n'est installé | `feature/maj-ecran` | |
+| O6 | Rouvrir la confirmation, ne rien toucher 1 min | La fenêtre se ferme ; l'accueil est affiché | `feature/maj-ecran` | |
+| O7 | Rouvrir la confirmation, toucher Installer | « Mise à jour en cours, module indisponible » jusqu'au redémarrage (2 à 3 min) ; ensuite, À propos affiche `0.10.0` avec le SHA de la Release, sans flèche ni tuile violette ; dans HA, « Firmware » à jour | `feature/maj-ecran` | |
+| O8 | Binaire de la branche compilé à la version de la Release « Latest » : toucher « Rechercher » | « À jour » ; pas de tuile dans le Menu | — | |
+| O9 | Module public sans Wi-Fi (box coupée ou module hors de portée) : toucher « Rechercher » | « Pas de Wi-Fi » ; l'écran reste réactif | — | |
+| O10 | Binaire privé du banc (`hapanel_banc.yaml`) : ouvrir À propos et le Menu | Ni bouton de recherche, ni tuile « Mise à jour » | `feature/maj-ecran` | |
+| O11 | Module public, mise à jour disponible, laissé la nuit, HA connecté | Historique de l'entité « Firmware » dans HA ou journal : une vérification vers 3 h | — | |
+| O12 | Page À propos pendant O1 | Mémoire libre et plus grand bloc notés (G6), comparables à L10 (149 Ko, 60 Ko) | `feature/maj-ecran` | |
