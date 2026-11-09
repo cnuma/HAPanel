@@ -29,7 +29,7 @@ Trois idées structurent tout le reste :
 | Événement `esphome.hapanel_commande` | API native | Module vers HA | Toutes les commandes |
 | Action `message_accueil(texte, infos)` | API native chiffrée | HA vers module | Message d'accueil (D028), section du blueprint `module.yaml` (D042) |
 | OTA | Réseau local chiffré | PC vers module | Mise à jour du firmware (modules privés, `hapanel.yaml`) |
-| Entité « Firmware » | HTTPS depuis GitHub | GitHub vers module, lancée depuis HA | Mise à jour du binaire public (D039, maquette) |
+| Entité « Firmware » | HTTPS depuis GitHub | GitHub vers module, lancée depuis HA ou depuis l'écran du module (D047) | Mise à jour du binaire public (D039) ; recherche au démarrage, à 3 h et par le bouton d'À propos |
 
 ## Organisation du YAML
 
@@ -57,14 +57,14 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `hapanel_banc.yaml` | 33 | Banc de l'atelier : `hapanel.yaml`, plus mémoire mesurée, journaux DEBUG et dossier de compilation propre |
 | `hapanel_public.yaml` | 25 | Modules de la maison : binaire public sans secret, fonctions et accès public (D039, D037 révisée) |
 | `packages/application.yaml` | 20 | Liste ordonnée des fichiers de fonctions, commune aux configurations |
-| `packages/acces_prive.yaml` | 15 | Wi-Fi, clé de l'API et OTA depuis le PC, lus dans `secrets.yaml` |
-| `packages/acces_public.yaml` | 57 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub, mise à jour en attente signalée (D045) |
+| `packages/acces_prive.yaml` | 26 | Wi-Fi, clé de l'API et OTA depuis le PC, lus dans `secrets.yaml` ; scripts de mise à jour vides (D047) |
+| `packages/acces_public.yaml` | 332 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub, mise à jour en attente signalée (D045), recherche, confirmation et installation depuis l'écran (D047) |
 | `packages/base.yaml` | 57 | Nœud, ESP32, journaux, écriture des réglages, identité de build |
 | `packages/hardware.yaml` | 116 | Carte ESP32-2432S024C : broches, bus, écran, tactile, sorties PWM, LDR (G2) |
 | `packages/hardware_2432s028.yaml` | 122 | Carte ESP32-2432S028 : mêmes `id`, rétroéclairage GPIO21, tactile résistif XPT2046 |
 | `hapanel_2432s028_banc.yaml` | 38 | Banc sur carte ESP32-2432S028 |
 | `hapanel_2432s028_public.yaml` | 24 | Binaire public de la carte ESP32-2432S028 (D041) |
-| `packages/lvgl.yaml` | 378 | Polices communes, À propos (version, SHA, connexion, adresse IP, mémoire), barre d'état en haut (titre, disquette, mise à jour, Wi-Fi, HA, ☰, D036, D045) et bouton Accueil en bas, suivi de la connexion |
+| `packages/lvgl.yaml` | 401 | Polices communes, À propos (version, SHA, connexion, adresse IP, mémoire, bouton de recherche de mise à jour, D047), barre d'état en haut (titre, disquette, mise à jour, Wi-Fi, HA, ☰, D036, D045) et bouton Accueil en bas, suivi de la connexion |
 | `packages/liaison_ha.yaml` | 489 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
 | `packages/led_veille.yaml` | 320 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
 | `packages/message_accueil.yaml` | 160 | Action `message_accueil`, message plein écran, entité « Message d'accueil » |
@@ -72,7 +72,7 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `packages/pages/meteo.yaml` | 194 | Conditions et prévisions |
 | `packages/pages/planning.yaml` | 378 | Résumé et frises |
 | `packages/pages/scenarios.yaml` | 365 | Boutons et lancement |
-| `packages/pages/menu.yaml` | 126 | Tuiles de navigation |
+| `packages/pages/menu.yaml` | 151 | Tuiles de navigation, tuile « Mise à jour » (D047) |
 | `packages/pages/reglages.yaml` | 216 | Réglages de la LED et de l'écran, synchronisés avec HA, cadenas si imposés (D031) |
 | `secrets.yaml` | | Wi-Fi et clé d'API des modules de l'atelier, hors de Git (G9) |
 
@@ -181,7 +181,8 @@ Les tâches périodiques donnent le rythme du module :
 | 1 s | `led_veille.yaml` | Retour à l'accueil, veille, réveil sans HA |
 | 1 s | `scenarios.yaml` | Délais de réponse et de message |
 | 1 s | `message_accueil.yaml` | Fermeture du message d'accueil après 3 min |
-| 1 s | `acces_public.yaml` | Mise à jour en attente (`maj_disponible`, binaire public seulement) |
+| 1 s | `acces_public.yaml` | Mise à jour en attente (`maj_disponible`), tuile du Menu et bouton d'À propos, fermeture de la confirmation sans toucher (binaire public seulement, D047) |
+| 3 h chaque nuit | `acces_public.yaml` | Recherche d'une mise à jour, heure de HA (D047) ; une autre 10 s après la première connexion au Wi-Fi |
 | 2 s | `lvgl.yaml` | Connexion à HA |
 | 10 s | `led_veille.yaml` | Obscurité et rétroéclairage |
 | 10 s | `lvgl.yaml` | Mémoire affichée dans À propos |
@@ -607,7 +608,8 @@ message au toucher, après 3 minutes ou à la déconnexion de HA (P2).
   `hapanel_public` : passer de l'un à l'autre ne recompile pas tout.
 - **Binaire public (D039), mode de déploiement de tous les modules de la maison (D037 révisée) :**
   une étiquette `v<version>` lance GitHub Actions, qui publie une Release (binaire complet, binaire
-  de mise à jour, manifeste) ; chaque module la propose dans HA (entité Firmware). USB en secours. Procédure : [DEPLOIEMENT_PUBLIC.md](DEPLOIEMENT_PUBLIC.md).
+  de mise à jour, manifeste avec le résumé lu dans `NOUVEAUTES.md`) ; chaque module la propose dans
+  HA (entité Firmware) et sur son écran (tuile du Menu, D047). USB en secours. Procédure : [DEPLOIEMENT_PUBLIC.md](DEPLOIEMENT_PUBLIC.md).
 
 ## Sécurité
 
