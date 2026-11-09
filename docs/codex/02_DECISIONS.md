@@ -1215,3 +1215,30 @@ qui cite la précédente.
 - Conséquences : un module 4,3" ne reçoit jamais un binaire ESP32 (manifeste et puce
   distincts) ; une nouvelle page doit être ajoutée aux marges du fichier matériel tant
   que le portrait provisoire dure ; écran sous-utilisé (bande noire) jusqu'au paysage.
+
+## D049 — Blueprint à mettre à jour : signalé par le module, réimport guidé
+
+- Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R013, piste A ;
+  HAP-R014 : QR code vers HA, icône distincte), **non implémenté** (TODO rang 14).
+- Contexte : chaque module dépend du blueprint `module.yaml` importé dans HA. Il évolue
+  avec le firmware ; le réimporter (menu ⋮ du blueprint, « Réimporter ») est simple,
+  mais rien ne prévient qu'il faut le faire, et rien ne distingue cette mise à jour,
+  faite dans HA, de celle du module.
+- Décision :
+  - le blueprint porte un numéro de version et l'envoie au module avec les autres
+    valeurs (`maj_valeur`) ; le firmware porte la version minimale qu'il attend ;
+  - blueprint plus ancien, ou sans version après un envoi complet : **icône distincte**
+    dans la barre d'état (autre forme et autre couleur que la flèche violette du
+    firmware, D045) ; la toucher ouvre une fenêtre « Blueprint à mettre à jour », la
+    ligne d'aide « Dans HA : Blueprints › HAPanel › ⋮ › Réimporter » et un **QR code**
+    vers la page Blueprints de HA par le lien officiel `my.home-assistant.io` ;
+  - pas de LED, pas d'entité HA, pas de ligne sur À propos (non retenus le 9 novembre) ;
+  - une nouvelle entrée du blueprint a toujours une valeur par défaut : un réimport ne
+    casse jamais une automatisation existante ;
+  - procédure de réimport écrite dans `CONFIGURATION.md` (G11).
+- Options écartées : intégration HAPanel distribuée par HACS, avec mises à jour dans
+  Paramètres (piste B) : reportée à une v2, gros chantier ; QR code vers la doc GitHub
+  (une étape de plus) ; texte seul (lien illisible sur 2,4 pouces).
+- Conséquences : le premier lien `my.home-assistant.io` scanné demande une fois
+  l'adresse de HA ; le firmware et le blueprint se publient ensemble quand la version
+  attendue change.
