@@ -1125,4 +1125,6 @@ qui cite la précédente.
   fiable est dans HA (écrire `device_id` après les données du module), hors du dépôt.
 - Conséquences : le blueprint garde son filtre `device_id == panneau`, qui empêche les
   erreurs (deux panneaux, deux automatisations) mais n'est pas une barrière de
-  sécurité. Un signalement à l'équipe de HA reste au choix du propriétaire.
+  sécurité. Pas de signalement à l'équipe de HA : hors du périmètre de sa politique de
+  sécurité (appareil compromis, accès physique), décision du propriétaire du
+  9 novembre 2026 (HAP-R005).
