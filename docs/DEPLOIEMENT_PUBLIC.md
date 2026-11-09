@@ -14,7 +14,10 @@ de test de l'atelier.
 ## 1. Publier une version
 
 1. Le commit à publier est poussé sur GitHub. Le fichier `VERSION` donne la base de
-   la version, par exemple `0.8.0-dev`.
+   la version, par exemple `0.8.0-dev`. `NOUVEAUTES.md` contient une ligne courte pour
+   cette version, sous `## <version>` (`## 0.8.0` suffit pour `0.8.0-dev.1`) : c'est le
+   résumé affiché par le module avant l'installation et par HA (D047). Sans ligne,
+   la publication le signale (avertissement dans Actions) et rien ne s'affiche.
 2. Créer et pousser l'étiquette, dont la version commence par le contenu de
    `VERSION` :
 
@@ -90,10 +93,12 @@ le § 2 ; le Wi-Fi est à ressaisir. Même démarche dans HA qu'au § 5.
 1. Une fois la nouvelle Release publiée (§ 1), l'entité **Firmware** du module
    passe à « Mise à jour disponible » ; depuis 0.10.0, le module le montre aussi : flèche
    violette qui clignote dans la barre du haut, deux éclairs violets de la LED toutes les
-   10 s (D045, [UTILISATION.md](UTILISATION.md)). Le module vérifie environ 20 s après son
-   démarrage, puis toutes les 6 h. Pour forcer, redémarrer le module ; l'action
-   « Mettre à jour l'entité » de HA ne déclenche pas la vérification (constaté le
-   5 nov.).
+   10 s (D045, [UTILISATION.md](UTILISATION.md)). Le module vérifie 10 s après sa
+   première connexion au Wi-Fi, puis chaque nuit à 3 h, heure de HA (D047). Pour
+   forcer : bouton « Rechercher une mise à jour » de la page À propos, ou redémarrer
+   le module ; l'action « Mettre à jour l'entité » de HA ne déclenche pas la
+   vérification (constaté le 5 nov.). Le module peut aussi installer lui-même :
+   Menu, tuile violette « Mise à jour », Installer (D047).
    Juste après une publication, HA peut encore proposer la version précédente, vue
    à la dernière vérification : redémarrer le module, puis vérifier la version
    proposée avant d'installer (sinon, deux mises à jour successives, sans dégât).

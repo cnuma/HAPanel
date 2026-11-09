@@ -13,3 +13,14 @@ ota:
   - platform: esphome
     # Chiffree par la cle de l'API, heritee faute de cle propre (D010).
     encryption:
+
+# Boutons de mise a jour des pages A propos et Menu (D047) : toujours masques
+# ici, faute d'entite de mise a jour ; scripts vides pour que les pages
+# communes compilent. Le binaire prive se met a jour par l'OTA esphome.
+script:
+  - id: maj_rechercher
+    then:
+      - logger.log: "binaire prive : pas de recherche de mise a jour"
+  - id: maj_proposer
+    then:
+      - logger.log: "binaire prive : pas de mise a jour depuis l'ecran"

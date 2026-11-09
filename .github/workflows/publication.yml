@@ -54,6 +54,17 @@ jobs:
           v="${{ steps.id.outputs.version }}"
           base="https://github.com/${{ github.repository }}/releases/download/$GITHUB_REF_NAME"
           mkdir publication
+          # Resume affiche par le module et par HA (D047) : ligne de NOUVEAUTES.md
+          # sous « ## <version> », sinon sous la version sans suffixe
+          # (0.11.0-dev.1 -> 0.11.0) ; echappee pour le JSON.
+          lire_resume() {
+            awk -v t="## $1" '$0==t{f=1;next} f&&/^## /{exit} f&&NF{print;exit}' NOUVEAUTES.md
+          }
+          resume="$(lire_resume "$v")"
+          [ -n "$resume" ] || resume="$(lire_resume "${v%%-*}")"
+          [ -n "$resume" ] || echo "::warning::NOUVEAUTES.md : aucune ligne pour $v"
+          resume="${resume//\\/\\\\}"
+          resume="${resume//\"/\\\"}"
           # publier <dossier de compilation> <carte> <manifeste>
           publier() {
             d=".esphome/build/$1/build"
@@ -75,7 +86,7 @@ jobs:
                 "ota": {
                   "path": "$base/hapanel-$2-ota.bin",
                   "md5": "$md5",
-                  "summary": "HAPanel $v (${{ steps.id.outputs.sha }}), carte $2",
+                  "summary": "$resume",
                   "release_url": "https://github.com/${{ github.repository }}/releases/tag/$GITHUB_REF_NAME"
                 },
                 "parts": [{ "path": "hapanel-$2-factory.bin", "offset": 0 }]

@@ -124,3 +124,28 @@ lvgl:
               - lvgl.page.show:
                   id: page_reglages
                   animation: NONE
+        # Mise a jour (D047) : violet de l'icone de la barre d'etat (D045),
+        # affiche seulement quand une mise a jour attend (acces_public.yaml) ;
+        # jamais dans le binaire prive. Ouvre la confirmation.
+        - button:
+            id: btn_men_maj
+            align: TOP_LEFT
+            x: 124
+            y: 196
+            width: 108
+            height: 72
+            pad_all: 4
+            hidden: true
+            bg_color: 0xAB47BC
+            widgets:
+              - label:
+                  align: TOP_MID
+                  y: 8
+                  text_font: police_icones
+                  text: "\U000F005F"
+              - label:
+                  align: BOTTOM_MID
+                  y: -8
+                  text: "Mise à jour"
+            on_click:
+              - script.execute: maj_proposer

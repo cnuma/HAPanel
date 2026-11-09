@@ -15,6 +15,7 @@ S = 2  # echelle de rendu
 
 BLANC, GRIS, GRIS_FONCE, ORANGE = "#FFFFFF", "#9E9E9E", "#303030", "#FF9800"
 BLEU, VERT, ROUGE = "#2196F3", "#4CAF50", "#F44336"
+VIOLET = "#AB47BC"
 INACTIF = "#424242"
 
 MDI = {
@@ -24,6 +25,7 @@ MDI = {
     "info": "\U000F02FD", "soleil": "\U000F0599", "pluie": "\U000F0597", "nuage": "\U000F0590",
     "canape": "\U000F04B9", "depart": "\U000F0A48", "lune": "\U000F0594", "lumiere_eteinte": "\U000F0E4F",
     "film": "\U000F0FCE", "reveil": "\U000F0020", "reglages": "\U000F0493", "verrou": "\U000F033E", "disquette": "\U000F0193",
+    "maj": "\U000F005F",
 }
 
 
@@ -173,6 +175,10 @@ def menu():
         e.bouton(x, y, 108, 72)
         e.icone(nom, x + 54, y + 22, 24)
         e.texte(x + 54, y + 54, texte, BLANC, 16, 400, "mm")
+    # Tuile de mise a jour (D047), seulement quand une mise a jour attend.
+    e.bouton(124, 196, 108, 72, VIOLET)
+    e.icone("maj", 124 + 54, 196 + 22, 24)
+    e.texte(124 + 54, 196 + 54, "Mise à jour", BLANC, 16, 400, "mm")
     e.finir("menu.png")
 
 
@@ -278,6 +284,9 @@ def apropos():
     e.texte(12, 156, "Adresse IP : 192.168.x.x")
     e.texte(12, 196, "Mémoire : 162 Ko libres,")
     e.texte(12, 216, "plus grand bloc 108 Ko")
+    # Recherche d'une mise a jour (D047), binaire public seulement.
+    e.bouton(12, 238, 216, 34)
+    e.texte(120, 255, "Rechercher une mise à jour", BLANC, 16, 400, "mm")
     e.finir("apropos.png")
 
 

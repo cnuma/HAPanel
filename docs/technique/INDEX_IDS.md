@@ -34,7 +34,12 @@ Relancer le script après toute modification du YAML.
 | `btn_acc_pre_eco` | widget button | packages/pages/accueil.yaml | — |
 | `btn_acc_pre_frost` | widget button | packages/pages/accueil.yaml | — |
 | `btn_acc_pre_none` | widget button | packages/pages/accueil.yaml | — |
+| `btn_apropos_maj` | widget button | packages/lvgl.yaml | packages/acces_public.yaml |
+| `btn_maj_annuler` | widget button | packages/acces_public.yaml | — |
+| `btn_maj_fermer` | widget button | packages/acces_public.yaml | — |
+| `btn_maj_installer` | widget button | packages/acces_public.yaml | — |
 | `btn_men_apropos` | widget button | packages/pages/menu.yaml | — |
+| `btn_men_maj` | widget button | packages/pages/menu.yaml | packages/acces_public.yaml |
 | `btn_men_meteo` | widget button | packages/pages/menu.yaml | — |
 | `btn_men_planning` | widget button | packages/pages/menu.yaml | — |
 | `btn_men_reglages` | widget button | packages/pages/menu.yaml | — |
@@ -52,12 +57,12 @@ Relancer le script après toute modification du YAML.
 | `bus_spi_ecran` | spi | packages/hardware.yaml | packages/hardware_2432s028.yaml |
 | `bus_spi_ecran` | spi | packages/hardware_2432s028.yaml | packages/hardware.yaml |
 | `bus_spi_tactile` | spi | packages/hardware_2432s028.yaml | — |
-| `ecran` | display (mipi_spi) | packages/hardware.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
-| `ecran` | display (mipi_spi) | packages/hardware_2432s028.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
+| `ecran` | display (mipi_spi) | packages/hardware.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
+| `ecran` | display (mipi_spi) | packages/hardware_2432s028.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
 | `ecran_intensite` | number (template) | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `enregistrement_signaler` | script | packages/lvgl.yaml | packages/led_veille.yaml, packages/message_accueil.yaml |
 | `ha_connecte_affiche` | globals | packages/lvgl.yaml | packages/led_veille.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/scenarios.yaml |
-| `heure_ha` | time (homeassistant) | packages/pages/accueil.yaml | packages/pages/planning.yaml |
+| `heure_ha` | time (homeassistant) | packages/pages/accueil.yaml | packages/acces_public.yaml, packages/pages/planning.yaml |
 | `ico_barre_enregistrement` | widget label | packages/lvgl.yaml | — |
 | `ico_barre_maj` | widget label | packages/lvgl.yaml | — |
 | `ico_reg_ecran_intensite_verrou` | widget label | packages/pages/reglages.yaml | — |
@@ -83,11 +88,14 @@ Relancer le script après toute modification du YAML.
 | `lbl_acc_temperature_etat` | widget label | packages/pages/accueil.yaml | — |
 | `lbl_apropos_connexion` | widget label | packages/lvgl.yaml | — |
 | `lbl_apropos_ip` | widget label | packages/lvgl.yaml | — |
+| `lbl_apropos_maj` | widget label | packages/lvgl.yaml | packages/acces_public.yaml |
 | `lbl_apropos_memoire` | widget label | packages/lvgl.yaml | — |
 | `lbl_apropos_sha` | widget label | packages/lvgl.yaml | — |
 | `lbl_apropos_version` | widget label | packages/lvgl.yaml | — |
 | `lbl_barre_date` | widget label | packages/lvgl.yaml | packages/pages/accueil.yaml |
 | `lbl_barre_titre` | widget label | packages/lvgl.yaml | packages/pages/accueil.yaml, packages/pages/menu.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
+| `lbl_maj_resume` | widget label | packages/acces_public.yaml | — |
+| `lbl_maj_texte` | widget label | packages/acces_public.yaml | — |
 | `lbl_met_condition` | widget label | packages/pages/meteo.yaml | — |
 | `lbl_met_etat` | widget label | packages/pages/meteo.yaml | — |
 | `lbl_met_icone` | widget label | packages/pages/meteo.yaml | — |
@@ -177,7 +185,18 @@ Relancer le script après toute modification du YAML.
 | `liaison_temperature_etat` | globals | packages/liaison_ha.yaml | packages/pages/accueil.yaml |
 | `liaison_temperature_ms` | globals | packages/liaison_ha.yaml | — |
 | `maj_disponible` | globals | packages/lvgl.yaml | packages/acces_public.yaml, packages/led_veille.yaml |
+| `maj_fermer` | script | packages/acces_public.yaml | — |
 | `maj_firmware` | update (http_request) | packages/acces_public.yaml | packages/lvgl.yaml |
+| `maj_installation` | globals | packages/acces_public.yaml | — |
+| `maj_installer` | script | packages/acces_public.yaml | — |
+| `maj_proposer` | script | packages/acces_prive.yaml | packages/acces_public.yaml, packages/pages/menu.yaml |
+| `maj_proposer` | script | packages/acces_public.yaml | packages/acces_prive.yaml, packages/pages/menu.yaml |
+| `maj_recherche_debut` | globals | packages/acces_public.yaml | — |
+| `maj_recherche_demarrage` | script | packages/acces_public.yaml | — |
+| `maj_recherche_demarrage_lancer` | script | packages/acces_public.yaml | — |
+| `maj_rechercher` | script | packages/acces_prive.yaml | packages/acces_public.yaml, packages/lvgl.yaml |
+| `maj_rechercher` | script | packages/acces_public.yaml | packages/acces_prive.yaml, packages/lvgl.yaml |
+| `maj_reponses` | globals | packages/acces_public.yaml | — |
 | `message_actif` | switch (template) | packages/message_accueil.yaml | — |
 | `message_fermer` | script | packages/message_accueil.yaml | packages/liaison_ha.yaml |
 | `message_ms` | globals | packages/message_accueil.yaml | packages/led_veille.yaml |
@@ -190,6 +209,7 @@ Relancer le script après toute modification du YAML.
 | `obj_barre_wifi_2` | widget obj | packages/lvgl.yaml | packages/pages/accueil.yaml |
 | `obj_barre_wifi_3` | widget obj | packages/lvgl.yaml | packages/pages/accueil.yaml |
 | `obj_barre_wifi_4` | widget obj | packages/lvgl.yaml | packages/pages/accueil.yaml |
+| `obj_maj` | widget obj | packages/acces_public.yaml | — |
 | `obj_message` | widget obj | packages/message_accueil.yaml | — |
 | `obj_nav` | widget obj | packages/lvgl.yaml | packages/pages/accueil.yaml |
 | `obj_pla_bande` | widget obj | packages/pages/planning.yaml | — |
@@ -207,11 +227,11 @@ Relancer le script après toute modification du YAML.
 | `page_scenarios` | page LVGL | packages/pages/scenarios.yaml | packages/pages/menu.yaml |
 | `planning_rafraichir` | script | packages/pages/planning.yaml | packages/liaison_ha.yaml |
 | `police_grande` | font | packages/pages/accueil.yaml | packages/pages/meteo.yaml |
-| `police_icones` | font | packages/lvgl.yaml | packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/menu.yaml, packages/pages/reglages.yaml |
+| `police_icones` | font | packages/lvgl.yaml | packages/acces_public.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/menu.yaml, packages/pages/reglages.yaml |
 | `police_meteo` | font | packages/pages/meteo.yaml | — |
 | `police_scenarios` | font | packages/pages/scenarios.yaml | — |
-| `police_texte` | font | packages/lvgl.yaml | packages/message_accueil.yaml |
-| `police_titre` | font | packages/lvgl.yaml | packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml |
+| `police_texte` | font | packages/lvgl.yaml | packages/acces_public.yaml, packages/message_accueil.yaml |
+| `police_titre` | font | packages/lvgl.yaml | packages/acces_public.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml |
 | `reglage_impose_ecran_intensite` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `reglage_impose_led_alerte` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `reglage_impose_led_intensite` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
