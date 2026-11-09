@@ -22,7 +22,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | Date | Binaire | Partie | Résultat | Suite |
 |---|---|---|---|---|
 | 9 novembre 2026 | `0.11.0-dev (807f372)`, module de la cuisine, par USB | O | OK : O1, O2, O4 à O7, O12 ; O3 sans retour | Demandes du propriétaire : bouton violet (O13), descriptif dans la confirmation (O14, `NOUVEAUTES.md`). Module revenu sur `0.10.0 (99a9a10)` par O7 |
-| 9 novembre 2026 | `0.11.0-dev (e1407a4)`, module de la cuisine | O3, O13 | **OK** (propriétaire) | O14 à faire |
+| 9 novembre 2026 | `0.11.0-dev (e1407a4)`, module de la cuisine | O3, O13, O14 | **OK** (propriétaire) | — |
 | 9 novembre 2026 | `0.11.0-dev (d06100e)`, Guition 4,3", par USB | Q1 à Q4 | Q1 partiel, **Q2 et Q3 KO** (image et toucher à 180° après coupure ; couleurs inversées avant coupure, piège de l'écran sans remise à zéro), Q4 OK (point d'accès instable) | Rotation 270 et axes du GT911 inversés ; Q2, Q3 à refaire après coupure |
 | 9 novembre 2026 | `0.11.0-dev (a3e2065)`, Guition 4,3", par USB puis coupure | Q2, Q3, Q5 à Q9 | **OK** (propriétaire) | Remarque : les pages n'occupent qu'environ 60 % de la dalle (attendu en portrait provisoire, D048) ; pages pour la grande dalle : T04 |
 | 3 novembre 2026 | `6ec8bc4` | A | OK, sauf texte gris sombre sur noir, illisible | Corrigé (`5134e69`) : texte blanc ; à revoir après flash |
@@ -375,7 +375,7 @@ sur le binaire publié. O10 se fait sur le binaire privé du banc.
 | O11 | Module public, mise à jour disponible, laissé la nuit, HA connecté | Historique de l'entité « Firmware » dans HA ou journal : une vérification vers 3 h | — | |
 | O12 | Page À propos pendant O1 | Mémoire libre et plus grand bloc notés (G6), comparables à L10 (149 Ko, 60 Ko) | `feature/maj-ecran` | OK 9 nov. (`807f372`) : 144 Ko libres, plus grand bloc 54 Ko |
 | O13 | Binaire de test suivant, mise à jour disponible : À propos, toucher « Rechercher », puis quitter et revenir | Bouton violet avec « Version … disponible » ; au retour, couleur d'origine et « Rechercher une mise à jour » | `feature/maj-ecran` | OK 9 nov. (`e1407a4`) |
-| O14 | Même binaire : Menu, tuile « Mise à jour » | Titre « Installer la version 0.10.0 ? » plus haut ; en dessous, en gris : « HAPanel 0.10.0 (99a9a10), carte 2432s024c » (manifeste de `v0.10.0`, publié avant `NOUVEAUTES.md`) ; pendant l'installation, le résumé disparaît. Annuler | `feature/maj-ecran` | |
+| O14 | Même binaire : Menu, tuile « Mise à jour » | Titre « Installer la version 0.10.0 ? » plus haut ; en dessous, en gris : « HAPanel 0.10.0 (99a9a10), carte 2432s024c » (manifeste de `v0.10.0`, publié avant `NOUVEAUTES.md`) ; pendant l'installation, le résumé disparaît. Annuler | `feature/maj-ecran` | OK 9 nov. (`e1407a4`) |
 | O15 | Première Release publiée avec `NOUVEAUTES.md` : un module encore sur la version précédente, Menu, tuile | Sous le titre, la ligne de `NOUVEAUTES.md` pour cette version ; même texte dans HA, fenêtre « Firmware » | — (à la publication) | |
 
 ## Q — Carte Guition JC4827W543, 4,3" (D048)
