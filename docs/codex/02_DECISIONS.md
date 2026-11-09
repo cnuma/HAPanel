@@ -1282,3 +1282,34 @@ qui cite la précédente.
     des checkpoints laissées telles quelles (archives datées).
 - Conséquences : prochain numéro `T16` ; modèle de checkpoint, G14 et `AGENTS.md`
   citent les sujets par leur numéro.
+
+## D052 — Projet publiable : cadrage (TODO T02)
+
+- Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R002 :
+  « Q1 - A, Q2 - A, Q3 - Fr »), appliqué sur `docs/t02-projet-publiable`.
+- Contexte : D038 demande de relire la documentation pour en retirer le personnel,
+  et de cadrer l'adoption par d'autres utilisateurs. Inventaire du 9 novembre 2026 :
+  les pages pour l'utilisateur sont presque neutres (restaient les noms réels de
+  deux modules, fin de l'adresse MAC, en exemple, et dans une capture) ; le
+  personnel (pièces, modules, nœud `clim-parents`, réseau de bus, installation de
+  HA, chemin du poste) est dans le journal de développement. Le dépôt est déjà
+  public : l'historique Git garde tout ce qui a été écrit.
+- Décision :
+  - **nettoyage de la documentation pour l'utilisateur seulement** (option A) :
+    noms de modules réels remplacés par `hapanel-1a2b3c`, suffixe masqué dans la
+    capture 11 d'`INSTALLATION.md`, chemin du poste retiré de `START_HERE.md` ; le
+    README présente le reste de `docs/` comme le journal de développement d'une
+    installation réelle ; règle durable dans `04_DEVELOPMENT_RULES.md` ;
+  - le journal de développement reste tel quel ; pas de réécriture de l'historique
+    Git ;
+  - **adoption par le binaire public seulement** (option A) : le guide
+    d'installation (D039, D041) est le seul parcours documenté pour le public ; la
+    compilation reste possible (`secrets.example.yaml`, `05_BUILD_AND_TEST.md`) mais
+    n'a pas de guide pour débutant ;
+  - **documentation en français seulement**.
+- Options écartées : nettoyer aussi le journal de développement (gros travail, gain
+  nul tant que l'historique Git le garde) ; le déplacer dans un dépôt privé (deux
+  sources de vérité) ; guide « je compile moi-même » (à tester sur un poste vierge,
+  `tools/build.ps1` réservé à Windows) ; traduction anglaise (double maintenance).
+  Chacune peut être rouverte par une nouvelle décision.
+- Conséquences : T02 terminé à la fusion ; reste de D038 : page d'installation (T03).

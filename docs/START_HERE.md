@@ -21,7 +21,7 @@ Point d'entrée officiel de la documentation.
 Le checkpoint donne la branche ; le reste ne change pas d'un chat à l'autre (G14).
 
 ```powershell
-cd C:\Users\Emman\00_DevClaude\HAPanel
+cd <dossier du dépôt cloné>
 git fetch origin
 git checkout <branche du checkpoint>
 git pull origin <branche du checkpoint>

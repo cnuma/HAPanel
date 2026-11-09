@@ -25,7 +25,7 @@ et **aucun accès au réseau** : le Wi-Fi, la clé de l'API et l'OTA sont dans
 |---|---|---|
 | `name` | `${node_name}` | Nom du nœud (`hapanel`). |
 | `friendly_name` | `${friendly_name}` | Nom de l'appareil dans Home Assistant. |
-| `name_add_mac_suffix` | `true` | Ajoute la fin de l'adresse MAC : `hapanel-a85bfc`. Un seul binaire pour tous les modules, chacun avec un nom unique (D012). |
+| `name_add_mac_suffix` | `true` | Ajoute la fin de l'adresse MAC : `hapanel-1a2b3c`. Un seul binaire pour tous les modules, chacun avec un nom unique (D012). |
 | `project.name` | `cnuma.hapanel` | Identité du projet, visible dans Home Assistant et dans les journaux. |
 | `project.version` | `${version}` | Version du fichier `VERSION`, injectée par `tools/build.ps1` (G5). |
 

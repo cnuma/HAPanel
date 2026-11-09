@@ -37,7 +37,7 @@ le banc : il n'est jamais flashé sur un module de la maison.
 
 | Substitution | Valeur | Utilisée par | Rôle |
 |---|---|---|---|
-| `node_name` | `hapanel` | `base.yaml` (`esphome.name`) | Nom du nœud ESPHome. ESPHome y ajoute la fin de l'adresse MAC : `hapanel-a85bfc` (D012). |
+| `node_name` | `hapanel` | `base.yaml` (`esphome.name`) | Nom du nœud ESPHome. ESPHome y ajoute la fin de l'adresse MAC : `hapanel-1a2b3c` (D012). |
 | `friendly_name` | `HAPanel` | `base.yaml` | Nom de l'appareil affiché dans Home Assistant. |
 | `version` | `0.0.0-non-injectee` | `base.yaml`, `lvgl.yaml` (page À propos) | Version du logiciel. Remplacée par le contenu du fichier `VERSION`. |
 | `git_sha` | `inconnu` | `base.yaml`, `lvgl.yaml` | Commit compilé. Remplacé par le SHA court de Git, suivi de `+modif` si des fichiers ne sont pas commités. |
