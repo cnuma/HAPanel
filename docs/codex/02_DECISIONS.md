@@ -1057,7 +1057,8 @@ qui cite la précédente.
 ## D044 — Page d'installation par carte (TODO T03)
 
 - Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R005 : « 1-A, 2-A,
-  3-A, 4-A »), implémenté sur `feature/page-installation`, à valider (cahier S).
+  3-A, 4-A »), implémenté sur `feature/page-installation` ; cahier S1 à S4 OK, fusionné dans
+  `main` le 9 novembre 2026 ; en ligne à la première version finale (S5).
   Numéro réservé le 7 novembre 2026, rédigé le 9 (D045 à D052 prises entre-temps).
 - Contexte : demande du propriétaire du 7 novembre 2026. Une Release n'a pas de
   dossiers : trois fichiers par carte à plat (neuf aujourd'hui) ; l'utilisateur devait
