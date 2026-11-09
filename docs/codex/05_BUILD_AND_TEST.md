@@ -28,6 +28,7 @@ par Git.
 | `hapanel_banc.yaml` | banc : production + composant `debug` (mémoire libre, plus grand bloc) et journaux `DEBUG` |
 | `hapanel_public.yaml` | binaire public de la S024C, sans secret (D039) |
 | `hapanel_2432s028_public.yaml` | binaire public de la S028 (D041) |
+| `hapanel_jc4827w543_public.yaml` | binaire public de la Guition JC4827W543, 4,3", ESP32-S3 (D049) ; première installation par USB : `esphome upload … --device <PORT_COM>` |
 | `hapanel_2432s028_banc.yaml` | banc sur carte ESP32-2432S028 : `.	oolsuild.ps1 run -Config hapanel_2432s028_banc.yaml -Device <PORT_COM>` |
 
 ## Port série et adresse
@@ -35,6 +36,8 @@ par Git.
 - Premier flash par USB : `<PORT_COM>`, demandé à chaque session.
   `esphome run` liste les ports si `--device` est omis. Si la carte
   n'apparaît pas, installer le pilote du convertisseur USB-série de la carte.
+- Après un flash par USB, **couper l'alimentation** avant de juger l'écran ou le
+  toucher (`09_PIEGES.md`, Guition 4,3") ; un essai fait sans coupure ne vaut pas.
 - Ensuite, mise à jour par le réseau : `<IP_PANNEAU>`.
 
 ## Chaîne courante

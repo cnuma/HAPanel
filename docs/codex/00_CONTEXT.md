@@ -52,6 +52,7 @@ Home Assistant qu'il lit et les actions qu'il déclenche.
 | Alimentation | Bloc secteur externe 1 A validé au banc ; port USB du PC insuffisant (R7) |
 | Montage mural | À définir |
 | Autre carte | ESP32-2432S028 à deux prises USB (2,8", contrôleur ST7789V, tactile résistif XPT2046, rétroéclairage GPIO21) : `packages/hardware_2432s028.yaml`, validée au banc le 7 novembre 2026 (cahier K ; mémoire libre 153 Ko, plus grand bloc 96 Ko) ; binaire public `hapanel_2432s028_public.yaml` (D041), validé en `v0.9.0` le 7 novembre 2026 (cahier K12 à K15) |
+| Carte 4,3" | Guition JC4827W543C_I (ESP32-S3, 4 Mo de flash, 8 Mo de PSRAM, écran NV3041A 480 × 272 en QSPI, tactile GT911, rétroéclairage GPIO1, ni LED ni LDR), brochage validé par AquaLook le 27 août 2026 : `packages/hardware_jc4827w543.yaml`, binaire public `hapanel_jc4827w543_public.yaml`, en portrait provisoire (D049) ; à valider au banc (cahier Q) |
 
 ## Environnement de développement
 

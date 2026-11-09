@@ -13,6 +13,7 @@ commande, rien à compiler, aucun mot de passe à inventer.
   |---|---|---|
   | ESP32-2432S024C | 2,4 pouces, tactile capacitif | `hapanel-2432s024c-factory.bin` |
   | ESP32-2432S028, prises USB-C **et** micro-USB | 2,8 pouces, tactile résistif (appui franc) | `hapanel-2432s028-factory.bin` |
+  | Guition JC4827W543 (en essai) | 4,3 pouces, tactile capacitif ; pages en portrait au centre de l'écran, bande noire en bas, pas de LED | `hapanel-jc4827w543-factory.bin` |
 
   Une S028 avec une seule prise micro-USB n'est pas encore prise en charge.
 - **Un câble USB de données.** Certains câbles ne font que charger : si l'ordinateur
@@ -141,6 +142,11 @@ caractères) et sa version.
 Vous pouvez maintenant débrancher le module de l'ordinateur et le brancher sur son
 bloc secteur : il garde le Wi-Fi.
 
+**Jugez l'écran seulement après cette coupure.** Juste après l'écriture, certaines
+cartes (dont la Guition 4,3") gardent l'état laissé par le logiciel précédent :
+couleurs inversées, image à l'envers, toucher décalé. Débrancher puis rebrancher
+le module remet l'écran à zéro ; c'est ce démarrage-là qui compte.
+
 L'écran affiche « Pas de communication avec Home Assistant » et un point rouge en
 haut à droite : c'est normal, Home Assistant n'est pas encore relié (étape suivante).
 La date ne s'affiche qu'une fois Home Assistant relié.
@@ -191,5 +197,6 @@ jour suivantes passeront par Home Assistant, sans câble (section 7).
 | Le module ne rejoint pas le Wi-Fi | Réseau 2,4 GHz, mot de passe ; module trop loin de la box |
 | Réseau `hapanel-…` absent | Plus de 15 minutes depuis la mise sous tension : débrancher, rebrancher |
 | Le module redémarre en boucle | Alimentation trop faible : bloc secteur de 1 A |
+| Juste après l'écriture : couleurs inversées, image à l'envers ou toucher décalé | Débrancher le module, attendre quelques secondes, le rebrancher (étape 4) ; ne juger qu'après cette coupure |
 
 Problème une fois dans Home Assistant : [dépannage de la configuration](CONFIGURATION.md#dépannage).

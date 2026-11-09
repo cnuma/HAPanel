@@ -34,12 +34,14 @@ de test de l'atelier.
    |---|---|---|---|---|
    | ESP32-2432S024C (2,4", capacitif) | `hapanel_public.yaml` | `hapanel-2432s024c-factory.bin` | `hapanel-2432s024c-ota.bin` | `manifest.json` |
    | ESP32-2432S028, deux prises USB (2,8", résistif) | `hapanel_2432s028_public.yaml` | `hapanel-2432s028-factory.bin` | `hapanel-2432s028-ota.bin` | `manifest-2432s028.json` |
+   | Guition JC4827W543 (4,3", ESP32-S3, D049) | `hapanel_jc4827w543_public.yaml` | `hapanel-jc4827w543-factory.bin` | `hapanel-jc4827w543-ota.bin` | `manifest-jc4827w543.json` |
 
    Le manifeste de la S024C garde le nom `manifest.json` : son adresse est compilée
    dans les modules déjà installés. Jusqu'à `v0.8.1` incluse, la Release ne contenait
    que la S024C, sous les noms `hapanel-factory.bin` et `hapanel-ota.bin`.
-4. Vérifier la Release : les six fichiers sont présents, elle est marquée
-   **Latest**.
+4. Vérifier la Release : les neuf fichiers sont présents, elle est marquée
+   **Latest** ; `manifest-jc4827w543.json` porte `"chipFamily": "ESP32-S3"`, les deux
+   autres `"ESP32"` (D049).
 
 **Forme des versions :** toujours `X.Y.Z-dev.N`, puis `X.Y.Z`, sans suffixe ajouté.
 HA ne propose une mise à jour que si la version publiée est plus récente que
@@ -66,6 +68,9 @@ Il faut un ordinateur avec Chrome ou Edge, un câble USB de données et le modul
    fin (environ 2 min).
 4. Fenêtre « Configure Wi-Fi » (Improv) : choisir le réseau, saisir son mot de
    passe, **Connect** ; « Provisioned! » quand le module a rejoint le réseau.
+5. **Couper l'alimentation** (débrancher, rebrancher), puis seulement juger l'écran
+   et le toucher : sans broche de remise à zéro (Guition 4,3"), l'écran garde l'état
+   du logiciel précédent jusqu'à la coupure (couleurs inversées, image à 180°).
 
 **Sans câble ou si Improv échoue :** dans les 15 min qui suivent la mise sous
 tension, le module ouvre un point d'accès Wi-Fi à son nom (`hapanel-xxxxxx`). S'y

@@ -1,4 +1,4 @@
-# Publication des binaires publics (D038, D039, D041) : compile une
+# Publication des binaires publics (D038, D039, D041, D049) : compile une
 # configuration publique par carte, sans aucun secret, et publie une Release
 # GitHub avec, pour chaque carte, le binaire complet (premiere installation), le
 # binaire de mise a jour et le manifeste lu par l'entite « Firmware » des modules.
@@ -45,7 +45,7 @@ jobs:
 
       - name: Compilation
         run: |
-          for c in hapanel_public.yaml hapanel_2432s028_public.yaml; do
+          for c in hapanel_public.yaml hapanel_2432s028_public.yaml hapanel_jc4827w543_public.yaml; do
             esphome -s version "${{ steps.id.outputs.version }}"               -s git_sha "${{ steps.id.outputs.sha }}" compile "$c"
           done
 
@@ -65,7 +65,9 @@ jobs:
           [ -n "$resume" ] || echo "::warning::NOUVEAUTES.md : aucune ligne pour $v"
           resume="${resume//\\/\\\\}"
           resume="${resume//\"/\\\"}"
-          # publier <dossier de compilation> <carte> <manifeste>
+          # publier <dossier de compilation> <carte> <manifeste> <puce>
+          # La puce (chipFamily) doit valoir celle du module : ESPHome n'installe
+          # que la ligne de sa propre puce (ESP32 ou ESP32-S3, D049).
           publier() {
             d=".esphome/build/$1/build"
             cp "$d/firmware.factory.bin" "publication/hapanel-$2-factory.bin"
@@ -82,7 +84,7 @@ jobs:
             "new_install_prompt_erase": true,
             "builds": [
               {
-                "chipFamily": "ESP32",
+                "chipFamily": "$4",
                 "ota": {
                   "path": "$base/hapanel-$2-ota.bin",
                   "md5": "$md5",
@@ -96,8 +98,9 @@ jobs:
           EOF
             cat "publication/$3"
           }
-          publier hapanel_public 2432s024c manifest.json
-          publier hapanel_2432s028_public 2432s028 manifest-2432s028.json
+          publier hapanel_public 2432s024c manifest.json ESP32
+          publier hapanel_2432s028_public 2432s028 manifest-2432s028.json ESP32
+          publier hapanel_jc4827w543_public jc4827w543 manifest-jc4827w543.json ESP32-S3
 
       - name: Release
         env:
@@ -105,5 +108,5 @@ jobs:
         run: >
           gh release create "$GITHUB_REF_NAME" publication/*
           --title "HAPanel ${{ steps.id.outputs.version }}"
-          --notes "Binaires publics sans secret (D039, D041). Premiere installation : hapanel-2432s024c-factory.bin (ecran 2,4 pouces capacitif) ou hapanel-2432s028-factory.bin (2,8 pouces resistif). Mise a jour : entite Firmware dans Home Assistant."
+          --notes "Binaires publics sans secret (D039, D041). Premiere installation : hapanel-2432s024c-factory.bin (ecran 2,4 pouces capacitif), hapanel-2432s028-factory.bin (2,8 pouces resistif) ou hapanel-jc4827w543-factory.bin (Guition 4,3 pouces, ESP32-S3). Mise a jour : depuis le module (Menu, Mise a jour) ou entite Firmware dans Home Assistant."
           --latest

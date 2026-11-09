@@ -716,7 +716,7 @@ qui cite la précédente.
     référence ; nouveau `docs/codex/09_PIEGES.md`, qui rassemble les pièges des
     checkpoints ; procédure de reprise dans `START_HERE.md` ; checkpoint réduit à
     l'état variable, selon le modèle de `docs/checkpoints/README.md` ;
-  - `docs/TODO.md` toujours utilisé, avec une colonne **Prio** qui ordonne les
+  - `docs/TODO.md` toujours utilisé, avec une colonne **Prio** (« Ordre » depuis D051) qui ordonne les
     développements selon leurs dépendances (fusionner avant d'ouvrir un chantier,
     décider avant de coder, matériel avant code) ; les tests n'y figurent plus, ils
     sont dans le cahier (G13) ;
@@ -1001,7 +1001,7 @@ qui cite la précédente.
   contient six fichiers ; `hapanel-factory.bin` et `hapanel-ota.bin` deviennent
   `hapanel-2432s024c-factory.bin` et `hapanel-2432s024c-ota.bin` (guide
   d'installation : captures à refaire). Interface encore calée sur 240 × 320 et
-  glissière peu adaptée au tactile résistif : TODO rang 5.
+  glissière peu adaptée au tactile résistif : TODO T04.
 
 ## D042 — Message d'accueil réglé dans le blueprint du module
 
@@ -1059,7 +1059,7 @@ qui cite la précédente.
 - Date : 7 novembre 2026 — Statut : choisi par le propriétaire (HAP-R001), implémenté
   sur `feature/maj-icone`, validé sur la S028 le 7 novembre 2026 (cahier L1 à L10), en
   0.10.0. Premier point du
-  TODO rang 2 (mise à jour depuis l'écran) ; les points 2 à 4 restent à faire.
+  TODO T01 (mise à jour depuis l'écran) ; les points 2 à 4 restent à faire.
 - Contexte : une Release publiée n'est visible que dans HA (entité « Firmware ») ; le
   propriétaire veut la voir sur le module, comme dans AquaLook (demande du 5 novembre
   2026, précisée le 6 novembre).
@@ -1079,7 +1079,7 @@ qui cite la précédente.
     pas d'entité de mise à jour et n'affiche jamais rien ;
   - **recherche :** inchangée (au démarrage dès que le Wi-Fi est là, puis toutes les
     6 h, réglage d'ESPHome) : une Release est vue en 6 h au plus. Recherche à 3 h du
-    matin et bouton « Rechercher » : TODO rang 2. Remplacée par D047 (recherche au
+    matin et bouton « Rechercher » : TODO T01. Remplacée par D047 (recherche au
     démarrage, à 3 h et par le bouton de la page À propos).
 - Options écartées : `mdi:package-up` (icône de HA, trop détaillée à 24 px) ; LED en
   clignotement violet continu (la couleur du chauffage disparaîtrait jusqu'à
@@ -1133,7 +1133,8 @@ qui cite la précédente.
 ## D047 — Mise à jour depuis l'écran : recherche et installation
 
 - Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R002), implémenté
-  sur `feature/maj-ecran`, à valider (cahier O). TODO rang 1, points 2 à 4 ; complète
+  sur `feature/maj-ecran`, validé sur le module de la cuisine le 9 novembre 2026
+  (cahier O1 à O7, O12 à O14), en 0.11.0. TODO T01, points 2 à 4 ; complète
   D045.
 - Contexte : une mise à jour publiée ne s'installait que depuis HA (entité
   « Firmware »), ce qui oblige à se connecter à HA ; le module ne cherchait qu'au
@@ -1197,3 +1198,87 @@ qui cite la précédente.
   actif et vide (page publique inutile, porte ouverte à une doc concurrente).
 - Conséquences : aucune sur le firmware ni sur les modules. Réactivable à tout moment
   dans les réglages du dépôt, par décision révisée.
+
+## D049 — Carte Guition JC4827W543 (4,3", ESP32-S3), en portrait provisoire
+
+- Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R011 : « portrait ce
+  soir, paysage ensuite », « sans LED ni LDR »), implémenté sur
+  `feature/carte-jc4827w543`, validé sur la carte le 9 novembre 2026 (cahier Q1 à Q9),
+  en 0.11.0. TODO T04. Numérotée D048 sur la branche, décalée avec D050 et D051 à la
+  fusion : D048 avait été prise dans `main` par le wiki.
+- Contexte : le propriétaire a des cartes Guition JC4827W543C_I, déjà portées et
+  validées sur matériel par AquaLook (27 août 2026) : ESP32-S3, 4 Mo de flash, 8 Mo de
+  PSRAM, écran NV3041A de 480 × 272 en QSPI, tactile GT911, rétroéclairage GPIO1, ni LED
+  RVB ni LDR. Les pages sont dessinées pour 240 × 320 en portrait et ne tiennent pas en
+  272 de haut.
+- Décision :
+  - fichier matériel `packages/hardware_jc4827w543.yaml` et binaire public
+    `hapanel_jc4827w543_public.yaml` (D041), manifeste `manifest-jc4827w543.json` ;
+  - le bloc `esp32` quitte `base.yaml` pour chaque fichier matériel (la puce dépend de
+    la carte) ; contenu inchangé pour la S024C et la S028 ;
+  - **portrait provisoire :** rotation de 270° par LVGL (barre d'état du côté opposé au port USB, axes du tactile inversés : cahier Q2, Q3), pages de 240 × 320 centrées en
+    largeur (marges de 16 px), bande noire de 160 px en bas ; mêmes pages, mêmes
+    boutons et mêmes couleurs que les autres cartes ;
+  - **sans LED ni LDR :** sorties de LED sans effet (alerte, chauffage et mise à jour
+    se lisent à l'écran ; les réglages de la LED restent affichés, sans effet) ;
+    capteur de lumière fixé au plein jour : rétroéclairage de jour, réglé par
+    « Intensité écran » ;
+  - **publication :** la Release porte trois cartes ; le champ `chipFamily` de chaque
+    manifeste vaut la puce de la carte (`ESP32` ou `ESP32-S3`), sans quoi ESPHome
+    refuse la mise à jour.
+- Options écartées : paysage tout de suite (toutes les pages à redessiner, rien de
+  testable le 9 novembre) ; portrait définitif ; LED WS2812 externe sur GPIO46 comme
+  AquaLook (montage à faire) ; LDR ajoutée sur une broche libre.
+- Justification : la carte fonctionne et se met à jour comme les autres dès la
+  première version, sans attendre la refonte des pages ; la refonte en paysage
+  (TODO T04, point 1) se fera page par page avec le propriétaire.
+- Conséquences : un module 4,3" ne reçoit jamais un binaire ESP32 (manifeste et puce
+  distincts) ; une nouvelle page doit être ajoutée aux marges du fichier matériel tant
+  que le portrait provisoire dure ; écran sous-utilisé (bande noire) jusqu'au paysage.
+
+## D050 — Blueprint à mettre à jour : signalé par le module, réimport guidé
+
+- Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R013, piste A ;
+  HAP-R014 : QR code vers HA, icône distincte), **non implémenté** (TODO T14).
+- Contexte : chaque module dépend du blueprint `module.yaml` importé dans HA. Il évolue
+  avec le firmware ; le réimporter (menu ⋮ du blueprint, « Réimporter ») est simple,
+  mais rien ne prévient qu'il faut le faire, et rien ne distingue cette mise à jour,
+  faite dans HA, de celle du module.
+- Décision :
+  - le blueprint porte un numéro de version et l'envoie au module avec les autres
+    valeurs (`maj_valeur`) ; le firmware porte la version minimale qu'il attend ;
+  - blueprint plus ancien, ou sans version après un envoi complet : **icône distincte**
+    dans la barre d'état (autre forme et autre couleur que la flèche violette du
+    firmware, D045) ; la toucher ouvre une fenêtre « Blueprint à mettre à jour », la
+    ligne d'aide « Dans HA : Blueprints › HAPanel › ⋮ › Réimporter » et un **QR code**
+    vers la page Blueprints de HA par le lien officiel `my.home-assistant.io` ;
+  - pas de LED, pas d'entité HA, pas de ligne sur À propos (non retenus le 9 novembre) ;
+  - une nouvelle entrée du blueprint a toujours une valeur par défaut : un réimport ne
+    casse jamais une automatisation existante ;
+  - procédure de réimport écrite dans `CONFIGURATION.md` (G11).
+- Options écartées : intégration HAPanel distribuée par HACS, avec mises à jour dans
+  Paramètres (piste B) : reportée à une v2, gros chantier ; QR code vers la doc GitHub
+  (une étape de plus) ; texte seul (lien illisible sur 2,4 pouces).
+- Conséquences : le premier lien `my.home-assistant.io` scanné demande une fois
+  l'adresse de HA ; le firmware et le blueprint se publient ensemble quand la version
+  attendue change.
+
+## D051 — TODO : numéro fixe par sujet, ordre à part
+
+- Date : 9 novembre 2026 — Statut : demandé par le propriétaire (HAP-R018 : « rang »
+  peu clair ; « Go »), appliqué le même jour.
+- Contexte : la colonne « Prio » du TODO (D033) donnait à chaque sujet un « rang »,
+  cité ailleurs (« TODO rang 4 ») ; le rang change quand on réordonne, et ces renvois
+  devenaient faux (D045 citait le rang 2 pour un sujet passé au rang 1).
+- Décision :
+  - colonne **« N° »** : numéro fixe `T01`, `T02`…, donné à la création, jamais changé
+    ni réattribué ; c'est lui que citent décisions, cahier, code et checkpoints ;
+  - colonne **« Ordre »** à la place de « Prio » : ordre de développement, seule
+    valeur qui change quand on réordonne, citée nulle part ;
+  - colonne **« Demandé le »** : date de la demande (demande du propriétaire du
+    même jour) ;
+  - sujets existants : numéro égal à leur place du 9 novembre 2026 ; renvois vers des
+    sujets ouverts corrigés ; mentions de rang des sujets finis, de l'historique et
+    des checkpoints laissées telles quelles (archives datées).
+- Conséquences : prochain numéro `T16` ; modèle de checkpoint, G14 et `AGENTS.md`
+  citent les sujets par leur numéro.

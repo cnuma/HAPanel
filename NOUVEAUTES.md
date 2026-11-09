@@ -11,7 +11,7 @@ proposée pour la prochaine publication est confirmée à la fusion.
 
 ## 0.11.0
 
-Mise à jour depuis l'écran : bouton Rechercher sur À propos, tuile Mise à jour dans le Menu.
+Mise à jour depuis l'écran (bouton Rechercher, tuile du Menu) ; carte Guition 4,3 pouces en essai.
 
 ## 0.10.0
 

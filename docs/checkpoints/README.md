@@ -16,7 +16,7 @@ significative du socle de règles, ou avant de changer de chat.
 
   | Information | Fichier de référence |
   |---|---|
-  | Reste à faire et ordre des développements | `docs/TODO.md` (colonne « Prio ») |
+  | Reste à faire et ordre des développements | `docs/TODO.md` (colonnes « Ordre » et « N° ») |
   | Tests restants, fusions bloquées | `docs/CAHIER_DE_TESTS.md` |
   | Pièges | `docs/codex/09_PIEGES.md` |
   | Procédure de reprise, ordre de lecture | `docs/START_HERE.md` |
@@ -26,7 +26,7 @@ significative du socle de règles, ou avant de changer de chat.
 
 - **Jamais :** adresse IP, port COM, mot de passe, clé, nom de réseau Wi-Fi (G9). Le
   checkpoint écrit « à redemander au propriétaire ».
-- **Le reste à faire** n'est pas recopié : le checkpoint cite les rangs 1 à 3 du TODO et
+- **Le reste à faire** n'est pas recopié : le checkpoint cite les trois premiers sujets du TODO, par leur numéro (`T…`), et
   les tests qui bloquent la prochaine fusion.
 
 ## Modèle
@@ -59,7 +59,7 @@ significative du socle de règles, ou avant de changer de chat.
 
 ## Suite
 
-- Prochaine étape : rang <n> de `docs/TODO.md` : <sujet>.
+- Prochaine étape : T<nn> de `docs/TODO.md` : <sujet>.
 - Tests qui bloquent la prochaine fusion : <codes> (`docs/CAHIER_DE_TESTS.md`).
 - Nouveaux pièges : ajoutés à `docs/codex/09_PIEGES.md` (ou « aucun »).
 

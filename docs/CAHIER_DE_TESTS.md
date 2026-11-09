@@ -22,6 +22,9 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | Date | Binaire | Partie | Résultat | Suite |
 |---|---|---|---|---|
 | 9 novembre 2026 | `0.11.0-dev (807f372)`, module de la cuisine, par USB | O | OK : O1, O2, O4 à O7, O12 ; O3 sans retour | Demandes du propriétaire : bouton violet (O13), descriptif dans la confirmation (O14, `NOUVEAUTES.md`). Module revenu sur `0.10.0 (99a9a10)` par O7 |
+| 9 novembre 2026 | `0.11.0-dev (e1407a4)`, module de la cuisine | O3, O13, O14 | **OK** (propriétaire) | — |
+| 9 novembre 2026 | `0.11.0-dev (d06100e)`, Guition 4,3", par USB | Q1 à Q4 | Q1 partiel, **Q2 et Q3 KO** (image et toucher à 180° après coupure ; couleurs inversées avant coupure, piège de l'écran sans remise à zéro), Q4 OK (point d'accès instable) | Rotation 270 et axes du GT911 inversés ; Q2, Q3 à refaire après coupure |
+| 9 novembre 2026 | `0.11.0-dev (a3e2065)`, Guition 4,3", par USB puis coupure | Q2, Q3, Q5 à Q9 | **OK** (propriétaire) | Remarque : les pages n'occupent qu'environ 60 % de la dalle (attendu en portrait provisoire, D049) ; pages pour la grande dalle : T04 |
 | 3 novembre 2026 | `6ec8bc4` | A | OK, sauf texte gris sombre sur noir, illisible | Corrigé (`5134e69`) : texte blanc ; à revoir après flash |
 | 3 novembre 2026 | `6ec8bc4` | B | OK, même défaut de couleur | Idem |
 | 3 novembre 2026 | `6ec8bc4` | C | KO : « pas de menu de réglage sur le module » | À préciser : les réglages D027 sont sur la page de l'appareil dans HA, pas sur l'écran du module |
@@ -72,7 +75,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | L | Mise à jour signalée par la barre d'état et la LED (D045) | `feature/maj-icone` (fusionnée) ; L11 sur la Release `v0.10.0` |
 | M | Adresse IP sur la page À propos | `feature/maj-icone` (fusionnée) |
 | 7 novembre 2026 | `9b78597` (S028, USB) | K1, K2, K3 | Écran et couleurs OK (contrôleur ST7789V, sans inversion) ; tactile : x brut décroît de gauche à droite (3605 à 449), y de 419 à 3662. Premier téléversement impossible avec le premier câble USB-C (aucune donnée reçue) ; OK avec un autre câble | Calibrage et `mirror_x` reportés ; K4 sur le binaire suivant |
-| 7 novembre 2026 | `174aa99` (S028, USB) | K4 à K11 | Tout OK ; K5 : glissière Éteint / Chauffage capricieuse au doigt sur dalle résistive, boutons fiables. Mémoire libre 153 Ko, plus grand bloc 96 Ko. Remarque du propriétaire : avoir à configurer le blueprint du message d'accueil en plus de celui du module n'est pas pratique (TODO rang 1) | **Partie K validée**, fusion dans `main` (accord du propriétaire) ; glissière : TODO rang 5 |
+| 7 novembre 2026 | `174aa99` (S028, USB) | K4 à K11 | Tout OK ; K5 : glissière Éteint / Chauffage capricieuse au doigt sur dalle résistive, boutons fiables. Mémoire libre 153 Ko, plus grand bloc 96 Ko. Remarque du propriétaire : avoir à configurer le blueprint du message d'accueil en plus de celui du module n'est pas pratique (TODO rang 1) | **Partie K validée**, fusion dans `main` (accord du propriétaire) ; glissière : TODO T04 |
 | 7 novembre 2026 | `745126b` (blueprint, branche) | B10 à B19 | Tout OK : migration, module sans section, même texte sur deux modules, message unique, entité désactivée, météo, plage horaire ; B3 refait (B13) | **Fusion de `feature/accueil-blueprint-module` dans `main`**, accord du propriétaire |
 | 7 novembre 2026 | `v0.9.0-dev.1` (`3ad92cc`, Release) | J16 (fichiers) | Vérifié par l'agent : six fichiers, Release marquée Latest, `manifest.json` en `0.9.0-dev.1` vers `hapanel-2432s024c-ota.bin` | Reste J16 (mise à jour de la cuisine depuis HA) et K12 à K15 ; puis `v0.9.0` |
 | 7 novembre 2026 | `v0.9.0-dev.1` (Release), module de la cuisine | J16 | **J16 OK** (propriétaire) : mise à jour depuis HA | Publication de `v0.9.0` (accord du propriétaire) ; K12 à K15 (S028) restent à faire, K14 et K15 sur la mise à jour vers `v0.9.0` |
@@ -361,7 +364,7 @@ sur le binaire publié. O10 se fait sur le binaire privé du banc.
 |---|---|---|---|---|
 | O1 | Démarrer le module, attendre 1 min, ouvrir À propos | Bouton « Rechercher une mise à jour » sous la mémoire, sans chevauchement ni débordement sous la barre du bas ; flèche violette dans la barre (recherche du démarrage) | `feature/maj-ecran` | OK 9 nov. (`807f372`) : journal « recherche du demarrage » 10 s après le Wi-Fi |
 | O2 | Toucher « Rechercher une mise à jour » | « Recherche… », puis en quelques secondes « Version 0.10.0 disponible » ; journal : « recherche depuis l'ecran » | `feature/maj-ecran` | OK 9 nov. (`807f372`). Mémoire libre 98 Ko pendant la recherche (connexion chiffrée), 144 Ko après. Demande : bouton violet quand une version est trouvée (O13) |
-| O3 | Quitter À propos, y revenir | Le bouton affiche de nouveau « Rechercher une mise à jour » | `feature/maj-ecran` | |
+| O3 | Quitter À propos, y revenir | Le bouton affiche de nouveau « Rechercher une mise à jour » | `feature/maj-ecran` | OK 9 nov. (`e1407a4`) |
 | O4 | Ouvrir le Menu | Tuile violette « Mise à jour » à droite d'À propos ; les autres tuiles inchangées | `feature/maj-ecran` | OK 9 nov. (`807f372`) |
 | O5 | Toucher la tuile, puis Annuler | Fenêtre « Installer la version 0.10.0 ? » ; Annuler la ferme, le Menu revient, rien n'est installé | `feature/maj-ecran` | OK 9 nov. (`807f372`). Demande : court descriptif de la version, titre remonté (O14) |
 | O6 | Rouvrir la confirmation, ne rien toucher 1 min | La fenêtre se ferme ; l'accueil est affiché | `feature/maj-ecran` | OK 9 nov. (`807f372`) |
@@ -371,6 +374,27 @@ sur le binaire publié. O10 se fait sur le binaire privé du banc.
 | O10 | Binaire privé du banc (`hapanel_banc.yaml`) : ouvrir À propos et le Menu | Ni bouton de recherche, ni tuile « Mise à jour » | `feature/maj-ecran` | |
 | O11 | Module public, mise à jour disponible, laissé la nuit, HA connecté | Historique de l'entité « Firmware » dans HA ou journal : une vérification vers 3 h | — | |
 | O12 | Page À propos pendant O1 | Mémoire libre et plus grand bloc notés (G6), comparables à L10 (149 Ko, 60 Ko) | `feature/maj-ecran` | OK 9 nov. (`807f372`) : 144 Ko libres, plus grand bloc 54 Ko |
-| O13 | Binaire de test suivant, mise à jour disponible : À propos, toucher « Rechercher », puis quitter et revenir | Bouton violet avec « Version … disponible » ; au retour, couleur d'origine et « Rechercher une mise à jour » | `feature/maj-ecran` | |
-| O14 | Même binaire : Menu, tuile « Mise à jour » | Titre « Installer la version 0.10.0 ? » plus haut ; en dessous, en gris : « HAPanel 0.10.0 (99a9a10), carte 2432s024c » (manifeste de `v0.10.0`, publié avant `NOUVEAUTES.md`) ; pendant l'installation, le résumé disparaît. Annuler | `feature/maj-ecran` | |
+| O13 | Binaire de test suivant, mise à jour disponible : À propos, toucher « Rechercher », puis quitter et revenir | Bouton violet avec « Version … disponible » ; au retour, couleur d'origine et « Rechercher une mise à jour » | `feature/maj-ecran` | OK 9 nov. (`e1407a4`) |
+| O14 | Même binaire : Menu, tuile « Mise à jour » | Titre « Installer la version 0.10.0 ? » plus haut ; en dessous, en gris : « HAPanel 0.10.0 (99a9a10), carte 2432s024c » (manifeste de `v0.10.0`, publié avant `NOUVEAUTES.md`) ; pendant l'installation, le résumé disparaît. Annuler | `feature/maj-ecran` | OK 9 nov. (`e1407a4`) |
 | O15 | Première Release publiée avec `NOUVEAUTES.md` : un module encore sur la version précédente, Menu, tuile | Sous le titre, la ligne de `NOUVEAUTES.md` pour cette version ; même texte dans HA, fenêtre « Firmware » | — (à la publication) | |
+
+## Q — Carte Guition JC4827W543, 4,3" (D049)
+
+Binaire public `hapanel_jc4827w543_public.yaml` de la branche
+`feature/carte-jc4827w543`, écrit par USB sur une carte JC4827W543C_I neuve (procédure
+dans le message de livraison). Q10 et Q11 se font après la publication de la Release.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| Q1 | Écrire le binaire par USB, lire le journal du démarrage | « HAPanel … », PSRAM de 8 Mo détectée, aucun redémarrage en boucle | `feature/carte-jc4827w543` | Partiel 9 nov. (`d06100e`) : « Boot seems successful », pas de boucle ; début du démarrage invisible (USB de l'ESP32-S3) |
+| Q2 | Regarder l'écran (accueil) | Image droite en portrait, couleurs justes (comme sur la S024C), accents lisibles ; pages centrées en largeur, barre d'état en haut, bouton Accueil à 320 px, bande noire en dessous | `feature/carte-jc4827w543` | KO 9 nov. (`d06100e`) : après coupure, image à 180° (barre côté USB), couleurs justes ; juste après le flash, couleurs inversées (état d'AquaLook gardé). Corrigé : rotation 270 ; **OK 9 nov. (`a3e2065`) après coupure** |
+| Q3 | Toucher le bouton Menu (en haut à gauche), une tuile, puis le bouton Accueil | Chaque toucher agit là où le doigt appuie ; sinon noter le sens de l'écart (gauche-droite, haut-bas) | `feature/carte-jc4827w543` | KO 9 nov. (`d06100e`) après coupure : toucher à 180° de l'image. Corrigé : axes du GT911 inversés ; **OK 9 nov. (`a3e2065`) après coupure** |
+| Q4 | Saisir le Wi-Fi (point d'accès du module ou USB), puis ajouter le module dans HA, option « actions HA » décochée (D046) | Module joint, point vert ; entité « Firmware » présente | `feature/carte-jc4827w543` | OK 9 nov. (`d06100e`), point d'accès du module instable (apparaît, disparaît, revient) ; ajout dans HA OK |
+| Q5 | Blueprint `module.yaml` pour ce module, puis régler la consigne et lancer Météo, Planning | Mêmes affichages et commandes que la S024C | `feature/carte-jc4827w543` | OK 9 nov. (`a3e2065`) |
+| Q6 | Réglages : déplacer « Intensité écran » ; puis ne rien toucher 1 min, et toucher l'écran | Luminosité qui suit le curseur ; écran éteint après 1 min, rallumé au toucher | `feature/carte-jc4827w543` | OK 9 nov. (`a3e2065`) |
+| Q7 | Réglages de la LED | Affichés, sans effet (pas de LED sur la carte, D049) | — | OK 9 nov. (`a3e2065`) |
+| Q8 | Laisser tourner 15 min, page À propos ouverte | Aucun redémarrage (le journal ne montre pas un nouveau « HAPanel … ») ; mémoire libre et plus grand bloc notés (G6) | `feature/carte-jc4827w543` | OK 9 nov. (`a3e2065`) |
+| Q9 | Message d'accueil (comme A1) et confirmation de mise à jour (O5) | Plein écran dans la zone de 240 × 320, centrés comme les pages | `feature/carte-jc4827w543` | OK 9 nov. (`a3e2065`) |
+| Q10 | Après la publication : sur la 4,3" en binaire de la branche, Menu, tuile « Mise à jour », Installer | Installation depuis `manifest-jc4827w543.json`, redémarrage dans la version publiée | — (à la publication) | |
+| Q11 | Après la publication : Release | Neuf fichiers (trois par carte) ; dans `manifest-jc4827w543.json`, `"chipFamily": "ESP32-S3"` ; dans les deux autres, `"ESP32"` | — (à la publication) | |
+| Q12 | Binaires S024C et S028 de la branche (bloc `esp32` déplacé) : un module de chaque, après la publication | Mise à jour depuis l'écran réussie, fonctions inchangées | — (à la publication) | |

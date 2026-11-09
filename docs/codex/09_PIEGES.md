@@ -89,6 +89,13 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 - Téléversement « No serial data received », même avec BOOT tenu, et CH340 bien vu
   par Windows : câble USB de charge seule. Test sans risque : écouter le port et
   appuyer sur RST ; un ESP32 envoie toujours ses lignes de démarrage (7 novembre 2026).
+- Guition 4,3" (NV3041A, sans broche de remise à zéro de l'écran) : après un flash par
+  USB, l'écran garde l'état du firmware précédent (couleurs inversées, image à 180°)
+  jusqu'à une coupure de courant ; ESPHome n'envoie pas de remise à zéro logicielle.
+  Juger l'image et le toucher seulement après avoir débranché et rebranché ; déjà vu
+  avec AquaLook (9 novembre 2026, cahier Q2). Une OTA garde l'état du même firmware.
+- Guition 4,3" : le port USB est celui de l'ESP32-S3 (303A:1001), il disparaît à chaque
+  redémarrage : le journal ne montre jamais les premières lignes du démarrage.
 - Ouvrir le port série (journaux, script d'écoute) redémarre la carte : la broche EN
   est reliée au port. Un `POWERON_RESET` à ce moment n'est pas une coupure
   d'alimentation (7 novembre 2026).
@@ -153,6 +160,13 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 - L'action « Mettre à jour l'entité » de HA ne fait pas vérifier le module : il ne
   vérifie qu'au démarrage, puis chaque nuit à 3 h (D047). Pour forcer : bouton
   « Rechercher une mise à jour » de la page À propos, ou redémarrer le module.
+- Manifeste de mise à jour : `chipFamily` doit valoir la puce du module (`ESP32`,
+  `ESP32-S3`) ; ESPHome ne lit que la ligne de sa puce, sinon « Manifest does not
+  contain required fields » et aucune mise à jour (D049).
+- JC4827W543 (4,3") : GPIO21 est la ligne D0 de l'écran QSPI, pas un rétroéclairage ;
+  tout code qui la reprogramme casse l'écran en silence. Avec 8 Mo de PSRAM, parcourir
+  le tas (`heap_caps_get_largest_free_block`) a fait redémarrer AquaLook par chien de
+  garde : rester sur la mémoire interne (D049, piège repris d'AquaLook).
 - `update_interval: never` sur l'`update` `http_request` supprime **aussi** la
   vérification du démarrage (ESPHome ne la programme que si l'intervalle dépasse
   60 s) : elle est relancée par `wifi: on_connect` (D047). Une vérification qui échoue
