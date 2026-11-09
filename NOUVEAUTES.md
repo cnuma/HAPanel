@@ -9,6 +9,10 @@ l'affiche sous « Installer la version X ? », et Home Assistant dans la fenêtr
 La ligne s'écrit dans le même commit que la fonction qu'elle décrit ; la version
 proposée pour la prochaine publication est confirmée à la fusion.
 
+## 0.11.1
+
+Logiciel inchangé ; nouvelle page d'installation par carte (cnuma.github.io/HAPanel).
+
 ## 0.11.0
 
 Mise à jour depuis l'écran (bouton Rechercher, tuile du Menu) ; carte Guition 4,3 pouces en essai.
