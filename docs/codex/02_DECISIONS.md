@@ -1128,3 +1128,20 @@ qui cite la précédente.
   sécurité. Pas de signalement à l'équipe de HA : hors du périmètre de sa politique de
   sécurité (appareil compromis, accès physique), décision du propriétaire du
   9 novembre 2026 (HAP-R005).
+
+## D048 — Wiki GitHub désactivé
+
+- Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R003) ; wiki
+  désactivé le même jour (`gh repo edit cnuma/HAPanel --enable-wiki=false`, vérifié :
+  `hasWikiEnabled` à `false`).
+- Contexte : GitHub active par défaut un wiki sur tout dépôt public ; celui de
+  `cnuma/HAPanel` était vide.
+- Décision : pas de wiki. Toute la documentation reste dans le dépôt (`README.md`,
+  `docs/`), et la future page d'installation passera par GitHub Pages, versionnée dans
+  le dépôt (TODO rang 3).
+- Options écartées : utiliser le wiki (dépôt Git séparé, sans branche ni relecture,
+  toujours à la dernière version et non à celle d'une Release ; contraire à la source
+  de vérité unique et à la doc écrite dans le même commit que le code) ; le laisser
+  actif et vide (page publique inutile, porte ouverte à une doc concurrente).
+- Conséquences : aucune sur le firmware ni sur les modules. Réactivable à tout moment
+  dans les réglages du dépôt, par décision révisée.
