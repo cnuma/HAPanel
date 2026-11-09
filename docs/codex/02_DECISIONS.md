@@ -1088,3 +1088,43 @@ qui cite la précédente.
   inchangé), le module ne fait que lire l'état de son entité de mise à jour.
 - Conséquences : tous les modules publics clignotent dès qu'une Release est publiée,
   y compris une Release de développement marquée « Latest ».
+
+## D046 — Actions Home Assistant refusées aux modules, usurpation de `device_id` acceptée
+
+- Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R001, option A),
+  sur `docs/securite-actions-ha` ; option décochée sur les trois modules (cahier N1).
+  TODO rang 1 du 9 novembre 2026 ; validé et fusionné dans `main` le même jour.
+- Contexte : l'intégration ESPHome de HA a une option par module, « Autoriser
+  l'appareil à effectuer des actions Home Assistant ». Le firmware n'appelle aucune
+  action, il n'émet que des événements `esphome.hapanel_*` (testé le 2 novembre
+  2026, `08`). Code de l'intégration lu le 9 novembre 2026 (`manager.py`, branche
+  `dev`, `async_on_service_call`) :
+  - un événement est émis avec `{device_id: <vrai appareil>, **données du module}` :
+    un champ `device_id` envoyé par le module **remplace** le vrai ;
+  - les modèles (`data_template`) envoyés par le module sont évalués par HA avant
+    l'émission : un firmware modifié peut faire calculer par HA l'identifiant d'un
+    autre panneau (`integration_entities('esphome')`…), sans le connaître ;
+  - ces deux points ne dépendent pas de l'option, qui ne bloque que les actions.
+- Décision :
+  - l'option reste **décochée** sur chaque module ; les guides le disent à l'ajout et
+    pour un module déjà ajouté (`CONFIGURATION.md` § 1) ;
+  - l'usurpation de `device_id` est un **risque accepté** (`08`, R11) : elle demande
+    un firmware modifié muni de la clé du module, donc en pratique l'accès physique à
+    un panneau (flash non chiffrée lisible par USB) ; elle ne donne que les commandes
+    que les blueprints autorisent, mais pour tous les panneaux ;
+  - toute commande nouvelle (infrarouge) passe par un événement traduit
+    par le blueprint, avec bornes et liste fermée, jamais par une action HA appelée
+    par le module.
+- Options écartées : laisser l'option cochée (un firmware modifié pourrait lancer
+  n'importe quelle action de HA : serrures, alarme ; aucun usage par le panneau) ;
+  jeton secret par panneau vérifié par le blueprint (lisible par ces mêmes modèles
+  s'il est rangé dans une entité, firmware public et blueprint à modifier, pour un
+  gain faible) ; chiffrement de la flash et démarrage sécurisé de l'ESP32 (eFuses
+  irréversibles, installation par le navigateur à revoir).
+- Justification : surface la plus petite sans perte de fonction ; la seule parade
+  fiable est dans HA (écrire `device_id` après les données du module), hors du dépôt.
+- Conséquences : le blueprint garde son filtre `device_id == panneau`, qui empêche les
+  erreurs (deux panneaux, deux automatisations) mais n'est pas une barrière de
+  sécurité. Pas de signalement à l'équipe de HA : hors du périmètre de sa politique de
+  sécurité (appareil compromis, accès physique), décision du propriétaire du
+  9 novembre 2026 (HAP-R005).

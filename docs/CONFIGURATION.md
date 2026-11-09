@@ -68,6 +68,19 @@ dans sa liste des appareils connectés).
 Assistant ». Le module n'en a pas besoin ; laissée décochée, l'option limite ce
 qu'un module modifié pourrait faire.
 
+**Module déjà ajouté :** vérifiez l'option une fois.
+
+1. **Paramètres › Appareils et services › ESPHome**.
+2. Sur la ligne du module, cliquez sur **⚙ Configurer** (ou **⋮ › Options**).
+3. Décochez « Autoriser l'appareil à effectuer des actions Home Assistant », puis
+   **Valider**.
+4. Sur le module, réglez la consigne de l'accueil et lancez un scénario : les deux
+   marchent toujours (ils n'utilisent pas cette option).
+
+Pourquoi : un module dont on aurait modifié le logiciel pourrait, avec l'option,
+lancer n'importe quelle action de Home Assistant (serrures, alarme…). Sans elle, il
+ne peut que ce que le blueprint permet (`docs/codex/02_DECISIONS.md`, D046).
+
 ## 2. Importer le blueprint
 
 À faire **une seule fois**, quel que soit le nombre de modules.
