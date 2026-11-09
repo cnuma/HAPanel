@@ -92,10 +92,12 @@ du C++ au YAML.
 ## Documentation publique
 
 - Pages pour l'utilisateur (README, `INSTALLATION.md`, `CONFIGURATION.md`,
-  `UTILISATION.md`, `ARCHITECTURE.md`, `docs/technique/`) : aucun nom réel de
-  module, de pièce, de réseau ni de chemin du poste du propriétaire (D052) ;
-  nom de module d'exemple : `hapanel-1a2b3c`. Captures : masquer aussi le suffixe
-  du nom du module (`09_PIEGES.md`, G9).
+  `UTILISATION.md`, `ARCHITECTURE.md`, `docs/technique/`, page d'installation) :
+  aucun identifiant réel de module (nom `hapanel-…`, adresse MAC), aucun nom de
+  réseau Wi-Fi ni chemin du poste du propriétaire (D052) ; nom de module d'exemple :
+  `hapanel-1a2b3c`. Un nom de pièce courant (« Cuisine ») est admis en exemple.
+  Captures : masquer aussi le suffixe du nom du module et l'adresse MAC, que la page
+  du point d'accès affiche en entier (`09_PIEGES.md`, G9).
 - Le journal de développement (`docs/codex/`, cahier, TODO, checkpoints) peut citer
   l'installation réelle ; il ne contient jamais de secret, d'adresse IP ni de port
   COM (G9).

@@ -1313,3 +1313,6 @@ qui cite la précédente.
   `tools/build.ps1` réservé à Windows) ; traduction anglaise (double maintenance).
   Chacune peut être rouverte par une nouvelle décision.
 - Conséquences : T02 terminé à la fusion ; reste de D038 : page d'installation (T03).
+- Complément du 9 novembre 2026 (relevé en préparant T03) : les captures 08, 09 et 12
+  à 19 du guide montraient encore le nom réel d'un module, et la 12 son adresse MAC
+  complète ; masquées. Les noms de pièces courants (« Cuisine ») restent en exemple.
