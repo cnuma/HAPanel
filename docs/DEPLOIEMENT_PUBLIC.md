@@ -68,6 +68,9 @@ Il faut un ordinateur avec Chrome ou Edge, un câble USB de données et le modul
    fin (environ 2 min).
 4. Fenêtre « Configure Wi-Fi » (Improv) : choisir le réseau, saisir son mot de
    passe, **Connect** ; « Provisioned! » quand le module a rejoint le réseau.
+5. **Couper l'alimentation** (débrancher, rebrancher), puis seulement juger l'écran
+   et le toucher : sans broche de remise à zéro (Guition 4,3"), l'écran garde l'état
+   du logiciel précédent jusqu'à la coupure (couleurs inversées, image à 180°).
 
 **Sans câble ou si Improv échoue :** dans les 15 min qui suivent la mise sous
 tension, le module ouvre un point d'accès Wi-Fi à son nom (`hapanel-xxxxxx`). S'y

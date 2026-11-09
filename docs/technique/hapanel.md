@@ -166,7 +166,7 @@ manifeste porte `"chipFamily": "ESP32-S3"`.
 | Ajouter un écran | Package dans `packages/pages/`, inclus **avant** `lvgl`. |
 | Changer l'écran de démarrage | Mettre son package en premier parmi les pages. |
 | Ajouter un outil de mise au point | Dans `hapanel_banc.yaml` uniquement : la production reste inchangée. |
-| Ajouter une carte | Fichier matériel `packages/hardware_<carte>.yaml` avec les mêmes `id`, configurations de banc et publique, ligne dans `publier` de `.github/workflows/publication.yml`, page dans `docs/technique/`, tests au cahier (D041). |
+| Ajouter une carte | Fichier matériel `packages/hardware_<carte>.yaml` avec les mêmes `id`, configurations de banc et publique, ligne dans `publier` de `.github/workflows/publication.yml`, page dans `docs/technique/`, tests au cahier (D041). Premier essai : image et toucher jugés **après une coupure de courant**, jamais juste après le flash par USB (`09_PIEGES.md`). |
 | Changer la version | Modifier le fichier `VERSION`, jamais `version` ici (G5). |
 
 **Pièges :**

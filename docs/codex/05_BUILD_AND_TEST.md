@@ -36,6 +36,8 @@ par Git.
 - Premier flash par USB : `<PORT_COM>`, demandé à chaque session.
   `esphome run` liste les ports si `--device` est omis. Si la carte
   n'apparaît pas, installer le pilote du convertisseur USB-série de la carte.
+- Après un flash par USB, **couper l'alimentation** avant de juger l'écran ou le
+  toucher (`09_PIEGES.md`, Guition 4,3") ; un essai fait sans coupure ne vaut pas.
 - Ensuite, mise à jour par le réseau : `<IP_PANNEAU>`.
 
 ## Chaîne courante
