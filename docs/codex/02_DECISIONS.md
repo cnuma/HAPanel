@@ -1129,7 +1129,7 @@ qui cite la précédente.
   sécurité (appareil compromis, accès physique), décision du propriétaire du
   9 novembre 2026 (HAP-R005).
 
-## D047 — Wiki GitHub désactivé
+## D048 — Wiki GitHub désactivé
 
 - Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R003) ; wiki
   désactivé le même jour (`gh repo edit cnuma/HAPanel --enable-wiki=false`, vérifié :
