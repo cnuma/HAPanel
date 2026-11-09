@@ -716,7 +716,7 @@ qui cite la précédente.
     référence ; nouveau `docs/codex/09_PIEGES.md`, qui rassemble les pièges des
     checkpoints ; procédure de reprise dans `START_HERE.md` ; checkpoint réduit à
     l'état variable, selon le modèle de `docs/checkpoints/README.md` ;
-  - `docs/TODO.md` toujours utilisé, avec une colonne **Prio** (« Ordre » depuis D050) qui ordonne les
+  - `docs/TODO.md` toujours utilisé, avec une colonne **Prio** (« Ordre » depuis D051) qui ordonne les
     développements selon leurs dépendances (fusionner avant d'ouvrir un chantier,
     décider avant de coder, matériel avant code) ; les tests n'y figurent plus, ils
     sont dans le cahier (G13) ;
@@ -1133,7 +1133,8 @@ qui cite la précédente.
 ## D047 — Mise à jour depuis l'écran : recherche et installation
 
 - Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R002), implémenté
-  sur `feature/maj-ecran`, à valider (cahier O). TODO T01, points 2 à 4 ; complète
+  sur `feature/maj-ecran`, validé sur le module de la cuisine le 9 novembre 2026
+  (cahier O1 à O7, O12 à O14), en 0.11.0. TODO T01, points 2 à 4 ; complète
   D045.
 - Contexte : une mise à jour publiée ne s'installait que depuis HA (entité
   « Firmware »), ce qui oblige à se connecter à HA ; le module ne cherchait qu'au
@@ -1181,11 +1182,13 @@ qui cite la précédente.
   (`08`, surfaces) ; une Release publiée est vue au plus tard à 3 h le lendemain, au
   redémarrage, ou par le bouton. HA continue de proposer la mise à jour.
 
-## D048 — Carte Guition JC4827W543 (4,3", ESP32-S3), en portrait provisoire
+## D049 — Carte Guition JC4827W543 (4,3", ESP32-S3), en portrait provisoire
 
 - Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R011 : « portrait ce
   soir, paysage ensuite », « sans LED ni LDR »), implémenté sur
-  `feature/carte-jc4827w543`, à valider au banc (cahier Q). TODO T04.
+  `feature/carte-jc4827w543`, validé sur la carte le 9 novembre 2026 (cahier Q1 à Q9),
+  en 0.11.0. TODO T04. Numérotée D048 sur la branche, décalée avec D050 et D051 à la
+  fusion : D048 avait été prise dans `main` par le wiki.
 - Contexte : le propriétaire a des cartes Guition JC4827W543C_I, déjà portées et
   validées sur matériel par AquaLook (27 août 2026) : ESP32-S3, 4 Mo de flash, 8 Mo de
   PSRAM, écran NV3041A de 480 × 272 en QSPI, tactile GT911, rétroéclairage GPIO1, ni LED
@@ -1216,7 +1219,7 @@ qui cite la précédente.
   distincts) ; une nouvelle page doit être ajoutée aux marges du fichier matériel tant
   que le portrait provisoire dure ; écran sous-utilisé (bande noire) jusqu'au paysage.
 
-## D049 — Blueprint à mettre à jour : signalé par le module, réimport guidé
+## D050 — Blueprint à mettre à jour : signalé par le module, réimport guidé
 
 - Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R013, piste A ;
   HAP-R014 : QR code vers HA, icône distincte), **non implémenté** (TODO T14).
@@ -1243,7 +1246,7 @@ qui cite la précédente.
   l'adresse de HA ; le firmware et le blueprint se publient ensemble quand la version
   attendue change.
 
-## D050 — TODO : numéro fixe par sujet, ordre à part
+## D051 — TODO : numéro fixe par sujet, ordre à part
 
 - Date : 9 novembre 2026 — Statut : demandé par le propriétaire (HAP-R018 : « rang »
   peu clair ; « Go »), appliqué le même jour.

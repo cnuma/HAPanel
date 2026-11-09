@@ -1,4 +1,4 @@
-# Publication des binaires publics (D038, D039, D041, D048) : compile une
+# Publication des binaires publics (D038, D039, D041, D049) : compile une
 # configuration publique par carte, sans aucun secret, et publie une Release
 # GitHub avec, pour chaque carte, le binaire complet (premiere installation), le
 # binaire de mise a jour et le manifeste lu par l'entite « Firmware » des modules.
@@ -67,7 +67,7 @@ jobs:
           resume="${resume//\"/\\\"}"
           # publier <dossier de compilation> <carte> <manifeste> <puce>
           # La puce (chipFamily) doit valoir celle du module : ESPHome n'installe
-          # que la ligne de sa propre puce (ESP32 ou ESP32-S3, D048).
+          # que la ligne de sa propre puce (ESP32 ou ESP32-S3, D049).
           publier() {
             d=".esphome/build/$1/build"
             cp "$d/firmware.factory.bin" "publication/hapanel-$2-factory.bin"

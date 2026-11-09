@@ -162,11 +162,11 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   « Rechercher une mise à jour » de la page À propos, ou redémarrer le module.
 - Manifeste de mise à jour : `chipFamily` doit valoir la puce du module (`ESP32`,
   `ESP32-S3`) ; ESPHome ne lit que la ligne de sa puce, sinon « Manifest does not
-  contain required fields » et aucune mise à jour (D048).
+  contain required fields » et aucune mise à jour (D049).
 - JC4827W543 (4,3") : GPIO21 est la ligne D0 de l'écran QSPI, pas un rétroéclairage ;
   tout code qui la reprogramme casse l'écran en silence. Avec 8 Mo de PSRAM, parcourir
   le tas (`heap_caps_get_largest_free_block`) a fait redémarrer AquaLook par chien de
-  garde : rester sur la mémoire interne (D048, piège repris d'AquaLook).
+  garde : rester sur la mémoire interne (D049, piège repris d'AquaLook).
 - `update_interval: never` sur l'`update` `http_request` supprime **aussi** la
   vérification du démarrage (ESPHome ne la programme que si l'intervalle dépasse
   60 s) : elle est relancée par `wifi: on_connect` (D047). Une vérification qui échoue

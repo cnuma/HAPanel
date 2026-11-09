@@ -34,14 +34,14 @@ de test de l'atelier.
    |---|---|---|---|---|
    | ESP32-2432S024C (2,4", capacitif) | `hapanel_public.yaml` | `hapanel-2432s024c-factory.bin` | `hapanel-2432s024c-ota.bin` | `manifest.json` |
    | ESP32-2432S028, deux prises USB (2,8", résistif) | `hapanel_2432s028_public.yaml` | `hapanel-2432s028-factory.bin` | `hapanel-2432s028-ota.bin` | `manifest-2432s028.json` |
-   | Guition JC4827W543 (4,3", ESP32-S3, D048) | `hapanel_jc4827w543_public.yaml` | `hapanel-jc4827w543-factory.bin` | `hapanel-jc4827w543-ota.bin` | `manifest-jc4827w543.json` |
+   | Guition JC4827W543 (4,3", ESP32-S3, D049) | `hapanel_jc4827w543_public.yaml` | `hapanel-jc4827w543-factory.bin` | `hapanel-jc4827w543-ota.bin` | `manifest-jc4827w543.json` |
 
    Le manifeste de la S024C garde le nom `manifest.json` : son adresse est compilée
    dans les modules déjà installés. Jusqu'à `v0.8.1` incluse, la Release ne contenait
    que la S024C, sous les noms `hapanel-factory.bin` et `hapanel-ota.bin`.
 4. Vérifier la Release : les neuf fichiers sont présents, elle est marquée
    **Latest** ; `manifest-jc4827w543.json` porte `"chipFamily": "ESP32-S3"`, les deux
-   autres `"ESP32"` (D048).
+   autres `"ESP32"` (D049).
 
 **Forme des versions :** toujours `X.Y.Z-dev.N`, puis `X.Y.Z`, sans suffixe ajouté.
 HA ne propose une mise à jour que si la version publiée est plus récente que

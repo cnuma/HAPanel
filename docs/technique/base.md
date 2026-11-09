@@ -37,7 +37,7 @@ et **aucun accès au réseau** : le Wi-Fi, la clé de l'API et l'OTA sont dans
 
 `pages/accueil.yaml` ajoute son propre `on_boot` : ESPHome exécute les deux.
 
-### Puce : hors de ce fichier (D048)
+### Puce : hors de ce fichier (D049)
 
 Le bloc `esp32` est dans le fichier matériel de chaque carte : ESP32 pour la S024C et la
 S028 ([hardware.md](hardware.md)), ESP32-S3 pour la Guition JC4827W543

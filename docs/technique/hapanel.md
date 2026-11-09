@@ -13,7 +13,7 @@ substitutions communes.
 | `hapanel_public.yaml` | Mêmes fonctions, sans aucun secret, publiable (D039, maquette) | Les modules installés depuis GitHub |
 | `hapanel_2432s028_banc.yaml` | Banc sur carte ESP32-2432S028 | Une carte S028 de l'atelier |
 | `hapanel_2432s028_public.yaml` | Binaire public de la carte ESP32-2432S028 (D041) | Les modules S028 installés depuis GitHub |
-| `hapanel_jc4827w543_public.yaml` | Binaire public de la carte Guition JC4827W543, 4,3" (D048) | Les modules 4,3" installés depuis GitHub |
+| `hapanel_jc4827w543_public.yaml` | Binaire public de la carte Guition JC4827W543, 4,3" (D049) | Les modules 4,3" installés depuis GitHub |
 
 **Un fichier matériel par carte :** chaque point d'entrée inclut le sien
 (`hardware.yaml` pour l'ESP32-2432S024C, `hardware_2432s028.yaml` pour la S028,
@@ -146,7 +146,7 @@ Publié par `.github/workflows/publication.yml` avec la configuration de la S024
 
 ## hapanel_jc4827w543_public.yaml
 
-Binaire public de la carte Guition JC4827W543, 4,3", ESP32-S3 (D048) : même contenu que
+Binaire public de la carte Guition JC4827W543, 4,3", ESP32-S3 (D049) : même contenu que
 `hapanel_public.yaml`, autre fichier matériel et autre manifeste.
 
 | Bloc | Contenu | Rôle |

@@ -1,5 +1,5 @@
 # HAPanel : configuration publique de la carte Guition JC4827W543 (ecran 4,3",
-# ESP32-S3, D048). Memes fonctions et meme acces que hapanel_public.yaml, autre
+# ESP32-S3, D049). Memes fonctions et meme acces que hapanel_public.yaml, autre
 # fichier materiel et manifeste de mise a jour propre a cette carte.
 #
 # version et git_sha sont injectes par tools/build.ps1 ou par la publication

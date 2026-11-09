@@ -3,7 +3,7 @@
 ## Rôle
 
 La description de la carte **Guition JC4827W543C_I** : écran 4,3" de 480 × 272,
-tactile **capacitif** GT911, puce **ESP32-S3** avec 8 Mo de PSRAM (D048). Même rôle que
+tactile **capacitif** GT911, puce **ESP32-S3** avec 8 Mo de PSRAM (D049). Même rôle que
 [hardware.md](hardware.md) pour l'ESP32-2432S024C : seul fichier qui nomme une broche
 ou un bus pour cette carte (G2).
 
@@ -14,7 +14,7 @@ veille, LED) les utilise sans savoir quelle carte est montée.
 carte sur matériel le 27 août 2026 (`docs/architecture/HW_JC4827W543_PORT_IMPACT.md` du
 dépôt `cnuma/AquaLook`), et du modèle `JC4827W543` d'ESPHome.
 
-**Provisoire (D048) :** l'écran est tourné en portrait (272 × 480) et les pages de
+**Provisoire (D049) :** l'écran est tourné en portrait (272 × 480) et les pages de
 240 × 320 y sont centrées en largeur, avec une bande noire en bas, en attendant des
 pages dessinées pour le paysage (TODO T04).
 
@@ -26,7 +26,7 @@ pages dessinées pour le paysage (TODO T04).
 - **Fournit :** les mêmes `id` que `hardware.yaml` (`bus_spi_ecran`, `bus_i2c_tactile`,
   `sortie_retroeclairage`, `sortie_led_rouge`, `sortie_led_vert`, `sortie_led_bleu`,
   `ldr_tension`, `retroeclairage`, `ecran`, `tactile`).
-- **Inclus par :** `hapanel_jc4827w543_public.yaml` (D048).
+- **Inclus par :** `hapanel_jc4827w543_public.yaml` (D049).
 
 ## Différences avec la S024C
 
@@ -71,7 +71,7 @@ tactile, à 400 kHz comme sur la S024C.
 | id | Rôle |
 |---|---|
 | `sortie_retroeclairage` | `ledc` sur GPIO1. |
-| `sortie_led_rouge`, `sortie_led_vert`, `sortie_led_bleu` | `template` sans action : `led_veille.yaml` y écrit sans effet. Les réglages de la LED restent affichés et sans effet (D048). |
+| `sortie_led_rouge`, `sortie_led_vert`, `sortie_led_bleu` | `template` sans action : `led_veille.yaml` y écrit sans effet. Les réglages de la LED restent affichés et sans effet (D049). |
 | `ldr_tension` | `template`, toujours 0 V (plein jour) : rétroéclairage de jour, réglable par « Intensité écran ». Interne. |
 | `retroeclairage` | Lumière monochrome sur `sortie_retroeclairage`, interne, comme sur la S024C. |
 

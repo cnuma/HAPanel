@@ -1,4 +1,4 @@
-# Materiel : Guition JC4827W543C_I, ecran 4,3" capacitif, ESP32-S3 (D048).
+# Materiel : Guition JC4827W543C_I, ecran 4,3" capacitif, ESP32-S3 (D049).
 # Seul fichier qui declare broches et bus pour cette carte (invariant G2) ;
 # memes id que hardware.yaml, le reste du panneau ne change pas.
 #
@@ -12,7 +12,7 @@
 #
 # Ecran 480 x 272 tourne en portrait (272 x 480) en attendant des pages
 # dessinees pour le paysage (TODO T04) : les pages de 240 x 320 sont
-# centrees en largeur, bande noire en bas (D048).
+# centrees en largeur, bande noire en bas (D049).
 substitutions:
   pin_qspi_clk: GPIO47
   pin_qspi_d0: GPIO21
@@ -29,7 +29,7 @@ substitutions:
   ecran_marge_droite: "16"
   ecran_marge_bas: "160"
 
-# Puce de la carte (D048) : ESP32-S3, 4 Mo de flash, 8 Mo de PSRAM octale.
+# Puce de la carte (D049) : ESP32-S3, 4 Mo de flash, 8 Mo de PSRAM octale.
 esp32:
   board: esp32-s3-devkitc-1
   variant: esp32s3
