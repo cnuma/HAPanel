@@ -166,8 +166,8 @@ Lorsque l'utilisateur écrit exactement « checkpoint » :
    `00_CONTEXT.md`) ;
 4. créer `docs/checkpoints/CHECKPOINT_YYYY-MM-DD_<sha-court>.md` selon le
    modèle de `docs/checkpoints/README.md` : état variable seulement (branche,
-   commit, version, binaire, changements, mesures, mémoire), rangs suivants du
-   TODO et tests qui bloquent la prochaine fusion cités sans être recopiés ;
+   commit, version, binaire, changements, mesures, mémoire), premiers sujets du
+   TODO (par leur numéro T, D050) et tests qui bloquent la prochaine fusion cités sans être recopiés ;
    aucune adresse IP, port COM ni mot de passe (G9, G14) ;
 5. ajouter, committer et pousser ce document, puis vérifier qu'il est bien
    sur le dépôt distant avant de l'annoncer ;

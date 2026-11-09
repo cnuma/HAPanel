@@ -11,7 +11,7 @@
 # sorties et capteur sans effet, memes id que les autres cartes.
 #
 # Ecran 480 x 272 tourne en portrait (272 x 480) en attendant des pages
-# dessinees pour le paysage (TODO rang 4) : les pages de 240 x 320 sont
+# dessinees pour le paysage (TODO T04) : les pages de 240 x 320 sont
 # centrees en largeur, bande noire en bas (D048).
 substitutions:
   pin_qspi_clk: GPIO47

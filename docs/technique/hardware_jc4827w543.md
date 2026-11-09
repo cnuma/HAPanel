@@ -16,7 +16,7 @@ dépôt `cnuma/AquaLook`), et du modèle `JC4827W543` d'ESPHome.
 
 **Provisoire (D048) :** l'écran est tourné en portrait (272 × 480) et les pages de
 240 × 320 y sont centrées en largeur, avec une bande noire en bas, en attendant des
-pages dessinées pour le paysage (TODO rang 4).
+pages dessinées pour le paysage (TODO T04).
 
 ## Dépendances
 
@@ -95,7 +95,7 @@ cartes. Priorité `-100`, comme les autres `on_boot` (fusionnés).
 | Opération | Méthode |
 |---|---|
 | Écran à l'envers ou tactile inversé | Changer `lvgl.rotation` (`90` ou `270`) ; si seul le tactile est inversé, ajouter `transform` (`mirror_x`, `mirror_y`) au bloc `touchscreen` (AquaLook a dû inverser les deux axes du GT911). |
-| Passer en paysage | Pages redessinées pour 480 × 272 (TODO rang 4), puis retirer `lvgl.rotation`, les marges et le bloc `on_boot`. |
+| Passer en paysage | Pages redessinées pour 480 × 272 (TODO T04), puis retirer `lvgl.rotation`, les marges et le bloc `on_boot`. |
 | Nouvelle page | L'ajouter à la lambda du bloc `on_boot`, sinon elle est décalée de 16 px. |
 
 **Pièges :**
