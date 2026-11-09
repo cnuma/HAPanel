@@ -37,14 +37,11 @@ et **aucun accès au réseau** : le Wi-Fi, la clé de l'API et l'OTA sont dans
 
 `pages/accueil.yaml` ajoute son propre `on_boot` : ESPHome exécute les deux.
 
-### Bloc `esp32`
+### Puce : hors de ce fichier (D048)
 
-| Clé | Valeur | Rôle |
-|---|---|---|
-| `board` | `esp32dev` | ESP32 classique, sans PSRAM (D004). |
-| `flash_size` | `4MB` | Taille de la mémoire flash de la carte. |
-| `framework.type` | `esp-idf` | Cadre logiciel d'Espressif, plus léger que celui d'Arduino (D008). |
-| `framework.advanced.minimum_chip_revision` | `"3.1"` | La puce du panneau est en révision 3.1 : le compilateur retire le code de contournement des anciennes révisions, le binaire est plus petit (D011). |
+Le bloc `esp32` est dans le fichier matériel de chaque carte : ESP32 pour la S024C et la
+S028 ([hardware.md](hardware.md)), ESP32-S3 pour la Guition JC4827W543
+([hardware_jc4827w543.md](hardware_jc4827w543.md)).
 
 ### Wi-Fi, API et OTA : hors de ce fichier (D039)
 
@@ -93,8 +90,8 @@ l'écran « HA déconnecté » (D015).
 **Pièges :**
 - Changer `name_add_mac_suffix` ou `node_name` change le nom de tous les modules dans
   Home Assistant : tableaux de bord et automatisations perdent leurs entités (G10).
-- `minimum_chip_revision: "3.1"` : un binaire compilé ainsi ne démarre pas sur une puce
-  plus ancienne. Vérifier la révision d'une nouvelle carte dans le premier téléversement
+- `minimum_chip_revision: "3.1"` (fichiers matériels des cartes ESP32) : un binaire
+  compilé ainsi ne démarre pas sur une puce plus ancienne. Vérifier la révision d'une nouvelle carte dans le premier téléversement
   par USB (ligne `Chip is …`, qui donne la révision).
 - Aucun mot de passe ni clé en clair ici, même provisoire (G9).
 

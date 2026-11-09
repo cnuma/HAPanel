@@ -53,12 +53,15 @@ Relancer le script après toute modification du YAML.
 | `btn_sce_4` | widget button | packages/pages/scenarios.yaml | — |
 | `btn_sce_5` | widget button | packages/pages/scenarios.yaml | — |
 | `btn_sce_6` | widget button | packages/pages/scenarios.yaml | — |
-| `bus_i2c_tactile` | i2c | packages/hardware.yaml | — |
-| `bus_spi_ecran` | spi | packages/hardware.yaml | packages/hardware_2432s028.yaml |
-| `bus_spi_ecran` | spi | packages/hardware_2432s028.yaml | packages/hardware.yaml |
+| `bus_i2c_tactile` | i2c | packages/hardware.yaml | packages/hardware_jc4827w543.yaml |
+| `bus_i2c_tactile` | i2c | packages/hardware_jc4827w543.yaml | packages/hardware.yaml |
+| `bus_spi_ecran` | spi | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml |
+| `bus_spi_ecran` | spi | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/hardware_jc4827w543.yaml |
+| `bus_spi_ecran` | spi | packages/hardware_jc4827w543.yaml | packages/hardware.yaml, packages/hardware_2432s028.yaml |
 | `bus_spi_tactile` | spi | packages/hardware_2432s028.yaml | — |
-| `ecran` | display (mipi_spi) | packages/hardware.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
-| `ecran` | display (mipi_spi) | packages/hardware_2432s028.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
+| `ecran` | display (mipi_spi) | packages/hardware.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
+| `ecran` | display (mipi_spi) | packages/hardware_2432s028.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
+| `ecran` | display (mipi_spi) | packages/hardware_jc4827w543.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
 | `ecran_intensite` | number (template) | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `enregistrement_signaler` | script | packages/lvgl.yaml | packages/led_veille.yaml, packages/message_accueil.yaml |
 | `ha_connecte_affiche` | globals | packages/lvgl.yaml | packages/led_veille.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/scenarios.yaml |
@@ -136,8 +139,9 @@ Relancer le script après toute modification du YAML.
 | `lbl_sce_6` | widget label | packages/pages/scenarios.yaml | — |
 | `lbl_sce_etat` | widget label | packages/pages/scenarios.yaml | — |
 | `ldr_obscurite` | globals | packages/led_veille.yaml | — |
-| `ldr_tension` | sensor (adc) | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/led_veille.yaml |
-| `ldr_tension` | sensor (adc) | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/led_veille.yaml |
+| `ldr_tension` | sensor (adc) | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml |
+| `ldr_tension` | sensor (adc) | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml |
+| `ldr_tension` | sensor (template) | packages/hardware_jc4827w543.yaml | packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml |
 | `led_alerte` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/accueil.yaml |
 | `led_alerte_active` | switch (template) | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `led_allumee` | globals | packages/led_veille.yaml | — |
@@ -218,13 +222,13 @@ Relancer le script après toute modification du YAML.
 | `obj_pla_point_3` | widget obj | packages/pages/planning.yaml | — |
 | `obj_pla_point_4` | widget obj | packages/pages/planning.yaml | — |
 | `obj_reg_impose` | widget obj | packages/pages/reglages.yaml | — |
-| `page_accueil` | page LVGL | packages/pages/accueil.yaml | packages/led_veille.yaml, packages/lvgl.yaml |
-| `page_apropos` | page LVGL | packages/lvgl.yaml | packages/pages/menu.yaml |
-| `page_menu` | page LVGL | packages/pages/menu.yaml | packages/lvgl.yaml |
-| `page_meteo` | page LVGL | packages/pages/meteo.yaml | packages/pages/menu.yaml |
-| `page_planning` | page LVGL | packages/pages/planning.yaml | packages/pages/menu.yaml |
-| `page_reglages` | page LVGL | packages/pages/reglages.yaml | packages/pages/menu.yaml |
-| `page_scenarios` | page LVGL | packages/pages/scenarios.yaml | packages/pages/menu.yaml |
+| `page_accueil` | page LVGL | packages/pages/accueil.yaml | packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
+| `page_apropos` | page LVGL | packages/lvgl.yaml | packages/hardware_jc4827w543.yaml, packages/pages/menu.yaml |
+| `page_menu` | page LVGL | packages/pages/menu.yaml | packages/hardware_jc4827w543.yaml, packages/lvgl.yaml |
+| `page_meteo` | page LVGL | packages/pages/meteo.yaml | packages/hardware_jc4827w543.yaml, packages/pages/menu.yaml |
+| `page_planning` | page LVGL | packages/pages/planning.yaml | packages/hardware_jc4827w543.yaml, packages/pages/menu.yaml |
+| `page_reglages` | page LVGL | packages/pages/reglages.yaml | packages/hardware_jc4827w543.yaml, packages/pages/menu.yaml |
+| `page_scenarios` | page LVGL | packages/pages/scenarios.yaml | packages/hardware_jc4827w543.yaml, packages/pages/menu.yaml |
 | `planning_rafraichir` | script | packages/pages/planning.yaml | packages/liaison_ha.yaml |
 | `police_grande` | font | packages/pages/accueil.yaml | packages/pages/meteo.yaml |
 | `police_icones` | font | packages/lvgl.yaml | packages/acces_public.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/menu.yaml, packages/pages/reglages.yaml |
@@ -240,8 +244,9 @@ Relancer le script après toute modification du YAML.
 | `retro_cible` | globals | packages/led_veille.yaml | — |
 | `retro_cible_calculer` | script | packages/led_veille.yaml | — |
 | `retro_niveau` | globals | packages/led_veille.yaml | — |
-| `retroeclairage` | light (monochromatic) | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/led_veille.yaml |
-| `retroeclairage` | light (monochromatic) | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/led_veille.yaml |
+| `retroeclairage` | light (monochromatic) | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml |
+| `retroeclairage` | light (monochromatic) | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml |
+| `retroeclairage` | light (monochromatic) | packages/hardware_jc4827w543.yaml | packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml |
 | `scenarios_indice` | globals | packages/pages/scenarios.yaml | — |
 | `scenarios_lancer` | script | packages/pages/scenarios.yaml | — |
 | `scenarios_rafraichir` | script | packages/pages/scenarios.yaml | packages/liaison_ha.yaml |
@@ -250,16 +255,21 @@ Relancer le script après toute modification du YAML.
 | `signal_wifi` | sensor (wifi_signal) | packages/base.yaml | packages/pages/accueil.yaml |
 | `sld_reg_ecran_intensite` | widget slider | packages/pages/reglages.yaml | — |
 | `sld_reg_led_intensite` | widget slider | packages/pages/reglages.yaml | — |
-| `sortie_led_bleu` | output (ledc) | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |
-| `sortie_led_bleu` | output (ledc) | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |
-| `sortie_led_rouge` | output (ledc) | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/led_veille.yaml |
-| `sortie_led_rouge` | output (ledc) | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/led_veille.yaml |
-| `sortie_led_vert` | output (ledc) | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |
-| `sortie_led_vert` | output (ledc) | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |
-| `sortie_retroeclairage` | output (ledc) | packages/hardware.yaml | packages/hardware_2432s028.yaml |
-| `sortie_retroeclairage` | output (ledc) | packages/hardware_2432s028.yaml | packages/hardware.yaml |
+| `sortie_led_bleu` | output (ledc) | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |
+| `sortie_led_bleu` | output (ledc) | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |
+| `sortie_led_bleu` | output (template) | packages/hardware_jc4827w543.yaml | packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |
+| `sortie_led_rouge` | output (ledc) | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml |
+| `sortie_led_rouge` | output (ledc) | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml |
+| `sortie_led_rouge` | output (template) | packages/hardware_jc4827w543.yaml | packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml |
+| `sortie_led_vert` | output (ledc) | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |
+| `sortie_led_vert` | output (ledc) | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |
+| `sortie_led_vert` | output (template) | packages/hardware_jc4827w543.yaml | packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |
+| `sortie_retroeclairage` | output (ledc) | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml |
+| `sortie_retroeclairage` | output (ledc) | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/hardware_jc4827w543.yaml |
+| `sortie_retroeclairage` | output (ledc) | packages/hardware_jc4827w543.yaml | packages/hardware.yaml, packages/hardware_2432s028.yaml |
 | `sw_reg_led` | widget switch | packages/pages/reglages.yaml | — |
 | `sw_reg_led_alerte` | widget switch | packages/pages/reglages.yaml | — |
-| `tactile` | touchscreen (cst816) | packages/hardware.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
-| `tactile` | touchscreen (xpt2046) | packages/hardware_2432s028.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
+| `tactile` | touchscreen (cst816) | packages/hardware.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
+| `tactile` | touchscreen (xpt2046) | packages/hardware_2432s028.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
+| `tactile` | touchscreen (gt911) | packages/hardware_jc4827w543.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
 | `veille_reveiller` | script | packages/led_veille.yaml | packages/message_accueil.yaml |

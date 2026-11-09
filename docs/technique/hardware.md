@@ -51,6 +51,18 @@ tableau.
 | `pin_led_bleu` | `GPIO17` | LED bleue, allumée à l'état bas. |
 | `pin_ldr` | `GPIO34` | LDR : la tension **monte** quand la pièce s'assombrit. |
 
+### Bloc `esp32` : la puce (D048)
+
+| Clé | Valeur | Rôle |
+|---|---|---|
+| `board` | `esp32dev` | ESP32 classique, sans PSRAM (D004). |
+| `flash_size` | `4MB` | Taille de la mémoire flash de la carte. |
+| `framework.type` | `esp-idf` | Cadre logiciel d'Espressif, plus léger que celui d'Arduino (D008). |
+| `framework.advanced.minimum_chip_revision` | `"3.1"` | La puce du panneau est en révision 3.1 : le compilateur retire le code de contournement des anciennes révisions, le binaire est plus petit (D011). |
+
+Il était dans `base.yaml` jusqu'à D048 : la puce dépend de la carte. `hardware_2432s028.yaml`
+porte le même bloc.
+
 ### Bloc `spi`
 
 | id | Clé | Rôle |
@@ -144,7 +156,7 @@ effet pour un panneau alimenté en permanence. Cette dette est notée T1.
 
 | Pour | Faire |
 |---|---|
-| Porter sur une autre carte | Modifier le tableau `substitutions`, puis `display_model`, la plateforme du tactile et, si besoin, `esp32.board` dans `base.yaml`. Revalider au banc écran, tactile (coins de l'écran, voir `hapanel.md`), LED et LDR. |
+| Porter sur une autre carte | Modifier le tableau `substitutions`, puis `display_model`, la plateforme du tactile et, si besoin, le bloc `esp32` de ce fichier (D048). Revalider au banc écran, tactile (coins de l'écran, voir `hapanel.md`), LED et LDR. |
 | Tactile lent ou touchers brefs ignorés | Baisser `update_interval` du tactile (20 ms aujourd'hui) ; garder `frequency: 400kHz` sur le bus. Vérifier au banc avec le journal des touchers. |
 | Tactile décalé ou inversé | Ajouter `transform` (`swap_xy`, `mirror_x`, `mirror_y`) ou `calibration` sous `tactile`. Vérifier avec le journal des touchers du banc. |
 | Couleurs de l'écran fausses | Options `invert_colors` ou `color_order` sous `ecran`. |

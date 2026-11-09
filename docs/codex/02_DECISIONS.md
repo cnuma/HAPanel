@@ -1180,3 +1180,38 @@ qui cite la précédente.
 - Conséquences : toute personne devant un module peut installer la version publiée
   (`08`, surfaces) ; une Release publiée est vue au plus tard à 3 h le lendemain, au
   redémarrage, ou par le bouton. HA continue de proposer la mise à jour.
+
+## D048 — Carte Guition JC4827W543 (4,3", ESP32-S3), en portrait provisoire
+
+- Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R011 : « portrait ce
+  soir, paysage ensuite », « sans LED ni LDR »), implémenté sur
+  `feature/carte-jc4827w543`, à valider au banc (cahier P). TODO rang 4.
+- Contexte : le propriétaire a des cartes Guition JC4827W543C_I, déjà portées et
+  validées sur matériel par AquaLook (27 août 2026) : ESP32-S3, 4 Mo de flash, 8 Mo de
+  PSRAM, écran NV3041A de 480 × 272 en QSPI, tactile GT911, rétroéclairage GPIO1, ni LED
+  RVB ni LDR. Les pages sont dessinées pour 240 × 320 en portrait et ne tiennent pas en
+  272 de haut.
+- Décision :
+  - fichier matériel `packages/hardware_jc4827w543.yaml` et binaire public
+    `hapanel_jc4827w543_public.yaml` (D041), manifeste `manifest-jc4827w543.json` ;
+  - le bloc `esp32` quitte `base.yaml` pour chaque fichier matériel (la puce dépend de
+    la carte) ; contenu inchangé pour la S024C et la S028 ;
+  - **portrait provisoire :** rotation de 90° par LVGL, pages de 240 × 320 centrées en
+    largeur (marges de 16 px), bande noire de 160 px en bas ; mêmes pages, mêmes
+    boutons et mêmes couleurs que les autres cartes ;
+  - **sans LED ni LDR :** sorties de LED sans effet (alerte, chauffage et mise à jour
+    se lisent à l'écran ; les réglages de la LED restent affichés, sans effet) ;
+    capteur de lumière fixé au plein jour : rétroéclairage de jour, réglé par
+    « Intensité écran » ;
+  - **publication :** la Release porte trois cartes ; le champ `chipFamily` de chaque
+    manifeste vaut la puce de la carte (`ESP32` ou `ESP32-S3`), sans quoi ESPHome
+    refuse la mise à jour.
+- Options écartées : paysage tout de suite (toutes les pages à redessiner, rien de
+  testable le 9 novembre) ; portrait définitif ; LED WS2812 externe sur GPIO46 comme
+  AquaLook (montage à faire) ; LDR ajoutée sur une broche libre.
+- Justification : la carte fonctionne et se met à jour comme les autres dès la
+  première version, sans attendre la refonte des pages ; la refonte en paysage
+  (TODO rang 4, point 1) se fera page par page avec le propriétaire.
+- Conséquences : un module 4,3" ne reçoit jamais un binaire ESP32 (manifeste et puce
+  distincts) ; une nouvelle page doit être ajoutée aux marges du fichier matériel tant
+  que le portrait provisoire dure ; écran sous-utilisé (bande noire) jusqu'au paysage.

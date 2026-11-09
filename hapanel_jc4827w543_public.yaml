@@ -1,0 +1,24 @@
+# HAPanel : configuration publique de la carte Guition JC4827W543 (ecran 4,3",
+# ESP32-S3, D048). Memes fonctions et meme acces que hapanel_public.yaml, autre
+# fichier materiel et manifeste de mise a jour propre a cette carte.
+#
+# version et git_sha sont injectes par tools/build.ps1 ou par la publication
+# GitHub (G5).
+substitutions:
+  node_name: hapanel
+  friendly_name: HAPanel
+  version: "0.0.0-non-injectee"
+  git_sha: "inconnu"
+  log_level: INFO
+  # Manifeste de cette carte : un module ESP32-S3 ne recoit jamais un binaire ESP32.
+  source_mise_a_jour: https://github.com/cnuma/HAPanel/releases/latest/download/manifest-jc4827w543.json
+
+packages:
+  # Guition JC4827W543C_I, ecran 4,3" capacitif (cahier P).
+  hardware: !include packages/hardware_jc4827w543.yaml
+  application: !include packages/application.yaml
+  acces: !include packages/acces_public.yaml
+
+# Dossier de compilation propre : meme nom de noeud que les autres configurations.
+esphome:
+  build_path: build/hapanel_jc4827w543_public

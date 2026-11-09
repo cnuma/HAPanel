@@ -20,14 +20,7 @@ esphome:
           level: INFO
           format: "HAPanel ${version} (${git_sha})"
 
-esp32:
-  board: esp32dev
-  flash_size: 4MB
-  framework:
-    type: esp-idf
-    advanced:
-      # Puce du panneau en revision 3.1 : binaire plus petit (D011).
-      minimum_chip_revision: "3.1"
+# Puce (ESP32, ESP32-S3) : fichier materiel de chaque carte (D048).
 
 # Wi-Fi, cle de l'API et OTA : acces_prive.yaml (secrets compiles) ou
 # acces_public.yaml (saisis a l'installation), D039.

@@ -23,6 +23,16 @@ substitutions:
   # LDR, confirmee au banc le 31 octobre 2026 : la tension monte dans le noir.
   pin_ldr: GPIO34
 
+# Puce de la carte (D048 : declaree ici, et non plus dans base.yaml).
+esp32:
+  board: esp32dev
+  flash_size: 4MB
+  framework:
+    type: esp-idf
+    advanced:
+      # Puce du panneau en revision 3.1 : binaire plus petit (D011).
+      minimum_chip_revision: "3.1"
+
 spi:
   id: bus_spi_ecran
   clk_pin: ${pin_spi_clk}

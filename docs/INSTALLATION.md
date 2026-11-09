@@ -13,6 +13,7 @@ commande, rien à compiler, aucun mot de passe à inventer.
   |---|---|---|
   | ESP32-2432S024C | 2,4 pouces, tactile capacitif | `hapanel-2432s024c-factory.bin` |
   | ESP32-2432S028, prises USB-C **et** micro-USB | 2,8 pouces, tactile résistif (appui franc) | `hapanel-2432s028-factory.bin` |
+  | Guition JC4827W543 (en essai) | 4,3 pouces, tactile capacitif ; pages en portrait au centre de l'écran, bande noire en bas, pas de LED | `hapanel-jc4827w543-factory.bin` |
 
   Une S028 avec une seule prise micro-USB n'est pas encore prise en charge.
 - **Un câble USB de données.** Certains câbles ne font que charger : si l'ordinateur

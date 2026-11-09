@@ -59,11 +59,13 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `packages/application.yaml` | 20 | Liste ordonnée des fichiers de fonctions, commune aux configurations |
 | `packages/acces_prive.yaml` | 26 | Wi-Fi, clé de l'API et OTA depuis le PC, lus dans `secrets.yaml` ; scripts de mise à jour vides (D047) |
 | `packages/acces_public.yaml` | 332 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub, mise à jour en attente signalée (D045), recherche, confirmation et installation depuis l'écran (D047) |
-| `packages/base.yaml` | 57 | Nœud, ESP32, journaux, écriture des réglages, identité de build |
-| `packages/hardware.yaml` | 116 | Carte ESP32-2432S024C : broches, bus, écran, tactile, sorties PWM, LDR (G2) |
-| `packages/hardware_2432s028.yaml` | 122 | Carte ESP32-2432S028 : mêmes `id`, rétroéclairage GPIO21, tactile résistif XPT2046 |
+| `packages/base.yaml` | 50 | Nœud, journaux, écriture des réglages, identité de build (puce : fichier matériel, D048) |
+| `packages/hardware.yaml` | 126 | Carte ESP32-2432S024C : puce, broches, bus, écran, tactile, sorties PWM, LDR (G2) |
+| `packages/hardware_2432s028.yaml` | 132 | Carte ESP32-2432S028 : mêmes `id`, rétroéclairage GPIO21, tactile résistif XPT2046 |
+| `packages/hardware_jc4827w543.yaml` | 138 | Carte Guition JC4827W543 (4,3", ESP32-S3) : mêmes `id`, écran QSPI tourné en portrait, tactile GT911, LED et LDR sans effet (D048) |
 | `hapanel_2432s028_banc.yaml` | 38 | Banc sur carte ESP32-2432S028 |
 | `hapanel_2432s028_public.yaml` | 24 | Binaire public de la carte ESP32-2432S028 (D041) |
+| `hapanel_jc4827w543_public.yaml` | 24 | Binaire public de la carte Guition JC4827W543 (D048) |
 | `packages/lvgl.yaml` | 401 | Polices communes, À propos (version, SHA, connexion, adresse IP, mémoire, bouton de recherche de mise à jour, D047), barre d'état en haut (titre, disquette, mise à jour, Wi-Fi, HA, ☰, D036, D045) et bouton Accueil en bas, suivi de la connexion |
 | `packages/liaison_ha.yaml` | 489 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
 | `packages/led_veille.yaml` | 320 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
@@ -226,7 +228,10 @@ Le second blueprint, `envoyer_valeur.yaml`, reste un outil générique : `module
 Le schéma montre la carte de référence, une ESP32-2432S024C (D004), au brochage
 publié sans documentation vendeur et confirmé au banc (R6). L'ESP32-2432S028 a son
 propre fichier matériel, avec les mêmes `id` : rétroéclairage GPIO21, tactile résistif
-XPT2046 sur un second bus SPI (`docs/technique/hardware_2432s028.md`, D041). Deux particularités :
+XPT2046 sur un second bus SPI (`docs/technique/hardware_2432s028.md`, D041). La Guition
+JC4827W543 (4,3", ESP32-S3) aussi : écran QSPI tourné en portrait par LVGL, pages
+centrées, ni LED ni LDR (`docs/technique/hardware_jc4827w543.md`, D048). Deux
+particularités de la S024C :
 
 - Aucune interruption n'arrive sur GPIO21 : le tactile est lu toutes les 50 ms (D009, dette T1).
 - Un pic de courant au démarrage du Wi-Fi peut faire redémarrer la carte sur un port

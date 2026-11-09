@@ -1,0 +1,138 @@
+# Materiel : Guition JC4827W543C_I, ecran 4,3" capacitif, ESP32-S3 (D048).
+# Seul fichier qui declare broches et bus pour cette carte (invariant G2) ;
+# memes id que hardware.yaml, le reste du panneau ne change pas.
+#
+# Brochage confirme sur cette carte par AquaLook le 27 aout 2026
+# (docs/architecture/HW_JC4827W543_PORT_IMPACT.md du depot cnuma/AquaLook) :
+# ecran NV3041A en QSPI, tactile GT911, retroeclairage GPIO1. A confirmer
+# avec ESPHome au banc (cahier P).
+#
+# Ni LED RVB ni LDR sur cette carte (choix du proprietaire, 9 novembre 2026) :
+# sorties et capteur sans effet, memes id que les autres cartes.
+#
+# Ecran 480 x 272 tourne en portrait (272 x 480) en attendant des pages
+# dessinees pour le paysage (TODO rang 4) : les pages de 240 x 320 sont
+# centrees en largeur, bande noire en bas (D048).
+substitutions:
+  pin_qspi_clk: GPIO47
+  pin_qspi_d0: GPIO21
+  pin_qspi_d1: GPIO48
+  pin_qspi_d2: GPIO40
+  pin_qspi_d3: GPIO39
+  pin_retroeclairage: GPIO1
+  pin_i2c_sda: GPIO8
+  pin_i2c_scl: GPIO4
+  pin_tactile_int: GPIO3
+  pin_tactile_rst: GPIO38
+  # Zone des pages (240 x 320) dans l'ecran tourne (272 x 480).
+  ecran_marge_gauche: "16"
+  ecran_marge_droite: "16"
+  ecran_marge_bas: "160"
+
+# Puce de la carte (D048) : ESP32-S3, 4 Mo de flash, 8 Mo de PSRAM octale.
+esp32:
+  board: esp32-s3-devkitc-1
+  variant: esp32s3
+  flash_size: 4MB
+  framework:
+    type: esp-idf
+
+# Exigee par le modele d'ecran d'ESPHome ; tampon de LVGL et rotation.
+psram:
+  mode: octal
+  speed: 80MHz
+
+spi:
+  id: bus_spi_ecran
+  type: quad
+  clk_pin: ${pin_qspi_clk}
+  data_pins:
+    - ${pin_qspi_d0}
+    - ${pin_qspi_d1}
+    - ${pin_qspi_d2}
+    - ${pin_qspi_d3}
+
+i2c:
+  id: bus_i2c_tactile
+  sda: ${pin_i2c_sda}
+  scl: ${pin_i2c_scl}
+  frequency: 400kHz
+
+output:
+  - platform: ledc
+    id: sortie_retroeclairage
+    pin: ${pin_retroeclairage}
+  # Pas de LED RVB : sorties sans effet, ecrites par led_veille.yaml.
+  - platform: template
+    id: sortie_led_rouge
+    type: float
+    write_action: []
+  - platform: template
+    id: sortie_led_vert
+    type: float
+    write_action: []
+  - platform: template
+    id: sortie_led_bleu
+    type: float
+    write_action: []
+
+sensor:
+  # Pas de LDR : tension de plein jour (0 V, la tension monte dans le noir sur
+  # les autres cartes), donc retroeclairage de jour, regle par « Intensite
+  # ecran » (D023, D031). Interne, aucune entite HA.
+  - platform: template
+    id: ldr_tension
+    internal: true
+    lambda: return 0.0f;
+    update_interval: 60s
+
+light:
+  - platform: monochromatic
+    id: retroeclairage
+    name: "Rétroéclairage"
+    output: sortie_retroeclairage
+    restore_mode: ALWAYS_ON
+    internal: true
+
+display:
+  - platform: mipi_spi
+    id: ecran
+    model: JC4827W543
+    spi_id: bus_spi_ecran
+
+touchscreen:
+  - platform: gt911
+    id: tactile
+    i2c_id: bus_i2c_tactile
+    display: ecran
+    interrupt_pin:
+      number: ${pin_tactile_int}
+      ignore_strapping_warning: true
+    reset_pin: ${pin_tactile_rst}
+
+# Portrait : rotation logicielle de LVGL (le controleur NV3041A n'echange pas
+# les axes) ; le tactile suit.
+lvgl:
+  rotation: 90
+
+# Pages de 240 x 320 centrees en largeur, en haut de l'ecran tourne : marges
+# de l'ecran de chaque page et de la couche commune (barres, messages), d'ou
+# les pages tirent leurs positions. Provisoire, jusqu'aux pages en paysage.
+esphome:
+  on_boot:
+    priority: -100
+    then:
+      - lambda: |-
+          auto marges = [](lv_obj_t *o) {
+            lv_obj_set_style_pad_left(o, ${ecran_marge_gauche}, LV_PART_MAIN);
+            lv_obj_set_style_pad_right(o, ${ecran_marge_droite}, LV_PART_MAIN);
+            lv_obj_set_style_pad_bottom(o, ${ecran_marge_bas}, LV_PART_MAIN);
+          };
+          marges(id(page_accueil).obj);
+          marges(id(page_meteo).obj);
+          marges(id(page_planning).obj);
+          marges(id(page_scenarios).obj);
+          marges(id(page_menu).obj);
+          marges(id(page_reglages).obj);
+          marges(id(page_apropos).obj);
+          marges(lv_layer_top());

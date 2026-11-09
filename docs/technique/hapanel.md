@@ -13,9 +13,11 @@ substitutions communes.
 | `hapanel_public.yaml` | Mêmes fonctions, sans aucun secret, publiable (D039, maquette) | Les modules installés depuis GitHub |
 | `hapanel_2432s028_banc.yaml` | Banc sur carte ESP32-2432S028 | Une carte S028 de l'atelier |
 | `hapanel_2432s028_public.yaml` | Binaire public de la carte ESP32-2432S028 (D041) | Les modules S028 installés depuis GitHub |
+| `hapanel_jc4827w543_public.yaml` | Binaire public de la carte Guition JC4827W543, 4,3" (D048) | Les modules 4,3" installés depuis GitHub |
 
 **Un fichier matériel par carte :** chaque point d'entrée inclut le sien
-(`hardware.yaml` pour l'ESP32-2432S024C, `hardware_2432s028.yaml` pour la S028).
+(`hardware.yaml` pour l'ESP32-2432S024C, `hardware_2432s028.yaml` pour la S028,
+`hardware_jc4827w543.yaml` pour la Guition 4,3").
 `application.yaml` ne contient aucune broche.
 
 Sans `hapanel.yaml`, il n'y a rien à compiler. `hapanel_banc.yaml` n'existe que pour
@@ -141,6 +143,20 @@ Binaire public de la carte ESP32-2432S028 (D041) : même contenu que
 | `esphome.build_path` | `build/hapanel_2432s028_public` | Dossier de compilation propre. |
 
 Publié par `.github/workflows/publication.yml` avec la configuration de la S024C.
+
+## hapanel_jc4827w543_public.yaml
+
+Binaire public de la carte Guition JC4827W543, 4,3", ESP32-S3 (D048) : même contenu que
+`hapanel_public.yaml`, autre fichier matériel et autre manifeste.
+
+| Bloc | Contenu | Rôle |
+|---|---|---|
+| `substitutions` | Celles de `hapanel_public.yaml` ; `source_mise_a_jour` vise `manifest-jc4827w543.json` | Un module ESP32-S3 ne reçoit jamais un binaire ESP32. |
+| `packages` | `hardware: hardware_jc4827w543.yaml`, `application`, `acces: acces_public.yaml` | |
+| `esphome.build_path` | `build/hapanel_jc4827w543_public` | Dossier de compilation propre. |
+
+Publié par `.github/workflows/publication.yml` avec les deux autres cartes ; son
+manifeste porte `"chipFamily": "ESP32-S3"`.
 
 ## Maintenance
 
