@@ -10,7 +10,7 @@ usurpation de `device_id` acceptée (D046). Remplace `CHECKPOINT_2026-11-09_7d81
 | Branche | `main`, `5efef73`, poussée et vérifiée sur le dépôt distant |
 | Version | `0.10.0` (inchangée, documentation seule) |
 | Modules | Cuisine et séjour (S024C), salle de bain (S028) : binaire public `0.10.0 (99a9a10)`, inchangé ; option « actions HA » décochée sur les trois (cahier N1) |
-| Branche `docs/securite-actions-ha` | Fusionnée ; suppression locale et distante refusée par les permissions de l'agent, à faire par le propriétaire |
+| Branche `docs/securite-actions-ha` | Fusionnée et supprimée (locale et distante) ; règle de permission locale de l'agent pour les branches `feature/`, `fix/`, `docs/`, `chore/` |
 
 ## Depuis le checkpoint précédent
 
