@@ -15,6 +15,19 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   GPIO21, rétroéclairage sur S028, est l'interruption du tactile sur S024C) ; reflash
   du banc par USB, tactile retrouvé. Le journal le dit : `cst816` sur S024C, `xpt2046`
   sur S028.
+- Il n'y a pas de module d'atelier : les trois modules sont en service (cuisine et
+  séjour en S024C, salle de bain en S028). Ne jamais écrire un binaire de banc ou
+  privé sur l'un d'eux sans le dire : il perd l'entité Firmware et ne se met plus à
+  jour depuis HA. Le 7 novembre 2026, la « S024C du banc » reflashée en privé était la
+  cuisine, découverte le 8. Dans HA : entité Firmware = binaire public ; « Mémoire
+  libre » sans Firmware = binaire de banc.
+- Entité Firmware avec « Version installée » et « Dernière version » vides : la
+  dernière lecture du manifeste a échoué (GitHub en `504` le 8 novembre 2026 au
+  matin) ; « À jour » n'a alors pas de sens. Le module ne réessaie qu'au démarrage
+  ou 6 h plus tard : le redémarrer une fois le manifeste lisible dans un navigateur.
+- Ajouter dans HA un module public réinstallé : dans les 15 min après son démarrage.
+  Passé ce délai, HA demande une clé de chiffrement qu'aucune saisie ne satisfait
+  (8 novembre 2026) : redémarrer le module, puis ajouter.
 - Version de test d'un binaire public : la prendre **plus ancienne** que la Release
   (`0.9.0-dev.99` sous `0.9.0`), sinon HA la juge à jour et refuse d'installer la
   Release, alors que le module signale une mise à jour dès que les versions diffèrent

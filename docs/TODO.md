@@ -174,4 +174,5 @@ Liste unique du reste à faire (G14).
       quand une mise à jour attend (D045, TODO rang 2 point 1, avancé avant le rang 1 à
       la demande du propriétaire) ; adresse IP sur la page À propos (demande du
       propriétaire) : cahier L1 à L10 et M OK, fusionné dans `main` le 7 novembre 2026 ;
-      `VERSION` 0.10.0, sans Release.
+      `VERSION` 0.10.0 ; Release `v0.10.0` publiée le 8 novembre 2026, installée sur
+      les trois modules, L11 OK le 9 novembre.
