@@ -139,6 +139,9 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   `esphome.<nœud>_message_accueil`.
 - Un déclencheur `state` dont la liste d'entités est vide est accepté et ne surveille
   rien (cahier B11, 7 novembre 2026).
+- Le `device_id` d'un événement `esphome.*` n'est pas une preuve d'origine : HA le met
+  avant les données du module, qui peuvent le remplacer (D046, R11). Le filtre
+  `device_id == panneau` évite les erreurs, il ne protège pas.
 
 ## Binaire public et mises à jour (D039)
 

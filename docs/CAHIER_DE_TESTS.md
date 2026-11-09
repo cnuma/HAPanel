@@ -335,3 +335,15 @@ Demande du propriétaire du 7 novembre 2026. Tout binaire (public ou privé).
 | M1 | Module relié au Wi-Fi : ouvrir À propos | Ligne « Adresse IP : … » sous la connexion à HA, avec l'adresse du module (la même que dans la box ou dans HA) ; mémoire en dessous, sur deux lignes, sans chevauchement ni débordement sous la barre du bas | `feature/maj-icone` (fusionnée) | OK 7 nov. |
 | M2 | Redémarrer le module, ouvrir aussitôt À propos | « Adresse IP : aucune », puis l'adresse dès que le Wi-Fi est rejoint | `feature/maj-icone` (fusionnée) | OK 7 nov. |
 | M3 | Dans HA, liste des entités du module | Aucune nouvelle entité « Adresse IP » (capteur interne) | `feature/maj-icone` (fusionnée) | OK 7 nov. |
+
+## N — Actions Home Assistant refusées aux modules (D046)
+
+Sur les trois modules (cuisine, séjour, salle de bain), binaire public en service.
+Procédure : `CONFIGURATION.md` § 1, « Module déjà ajouté ».
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| N1 | Pour chaque module : ESPHome › ⚙ Configurer | « Autoriser l'appareil à effectuer des actions Home Assistant » décochée (la décocher si besoin) ; noter pour chaque module si elle était cochée | `docs/securite-actions-ha` | |
+| N2 | Sur chaque module, après N1 : régler la consigne de l'accueil, puis allumer et couper le chauffage | Le thermostat de la pièce suit dans HA ; l'écran affiche le nouvel état | `docs/securite-actions-ha` | |
+| N3 | Sur chaque module : lancer un scénario | « OK » à l'écran, scénario exécuté dans HA | `docs/securite-actions-ha` | |
+| N4 | Le lendemain : Paramètres › Réparations, et journal de HA filtré sur `esphome` | Aucune réparation « … n'est pas autorisé à effectuer des actions » ni « Service call … rejected » : le panneau n'appelle aucune action | — | |
