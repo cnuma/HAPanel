@@ -76,6 +76,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | L | Mise à jour signalée par la barre d'état et la LED (D045) | `feature/maj-icone` (fusionnée) ; L11 sur la Release `v0.10.0` |
 | M | Adresse IP sur la page À propos | `feature/maj-icone` (fusionnée) |
 | R | Documentation publique sans élément personnel (D052) | `docs/t02-projet-publiable` (fusionnée) |
+| S | Page d'installation par carte (D044) | `feature/page-installation` ; S5, S6 à la publication |
 | 7 novembre 2026 | `9b78597` (S028, USB) | K1, K2, K3 | Écran et couleurs OK (contrôleur ST7789V, sans inversion) ; tactile : x brut décroît de gauche à droite (3605 à 449), y de 419 à 3662. Premier téléversement impossible avec le premier câble USB-C (aucune donnée reçue) ; OK avec un autre câble | Calibrage et `mirror_x` reportés ; K4 sur le binaire suivant |
 | 7 novembre 2026 | `174aa99` (S028, USB) | K4 à K11 | Tout OK ; K5 : glissière Éteint / Chauffage capricieuse au doigt sur dalle résistive, boutons fiables. Mémoire libre 153 Ko, plus grand bloc 96 Ko. Remarque du propriétaire : avoir à configurer le blueprint du message d'accueil en plus de celui du module n'est pas pratique (TODO rang 1) | **Partie K validée**, fusion dans `main` (accord du propriétaire) ; glissière : TODO T04 |
 | 7 novembre 2026 | `745126b` (blueprint, branche) | B10 à B19 | Tout OK : migration, module sans section, même texte sur deux modules, message unique, entité désactivée, météo, plage horaire ; B3 refait (B13) | **Fusion de `feature/accueil-blueprint-module` dans `main`**, accord du propriétaire |
@@ -88,6 +89,8 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 8 novembre 2026 | `v0.10.0` (Release, `99a9a10`), les trois modules | — | Publiée par l'agent (accord du propriétaire). Le « banc S024C » du 7 novembre était **le module de la cuisine** : resté en binaire de banc privé `0.9.0 (66e0b4e)`, sans entité Firmware ; séjour installé par USB en public `0.9.0` (HA demandait une clé : fenêtre de 15 min dépassée) ; GitHub a répondu `504` une partie de la matinée, champs de l'entité Firmware vides. Cuisine reflashée en public par USB, puis les trois modules en `0.10.0` | Les trois modules en public `0.10.0` ; piège ajouté au 09 |
 | 9 novembre 2026 | `v0.10.0`, manifestes de la Release annonçant `0.10.1` (binaire inchangé), les trois modules | L11 | **OK** (propriétaire) : mise à jour proposée dans HA, flèche et éclairs violets sur les trois modules, rien installé | Manifestes d'origine remis par l'agent, vérifiés (`0.10.0`). **Partie L terminée** |
 | 9 novembre 2026 | `v0.10.0`, les trois modules | N1 à N3 | **N1, N2 OK** (propriétaire) : option « actions HA » décochée sur les trois modules, consigne et chauffage commandés depuis chacun. **N3 non fait** : aucun scénario choisi dans les blueprints | N3 reporté au premier scénario choisi (accord du propriétaire) ; N4 le 10 novembre, ne bloque pas la fusion |
+| 9 novembre 2026 | Page locale (`v0.11.0`, branche `feature/page-installation`), module de la cuisine (S024C) | S2 à S4 | Installation par la page réussie, Wi-Fi saisi. Premier passage **sans cocher Erase device** (appareil supprimé de HA avant) : clé gardée, HA en demande une. Second passage avec effacement : la découverte de HA demandait encore une clé, même après redémarrage ; **ajout par l'adresse IP réussi** | Pièges et dépannage ajoutés (`09`, `CONFIGURATION.md`). Proposé : effacement imposé par la page (HAP-R009). Libellés de la fenêtre et écran après coupure à confirmer |
+| 9 novembre 2026 | Réglages du dépôt (agent, accord du propriétaire) | S5 (préalable) | GitHub Pages activé (source GitHub Actions), environnement `github-pages` ouvert aux étiquettes `v*` ; adresse `https://cnuma.github.io/HAPanel/`, vide jusqu'à la première publication | S5 à la publication de la première version finale |
 | 9 novembre 2026 | `512ca63`, documentation (branche `docs/t02-projet-publiable`) | R | **R1, R2 OK** (propriétaire) | Fusion dans `main` à l'accord du propriétaire |
 
 ## Préparation (une fois, avant A et B)
@@ -410,3 +413,23 @@ Sur GitHub, branche `docs/t02-projet-publiable` choisie dans le menu des branche
 |---|---|---|---|---|
 | R1 | Lire le README, puis `INSTALLATION.md`, `CONFIGURATION.md` et `UTILISATION.md` | Aucun nom réel de module (seulement `hapanel-1a2b3c` en exemple), aucune de vos pièces, aucun nom de réseau ; capture 11 d'`INSTALLATION.md` : suffixe du réseau du module masqué | `docs/t02-projet-publiable` (fusionnée) | OK 9 nov. (`512ca63`) |
 | R2 | README, paragraphe sur le journal de développement | Clair pour un visiteur : il comprend que le reste de `docs/` décrit votre installation à titre d'exemple | `docs/t02-projet-publiable` (fusionnée) | OK 9 nov. (`512ca63`) |
+
+## S — Page d'installation par carte (D044)
+
+Avant la fusion : page construite et servie en local depuis la Release `v0.11.0`
+(`DEPLOIEMENT_PUBLIC.md` § 1, « Essayer la page en local »), adresse
+<http://localhost:8765>. S1 à S4 se font en suivant `INSTALLATION.md`, étapes 1 à 3,
+en remplaçant l'adresse de la page par celle-ci. S2 efface la carte : si le module est
+connu de HA, le supprimer de HA avant (`09_PIEGES.md`). S5 et S6 se font à la
+publication.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| S1 | Ouvrir la page dans Chrome ou Edge | Titre « Installer HAPanel », version `0.11.0`, trois cartes, un bouton **Installer** bleu sous chacune ; textes lisibles, rien qui déborde | `feature/page-installation` | |
+| S2 | Carte branchée : **Installer** sous sa carte, port, **Install HAPanel**, **Install** | Libellés du guide ; **Installation complete!** après environ 2 min ; noter si une fenêtre ou un bouton diffère du guide | `feature/page-installation` | OK 9 nov. (propriétaire), fenêtres conformes ; essai fait avec la case **Erase device**, retirée ensuite (effacement imposé). Sans la case : à revoir à la publication (S8) |
+| S3 | **Next**, puis Wi-Fi : réseau, mot de passe, **Connect** | « Configure Wi-Fi » ; le module rejoint le Wi-Fi ; noter le message et les boutons de fin | `feature/page-installation` | OK 9 nov. (propriétaire) |
+| S4 | Couper l'alimentation, rebrancher sur le bloc secteur ; dans HA, ajouter le module (`CONFIGURATION.md` § 1) et le rattacher à son automatisation | Écran juste ; module découvert et ajouté sans clé à saisir ; accueil rempli | `feature/page-installation` | OK 9 nov. (propriétaire) : écran et accueil justes ; **ajout seulement par l'adresse IP** (la découverte demandait une clé, `09_PIEGES.md`) |
+| S5 | À la publication de la première version finale qui contient D044 : réglage unique fait (`DEPLOIEMENT_PUBLIC.md` § 1), puis Actions › Publication | Tâches « publier » et « page » réussies ; <https://cnuma.github.io/HAPanel/> affiche la nouvelle version ; S1 sur cette adresse | — (à la publication) | |
+| S6 | Première version `-dev` publiée après D044 | La Release est créée, la tâche « page » est sautée, la page garde la version finale | — (à la publication) | |
+| S7 | Ouvrir la page sur un téléphone | « Navigateur non compatible… » à la place des boutons **Installer** | — | |
+| S8 | Page publiée (après S5), une carte déjà dans HA : la supprimer de HA, l'installer par la page, l'ajouter dans HA | Pas de fenêtre **Erase device** ; **Confirm Installation** annonce l'effacement ; module ajouté (découverte ou adresse IP) | — (à la publication) | |

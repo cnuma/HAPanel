@@ -1,0 +1,66 @@
+<!doctype html>
+<!-- Maquettes de la fenetre d'ESP Web Tools pour le guide d'installation (D044).
+     Charge le vrai composant de la page construite et le place dans un etat donne,
+     sans carte branchee. Copier ce fichier dans le dossier de la page construite,
+     le servir, puis ouvrir maquette_fenetre_installation.html?etat=<etat> :
+     tableau, confirmation, ecriture, fin, wifi, connecte.
+     Procedure : docs/DEPLOIEMENT_PUBLIC.md, « Captures de la fenetre ». -->
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maquette de la fenêtre</title>
+  <style>body { margin: 0; background: #f6f7f9; font-family: system-ui, sans-serif; }</style>
+</head>
+<body>
+<script type="module">
+  const fichiers = ['install-dialog-im156JnI.js'];
+  for (const f of fichiers) await import('./esp-web-tools/' + f);
+  const C = customElements.get('ewt-install-dialog');
+  C.prototype.firstUpdated = function () {};
+  C.prototype._syncScanning = function () {};
+
+  const etat = new URLSearchParams(location.search).get('etat') || 'tableau';
+  const d = document.createElement('ewt-install-dialog');
+  d.port = { close: async () => {} };
+  d.manifestPath = 'x';
+  d._manifest = {
+    name: 'HAPanel', version: '0.11.0', home_assistant_domain: 'esphome',
+    new_install_prompt_erase: false, builds: [],
+  };
+  const info = { name: 'hapanel-1a2b3c', firmware: 'cnuma.hapanel', version: '0.11.0', chipFamily: 'ESP32' };
+  const reseaux = [
+    { name: 'Ma-Box-2.4GHz', rssi: -48, secured: true },
+    { name: 'Voisin-Wifi', rssi: -78, secured: true },
+  ];
+
+  // willUpdate remet a zero la confirmation et la liste des reseaux a chaque
+  // changement d'etat : l'etat d'abord, le reste apres le premier rendu.
+  const etats = {
+    tableau: ['DASHBOARD', { _client: null }],
+    confirmation: ['INSTALL', { _client: null, _installErase: true }],
+    ecriture: ['INSTALL', { _client: null, _installErase: true, _installConfirmed: true,
+      _installState: { state: 'writing', details: { percentage: 46 }, chipFamily: 'ESP32' } }],
+    fin: ['INSTALL', { _client: null, _installErase: true, _installConfirmed: true,
+      _installState: { state: 'finished', details: {}, chipFamily: 'ESP32' } }],
+    wifi: ['PROVISION', { _info: info, _client: { state: 2, error: 0, info }, _installErase: true,
+      _installState: { state: 'finished', details: {}, chipFamily: 'ESP32' },
+      _ssids: reseaux, _selectedSsid: 'Ma-Box-2.4GHz' }],
+    connecte: ['PROVISION', { _info: info, _client: { state: 4, error: 0, info }, _ssids: reseaux }],
+  };
+  const [nom, champs] = etats[etat];
+  d._client = champs._client;
+  d._info = champs._info;
+  d._state = nom;
+  document.body.append(d);
+  await d.updateComplete;
+  Object.assign(d, champs);
+  await d.updateComplete;
+  await new Promise((r) => setTimeout(r, 300));
+  // Pas d'anneau de focus sur les captures.
+  let a = document.activeElement;
+  while (a && a.shadowRoot && a.shadowRoot.activeElement) a = a.shadowRoot.activeElement;
+  if (a && a.blur) a.blur();
+</script>
+</body>
+</html>

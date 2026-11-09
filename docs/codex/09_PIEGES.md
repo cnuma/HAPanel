@@ -182,6 +182,14 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   POC, en `0.8.0-dev.4-wifi`, ne verra que des versions suffixées ou `0.8.0`.
 - Un binaire public déjà installé qui ne lit pas le manifeste ne peut plus se corriger
   par Wi-Fi : seul l'USB le rattrape. Tester la lecture du manifeste avant de publier.
+- Réinstallation par la page d'installation (D044), 9 novembre 2026, module de la
+  cuisine : **sans la case « Erase device »**, le module garde son Wi-Fi et sa clé ;
+  supprimé de HA avant, il n'est plus adoptable (HA demande une clé qu'il a oubliée).
+  Réinstallé **avec** effacement, la découverte de HA demandait encore une clé, même
+  après redémarrage du module : l'entrée « Découvertes » reprend l'état d'avant
+  l'effacement. Résolu par l'ajout manuel **par l'adresse IP** (page ESPHome, **Ajouter
+  un appareil** ; IP sur la page À propos du module), dans les 15 min après la mise
+  sous tension. Dépannage dans `CONFIGURATION.md`.
 - Reflasher par USB un module encore connu de HA efface sa clé : HA propose de le
   réassocier en prévenant que **la connexion ne sera plus chiffrée** (7 novembre 2026,
   cahier J14). Refuser (D010) : supprimer l'appareil dans HA, l'adopter de nouveau,

@@ -58,8 +58,10 @@ Vérifiez que Home Assistant contient déjà les entités que le module afficher
 
 **Le module n'apparaît pas :** attendez 2 minutes après l'avoir branché, puis
 actualisez la page. Toujours rien : cliquez sur **Ajouter une intégration**,
-cherchez **ESPHome**, puis saisissez l'adresse IP du module (votre box la donne,
-dans sa liste des appareils connectés).
+cherchez **ESPHome**, puis saisissez l'adresse IP du module : le module l'affiche
+sur sa page **Menu › À propos** (« Adresse IP »), et votre box la donne dans sa liste
+des appareils connectés. Si vous avez déjà un appareil ESPHome, le bouton **Ajouter
+un appareil** de la page ESPHome mène au même endroit.
 
 **Home Assistant demande une clé :** ne saisissez rien et voyez le
 [Dépannage](#dépannage).
@@ -378,7 +380,8 @@ Sans nouvelle valeur pendant 15 minutes, le module affiche la valeur comme péri
 | Écran trop sombre | « Intensité écran » trop basse | Monter « Intensité écran » (section 5). Toujours trop sombre la nuit : réglage du logiciel, à demander au développeur (`docs/codex/05_BUILD_AND_TEST.md`) |
 | Au démarrage de HA : « Automation failed to set up », `Unable to find …/message_accueil.yaml` | Automatisation « HAPanel — message d'accueil » restée dans HA : son blueprint, remplacé par la section Message d'accueil du module (D042), a été supprimé | Suivre la section 6, « Venir de l'ancien blueprint » |
 | Au démarrage de HA : « Automation failed to set up », `Unable to find cnuma/ecran_accueil.yaml` | Automatisation « HAPanel — écran d'accueil » restée dans HA : son blueprint, remplacé par `module.yaml` (D021), a été supprimé | Vérifier qu'une automatisation « HAPanel — module » existe pour le module, puis supprimer l'ancienne |
-| Le module n'apparaît pas parmi les appareils découverts | Module pas encore sur le Wi-Fi, ou découverte bloquée par le réseau | Vérifier le Wi-Fi ([INSTALLATION.md](INSTALLATION.md), étape 4), puis ajouter l'intégration ESPHome avec l'adresse IP du module (section 1) |
-| Home Assistant demande une clé de chiffrement | Module déjà ajouté à un autre Home Assistant, ou module de l'atelier compilé avec `secrets.yaml` | Ne rien saisir. Module public : le réinstaller ([INSTALLATION.md](INSTALLATION.md), étapes 1 à 4) pour l'effacer. Module de l'atelier : saisir sa clé `api_encryption_key` |
+| Le module n'apparaît pas parmi les appareils découverts | Module pas encore sur le Wi-Fi, ou découverte bloquée par le réseau | Vérifier le Wi-Fi ([INSTALLATION.md](INSTALLATION.md), étape 3), puis ajouter l'intégration ESPHome avec l'adresse IP du module (section 1) |
+| Home Assistant demande une clé de chiffrement | Module déjà ajouté à un autre Home Assistant, ou module de l'atelier compilé avec `secrets.yaml` | Ne rien saisir. Module public : le réinstaller ([INSTALLATION.md](INSTALLATION.md), étapes 1 à 3) pour l'effacer. Module de l'atelier : saisir sa clé `api_encryption_key` |
+| Module réinstallé et effacé, ancien appareil supprimé de Home Assistant, mais **Ajouter** (rubrique Découvertes) demande encore une clé | La découverte date d'avant l'effacement, quand le module avait encore son ancienne clé, et Home Assistant la reprend ; ou plus de 15 minutes depuis la mise sous tension du module | Ne rien saisir. Débrancher puis rebrancher le module, actualiser la page ; si la clé est encore demandée, ajouter le module **par son adresse IP** (section 1, « Le module n'apparaît pas »), dans les 15 minutes qui suivent la mise sous tension. Constaté et résolu ainsi le 9 novembre 2026 |
 | Home Assistant propose de réassocier le module et prévient que la connexion ne sera plus chiffrée | Module réinstallé, donc effacé, sans avoir été supprimé de Home Assistant | Ne pas accepter. Supprimer l'appareil, l'ajouter de nouveau (section 1), puis le choisir de nouveau dans « Panneau » de son automatisation (sinon l'accueil n'affiche rien de la maison) |
 | Point rouge et « Pas de communication » | Home Assistant arrêté, module retiré ou clé d'API différente | Vérifier l'intégration ESPHome |

@@ -1054,6 +1054,54 @@ qui cite la précédente.
   gardant la mention de copyright. Les composants compilés gardent leur licence
   (ESPHome, LVGL : MIT ; ESP-IDF : Apache 2.0).
 
+## D044 — Page d'installation par carte (TODO T03)
+
+- Date : 9 novembre 2026 — Statut : choisi par le propriétaire (HAP-R005 : « 1-A, 2-A,
+  3-A, 4-A »), implémenté sur `feature/page-installation`, à valider (cahier S).
+  Numéro réservé le 7 novembre 2026, rédigé le 9 (D045 à D052 prises entre-temps).
+- Contexte : demande du propriétaire du 7 novembre 2026. Une Release n'a pas de
+  dossiers : trois fichiers par carte à plat (neuf aujourd'hui) ; l'utilisateur devait
+  choisir le bon fichier, puis le redonner à web.esphome.io. Une page ne peut pas lire
+  les fichiers d'une Release (GitHub ne l'autorise pas depuis un autre site).
+- Décision :
+  - page publique `https://cnuma.github.io/HAPanel/`, en français (D052) : une ligne
+    par carte (nom, écran, tactile, prises, puce ; 4,3" « en essai »), texte seulement
+    (photos plus tard), bouton **Installer** (ESP Web Tools), Wi-Fi saisi par Improv
+    juste après l'écriture ;
+  - construite par `tools/construire_page.sh` et publiée par le workflow de
+    publication sur GitHub Pages (source « GitHub Actions ») : binaire complet et
+    manifeste de chaque carte copiés dans un dossier par carte ; aucun binaire dans
+    Git (option 1-A) ;
+  - ESP Web Tools 10.4.0, version figée, empreinte SHA-256 vérifiée à la
+    construction, servi par la page elle-même : le navigateur ne charge rien d'un
+    autre site (option 2-A) ; changer de version est une décision, comme pour ESPHome
+    (D005) ;
+  - seules les versions sans suffixe mettent la page à jour ; une `-dev` la laisse sur
+    la dernière version finale (option 3-A) ;
+  - les manifestes restent aussi dans la Release (adresse compilée dans les modules,
+    D041) ; la copie sert telle quelle à ESP Web Tools (`parts`, effacement proposé par
+    `new_install_prompt_erase`).
+- Options écartées : branche `gh-pages` avec les binaires (historique alourdi à chaque
+  version) ; ESP Web Tools chargé depuis un site tiers à chaque visite (un site
+  compromis installerait autre chose) ; toutes les Releases, `-dev` comprises ; photos
+  dès maintenant.
+- Conséquences : réglage unique du dépôt (Pages, environnement `github-pages` ouvert
+  aux étiquettes `v*`) décrit dans `DEPLOIEMENT_PUBLIC.md` ; surface publique au `08` ;
+  guide d'installation sans fichier à télécharger ni à choisir ; la page n'existe
+  qu'après la première version finale publiée avec ce workflow. La fenêtre d'ESP Web
+  Tools est en anglais.
+- Limite : les Releases `-dev` restent « Latest », donc proposées par HA à tous les
+  modules publics : TODO T18.
+- Complément du 9 novembre 2026 (HAP-R009, accord du propriétaire) : **effacement
+  imposé**. Essai sur le module de la cuisine : la case « Erase device », décochée par
+  défaut, a été oubliée ; le module a gardé une clé que HA avait oubliée. La copie du
+  manifeste servie par la page porte `new_install_prompt_erase: false` : ESP Web Tools
+  efface alors toujours (vérifié dans son code), sans poser la question. Une
+  réinstallation sans effacement n'est plus possible depuis la page (les mises à jour
+  passent par HA ou par l'écran). Le guide dit en tête de l'étape d'écriture de
+  supprimer d'abord de HA un module déjà ajouté. Captures du guide : maquettes du vrai
+  composant (`tools/maquette_fenetre_installation.html`).
+
 ## D045 — Mise à jour signalée par la barre d'état et la LED
 
 - Date : 7 novembre 2026 — Statut : choisi par le propriétaire (HAP-R001), implémenté
@@ -1313,3 +1361,6 @@ qui cite la précédente.
   `tools/build.ps1` réservé à Windows) ; traduction anglaise (double maintenance).
   Chacune peut être rouverte par une nouvelle décision.
 - Conséquences : T02 terminé à la fusion ; reste de D038 : page d'installation (T03).
+- Complément du 9 novembre 2026 (relevé en préparant T03) : les captures 08, 09 et 12
+  à 19 du guide montraient encore le nom réel d'un module, et la 12 son adresse MAC
+  complète ; masquées. Les noms de pièces courants (« Cuisine ») restent en exemple.

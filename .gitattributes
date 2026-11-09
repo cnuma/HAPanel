@@ -1,0 +1,3 @@
+# Scripts lus par bash (Git Bash sous Windows, GitHub Actions) : LF obligatoire,
+# sinon bash echoue sur le retour chariot.
+*.sh text eol=lf

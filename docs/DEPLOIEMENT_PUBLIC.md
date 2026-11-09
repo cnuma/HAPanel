@@ -1,7 +1,7 @@
 # Déploiement public — HAPanel (D039, D037 révisée)
 
-Procédure du binaire public, sans secret : publication sur GitHub, première
-installation d'un module, adoption dans Home Assistant, mises à jour depuis Home
+Procédure du binaire public, sans secret : publication sur GitHub, page
+d'installation (D044), première installation d'un module, adoption dans Home Assistant, mises à jour depuis Home
 Assistant. C'est le mode de déploiement de **tous les modules de la maison** (D037
 révisée), validé par la partie J du cahier de tests. Ce document s'adresse au
 développeur ; le guide pas à pas pour un débutant est
@@ -42,6 +42,59 @@ de test de l'atelier.
 4. Vérifier la Release : les neuf fichiers sont présents, elle est marquée
    **Latest** ; `manifest-jc4827w543.json` porte `"chipFamily": "ESP32-S3"`, les deux
    autres `"ESP32"` (D049).
+5. Version finale seulement (`0.12.0`, sans suffixe) : la tâche « page » publie la
+   page d'installation par carte (D044). Vérifier que <https://cnuma.github.io/HAPanel/>
+   affiche la nouvelle version. Une version `-dev` ne change pas la page.
+
+### Réglage unique : GitHub Pages (D044)
+
+À faire une fois, avant la première version finale publiée avec la page, avec un
+compte qui administre le dépôt (`gh` connecté), dans PowerShell :
+
+```powershell
+gh api -X POST repos/cnuma/HAPanel/pages -f build_type=workflow
+'{"deployment_branch_policy":{"protected_branches":false,"custom_branch_policies":true}}' | gh api -X PUT repos/cnuma/HAPanel/environments/github-pages --input -
+gh api -X POST repos/cnuma/HAPanel/environments/github-pages/deployment-branch-policies -f name='v*' -f type=tag
+gh api repos/cnuma/HAPanel/pages -q .html_url
+```
+
+La première ligne active GitHub Pages, publié par GitHub Actions. Les deux suivantes
+ouvrent l'environnement `github-pages` aux étiquettes `v*` : sans elles, il n'accepte
+que la branche par défaut, et la tâche « page » d'une publication serait refusée. La
+dernière doit répondre `https://cnuma.github.io/HAPanel/`. Fait le 9 novembre 2026 ;
+GitHub a aussi créé une règle pour la branche `main`, laissée en place.
+
+### Essayer la page en local
+
+Sans rien publier : construire la page avec les fichiers d'une Release finale déjà
+publiée, puis l'ouvrir en local (le navigateur autorise l'accès au port USB depuis
+`localhost`). Dans PowerShell, à la racine du dépôt :
+
+```powershell
+gh release download v0.11.0 -D "$env:TEMP\hapanel_rel" --clobber
+& "$env:ProgramFiles\Git\bin\bash.exe" tools/construire_page.sh "$env:TEMP\hapanel_rel" 0.11.0 "$env:TEMP\hapanel_site"
+.\.venv\Scripts\python -m http.server 8765 --bind 127.0.0.1 -d "$env:TEMP\hapanel_site"
+```
+
+Ouvrir <http://localhost:8765> dans Chrome ou Edge ; **Ctrl+C** arrête le serveur. La
+page installe alors la version de cette Release.
+
+### Captures de la fenêtre d'installation
+
+Les captures 04 à 09 d'`INSTALLATION.md` sont des maquettes : le vrai composant d'ESP
+Web Tools, placé dans chaque état sans carte branchée, avec un module et un réseau
+fictifs (aucune donnée à masquer). Après avoir construit la page en local (ci-dessus) :
+
+```powershell
+Copy-Item tools\maquette_fenetre_installation.html "$env:TEMP\hapanel_site\"
+```
+
+Le serveur lancé, ouvrir
+`http://localhost:8765/maquette_fenetre_installation.html?etat=<état>` pour chaque
+état (`tableau`, `confirmation`, `ecriture`, `fin`, `wifi`, `connecte`), capturer
+(Edge sans fenêtre, `09_PIEGES.md`, avec `--window-size=700,700`) et recadrer sur la
+fenêtre. Le nom du fichier `install-dialog-….js` chargé par la maquette change avec la
+version d'ESP Web Tools : le mettre à jour en même temps qu'`EWT_VERSION`.
 
 **Forme des versions :** toujours `X.Y.Z-dev.N`, puis `X.Y.Z`, sans suffixe ajouté.
 HA ne propose une mise à jour que si la version publiée est plus récente que
@@ -55,22 +108,29 @@ aucun (`secrets.yaml` n'existe pas sur GitHub).
 
 ## 2. Première installation d'un module
 
-Il faut un ordinateur avec Chrome ou Edge, un câble USB de données et le module.
+Il faut un ordinateur avec Chrome ou Edge, un câble USB de données et le module. Le
+guide pas à pas, avec les captures, est [INSTALLATION.md](INSTALLATION.md).
 
-1. Télécharger le binaire complet **de la carte** depuis la Release (`hapanel-<carte>-factory.bin`,
-   tableau du § 1). Un binaire d'une autre carte s'installe, mais l'écran reste noir ou
-   le tactile muet.
-2. Ouvrir <https://web.esphome.io>, brancher le module, **Connection**, choisir son
-   port (« USB Serial (COM…) »), **Connexion**.
-3. Petite flèche « Installer » (pas « Préparation pour la première utilisation »,
-   qui installe le logiciel ESPHome de base), **Choisir un fichier** :
-   `hapanel-<carte>-factory.bin`, **Installer**. L'écriture efface le module. Attendre la
-   fin (environ 2 min).
-4. Fenêtre « Configure Wi-Fi » (Improv) : choisir le réseau, saisir son mot de
-   passe, **Connect** ; « Provisioned! » quand le module a rejoint le réseau.
-5. **Couper l'alimentation** (débrancher, rebrancher), puis seulement juger l'écran
+1. Ouvrir la page d'installation <https://cnuma.github.io/HAPanel/> (D044), brancher
+   le module, **Installer** sous sa carte, choisir son port (« USB Serial (COM…) »),
+   **Connexion**.
+2. Fenêtre d'ESP Web Tools : **Install HAPanel** ; **Confirm Installation**,
+   **Install** (la page efface toujours le module, D044). Attendre **Installation
+   complete!** (environ 2 min), puis **Next**. Module déjà connu de HA : le supprimer
+   de HA avant, l'ajouter de nouveau ensuite, par son adresse IP si HA demande une clé
+   (`09_PIEGES.md`).
+3. Fenêtre « Configure Wi-Fi » (Improv) : choisir le réseau, saisir son mot de
+   passe, **Connect**.
+4. **Couper l'alimentation** (débrancher, rebrancher), puis seulement juger l'écran
    et le toucher : sans broche de remise à zéro (Guition 4,3"), l'écran garde l'état
    du logiciel précédent jusqu'à la coupure (couleurs inversées, image à 180°).
+
+**Version `-dev` :** la page n'installe que la dernière version finale. Pour une
+`-dev`, télécharger `hapanel-<carte>-factory.bin` de sa Release (tableau du § 1), ouvrir
+<https://web.esphome.io>, **Connection**, choisir le port, petite flèche « Installer »
+(pas « Préparation pour la première utilisation », qui installe le logiciel ESPHome de
+base), **Choisir un fichier**, **Installer** ; puis le Wi-Fi comme au point 3. Un
+binaire d'une autre carte s'installe, mais l'écran reste noir ou le tactile muet.
 
 **Sans câble ou si Improv échoue :** dans les 15 min qui suivent la mise sous
 tension, le module ouvre un point d'accès Wi-Fi à son nom (`hapanel-xxxxxx`). S'y

@@ -9,61 +9,59 @@ commande, rien à compiler, aucun mot de passe à inventer.
 
 - **Le module** HAPanel, et le nom de sa carte, imprimé au dos ou sur la boîte :
 
-  | Carte | Écran | Fichier à télécharger |
-  |---|---|---|
-  | ESP32-2432S024C | 2,4 pouces, tactile capacitif | `hapanel-2432s024c-factory.bin` |
-  | ESP32-2432S028, prises USB-C **et** micro-USB | 2,8 pouces, tactile résistif (appui franc) | `hapanel-2432s028-factory.bin` |
-  | Guition JC4827W543 (en essai) | 4,3 pouces, tactile capacitif ; pages en portrait au centre de l'écran, bande noire en bas, pas de LED | `hapanel-jc4827w543-factory.bin` |
+  | Carte | Écran |
+  |---|---|
+  | ESP32-2432S024C | 2,4 pouces, tactile capacitif |
+  | ESP32-2432S028, prises USB-C **et** micro-USB | 2,8 pouces, tactile résistif (appui franc) |
+  | Guition JC4827W543 (en essai) | 4,3 pouces, tactile capacitif ; pages en portrait au centre de l'écran, bande noire en bas, pas de LED |
 
   Une S028 avec une seule prise micro-USB n'est pas encore prise en charge.
 - **Un câble USB de données.** Certains câbles ne font que charger : si l'ordinateur
   ne voit pas le module (étape 2), essayez-en un autre.
 - **Un ordinateur avec Google Chrome ou Microsoft Edge**, et uniquement l'un de ces
-  deux navigateurs (voir l'avertissement de l'étape 2).
+  deux navigateurs (voir l'avertissement de l'étape 1).
 - **Un bloc secteur USB de 1 A** pour l'usage normal. Le port USB d'un ordinateur
   suffit pour l'installation, mais peut faire redémarrer le module en boucle ensuite.
 - **Le nom et le mot de passe de votre Wi-Fi.** Le module ne voit que le Wi-Fi
   2,4 GHz : si votre box sépare 2,4 et 5 GHz, choisissez le réseau 2,4 GHz.
 - **Home Assistant**, sur le même réseau, avec un compte administrateur.
 
-## 1. Télécharger le logiciel du module
-
-1. Ouvrez la page des versions :
-   <https://github.com/cnuma/HAPanel/releases/latest>.
-2. En bas de la page, la rubrique **Assets** liste les fichiers. Cliquez sur le
-   fichier `…-factory.bin` **de votre carte** (tableau ci-dessus). Il arrive dans
-   votre dossier Téléchargements. S'il y en a déjà un, d'une installation précédente,
-   supprimez l'ancien d'abord : le nouveau s'appellerait par exemple
-   `hapanel-2432s024c-factory (1).bin`, et l'on risquerait de choisir l'ancien à
-   l'étape 3.
-
-![Page de la version, fichiers …-factory.bin des deux cartes encadrés](images/installation/01_release.png)
-
-Les autres ne servent pas ici : les fichiers `…-ota.bin` et `manifest….json` servent
-aux mises à jour, que Home Assistant fera seul
-([CONFIGURATION.md](CONFIGURATION.md), section 7) ; « Source code » est le code du
-projet.
-
-## 2. Brancher le module à l'ordinateur
+## 1. Ouvrir la page d'installation
 
 1. Branchez le module à l'ordinateur avec le câble USB.
-2. Ouvrez <https://web.esphome.io> **dans Google Chrome ou Microsoft Edge**.
+2. Ouvrez la page d'installation **dans Google Chrome ou Microsoft Edge** :
+   <https://cnuma.github.io/HAPanel/>. Elle installe toujours la dernière version
+   publiée ; rien n'est à télécharger.
 
 > [!WARNING]
-> **Uniquement Chrome ou Edge, même si vous utilisez un autre navigateur d'habitude.**
-> Écrire dans le module passe par le port USB, et seuls ces deux navigateurs
-> l'autorisent. Firefox, Safari et Brave ne le permettent pas ; les autres
-> navigateurs ne sont pas garantis. Avec eux, la page s'ouvre normalement, mais le
-> bouton **Connection** ne trouve aucun module ou ne fait rien : on croit à un
-> problème de câble et on perd du temps.
+> **Uniquement Chrome ou Edge, sur un ordinateur, même si vous utilisez un autre
+> navigateur d'habitude.** Écrire dans le module passe par le port USB, et seuls ces
+> deux navigateurs l'autorisent. Avec un autre navigateur, un téléphone ou une
+> tablette, la page affiche « Navigateur non compatible » à la place des boutons
+> **Installer**.
 
-3. Cliquez sur **Connection** (la page est en partie en anglais).
+![Page d'installation : une ligne et un bouton Installer par carte](images/installation/01_page.png)
 
-![Page d'accueil d'ESPHome Web, bouton Connection encadré](images/installation/02_web_esphome.png)
+## 2. Écrire le logiciel dans le module
 
-4. Une fenêtre liste les ports série. Choisissez **USB Serial (COM…)**, puis
-   **Connexion**. Le numéro varie d'un ordinateur à l'autre, et « associé » peut
-   suivre.
+> [!IMPORTANT]
+> **La page efface toujours tout le module** avant d'écrire : logiciel, Wi-Fi et clé
+> de chiffrement. Pour un module neuf, c'est ce qu'il faut.
+>
+> **Module déjà ajouté à Home Assistant** (réinstallation) : avant de cliquer sur
+> **Installer**, supprimez-le de Home Assistant (**Paramètres › Appareils et
+> services › ESPHome**, le module, menu **⋮**). Après l'installation, ajoutez-le de
+> nouveau ([CONFIGURATION.md](CONFIGURATION.md), section 1), puis choisissez-le de
+> nouveau dans « Panneau » de son automatisation. Si Home Assistant demande une clé,
+> ne saisissez rien : ajoutez le module **par son adresse IP**, affichée sur sa page
+> **Menu › À propos** ([Dépannage](CONFIGURATION.md#dépannage)).
+
+1. Cliquez sur **Installer** sous **votre carte**. Le logiciel d'une autre carte
+   s'installe aussi, mais l'écran reste noir ou le toucher ne répond pas.
+2. Une fenêtre du navigateur liste les ports série. Choisissez **USB Serial (COM…)**,
+   puis **Connexion**. Le numéro varie d'un ordinateur à l'autre, et « associé » peut
+   suivre. Le haut de la fenêtre nomme le site qui demande le port
+   (`cnuma.github.io`) ; la capture ci-dessous a été prise sur un autre site.
 
 ![Fenêtre de choix du port, ligne USB Serial sélectionnée](images/installation/03_choix_port.png)
 
@@ -86,7 +84,7 @@ Si le pilote manque :
    - macOS : <https://www.wch-ic.com/downloads/CH341SER_MAC_ZIP.html>.
 2. Sous Windows, lancez `CH341SER.EXE`, cliquez sur **INSTALL**, puis débranchez et
    rebranchez le module.
-3. Recommencez l'étape 2 : la ligne « USB Serial (COM…) » apparaît dans la liste.
+3. Recommencez au point 1 : la ligne « USB Serial (COM…) » apparaît dans la liste.
 
 > [!CAUTION]
 > Ne prenez pas ce pilote sur un site de téléchargement, un forum ou un lien
@@ -94,50 +92,44 @@ Si le pilote manque :
 > et une copie modifiée peut l'infecter. Le site de WCH, fabricant de la puce, est la
 > seule source fiable.
 
-## 3. Écrire le logiciel dans le module
+Les captures de la fenêtre d'installation, ci-dessous, sont des maquettes de la
+fenêtre réelle, avec un module et un réseau fictifs.
 
-1. La page indique **Connecté**. Cliquez sur la **petite flèche** à droite du grand
-   bouton bleu : « Installer » s'affiche au survol.
+3. La fenêtre d'installation s'ouvre ; elle est en anglais. Cliquez sur
+   **Install HAPanel**.
 
-![Module connecté, bouton Installer encadré](images/installation/04_installer.png)
+![Fenêtre d'installation : Install HAPanel](images/installation/04_installer.png)
 
-> [!IMPORTANT]
-> Pas sur le grand bouton **Préparation pour la première utilisation** : il
-> installerait un logiciel ESPHome de base, pas HAPanel.
+4. Fenêtre **Confirm Installation** : elle rappelle que tout sera effacé (« All data
+   on the device will be erased. »). Cliquez sur **Install**.
 
-2. Dans la fenêtre qui s'ouvre, cliquez sur **Choisir un fichier**, prenez
-   le fichier `…-factory.bin` de votre carte dans votre dossier Téléchargements, puis
-   **Installer**. Les
-   explications numérotées de la fenêtre ne vous concernent pas : elles visent ceux
-   qui compilent leur propre logiciel.
+![Confirm Installation : Install](images/installation/05_confirmer.png)
 
-![Fenêtre de choix du fichier, hapanel-2432s024c-factory.bin choisi](images/installation/05_choisir_fichier.png)
+5. **Installing** : effacement, puis écriture, en 2 minutes environ. **Gardez cette
+   fenêtre visible** : passer à un autre onglet ou à une autre fenêtre peut
+   interrompre l'écriture. Ne débranchez pas le module.
 
-3. L'écriture efface tout ce que le module contenait, puis écrit le logiciel, en
-   2 minutes environ. **Gardez cette fenêtre visible** : passer à un autre onglet ou
-   à une autre fenêtre peut interrompre l'écriture. Ne débranchez pas le module.
+![Installing : écriture en cours](images/installation/06_ecriture.png)
 
-![Écriture en cours](images/installation/06_ecriture.png)
+6. À la fin, la fenêtre affiche **Installation complete!** : cliquez sur **Next**.
 
-4. À la fin, la fenêtre affiche **Installation finie**.
+![Installation complete! : Next](images/installation/07_ecriture_finie.png)
 
-![Écriture terminée : Installation finie](images/installation/07_ecriture_finie.png)
+## 3. Relier le module au Wi-Fi
 
-## 4. Relier le module au Wi-Fi
-
-Juste après l'écriture, la page propose de configurer le Wi-Fi : fenêtre
-**Configure Wi-Fi**, qui rappelle le nom du module (`hapanel-` suivi de six
-caractères) et sa version.
+Juste après l'écriture, la fenêtre propose de configurer le Wi-Fi : **Configure
+Wi-Fi**.
 
 1. Dans **Network**, choisissez votre réseau 2,4 GHz ; dans **Password**, saisissez
    son mot de passe ; puis **Connect**.
 
-![Fenêtre Configure Wi-Fi, nom du réseau et mot de passe masqués](images/installation/08_wifi.png)
+![Configure Wi-Fi : réseau, mot de passe, Connect](images/installation/08_wifi.png)
 
-2. Le module rejoint le Wi-Fi : la fenêtre affiche **Provisioned!**. Cliquez sur
-   **Close**.
+2. Le module rejoint le Wi-Fi : la fenêtre l'annonce (**Device connected to the
+   network!**). Fermez-la ; le lien **Add to Home Assistant** qu'elle propose mène
+   au même endroit que l'étape suivante.
 
-![Wi-Fi configuré : Provisioned!](images/installation/09_wifi_ok.png)
+![Device connected to the network!](images/installation/09_wifi_ok.png)
 
 Vous pouvez maintenant débrancher le module de l'ordinateur et le brancher sur son
 bloc secteur : il garde le Wi-Fi.
@@ -153,7 +145,7 @@ La date ne s'affiche qu'une fois Home Assistant relié.
 
 ![Écran du module avant Home Assistant (maquette)](images/installation/10_module_sans_ha.png)
 
-**La page n'a pas proposé le Wi-Fi, ou le module ne s'y connecte pas :** passez par
+**La fenêtre n'a pas proposé le Wi-Fi, ou le module ne s'y connecte pas :** passez par
 le point d'accès du module, ci-dessous.
 
 ### Autre méthode : depuis un téléphone
@@ -181,7 +173,7 @@ Tant qu'il n'a pas de Wi-Fi, le module crée son propre réseau Wi-Fi pendant
 **Le réseau `hapanel-…` n'apparaît pas :** les 15 minutes sont passées. Débranchez
 puis rebranchez le module, et recommencez.
 
-## 5. Suite : Home Assistant
+## 4. Suite : Home Assistant
 
 Le module est sur votre Wi-Fi. Pour l'ajouter à Home Assistant et choisir ce qu'il
 affiche, suivez [CONFIGURATION.md](CONFIGURATION.md), sections 1 à 3. Les mises à
@@ -191,12 +183,12 @@ jour suivantes passeront par Home Assistant, sans câble (section 7).
 
 | Symptôme | Que faire |
 |---|---|
-| **Connection** ne fait rien, ou aucun port n'est listé | D'abord le navigateur : **Chrome ou Edge uniquement** (étape 2). Puis un autre câble USB ; puis le pilote du convertisseur USB-série (étape 2) |
-| L'écriture s'arrête en erreur | Débrancher, rebrancher, recommencer l'étape 3 ; essayer un autre port USB de l'ordinateur |
-| Pas de proposition de Wi-Fi après l'écriture | Méthode du téléphone (étape 4) |
+| « Navigateur non compatible » à la place des boutons **Installer**, ou aucun port n'est listé | D'abord le navigateur : **Chrome ou Edge sur un ordinateur uniquement** (étape 1). Puis un autre câble USB ; puis le pilote du convertisseur USB-série (étape 2) |
+| L'écriture s'arrête en erreur (**Installation failed**) | Débrancher, rebrancher, recommencer l'étape 2 ; essayer un autre port USB de l'ordinateur |
+| Pas de proposition de Wi-Fi après l'écriture | Méthode du téléphone (étape 3) |
 | Le module ne rejoint pas le Wi-Fi | Réseau 2,4 GHz, mot de passe ; module trop loin de la box |
 | Réseau `hapanel-…` absent | Plus de 15 minutes depuis la mise sous tension : débrancher, rebrancher |
 | Le module redémarre en boucle | Alimentation trop faible : bloc secteur de 1 A |
-| Juste après l'écriture : couleurs inversées, image à l'envers ou toucher décalé | Débrancher le module, attendre quelques secondes, le rebrancher (étape 4) ; ne juger qu'après cette coupure |
+| Juste après l'écriture : couleurs inversées, image à l'envers ou toucher décalé | Débrancher le module, attendre quelques secondes, le rebrancher (étape 3) ; ne juger qu'après cette coupure |
 
 Problème une fois dans Home Assistant : [dépannage de la configuration](CONFIGURATION.md#dépannage).
