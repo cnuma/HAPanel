@@ -25,6 +25,8 @@ Liste unique du reste à faire (G14).
 | 9 | Message d'accueil : citer la personne qui arrive (présence des téléphones dans HA) | Tous les téléphones de la maison connus dans HA | à créer | Dépend d'un préalable du propriétaire. |
 | 10 | LED de face avant : autres informations (alerte météo…), à spécifier | D017, rang 5 | à créer | À spécifier après l'infrarouge, pour ne revoir la logique de la LED qu'une fois. |
 | 11 | Outillage : mesurer le gain du dossier de compilation séparé du banc | Prochaine fusion | — | Constat seulement, sans développement. |
+| 12 | Verrouillage enfants (demande du propriétaire du 9 novembre 2026, décision à rédiger). À cadrer : ce qui est bloqué (commandes du chauffage et scénarios seulement, ou tout l'écran) ; comment on l'active (Réglages, entité HA par module, plage horaire) ; comment on déverrouille (appui long, geste, code) ; ce qui reste visible (cadenas dans la barre d'état) | Réponses du propriétaire | à créer | Ajouté en fin de liste ; rang à fixer avec le propriétaire (sécurité des commandes, avant l'infrarouge ?). |
+| 13 | Message d'accueil : régler la luminosité de l'écran pendant le message (demande du propriétaire du 9 novembre 2026). À cadrer : réglage par module (entité HA, page Réglages) ou dans le blueprint ; niveau fixe ou relatif à la lumière de la pièce (D023) ; plancher de lisibilité (D031) | Réponses du propriétaire | à créer | Petit et isolé (D028) ; ajouté en fin de liste, rang à fixer. |
 
 ## Reporté
 
