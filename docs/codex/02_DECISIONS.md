@@ -1230,6 +1230,12 @@ qui cite la précédente.
 - Conséquences : toute personne devant un module peut installer la version publiée
   (`08`, surfaces) ; une Release publiée est vue au plus tard à 3 h le lendemain, au
   redémarrage, ou par le bouton. HA continue de proposer la mise à jour.
+- Complément du 9 novembre 2026 (demande du propriétaire, après la mise à jour vers
+  `v0.11.1`) : une fois le bouton d'À propos passé au violet par une recherche, le
+  toucher suivant ouvre la confirmation (script `maj_proposer`, comme la tuile du Menu)
+  au lieu de chercher de nouveau. Retour à la page : bouton remis à « Rechercher une
+  mise à jour », comme avant (O3, O13). Global `apropos_maj_trouvee`, script
+  `maj_rechercher_reseau` (la recherche elle-même).
 
 ## D048 — Wiki GitHub désactivé
 

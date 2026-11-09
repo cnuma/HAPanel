@@ -191,8 +191,20 @@ script:
       - update.check: maj_firmware
 
   # Bouton de la page A propos (D047) : « Recherche... », puis le resultat dans
-  # le libelle du bouton.
+  # le libelle du bouton. Bouton deja violet (version trouvee) : ouvre la
+  # confirmation, comme la tuile du Menu (demande du proprietaire, 9 novembre 2026).
   - id: maj_rechercher
+    mode: single
+    then:
+      - if:
+          condition:
+            lambda: return id(apropos_maj_trouvee) && id(maj_firmware).state == update::UPDATE_STATE_AVAILABLE;
+          then:
+            - script.execute: maj_proposer
+          else:
+            - script.execute: maj_rechercher_reseau
+
+  - id: maj_rechercher_reseau
     mode: single
     then:
       - if:
@@ -234,8 +246,10 @@ script:
                 lv_label_set_text(id(lbl_apropos_maj), texte.c_str());
                 // Violet de la tuile du Menu (D045) quand une version attend
                 // (retour du proprietaire, 9 novembre 2026).
-                if (id(maj_firmware).state == update::UPDATE_STATE_AVAILABLE &&
-                    id(maj_reponses) != id(maj_recherche_debut))
+                id(apropos_maj_trouvee) =
+                    id(maj_firmware).state == update::UPDATE_STATE_AVAILABLE &&
+                    id(maj_reponses) != id(maj_recherche_debut);
+                if (id(apropos_maj_trouvee))
                   lv_obj_set_style_bg_color(id(btn_apropos_maj), lv_color_hex(0xAB47BC), LV_PART_MAIN);
 
   # Bouton violet du Menu (D047) : confirmation, seulement si une mise a jour
