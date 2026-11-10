@@ -7,7 +7,7 @@ Liste unique du reste à faire (G14).
   d'ouvrir un nouveau chantier, décider avant de coder, le matériel avant le code).
   Un changement d'ordre se décide avec le propriétaire.
 - **Numéro :** la colonne « N° » identifie le sujet (`T01`, `T02`…). Il est donné à la
-  création (numéro suivant, prochain : `T19`) et ne change jamais, même quand l'ordre
+  création (numéro suivant, prochain : `T20`) et ne change jamais, même quand l'ordre
   change ou que le sujet est fini ; il n'est jamais réattribué. Les décisions, le
   cahier, le code et les checkpoints citent ce numéro, jamais l'ordre (D051). Avant
   le 9 novembre 2026, ils citaient un « rang », la place du moment dans la liste :
@@ -38,6 +38,7 @@ Liste unique du reste à faire (G14).
 | 13 | T16 | 9 nov. 2026 | Accueil moins tassé (demande du propriétaire) : sur toutes les cartes, la bande du bas de l'accueil est vide (sur les autres pages, c'est la place du bouton Accueil) ; s'en servir pour aérer les éléments de l'accueil. À cadrer sur maquette : ce qui descend (glissière, consigne, ligne météo…) ou simple répartition sur toute la hauteur | — | à créer | Petit, sans dépendance ; à faire avec les maquettes en paysage (T04, point 1) pour ne dessiner l'accueil qu'une fois ; place à fixer. |
 | 14 | T17 | 9 nov. 2026 | Tactile muet après une mise à jour (module de la cuisine, S024C, passage en 0.11.0 par HA le 9 novembre 2026) : revenu après un redémarrage ; à surveiller aux prochaines mises à jour. Si le cas revient : journal du démarrage après l'OTA, remise à zéro du CST816 au démarrage | Un deuxième cas | — | Une seule occurrence ; pas de développement sans reproduction. |
 | 15 | T18 | 9 nov. 2026 | Canal d'essai séparé (demande du propriétaire du 9 novembre 2026, HAP-R005, décision à rédiger) : aujourd'hui, chaque Release `-dev` est marquée « Latest », donc proposée par HA à tous les modules publics, y compris chez d'autres utilisateurs (D052 : projet publiable). À cadrer : Release `-dev` en préversion, hors de `releases/latest` ; comment les modules d'essai du propriétaire la reçoivent (manifeste d'essai, réglage dans HA, binaire de banc) ; tests de l'entité Firmware et de la tuile « Mise à jour » (D047) | — | à créer | Ajouté en fin de liste ; proposé juste après T03, avant la prochaine version `-dev` ; place à fixer avec le propriétaire. |
+| 16 | T19 | 10 nov. 2026 | LED sur les cartes qui n'en ont pas (remarque du propriétaire au test U10, Guition 4,3") : les réglages de la LED y sont affichés sans effet (D049). Demande : LED WS2812 ajoutée sur une broche à définir, en option propre à cette carte dans le blueprint. À cadrer : broche (GPIO46, choisie par AquaLook, écartée en D049 faute de montage) ; ESPHome fixe la broche à la compilation (D041), donc le binaire de la carte la déclare toujours et le blueprint ne fait qu'activer la LED ; sans LED, réglages de LED masqués sur la page Réglages | Montage de la LED par le propriétaire ; réponses au cadrage | à créer | Ajouté en fin de liste ; place à fixer avec le propriétaire. |
 
 ## Reporté
 

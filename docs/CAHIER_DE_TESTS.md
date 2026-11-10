@@ -94,6 +94,8 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 9 novembre 2026 | Page locale (`v0.11.0`, branche `feature/page-installation`), module de la cuisine (S024C) | S2 à S4 | Installation par la page réussie, Wi-Fi saisi. Premier passage **sans cocher Erase device** (appareil supprimé de HA avant) : clé gardée, HA en demande une. Second passage avec effacement : la découverte de HA demandait encore une clé, même après redémarrage ; **ajout par l'adresse IP réussi** | Pièges et dépannage ajoutés (`09`, `CONFIGURATION.md`). Proposé : effacement imposé par la page (HAP-R009). Libellés de la fenêtre et écran après coupure à confirmer |
 | 9 novembre 2026 | Réglages du dépôt (agent, accord du propriétaire) | S5 (préalable) | GitHub Pages activé (source GitHub Actions), environnement `github-pages` ouvert aux étiquettes `v*` ; adresse `https://cnuma.github.io/HAPanel/`, vide jusqu'à la première publication | S5 à la publication de la première version finale |
 | 9 novembre 2026 | `512ca63`, documentation (branche `docs/t02-projet-publiable`) | R | **R1, R2 OK** (propriétaire) | Fusion dans `main` à l'accord du propriétaire |
+| 10 novembre 2026 | `0.11.2 (e4ec69b)`, branche `feature/t04-paysage`, Guition 4,3", par USB puis coupure | U1 à U11 | **OK** (propriétaire) : U1 à U4, U6 à U8, U11 ; U5 et U9 non testés, jugés bons par le propriétaire (U9 : pas de scénario configuré, page non modifiée hors positions) ; U10 OK pour la disposition | Avant les tests, la Release `v0.11.2` a remplacé le binaire d'essai par le bouton violet (même numéro de version) : D055, `VERSION` `0.12.0-dev`. Remarque U10 : réglages de LED sans objet sur cette carte, LED WS2812 optionnelle à prévoir (T19) |
+| 10 novembre 2026 | `0.12.0-dev (4c035fd)`, Guition 4,3", par USB (agent) | W1 | Journal : « version d'essai : pas de recherche automatique » | Écran (pas de flèche violette) à confirmer par le propriétaire |
 
 ## Préparation (une fois, avant A et B)
 
@@ -419,17 +421,17 @@ inchangées.
 
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
-| U1 | Écrire le binaire par USB, couper le courant, rebrancher | Démarrage normal, « Boot seems successful » ; version `0.11.2` et SHA de la branche sur À propos | `feature/t04-paysage` | |
-| U2 | Regarder l'accueil, prise USB à gauche | Image droite en paysage sur tout l'écran, barre d'état en haut ; sinon noter le sens (à l'envers : rotation 0 au lieu de 180) | `feature/t04-paysage` | |
-| U3 | Toucher le bouton Menu, une tuile, puis le bouton Accueil | Chaque toucher agit là où le doigt appuie ; sinon noter le sens de l'écart | `feature/t04-paysage` | |
-| U4 | Accueil : préréglages, − et +, glissière (toucher le côté inactif, puis glisser) | Comme la maquette ; commandes appliquées par HA ; glissière : un tiers de la course suffit, le toucher de l'autre moitié bascule | `feature/t04-paysage` | |
-| U5 | Accueil avec HA arrêté (ou Wi-Fi coupé) | Icône rouge et message centrés, sous la barre | `feature/t04-paysage` | |
-| U6 | Menu, avec et sans mise à jour en attente | 5 ou 6 tuiles sur 3 colonnes, tuile violette en bas à droite | `feature/t04-paysage` | |
-| U7 | Météo | Temps actuel à gauche, 3 jours en colonnes ; une température négative (« -10° / -5° ») reste lisible (passage à la ligne admis) | `feature/t04-paysage` | |
-| U8 | Planning, avec au moins deux calendriers | Résumé à droite du nom, frise sur toute la largeur, trait de l'heure au bon endroit, lignes des autres calendriers | `feature/t04-paysage` | |
-| U9 | Scénarios : en lancer un | 6 boutons sur 3 colonnes, nom entier ; état « Lancé : … » en haut | `feature/t04-paysage` | |
-| U10 | Réglages : interrupteurs et curseurs ; puis un réglage imposé par HA | LED, Alerte LED et Intensité LED à gauche, Intensité écran seule à droite ; disquette ; cadenas et « imposé par HA » en bas | `feature/t04-paysage` | |
-| U11 | À propos ; message d'accueil (comme A1) ; confirmation de mise à jour (O5) | Infos sur deux colonnes, bouton sur toute la largeur ; message et confirmation sur tout l'écran | `feature/t04-paysage` | |
+| U1 | Écrire le binaire par USB, couper le courant, rebrancher | Démarrage normal, « Boot seems successful » ; version `0.11.2` et SHA de la branche sur À propos | `feature/t04-paysage` | OK 10 nov. (`e4ec69b`, propriétaire) |
+| U2 | Regarder l'accueil, prise USB à gauche | Image droite en paysage sur tout l'écran, barre d'état en haut ; sinon noter le sens (à l'envers : rotation 0 au lieu de 180) | `feature/t04-paysage` | OK 10 nov. (`e4ec69b`) : rotation 180 juste |
+| U3 | Toucher le bouton Menu, une tuile, puis le bouton Accueil | Chaque toucher agit là où le doigt appuie ; sinon noter le sens de l'écart | `feature/t04-paysage` | OK 10 nov. (`e4ec69b`) |
+| U4 | Accueil : préréglages, − et +, glissière (toucher le côté inactif, puis glisser) | Comme la maquette ; commandes appliquées par HA ; glissière : un tiers de la course suffit, le toucher de l'autre moitié bascule | `feature/t04-paysage` | OK 10 nov. (`e4ec69b`) |
+| U5 | Accueil avec HA arrêté (ou Wi-Fi coupé) | Icône rouge et message centrés, sous la barre | `feature/t04-paysage` | Non testé ; jugé bon par le propriétaire (10 nov.) |
+| U6 | Menu, avec et sans mise à jour en attente | 5 ou 6 tuiles sur 3 colonnes, tuile violette en bas à droite | `feature/t04-paysage` | OK 10 nov. (`e4ec69b`) |
+| U7 | Météo | Temps actuel à gauche, 3 jours en colonnes ; une température négative (« -10° / -5° ») reste lisible (passage à la ligne admis) | `feature/t04-paysage` | OK 10 nov. (`e4ec69b`) |
+| U8 | Planning, avec au moins deux calendriers | Résumé à droite du nom, frise sur toute la largeur, trait de l'heure au bon endroit, lignes des autres calendriers | `feature/t04-paysage` | OK 10 nov. (`e4ec69b`) |
+| U9 | Scénarios : en lancer un | 6 boutons sur 3 colonnes, nom entier ; état « Lancé : … » en haut | `feature/t04-paysage` | Non testé (pas de scénario configuré) ; jugé bon par le propriétaire (10 nov.) |
+| U10 | Réglages : interrupteurs et curseurs ; puis un réglage imposé par HA | LED, Alerte LED et Intensité LED à gauche, Intensité écran seule à droite ; disquette ; cadenas et « imposé par HA » en bas | `feature/t04-paysage` | OK 10 nov. pour la disposition ; réglages de LED sans objet sur cette carte : T19 |
+| U11 | À propos ; message d'accueil (comme A1) ; confirmation de mise à jour (O5) | Infos sur deux colonnes, bouton sur toute la largeur ; message et confirmation sur tout l'écran | `feature/t04-paysage` | OK 10 nov. (`e4ec69b`) |
 | U12 | Après la publication : S024C (cuisine ou séjour), mise à jour depuis l'écran | Pages autres que l'accueil et Réglages (V) identiques à avant, au pixel près | — (à la publication) | |
 | U13 | Après la publication : S028 (salle de bain), mise à jour depuis l'écran | Pages autres que l'accueil et Réglages (V) identiques à avant | — (à la publication) | |
 | U14 | Binaire S024C de la branche (par USB sur un module de test, ou à la publication) : accueil, puis préréglage, − / +, glissière (toucher et glisser) | Comme `docs/images/accueil.png` : tout l'écran utilisé, dernière ligne noire ; commandes inchangées | `feature/t04-paysage` | |
