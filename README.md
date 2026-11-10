@@ -3,8 +3,8 @@
 Panneau de commande mural multi-écrans pour Home Assistant, réalisé avec ESPHome.
 Cartes prises en charge : ESP32-2432S024C (écran 2,4", tactile capacitif),
 ESP32-2432S028 à deux prises USB (écran 2,8", tactile résistif) et, en essai, Guition
-JC4827W543 (écran 4,3", tactile capacitif, ESP32-S3, en portrait provisoire), un binaire
-par carte (D041, D049).
+JC4827W543 (écran 4,3", tactile capacitif, ESP32-S3, en paysage), un binaire
+par carte (D041, D049, D053).
 
 - Installer un module : [`docs/INSTALLATION.md`](docs/INSTALLATION.md)
 - Page d'installation, depuis Chrome ou Edge : <https://cnuma.github.io/HAPanel/> (D044)

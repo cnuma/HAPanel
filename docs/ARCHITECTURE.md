@@ -58,24 +58,26 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `hapanel_public.yaml` | 25 | Modules de la maison : binaire public sans secret, fonctions et accès public (D039, D037 révisée) |
 | `packages/application.yaml` | 20 | Liste ordonnée des fichiers de fonctions, commune aux configurations |
 | `packages/acces_prive.yaml` | 26 | Wi-Fi, clé de l'API et OTA depuis le PC, lus dans `secrets.yaml` ; scripts de mise à jour vides (D047) |
-| `packages/acces_public.yaml` | 332 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub, mise à jour en attente signalée (D045), recherche, confirmation et installation depuis l'écran (D047) |
+| `packages/acces_public.yaml` | 346 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub, mise à jour en attente signalée (D045), recherche, confirmation et installation depuis l'écran (D047) |
 | `packages/base.yaml` | 50 | Nœud, journaux, écriture des réglages, identité de build (puce : fichier matériel, D049) |
-| `packages/hardware.yaml` | 126 | Carte ESP32-2432S024C : puce, broches, bus, écran, tactile, sorties PWM, LDR (G2) |
-| `packages/hardware_2432s028.yaml` | 132 | Carte ESP32-2432S028 : mêmes `id`, rétroéclairage GPIO21, tactile résistif XPT2046 |
-| `packages/hardware_jc4827w543.yaml` | 138 | Carte Guition JC4827W543 (4,3", ESP32-S3) : mêmes `id`, écran QSPI tourné en portrait, tactile GT911, LED et LDR sans effet (D049) |
+| `packages/hardware.yaml` | 130 | Carte ESP32-2432S024C : puce, broches, bus, écran, tactile, sorties PWM, LDR (G2) |
+| `packages/hardware_2432s028.yaml` | 136 | Carte ESP32-2432S028 : mêmes `id`, rétroéclairage GPIO21, tactile résistif XPT2046 |
+| `packages/hardware_jc4827w543.yaml` | 123 | Carte Guition JC4827W543 (4,3", ESP32-S3) : mêmes `id`, écran QSPI en paysage, tactile GT911, LED et LDR sans effet (D049, D053) |
+| `packages/format_portrait.yaml` | 156 | Positions, tailles et polices des pages en 240 × 320, incluses par les cartes en portrait (D053) |
+| `packages/format_paysage.yaml` | 155 | Les mêmes en 480 × 272, incluses par la Guition 4,3" (D053) |
 | `hapanel_2432s028_banc.yaml` | 38 | Banc sur carte ESP32-2432S028 |
 | `hapanel_2432s028_public.yaml` | 24 | Binaire public de la carte ESP32-2432S028 (D041) |
 | `hapanel_jc4827w543_public.yaml` | 24 | Binaire public de la carte Guition JC4827W543 (D049) |
-| `packages/lvgl.yaml` | 401 | Polices communes, À propos (version, SHA, connexion, adresse IP, mémoire, bouton de recherche de mise à jour, D047), barre d'état en haut (titre, disquette, mise à jour, Wi-Fi, HA, ☰, D036, D045) et bouton Accueil en bas, suivi de la connexion |
-| `packages/liaison_ha.yaml` | 489 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
-| `packages/led_veille.yaml` | 320 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
-| `packages/message_accueil.yaml` | 160 | Action `message_accueil`, message plein écran, entité « Message d'accueil » |
-| `packages/pages/accueil.yaml` | 764 | Température, chauffage, commandes, couleur de la LED |
-| `packages/pages/meteo.yaml` | 194 | Conditions et prévisions |
-| `packages/pages/planning.yaml` | 378 | Résumé et frises |
+| `packages/lvgl.yaml` | 410 | Polices communes, À propos (version, SHA, connexion, adresse IP, mémoire, bouton de recherche de mise à jour, D047), barre d'état en haut (titre, disquette, mise à jour, Wi-Fi, HA, ☰, D036, D045) et bouton Accueil en bas, suivi de la connexion |
+| `packages/liaison_ha.yaml` | 500 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
+| `packages/led_veille.yaml` | 361 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
+| `packages/message_accueil.yaml` | 165 | Action `message_accueil`, message plein écran, entité « Message d'accueil » |
+| `packages/pages/accueil.yaml` | 772 | Température, chauffage, commandes, couleur de la LED |
+| `packages/pages/meteo.yaml` | 200 | Conditions et prévisions |
+| `packages/pages/planning.yaml` | 379 | Résumé et frises |
 | `packages/pages/scenarios.yaml` | 365 | Boutons et lancement |
 | `packages/pages/menu.yaml` | 151 | Tuiles de navigation, tuile « Mise à jour » (D047) |
-| `packages/pages/reglages.yaml` | 216 | Réglages de la LED et de l'écran, synchronisés avec HA, cadenas si imposés (D031) |
+| `packages/pages/reglages.yaml` | 263 | Réglages de la LED et de l'écran, synchronisés avec HA, cadenas si imposés (D031) |
 | `secrets.yaml` | | Wi-Fi et clé d'API des modules de l'atelier, hors de Git (G9) |
 
 **Pour lire le projet :** `hapanel.yaml`, puis `liaison_ha.yaml`, puis `scenarios.yaml`, qui est la
@@ -229,9 +231,15 @@ Le schéma montre la carte de référence, une ESP32-2432S024C (D004), au brocha
 publié sans documentation vendeur et confirmé au banc (R6). L'ESP32-2432S028 a son
 propre fichier matériel, avec les mêmes `id` : rétroéclairage GPIO21, tactile résistif
 XPT2046 sur un second bus SPI (`docs/technique/hardware_2432s028.md`, D041). La Guition
-JC4827W543 (4,3", ESP32-S3) aussi : écran QSPI tourné en portrait par LVGL, pages
-centrées, ni LED ni LDR (`docs/technique/hardware_jc4827w543.md`, D049). Deux
-particularités de la S024C :
+JC4827W543 (4,3", ESP32-S3) aussi : écran QSPI en paysage, ni LED ni LDR
+(`docs/technique/hardware_jc4827w543.md`, D049).
+
+Chaque fichier matériel inclut aussi un **fichier de format** (D053) : les pages ne
+contiennent aucune position en dur, elles lisent leurs positions, tailles et polices
+dans des substitutions `fmt_…`. `format_portrait.yaml` (240 × 320, S024C et S028) garde
+les valeurs d'origine ; `format_paysage.yaml` (480 × 272, Guition 4,3") place les mêmes
+éléments autrement (maquettes : `docs/images/paysage/`). Une nouvelle taille d'écran
+demande un nouveau fichier de format. Deux particularités de la S024C :
 
 - Aucune interruption n'arrive sur GPIO21 : le tactile est lu toutes les 50 ms (D009, dette T1).
 - Un pic de courant au démarrage du Wi-Fi peut faire redémarrer la carte sur un port
@@ -581,13 +589,15 @@ entités, que HA affiche aussitôt, et seulement si la valeur change : pas d'éc
 toutes les 5 minutes (G3).
 
 **Réglages depuis le module (D031) :** la page `page_reglages` (`packages/pages/reglages.yaml`,
-tuile du Menu) agit sur ces mêmes entités et sur une quatrième, « Intensité écran », qui
+tuile du Menu) agit sur ces mêmes entités et sur « Intensité écran », qui
 multiplie la luminosité calculée par `retro_cible_calculer` sans descendre sous
-`retro_plancher`. Une seule valeur par réglage, donc pas de synchronisation à écrire : la page
+`retro_plancher`, et « Intensité message » (T13, D054), qui la remplace tant que le message
+d'accueil est affiché (`message_ms` non nul) ; `retro_appliquer` l'applique à l'ouverture
+et à la fermeture du message. Une seule valeur par réglage, donc pas de synchronisation à écrire : la page
 écrit l'entité (au relâchement pour un curseur, une seule écriture en flash), et chaque
-`on_value` d'entité appelle `reglages_rafraichir`, qui recopie les quatre valeurs sur la page
-sans émettre d'événement LVGL, donc sans boucle. Le blueprint envoie chaque clé `led_*` et
-`ecran_intensite`, avec `libre` quand il n'impose rien ; une valeur imposée met à vrai le
+`on_value` d'entité appelle `reglages_rafraichir`, qui recopie les cinq valeurs sur la page
+sans émettre d'événement LVGL, donc sans boucle. Le blueprint envoie chaque clé `led_*`,
+`ecran_intensite` et `message_intensite`, avec `libre` quand il n'impose rien ; une valeur imposée met à vrai le
 drapeau `reglage_impose_*` correspondant, et la page affiche un cadenas et désactive la
 commande.
 

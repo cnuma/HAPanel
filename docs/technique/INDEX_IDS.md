@@ -73,6 +73,7 @@ Relancer le script après toute modification du YAML.
 | `ico_reg_led_alerte_verrou` | widget label | packages/pages/reglages.yaml | — |
 | `ico_reg_led_intensite_verrou` | widget label | packages/pages/reglages.yaml | — |
 | `ico_reg_led_verrou` | widget label | packages/pages/reglages.yaml | — |
+| `ico_reg_message_intensite_verrou` | widget label | packages/pages/reglages.yaml | — |
 | `ico_sce_1` | widget label | packages/pages/scenarios.yaml | — |
 | `ico_sce_2` | widget label | packages/pages/scenarios.yaml | — |
 | `ico_sce_3` | widget label | packages/pages/scenarios.yaml | — |
@@ -132,6 +133,7 @@ Relancer le script après toute modification du YAML.
 | `lbl_pla_titre` | widget label | packages/pages/planning.yaml | — |
 | `lbl_reg_ecran_intensite` | widget label | packages/pages/reglages.yaml | — |
 | `lbl_reg_led_intensite` | widget label | packages/pages/reglages.yaml | — |
+| `lbl_reg_message_intensite` | widget label | packages/pages/reglages.yaml | — |
 | `lbl_sce_1` | widget label | packages/pages/scenarios.yaml | — |
 | `lbl_sce_2` | widget label | packages/pages/scenarios.yaml | — |
 | `lbl_sce_3` | widget label | packages/pages/scenarios.yaml | — |
@@ -205,6 +207,7 @@ Relancer le script après toute modification du YAML.
 | `maj_reponses` | globals | packages/acces_public.yaml | — |
 | `message_actif` | switch (template) | packages/message_accueil.yaml | — |
 | `message_fermer` | script | packages/message_accueil.yaml | packages/liaison_ha.yaml |
+| `message_intensite` | number (template) | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `message_ms` | globals | packages/message_accueil.yaml | packages/led_veille.yaml |
 | `meteo_rafraichir` | script | packages/pages/meteo.yaml | packages/liaison_ha.yaml |
 | `obj_acc_glissiere` | widget obj | packages/pages/accueil.yaml | — |
@@ -224,25 +227,27 @@ Relancer le script après toute modification du YAML.
 | `obj_pla_point_3` | widget obj | packages/pages/planning.yaml | — |
 | `obj_pla_point_4` | widget obj | packages/pages/planning.yaml | — |
 | `obj_reg_impose` | widget obj | packages/pages/reglages.yaml | — |
-| `page_accueil` | page LVGL | packages/pages/accueil.yaml | packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
-| `page_apropos` | page LVGL | packages/lvgl.yaml | packages/hardware_jc4827w543.yaml, packages/pages/menu.yaml |
-| `page_menu` | page LVGL | packages/pages/menu.yaml | packages/hardware_jc4827w543.yaml, packages/lvgl.yaml |
-| `page_meteo` | page LVGL | packages/pages/meteo.yaml | packages/hardware_jc4827w543.yaml, packages/pages/menu.yaml |
-| `page_planning` | page LVGL | packages/pages/planning.yaml | packages/hardware_jc4827w543.yaml, packages/pages/menu.yaml |
-| `page_reglages` | page LVGL | packages/pages/reglages.yaml | packages/hardware_jc4827w543.yaml, packages/pages/menu.yaml |
-| `page_scenarios` | page LVGL | packages/pages/scenarios.yaml | packages/hardware_jc4827w543.yaml, packages/pages/menu.yaml |
+| `page_accueil` | page LVGL | packages/pages/accueil.yaml | packages/led_veille.yaml, packages/lvgl.yaml |
+| `page_apropos` | page LVGL | packages/lvgl.yaml | packages/pages/menu.yaml |
+| `page_menu` | page LVGL | packages/pages/menu.yaml | packages/lvgl.yaml |
+| `page_meteo` | page LVGL | packages/pages/meteo.yaml | packages/pages/menu.yaml |
+| `page_planning` | page LVGL | packages/pages/planning.yaml | packages/pages/menu.yaml |
+| `page_reglages` | page LVGL | packages/pages/reglages.yaml | packages/pages/menu.yaml |
+| `page_scenarios` | page LVGL | packages/pages/scenarios.yaml | packages/pages/menu.yaml |
 | `planning_rafraichir` | script | packages/pages/planning.yaml | packages/liaison_ha.yaml |
 | `police_grande` | font | packages/pages/accueil.yaml | packages/pages/meteo.yaml |
 | `police_icones` | font | packages/lvgl.yaml | packages/acces_public.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/menu.yaml, packages/pages/reglages.yaml |
 | `police_meteo` | font | packages/pages/meteo.yaml | — |
 | `police_scenarios` | font | packages/pages/scenarios.yaml | — |
-| `police_texte` | font | packages/lvgl.yaml | packages/acces_public.yaml, packages/message_accueil.yaml |
-| `police_titre` | font | packages/lvgl.yaml | packages/acces_public.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml |
+| `police_texte` | font | packages/lvgl.yaml | packages/acces_public.yaml, packages/format_portrait.yaml, packages/message_accueil.yaml |
+| `police_titre` | font | packages/lvgl.yaml | packages/acces_public.yaml, packages/format_paysage.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml |
 | `reglage_impose_ecran_intensite` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `reglage_impose_led_alerte` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `reglage_impose_led_intensite` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `reglage_impose_led_mode` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
+| `reglage_impose_message_intensite` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `reglages_rafraichir` | script | packages/pages/reglages.yaml | packages/led_veille.yaml, packages/liaison_ha.yaml |
+| `retro_appliquer` | script | packages/led_veille.yaml | packages/message_accueil.yaml |
 | `retro_cible` | globals | packages/led_veille.yaml | — |
 | `retro_cible_calculer` | script | packages/led_veille.yaml | — |
 | `retro_niveau` | globals | packages/led_veille.yaml | — |
@@ -257,6 +262,7 @@ Relancer le script après toute modification du YAML.
 | `signal_wifi` | sensor (wifi_signal) | packages/base.yaml | packages/pages/accueil.yaml |
 | `sld_reg_ecran_intensite` | widget slider | packages/pages/reglages.yaml | — |
 | `sld_reg_led_intensite` | widget slider | packages/pages/reglages.yaml | — |
+| `sld_reg_message_intensite` | widget slider | packages/pages/reglages.yaml | — |
 | `sortie_led_bleu` | output (ledc) | packages/hardware.yaml | packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |
 | `sortie_led_bleu` | output (ledc) | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |
 | `sortie_led_bleu` | output (template) | packages/hardware_jc4827w543.yaml | packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/pages/accueil.yaml |

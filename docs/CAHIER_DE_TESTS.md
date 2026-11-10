@@ -409,6 +409,48 @@ dans le message de livraison). Q10 et Q11 se font après la publication de la Re
 | Q11 | Après la publication : Release | Neuf fichiers (trois par carte) ; dans `manifest-jc4827w543.json`, `"chipFamily": "ESP32-S3"` ; dans les deux autres, `"ESP32"` | — (à la publication) | OK 9 nov. (`v0.11.0`, vérifié par l'agent) : 9 fichiers ; `ESP32-S3` pour la 4,3", `ESP32` pour les deux autres ; résumé de `NOUVEAUTES.md` dans les trois |
 | Q12 | Binaires S024C et S028 de la branche (bloc `esp32` déplacé) : un module de chaque, après la publication | Mise à jour depuis l'écran réussie, fonctions inchangées | — (à la publication) | OK 9 nov. par HA (`v0.11.0`) : cuisine, séjour (S024C), salle de bain (S028), fonctions inchangées ; cuisine : tactile muet après la mise à jour, revenu après un redémarrage (T17). Depuis l'écran : à la prochaine Release ; **S028 (salle de bain) depuis l'écran OK 9 nov. (`v0.11.1`, propriétaire)** ; **S024C (cuisine, séjour) depuis l'écran OK 10 nov. (`v0.11.1`, propriétaire)** |
 
+## U — Pages en paysage sur la Guition 4,3" (D053, TODO T04)
+
+Binaire public `hapanel_jc4827w543_public.yaml` de la branche `feature/t04-paysage`, écrit
+par USB sur la 4,3" (puis **couper le courant** avant de juger l'écran, `09_PIEGES.md`).
+Comparer chaque page à sa maquette (`docs/images/paysage/`). U12 à U14 vérifient le
+portrait des autres cartes : accueil réparti sur toute la hauteur (T16), autres pages
+inchangées.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| U1 | Écrire le binaire par USB, couper le courant, rebrancher | Démarrage normal, « Boot seems successful » ; version `0.11.2` et SHA de la branche sur À propos | `feature/t04-paysage` | |
+| U2 | Regarder l'accueil, prise USB à gauche | Image droite en paysage sur tout l'écran, barre d'état en haut ; sinon noter le sens (à l'envers : rotation 0 au lieu de 180) | `feature/t04-paysage` | |
+| U3 | Toucher le bouton Menu, une tuile, puis le bouton Accueil | Chaque toucher agit là où le doigt appuie ; sinon noter le sens de l'écart | `feature/t04-paysage` | |
+| U4 | Accueil : préréglages, − et +, glissière (toucher le côté inactif, puis glisser) | Comme la maquette ; commandes appliquées par HA ; glissière : un tiers de la course suffit, le toucher de l'autre moitié bascule | `feature/t04-paysage` | |
+| U5 | Accueil avec HA arrêté (ou Wi-Fi coupé) | Icône rouge et message centrés, sous la barre | `feature/t04-paysage` | |
+| U6 | Menu, avec et sans mise à jour en attente | 5 ou 6 tuiles sur 3 colonnes, tuile violette en bas à droite | `feature/t04-paysage` | |
+| U7 | Météo | Temps actuel à gauche, 3 jours en colonnes ; une température négative (« -10° / -5° ») reste lisible (passage à la ligne admis) | `feature/t04-paysage` | |
+| U8 | Planning, avec au moins deux calendriers | Résumé à droite du nom, frise sur toute la largeur, trait de l'heure au bon endroit, lignes des autres calendriers | `feature/t04-paysage` | |
+| U9 | Scénarios : en lancer un | 6 boutons sur 3 colonnes, nom entier ; état « Lancé : … » en haut | `feature/t04-paysage` | |
+| U10 | Réglages : interrupteurs et curseurs ; puis un réglage imposé par HA | LED, Alerte LED et Intensité LED à gauche, Intensité écran seule à droite ; disquette ; cadenas et « imposé par HA » en bas | `feature/t04-paysage` | |
+| U11 | À propos ; message d'accueil (comme A1) ; confirmation de mise à jour (O5) | Infos sur deux colonnes, bouton sur toute la largeur ; message et confirmation sur tout l'écran | `feature/t04-paysage` | |
+| U12 | Après la publication : S024C (cuisine ou séjour), mise à jour depuis l'écran | Pages autres que l'accueil et Réglages (V) identiques à avant, au pixel près | — (à la publication) | |
+| U13 | Après la publication : S028 (salle de bain), mise à jour depuis l'écran | Pages autres que l'accueil et Réglages (V) identiques à avant | — (à la publication) | |
+| U14 | Binaire S024C de la branche (par USB sur un module de test, ou à la publication) : accueil, puis préréglage, − / +, glissière (toucher et glisser) | Comme `docs/images/accueil.png` : tout l'écran utilisé, dernière ligne noire ; commandes inchangées | `feature/t04-paysage` | |
+| U15 | Sur la S028 : glissière de l'accueil, plus haute (48 px) | Toucher et glisser fonctionnent au moins aussi bien qu'avant (K5) | — (à la publication) | |
+
+## V — Intensité de l'écran pendant le message d'accueil (D054, TODO T13)
+
+Même binaire que U (branche `feature/t04-paysage`), sur la 4,3" et sur une S024C ;
+blueprint du module réimporté depuis la branche (`05_BUILD_AND_TEST.md`).
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| V1 | Page de l'appareil dans HA, rubrique Configuration | Entité « Intensité message », 100 % sur un module mis à jour | `feature/t04-paysage` | |
+| V2 | Réglages (S024C) : les cinq réglages | Tous visibles, sans chevauchement ; « imposé par HA » en bas, au-dessus de la barre | `feature/t04-paysage` | |
+| V3 | « Intensité écran » à 40 %, « Intensité message » à 100 %, puis un message d'accueil (comme A1) | L'écran monte pendant le message, puis revient à 40 % à la fermeture (toucher ou 3 min) | `feature/t04-paysage` | |
+| V4 | « Intensité message » à 20 %, message d'accueil, pièce sombre | Écran plus sombre pendant le message, jamais illisible (plancher) | `feature/t04-paysage` | |
+| V5 | Écran éteint (veille), puis un message d'accueil | L'écran se rallume directement à « Intensité message » | `feature/t04-paysage` | |
+| V6 | Déplacer le curseur pendant un message affiché | La luminosité suit au relâchement ; disquette | — | |
+| V7 | Blueprint : « Intensité message » imposée à 60 % | Valeur appliquée sous 5 min, cadenas sur le curseur, « imposé par HA » ; « Ne pas imposer » le libère | `feature/t04-paysage` | |
+| V8 | Redémarrer le module | « Intensité message » gardée | — | |
+
 ## R — Documentation publique sans élément personnel (D052)
 
 Sur GitHub, branche `docs/t02-projet-publiable` choisie dans le menu des branches.

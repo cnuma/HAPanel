@@ -10,9 +10,8 @@
 # Ni LED RVB ni LDR sur cette carte (choix du proprietaire, 9 novembre 2026) :
 # sorties et capteur sans effet, memes id que les autres cartes.
 #
-# Ecran 480 x 272 tourne en portrait (272 x 480) en attendant des pages
-# dessinees pour le paysage (TODO T04) : les pages de 240 x 320 sont
-# centrees en largeur, bande noire en bas (D049).
+# Ecran 480 x 272 en paysage, port USB a gauche, pages du format paysage
+# (D053, TODO T04 ; jusqu'a 0.11.2 : portrait provisoire, D049).
 substitutions:
   pin_qspi_clk: GPIO47
   pin_qspi_d0: GPIO21
@@ -24,10 +23,10 @@ substitutions:
   pin_i2c_scl: GPIO4
   pin_tactile_int: GPIO3
   pin_tactile_rst: GPIO38
-  # Zone des pages (240 x 320) dans l'ecran tourne (272 x 480).
-  ecran_marge_gauche: "16"
-  ecran_marge_droite: "16"
-  ecran_marge_bas: "160"
+
+# Positions et tailles des pages pour cet ecran (D053).
+packages:
+  format: !include format_paysage.yaml
 
 # Puce de la carte (D049) : ESP32-S3, 4 Mo de flash, 8 Mo de PSRAM octale.
 esp32:
@@ -109,37 +108,16 @@ touchscreen:
       number: ${pin_tactile_int}
       ignore_strapping_warning: true
     reset_pin: ${pin_tactile_rst}
-    # LVGL tourne l'image et le toucher de 270 degres ; le GT911 est monte a
-    # 180 degres de l'ecran : ses deux axes sont inverses (comme dans AquaLook).
+    # LVGL tourne l'image et le toucher (rotation plus bas) ; le GT911 est monte
+    # a 180 degres de l'ecran : ses deux axes sont inverses (comme dans AquaLook).
     transform:
       swap_xy: false
       mirror_x: true
       mirror_y: true
 
-# Portrait, barre d'etat du cote oppose au port USB (cahier Q2) : rotation
-# logicielle de LVGL (le controleur NV3041A n'echange pas les axes) ; le
-# tactile suit.
+# Paysage, port USB a gauche (D053) : en portrait, rotation de 270 degres, la
+# barre d'etat etait du cote oppose au port USB (cahier Q2), donc le port est a
+# droite de l'image native ; 180 degres le met a gauche. A confirmer sur la
+# carte (cahier U). Rotation logicielle de LVGL ; le tactile suit.
 lvgl:
-  rotation: 270
-
-# Pages de 240 x 320 centrees en largeur, en haut de l'ecran tourne : marges
-# de l'ecran de chaque page et de la couche commune (barres, messages), d'ou
-# les pages tirent leurs positions. Provisoire, jusqu'aux pages en paysage.
-esphome:
-  on_boot:
-    priority: -100
-    then:
-      - lambda: |-
-          auto marges = [](lv_obj_t *o) {
-            lv_obj_set_style_pad_left(o, ${ecran_marge_gauche}, LV_PART_MAIN);
-            lv_obj_set_style_pad_right(o, ${ecran_marge_droite}, LV_PART_MAIN);
-            lv_obj_set_style_pad_bottom(o, ${ecran_marge_bas}, LV_PART_MAIN);
-          };
-          marges(id(page_accueil).obj);
-          marges(id(page_meteo).obj);
-          marges(id(page_planning).obj);
-          marges(id(page_scenarios).obj);
-          marges(id(page_menu).obj);
-          marges(id(page_reglages).obj);
-          marges(id(page_apropos).obj);
-          marges(lv_layer_top());
+  rotation: 180

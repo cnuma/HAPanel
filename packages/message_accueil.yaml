@@ -39,8 +39,8 @@ lvgl:
           hidden: true
           clickable: true
           align: TOP_LEFT
-          width: 240
-          height: 320
+          width: ${ecran_largeur}
+          height: ${ecran_hauteur}
           radius: 0
           border_width: 0
           pad_all: 0
@@ -77,7 +77,7 @@ lvgl:
                 id: lbl_msg_texte
                 align: CENTER
                 y: -30
-                width: 216
+                width: ${fmt_texte_largeur}
                 long_mode: WRAP
                 text_align: CENTER
                 text_font: police_titre
@@ -86,7 +86,7 @@ lvgl:
                 id: lbl_msg_infos
                 align: BOTTOM_MID
                 y: -48
-                width: 216
+                width: ${fmt_texte_largeur}
                 long_mode: WRAP
                 text_align: CENTER
                 text_color: 0xB0BEC5
@@ -138,6 +138,9 @@ api:
                 - lambda: return id(message_ms) != 0;
             then:
               - script.execute: veille_reveiller
+            # Ecran deja allume : luminosite du message (T13).
+            else:
+              - script.execute: retro_appliquer
 
 script:
   # Aussi appele a la deconnexion de HA : l'etat de la liaison redevient
@@ -149,6 +152,8 @@ script:
           id(message_ms) = 0;
           lv_obj_add_flag(id(obj_message), LV_OBJ_FLAG_HIDDEN);
           ESP_LOGI("hapanel.message", "message ferme");
+      # Retour a « Intensite ecran » (T13).
+      - script.execute: retro_appliquer
 
 interval:
   - interval: 1s

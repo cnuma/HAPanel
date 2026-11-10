@@ -19,21 +19,21 @@ lvgl:
         - label:
             align: TOP_LEFT
             x: 12
-            y: 50
+            y: ${fmt_reg_led_y}
             text: "LED"
         - label:
             id: ico_reg_led_verrou
             align: TOP_RIGHT
-            x: -76
-            y: 47
+            x: ${fmt_reg_led_verrou_x}
+            y: ${fmt_reg_led_verrou_y}
             hidden: true
             text_font: police_icones
             text: "\U000F033E"
         - switch:
             id: sw_reg_led
             align: TOP_RIGHT
-            x: -12
-            y: 44
+            x: ${fmt_reg_led_droite_x}
+            y: ${fmt_reg_led_sw_y}
             width: 56
             height: 30
             # Arret : fond sombre borde, le bouton blanc reste lisible (le gris
@@ -49,26 +49,27 @@ lvgl:
         - label:
             align: TOP_LEFT
             x: 12
-            y: 88
+            y: ${fmt_reg_led_int_y}
             text: "Intensité LED"
         - label:
             id: ico_reg_led_intensite_verrou
             align: TOP_RIGHT
-            x: -66
-            y: 84
+            x: ${fmt_reg_led_int_verrou_x}
+            y: ${fmt_reg_led_int_verrou_y}
             hidden: true
             text_font: police_icones
             text: "\U000F033E"
         - label:
             id: lbl_reg_led_intensite
             align: TOP_RIGHT
-            x: -12
-            y: 88
+            x: ${fmt_reg_led_droite_x}
+            y: ${fmt_reg_led_int_y}
             text: ""
         - slider:
             id: sld_reg_led_intensite
             align: TOP_MID
-            y: 118
+            x: ${fmt_reg_led_sld_x}
+            y: ${fmt_reg_led_sld_y}
             width: 196
             height: 10
             min_value: 0
@@ -88,21 +89,21 @@ lvgl:
         - label:
             align: TOP_LEFT
             x: 12
-            y: 150
+            y: ${fmt_reg_alerte_y}
             text: "Alerte LED"
         - label:
             id: ico_reg_led_alerte_verrou
             align: TOP_RIGHT
-            x: -76
-            y: 147
+            x: ${fmt_reg_led_verrou_x}
+            y: ${fmt_reg_alerte_verrou_y}
             hidden: true
             text_font: police_icones
             text: "\U000F033E"
         - switch:
             id: sw_reg_led_alerte
             align: TOP_RIGHT
-            x: -12
-            y: 144
+            x: ${fmt_reg_led_droite_x}
+            y: ${fmt_reg_alerte_sw_y}
             width: 56
             height: 30
             bg_color: 0x303030
@@ -119,14 +120,14 @@ lvgl:
                     - switch.turn_off: led_alerte_active
         - label:
             align: TOP_LEFT
-            x: 12
-            y: 188
+            x: ${fmt_reg_ecran_x}
+            y: ${fmt_reg_ecran_y}
             text: "Intensité écran"
         - label:
             id: ico_reg_ecran_intensite_verrou
             align: TOP_RIGHT
             x: -66
-            y: 184
+            y: ${fmt_reg_ecran_verrou_y}
             hidden: true
             text_font: police_icones
             text: "\U000F033E"
@@ -134,12 +135,13 @@ lvgl:
             id: lbl_reg_ecran_intensite
             align: TOP_RIGHT
             x: -12
-            y: 188
+            y: ${fmt_reg_ecran_y}
             text: ""
         - slider:
             id: sld_reg_ecran_intensite
             align: TOP_MID
-            y: 218
+            x: ${fmt_reg_ecran_sld_x}
+            y: ${fmt_reg_ecran_sld_y}
             width: 196
             height: 10
             min_value: ${ecran_intensite_min}
@@ -154,10 +156,49 @@ lvgl:
               - number.set:
                   id: ecran_intensite
                   value: !lambda return 5 * lroundf(x / 5.0f);
+        # Intensite message (T13) : luminosite pendant le message d'accueil.
+        - label:
+            align: TOP_LEFT
+            x: ${fmt_reg_ecran_x}
+            y: ${fmt_reg_message_y}
+            text: "Intensité message"
+        - label:
+            id: ico_reg_message_intensite_verrou
+            align: TOP_RIGHT
+            x: -66
+            y: ${fmt_reg_message_verrou_y}
+            hidden: true
+            text_font: police_icones
+            text: "󰌾"
+        - label:
+            id: lbl_reg_message_intensite
+            align: TOP_RIGHT
+            x: -12
+            y: ${fmt_reg_message_y}
+            text: ""
+        - slider:
+            id: sld_reg_message_intensite
+            align: TOP_MID
+            x: ${fmt_reg_ecran_sld_x}
+            y: ${fmt_reg_message_sld_y}
+            width: 196
+            height: 10
+            min_value: ${ecran_intensite_min}
+            max_value: 100
+            on_value:
+              - lvgl.label.update:
+                  id: lbl_reg_message_intensite
+                  text:
+                    format: "%d %%"
+                    args: ["(int) (5 * lroundf(x / 5.0f))"]
+            on_release:
+              - number.set:
+                  id: message_intensite
+                  value: !lambda return 5 * lroundf(x / 5.0f);
         - obj:
             id: obj_reg_impose
             align: TOP_MID
-            y: 240
+            y: ${fmt_reg_impose_y}
             width: SIZE_CONTENT
             height: SIZE_CONTENT
             pad_all: 0
@@ -200,6 +241,10 @@ script:
           if (isnan(ei)) ei = ${ecran_intensite_defaut};
           lv_slider_set_value(id(sld_reg_ecran_intensite), (int32_t) lroundf(ei), LV_ANIM_OFF);
           lv_label_set_text_fmt(id(lbl_reg_ecran_intensite), "%d %%", (int) lroundf(ei));
+          float mi = id(message_intensite).state;
+          if (isnan(mi)) mi = ${message_intensite_defaut};
+          lv_slider_set_value(id(sld_reg_message_intensite), (int32_t) lroundf(mi), LV_ANIM_OFF);
+          lv_label_set_text_fmt(id(lbl_reg_message_intensite), "%d %%", (int) lroundf(mi));
           // Impose : cadenas visible et commande inactive.
           auto verrou = [&](lv_obj_t *commande, lv_obj_t *icone, bool impose) {
             etat(commande, LV_STATE_DISABLED, impose);
@@ -210,7 +255,9 @@ script:
           verrou(id(sld_reg_led_intensite), id(ico_reg_led_intensite_verrou), id(reglage_impose_led_intensite));
           verrou(id(sw_reg_led_alerte), id(ico_reg_led_alerte_verrou), id(reglage_impose_led_alerte));
           verrou(id(sld_reg_ecran_intensite), id(ico_reg_ecran_intensite_verrou), id(reglage_impose_ecran_intensite));
+          verrou(id(sld_reg_message_intensite), id(ico_reg_message_intensite_verrou), id(reglage_impose_message_intensite));
           bool impose = id(reglage_impose_led_mode) || id(reglage_impose_led_intensite) ||
-                        id(reglage_impose_led_alerte) || id(reglage_impose_ecran_intensite);
+                        id(reglage_impose_led_alerte) || id(reglage_impose_ecran_intensite) ||
+                        id(reglage_impose_message_intensite);
           if (impose) lv_obj_remove_flag(id(obj_reg_impose), LV_OBJ_FLAG_HIDDEN);
           else lv_obj_add_flag(id(obj_reg_impose), LV_OBJ_FLAG_HIDDEN);

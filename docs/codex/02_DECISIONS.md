@@ -1286,7 +1286,8 @@ qui cite la précédente.
   AquaLook (montage à faire) ; LDR ajoutée sur une broche libre.
 - Justification : la carte fonctionne et se met à jour comme les autres dès la
   première version, sans attendre la refonte des pages ; la refonte en paysage
-  (TODO T04, point 1) se fera page par page avec le propriétaire.
+  (TODO T04, point 1) se fera page par page avec le propriétaire. Remplacé pour
+  l'orientation par D053 (10 novembre 2026) : paysage, port USB à gauche.
 - Conséquences : un module 4,3" ne reçoit jamais un binaire ESP32 (manifeste et puce
   distincts) ; une nouvelle page doit être ajoutée aux marges du fichier matériel tant
   que le portrait provisoire dure ; écran sous-utilisé (bande noire) jusqu'au paysage.
@@ -1375,8 +1376,9 @@ qui cite la précédente.
 ## D053 — Pages selon le format de l'écran : un fichier de format par écran (TODO T04)
 
 - Date : 10 novembre 2026 — Statut : option choisie par le propriétaire (HAP-R003 :
-  « Q1 A », « Q3 … port USB à gauche ») ; maquettes en paysage proposées sur
-  `feature/t04-paysage`, à valider avant le code.
+  « Q1 A », « Q3 … port USB à gauche ») ; maquettes validées (HAP-R004 : bouton
+  Accueil gardé en bas, accueil « ok », Réglages laissés tels quels, « fait au
+  mieux » pour le reste) ; implémenté sur `feature/t04-paysage`, à tester (cahier U).
 - Contexte : T04, point 1. Les pages placent leurs éléments au pixel près pour
   240 × 320 en portrait ; la Guition 4,3" (480 × 272) les affiche tournées, sur 60 %
   de la dalle (D049). D'autres cartes vont arriver « dans peu de temps » (propriétaire,
@@ -1391,12 +1393,59 @@ qui cite la précédente.
     les cartes ;
   - C, écartée : pages en double pour le paysage ; logique en double, contraire aux
     règles du dépôt.
-- Décision (à compléter après validation des maquettes) :
-  - portrait 240 × 320 inchangé, au pixel près, sur la S024C et la S028 ;
+- Décision :
+  - portrait 240 × 320 inchangé, au pixel près, sur la S024C et la S028, sauf
+    l'accueil (T16 ci-dessous) ;
   - paysage 480 × 272 pour la Guition, port USB à gauche ; mêmes éléments, mêmes
     couleurs, même barre d'état (D036) et même bouton Accueil en bas (D025) ;
     l'accueil se sert de la bande du bas, sans bouton Accueil (T16) ;
   - maquettes : `tools/generer_maquettes_paysage.py`, images dans
     `docs/images/paysage/` ;
   - une nouvelle taille d'écran demande un nouveau fichier de format et ses maquettes.
+- Mise en œuvre : 146 substitutions (`ecran_largeur`, `ecran_hauteur`,
+  `fmt_texte_largeur`, `fmt_<page>_<élément>`), aux mêmes clés dans
+  `packages/format_portrait.yaml` et `packages/format_paysage.yaml`, inclus par le bloc
+  `packages` de chaque fichier matériel ; elles remplacent aussi les constantes des
+  lambdas (glissière de l'accueil, frise du planning). Portrait vérifié inchangé :
+  configuration complète comparée avant et après, seules diffèrent des valeurs par
+  défaut de LVGL devenues explicites et un calcul équivalent (216 / 96 = 9 / 4).
+  Guition : `lvgl.rotation` 180 (port USB à gauche, déduit du portrait à 270, cahier
+  Q2), marges du portrait provisoire et leur `on_boot` retirées. Écarts aux maquettes
+  du 10 novembre (« au mieux ») : Météo sans trait de séparation, températures du jour
+  sur une ligne (« 14° / 6° »), icône actuelle en 32 px (polices inchangées).
+  Réglages, demande du propriétaire du 10 novembre après les maquettes : LED, Alerte
+  LED et Intensité LED dans la colonne de gauche, Intensité écran seule à droite.
+- T16, accueil moins tassé (demande du propriétaire du 10 novembre 2026 : « passer
+  T16 » avec T04) : en portrait aussi, l'accueil se répartit sur toute la hauteur, la
+  bande du bas étant libre (pas de bouton Accueil) : pièce y 44, température y 62,
+  ligne extérieure y 124, préréglages y 152, − et + y 206 sur 48 px de haut (44
+  avant), glissière y 266 sur 48 px (40 avant). Seules les valeurs `fmt_acc_…` de
+  `format_portrait.yaml` changent ; maquette `docs/images/accueil.png`.
 - Hors périmètre : glissière de la S028 (K5), qui peut attendre (propriétaire).
+
+## D054 — Luminosité de l'écran pendant le message d'accueil (TODO T13)
+
+- Date : 10 novembre 2026 — Statut : demandé par le propriétaire (« intègre aussi les
+  slider de t13 et la gestion avec », avec T04 et T16) ; points à cadrer de T13
+  tranchés par l'agent sur le modèle d'« Intensité écran » (D031), à confirmer au
+  test ; implémenté sur `feature/t04-paysage` (cahier V).
+- Contexte : T13 (demande du 9 novembre 2026) laissait ouverts le lieu du réglage, le
+  niveau fixe ou relatif à la pièce et le plancher.
+- Décision :
+  - entité de configuration « Intensité message » par module (`message_intensite`,
+    20 à 100 %, pas de 5, 100 % par défaut, gardée en flash), sur la page de
+    l'appareil dans HA et en curseur sur la page Réglages (cinquième réglage) ;
+  - pendant le message d'accueil, elle remplace « Intensité écran » dans
+    `retro_cible_calculer` : la luminosité suit toujours la lumière de la pièce
+    (D023) et ne descend jamais sous `retro_plancher` (D031) ; appliquée aussitôt à
+    l'ouverture et à la fermeture du message (`retro_appliquer`, transition 0,5 s) ;
+  - imposable par le blueprint (entrée « Intensité message », section LED et écran,
+    clé `message_intensite`, « Ne pas imposer » par défaut), cadenas sur la page
+    Réglages comme les autres (D031) ;
+  - page Réglages en portrait : rangées resserrées (curseurs 28 px sous leur libellé
+    au lieu de 30) ; en paysage, sous « Intensité écran », à droite.
+- Options écartées : réglage dans le blueprint seulement (rien sur le module) ; niveau
+  fixe, sans la lumière de la pièce (éblouissant la nuit).
+- Conséquences : blueprint à réimporter (section 7 de `CONFIGURATION.md`) ; un
+  firmware plus ancien ignore la clé `message_intensite` (avertissement dans son
+  journal).

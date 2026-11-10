@@ -89,19 +89,19 @@ lvgl:
             id: lbl_apropos_version
             align: TOP_LEFT
             x: 12
-            y: 60
+            y: ${fmt_apr_version_y}
             text: "HAPanel ${version}"
         - label:
             id: lbl_apropos_sha
             align: TOP_LEFT
             x: 12
-            y: 88
+            y: ${fmt_apr_sha_y}
             text: "SHA ${git_sha}"
         - label:
             id: lbl_apropos_connexion
             align: TOP_LEFT
             x: 12
-            y: 128
+            y: ${fmt_apr_connexion_y}
             text_color: 0xF44336
             text: "Home Assistant : non connecté"
         # Adresse IP du module (demande du proprietaire, 7 novembre 2026) : trop
@@ -110,13 +110,13 @@ lvgl:
             id: lbl_apropos_ip
             align: TOP_LEFT
             x: 12
-            y: 156
+            y: ${fmt_apr_ip_y}
             text: "Adresse IP : aucune"
         - label:
             id: lbl_apropos_memoire
             align: TOP_LEFT
-            x: 12
-            y: 196
+            x: ${fmt_apr_memoire_x}
+            y: ${fmt_apr_memoire_y}
             long_mode: WRAP
             width: 216
             text: "Mémoire : mesure en cours"
@@ -127,9 +127,9 @@ lvgl:
             id: btn_apropos_maj
             align: TOP_LEFT
             x: 12
-            y: 238
-            width: 216
-            height: 34
+            y: ${fmt_apr_maj_y}
+            width: ${fmt_texte_largeur}
+            height: ${fmt_apr_maj_h}
             hidden: true
             widgets:
               - label:
@@ -150,7 +150,7 @@ lvgl:
           y: -2
           # Page de demarrage : l'accueil (packages/pages/accueil.yaml).
           hidden: true
-          width: 240
+          width: ${ecran_largeur}
           height: 42
           radius: 0
           border_width: 0
@@ -182,7 +182,7 @@ lvgl:
           # la dalle montre une ligne claire fugace (cahier I11 ; idee du
           # proprietaire, 4 novembre 2026).
           y: 2
-          width: 240
+          width: ${ecran_largeur}
           height: 34
           radius: 0
           border_width: 0
@@ -243,7 +243,7 @@ lvgl:
             - label:
                 id: ico_barre_enregistrement
                 align: TOP_LEFT
-                x: 160
+                x: ${fmt_barre_icone_x}
                 y: 6
                 hidden: true
                 text_font: police_icones
@@ -255,7 +255,7 @@ lvgl:
             - label:
                 id: ico_barre_maj
                 align: TOP_LEFT
-                x: 160
+                x: ${fmt_barre_icone_x}
                 y: 6
                 hidden: true
                 text_font: police_icones
@@ -265,7 +265,7 @@ lvgl:
             - obj:
                 id: obj_barre_wifi_1
                 align: TOP_LEFT
-                x: 192
+                x: ${fmt_barre_wifi_1_x}
                 y: 21
                 width: 4
                 height: 4
@@ -276,7 +276,7 @@ lvgl:
             - obj:
                 id: obj_barre_wifi_2
                 align: TOP_LEFT
-                x: 198
+                x: ${fmt_barre_wifi_2_x}
                 y: 18
                 width: 4
                 height: 7
@@ -287,7 +287,7 @@ lvgl:
             - obj:
                 id: obj_barre_wifi_3
                 align: TOP_LEFT
-                x: 204
+                x: ${fmt_barre_wifi_3_x}
                 y: 15
                 width: 4
                 height: 10
@@ -298,7 +298,7 @@ lvgl:
             - obj:
                 id: obj_barre_wifi_4
                 align: TOP_LEFT
-                x: 210
+                x: ${fmt_barre_wifi_4_x}
                 y: 12
                 width: 4
                 height: 13
@@ -310,7 +310,7 @@ lvgl:
             - obj:
                 id: obj_barre_point_ha
                 align: TOP_LEFT
-                x: 220
+                x: ${fmt_barre_ha_x}
                 y: 12
                 width: 13
                 height: 13

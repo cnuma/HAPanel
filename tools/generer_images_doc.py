@@ -125,31 +125,43 @@ def cote_a_cote(images, nom, legendes):
     sortie.save(SORTIE / nom, optimize=True)
 
 
+# Accueil reparti sur toute la hauteur, la bande du bas etant libre (T16) :
+# valeurs de packages/format_portrait.yaml (fmt_acc_...).
+ACC_PIECE_Y, ACC_TEMP_Y, ACC_LIGNE_Y, ACC_PRE_Y = 44, 62, 124, 152
+ACC_BTN_Y, ACC_BTN_H, ACC_GL_Y, ACC_GL_H = 206, 48, 266, 48
+
+
 def glissiere(e, chauffage=True):
-    e.rect(12, 234, 216, 40, GRIS_FONCE, 20)
-    e.rect(120 if chauffage else 12, 234, 108, 40, ORANGE, 20)
-    e.texte(66, 254, "Éteint", BLANC if not chauffage else GRIS, 16, 400, "mm")
-    e.texte(174, 254, "Chauffage", BLANC if chauffage else GRIS, 16, 400, "mm")
+    milieu = ACC_GL_Y + ACC_GL_H // 2
+    e.rect(12, ACC_GL_Y, 216, ACC_GL_H, GRIS_FONCE, ACC_GL_H // 2)
+    e.rect(120 if chauffage else 12, ACC_GL_Y, 108, ACC_GL_H, ORANGE, ACC_GL_H // 2)
+    e.texte(66, milieu, "Éteint", BLANC if not chauffage else GRIS, 16, 400, "mm")
+    e.texte(174, milieu, "Chauffage", BLANC if chauffage else GRIS, 16, 400, "mm")
+
+
+def accueil_haut(e):
+    e.texte(12, ACC_PIECE_Y, "Séjour")
+    e.texte(120, ACC_TEMP_Y, "20,5 °C", BLANC, 48, 500, "ma")
+    e.texte(12, ACC_LIGNE_Y, "Extérieur 8,5 °C")
 
 
 def accueil():
     e = Ecran(maison=False)
-    e.texte(12, 40, "Séjour")
-    e.texte(120, 54, "20,5 °C", BLANC, 48, 500, "ma")
-    e.texte(12, 110, "Extérieur 8,5 °C")
+    accueil_haut(e)
     prereglages = [("manuel", "#AB47BC", 12), ("horsgel", "#42A5F5", 56), ("eco", "#66BB6A", 100),
                    ("confort", ORANGE, 144), ("boost", ROUGE, 188)]
     for nom, couleur, x in prereglages:
-        e.rect(x, 134, 40, 40, GRIS_FONCE, 8, BLANC if nom == "eco" else None, 3 if nom == "eco" else 0)
-        e.icone(nom, x + 20, 154, 24, couleur)
-    e.bouton(12, 182, 56, 44, "#1E88E5")
-    e.texte(40, 204, "-", BLANC, 22, 500, "mm")
-    e.texte(120, 204, "19,0 °C", BLANC, 22, 500, "mm")
-    e.bouton(172, 182, 56, 44, "#E53935")
-    e.texte(200, 204, "+", BLANC, 22, 500, "mm")
+        e.rect(x, ACC_PRE_Y, 40, 40, GRIS_FONCE, 8, BLANC if nom == "eco" else None, 3 if nom == "eco" else 0)
+        e.icone(nom, x + 20, ACC_PRE_Y + 20, 24, couleur)
+    milieu = ACC_BTN_Y + ACC_BTN_H // 2
+    e.bouton(12, ACC_BTN_Y, 56, ACC_BTN_H, "#1E88E5")
+    e.texte(40, milieu, "-", BLANC, 22, 500, "mm")
+    e.texte(120, milieu, "19,0 °C", BLANC, 22, 500, "mm")
+    e.bouton(172, ACC_BTN_Y, 56, ACC_BTN_H, "#E53935")
+    e.texte(200, milieu, "+", BLANC, 22, 500, "mm")
     glissiere(e)
-    for numero, x, y in [(1, 150, 18), (2, 42, 32), (3, 226, 70), (4, 180, 118), (5, 232, 154),
-                         (6, 76, 204), (7, 120, 284)]:
+    for numero, x, y in [(1, 150, 18), (2, 42, 32), (3, 226, ACC_TEMP_Y + 16), (4, 180, ACC_LIGNE_Y + 8),
+                         (5, 232, ACC_PRE_Y + 20), (6, 76, milieu), (7, 120, ACC_GL_Y - 8)]:
         e.repere(numero, x, y)
     e.finir("accueil.png")
     return e
@@ -157,9 +169,7 @@ def accueil():
 
 def accueil_eteint():
     e = Ecran(maison=False)
-    e.texte(12, 40, "Séjour")
-    e.texte(120, 54, "20,5 °C", BLANC, 48, 500, "ma")
-    e.texte(12, 110, "Extérieur 8,5 °C")
+    accueil_haut(e)
     glissiere(e, False)
     return encadrer(e)
 
@@ -199,33 +209,36 @@ def interrupteur(e, y, libelle, actif, impose):
 
 
 def curseur(e, y, libelle, valeur, minimum, impose):
-    """Curseur par pas de 5 et valeur affichee a droite."""
+    """Curseur par pas de 5 et valeur affichee a droite, 28 px sous le libelle."""
     e.texte(12, y, libelle)
     e.texte(228, y, f"{valeur} %", BLANC, 16, 400, "ra")
     plein = round(196 * (valeur - minimum) / (100 - minimum))
     couleur = "#546E7A" if impose else BLEU
-    e.rect(22, y + 30, 196, 10, "#123C5E", 5)
-    e.rect(22, y + 30, max(plein, 10), 10, couleur, 5)
-    e.rect(22 + plein - 10, y + 25, 20, 20, couleur, 10)
+    e.rect(22, y + 28, 196, 10, "#123C5E", 5)
+    e.rect(22, y + 28, max(plein, 10), 10, couleur, 5)
+    e.rect(22 + plein - 10, y + 23, 20, 20, couleur, 10)
     if impose:
         e.icone("verrou", 162, y + 8, 24, GRIS)
 
 
 def reglages_ecran(alerte=True, impose_alerte=False, disquette=None):
     e = Ecran("Réglages", disquette=disquette)
-    interrupteur(e, 44, "LED", True, False)
-    curseur(e, 88, "Intensité LED", 20, 0, False)
-    interrupteur(e, 144, "Alerte LED", alerte, impose_alerte)
-    curseur(e, 188, "Intensité écran", 80, 20, False)
+    # Positions de packages/format_portrait.yaml (fmt_reg_...), cinq rangees (T13).
+    interrupteur(e, 40, "LED", True, False)
+    curseur(e, 76, "Intensité LED", 20, 0, False)
+    interrupteur(e, 124, "Alerte LED", alerte, impose_alerte)
+    curseur(e, 160, "Intensité écran", 80, 20, False)
+    curseur(e, 208, "Intensité message", 100, 20, False)
     if impose_alerte:
-        e.icone("verrou", 68, 252, 24, GRIS)
-        e.texte(84, 252, "imposé par HA", GRIS, 16, 400, "lm")
+        e.icone("verrou", 68, 264, 24, GRIS)
+        e.texte(84, 264, "imposé par HA", GRIS, 16, 400, "lm")
     return e
 
 
 def reglages():
     e = reglages_ecran(disquette=VERT)
-    for numero, x, y in [(1, 140, 59), (2, 140, 96), (3, 140, 159), (4, 150, 196), (5, 150, 18)]:
+    for numero, x, y in [(1, 140, 55), (2, 140, 84), (3, 140, 139), (4, 150, 168), (6, 160, 216),
+                         (5, 150, 18)]:
         e.repere(numero, x, y)
     e.finir("reglages.png")
     cote_a_cote([encadrer(reglages_ecran(alerte=False)), encadrer(reglages_ecran(impose_alerte=True))],

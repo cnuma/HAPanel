@@ -111,17 +111,17 @@ lvgl:
             id: lbl_acc_sejour
             align: TOP_LEFT
             x: 12
-            y: 40
-            width: 124
+            y: ${fmt_acc_piece_y}
+            width: ${fmt_acc_piece_l}
             long_mode: DOT
             text: "Intérieur"
         # Largeur fixe : alignee a droite avec une largeur au contenu, le
         # label cree vide s'elargissait hors de l'ecran (P3).
         - label:
             id: lbl_acc_temperature_etat
-            align: TOP_RIGHT
-            x: -12
-            y: 40
+            align: ${fmt_acc_etat_align}
+            x: ${fmt_acc_etat_x}
+            y: ${fmt_acc_piece_y}
             width: 120
             text_align: RIGHT
             text_color: 0xFF9800
@@ -129,7 +129,8 @@ lvgl:
         - label:
             id: lbl_acc_temperature
             align: TOP_MID
-            y: 54
+            x: ${fmt_acc_temp_x}
+            y: ${fmt_acc_temp_y}
             text_font: police_grande
             text: "--,- °C"
         # Temperature exterieure (D016), remplacee par la ligne du chauffage
@@ -138,7 +139,7 @@ lvgl:
             id: lbl_acc_exterieur
             align: TOP_LEFT
             x: 12
-            y: 110
+            y: ${fmt_acc_ligne_y}
             hidden: true
             text: ""
         # Chauffage
@@ -146,7 +147,7 @@ lvgl:
             id: lbl_acc_chauffage
             align: TOP_LEFT
             x: 12
-            y: 110
+            y: ${fmt_acc_ligne_y}
             text_color: 0xFF9800
             text: "Chauffage : non reçu"
         # Prereglages (D014) : Manuel, Hors-gel, Eco, Confort, Boost ; le
@@ -154,8 +155,8 @@ lvgl:
         - button:
             id: btn_acc_pre_none
             align: TOP_LEFT
-            x: 12
-            y: 134
+            x: ${fmt_acc_pre_none_x}
+            y: ${fmt_acc_pre_y}
             width: 40
             height: 40
             pad_all: 0
@@ -176,8 +177,8 @@ lvgl:
         - button:
             id: btn_acc_pre_frost
             align: TOP_LEFT
-            x: 56
-            y: 134
+            x: ${fmt_acc_pre_frost_x}
+            y: ${fmt_acc_pre_y}
             width: 40
             height: 40
             pad_all: 0
@@ -198,8 +199,8 @@ lvgl:
         - button:
             id: btn_acc_pre_eco
             align: TOP_LEFT
-            x: 100
-            y: 134
+            x: ${fmt_acc_pre_eco_x}
+            y: ${fmt_acc_pre_y}
             width: 40
             height: 40
             pad_all: 0
@@ -220,8 +221,8 @@ lvgl:
         - button:
             id: btn_acc_pre_comfort
             align: TOP_LEFT
-            x: 144
-            y: 134
+            x: ${fmt_acc_pre_comfort_x}
+            y: ${fmt_acc_pre_y}
             width: 40
             height: 40
             pad_all: 0
@@ -242,8 +243,8 @@ lvgl:
         - button:
             id: btn_acc_pre_boost
             align: TOP_LEFT
-            x: 188
-            y: 134
+            x: ${fmt_acc_pre_boost_x}
+            y: ${fmt_acc_pre_y}
             width: 40
             height: 40
             pad_all: 0
@@ -264,10 +265,10 @@ lvgl:
         - button:
             id: btn_acc_moins
             align: TOP_LEFT
-            x: 12
-            y: 182
-            width: 56
-            height: 44
+            x: ${fmt_acc_moins_x}
+            y: ${fmt_acc_consigne_btn_y}
+            width: ${fmt_acc_consigne_btn_l}
+            height: ${fmt_acc_consigne_btn_h}
             bg_color: 0x1E88E5
             widgets:
               - label:
@@ -283,16 +284,17 @@ lvgl:
         - label:
             id: lbl_acc_consigne
             align: TOP_MID
-            y: 192
+            x: ${fmt_acc_consigne_x}
+            y: ${fmt_acc_consigne_y}
             text_font: police_titre
             text: "--,- °C"
         - button:
             id: btn_acc_plus
             align: TOP_LEFT
-            x: 172
-            y: 182
-            width: 56
-            height: 44
+            x: ${fmt_acc_plus_x}
+            y: ${fmt_acc_consigne_btn_y}
+            width: ${fmt_acc_consigne_btn_l}
+            height: ${fmt_acc_consigne_btn_h}
             bg_color: 0xE53935
             widgets:
               - label:
@@ -312,10 +314,10 @@ lvgl:
         - obj:
             id: obj_acc_glissiere
             align: TOP_MID
-            y: 234
-            width: 216
-            height: 40
-            radius: 20
+            y: ${fmt_acc_gl_y}
+            width: ${fmt_acc_gl_l}
+            height: ${fmt_acc_gl_h}
+            radius: ${fmt_acc_gl_r}
             border_width: 0
             pad_all: 0
             bg_color: 0x303030
@@ -335,23 +337,23 @@ lvgl:
                   lv_point_t p;
                   lv_indev_get_point(lv_indev_active(), &p);
                   int x = id(accueil_glisse_depart) + p.x - id(accueil_glisse_x0);
-                  lv_obj_set_x(id(obj_acc_pastille), x < 0 ? 0 : x > 108 ? 108 : x);
+                  lv_obj_set_x(id(obj_acc_pastille), x < 0 ? 0 : x > ${fmt_acc_pastille_l} ? ${fmt_acc_pastille_l} : x);
             on_release:
               - if:
                   condition:
                     lambda: |-
                       if (!id(accueil_glisse_actif)) return false;
                       id(accueil_glisse_actif) = false;
-                      if (abs(lv_obj_get_x(id(obj_acc_pastille)) - id(accueil_glisse_depart)) >= 36) return true;
+                      if (abs(lv_obj_get_x(id(obj_acc_pastille)) - id(accueil_glisse_depart)) >= ${fmt_acc_gl_seuil}) return true;
                       // Toucher : doigt relache du cote inactif (milieu de la
-                      // glissiere a x = 120).
+                      // glissiere, ${fmt_acc_gl_milieu} en x).
                       lv_point_t p;
                       lv_indev_get_point(lv_indev_active(), &p);
-                      return id(accueil_glisse_depart) >= 54 ? p.x < 120 : p.x >= 120;
+                      return id(accueil_glisse_depart) >= ${fmt_acc_gl_demi} ? p.x < ${fmt_acc_gl_milieu} : p.x >= ${fmt_acc_gl_milieu};
                   then:
                     - script.execute:
                         id: accueil_envoyer_mode
-                        mode_cible: !lambda "return id(accueil_glisse_depart) >= 54 ? 0 : 1;"
+                        mode_cible: !lambda "return id(accueil_glisse_depart) >= ${fmt_acc_gl_demi} ? 0 : 1;"
               - script.execute: accueil_rafraichir
             on_press_lost:
               - globals.set:
@@ -363,9 +365,9 @@ lvgl:
                   id: obj_acc_pastille
                   x: 0
                   y: 0
-                  width: 108
-                  height: 40
-                  radius: 20
+                  width: ${fmt_acc_pastille_l}
+                  height: ${fmt_acc_gl_h}
+                  radius: ${fmt_acc_gl_r}
                   border_width: 0
                   pad_all: 0
                   bg_color: 0xFF9800
@@ -375,14 +377,16 @@ lvgl:
               - label:
                   id: lbl_acc_option_eteint
                   align: CENTER
-                  x: -54
+                  text_font: ${fmt_acc_option_police}
+                  x: ${fmt_acc_option_eteint_x}
                   clickable: false
                   text_color: 0x9E9E9E
                   text: "Éteint"
               - label:
                   id: lbl_acc_option_chauffage
                   align: CENTER
-                  x: 54
+                  text_font: ${fmt_acc_option_police}
+                  x: ${fmt_acc_option_chauffage_x}
                   clickable: false
                   text_color: 0x9E9E9E
                   text: "Chauffage"
@@ -391,7 +395,7 @@ lvgl:
         - label:
             id: lbl_acc_hs_icone
             align: TOP_MID
-            y: 126
+            y: ${fmt_acc_hs_icone_y}
             width: 60
             text_align: CENTER
             text_font: police_icones
@@ -401,8 +405,8 @@ lvgl:
         - label:
             id: lbl_acc_hs_message
             align: TOP_MID
-            y: 158
-            width: 216
+            y: ${fmt_acc_hs_message_y}
+            width: ${fmt_texte_largeur}
             long_mode: WRAP
             text_align: CENTER
             hidden: true
@@ -535,7 +539,7 @@ script:
               lv_obj_add_flag(pastille, LV_OBJ_FLAG_HIDDEN);
             } else {
               lv_obj_remove_flag(pastille, LV_OBJ_FLAG_HIDDEN);
-              lv_obj_set_x(pastille, pos == 1 ? 108 : 0);
+              lv_obj_set_x(pastille, pos == 1 ? ${fmt_acc_pastille_l} : 0);
             }
           }
           lv_obj_set_style_bg_color(pastille,

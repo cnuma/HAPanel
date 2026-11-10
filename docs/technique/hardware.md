@@ -63,6 +63,12 @@ tableau.
 Il était dans `base.yaml` jusqu'à D049 : la puce dépend de la carte. `hardware_2432s028.yaml`
 porte le même bloc.
 
+### Bloc `packages` : le format de l'écran (D053)
+
+`format: !include format_portrait.yaml` : positions, tailles et polices des pages pour
+240 × 320 en portrait (substitutions `ecran_largeur`, `ecran_hauteur`, `fmt_…`), valeurs
+d'origine des pages. La Guition 4,3" inclut `format_paysage.yaml`, aux mêmes clés.
+
 ### Bloc `spi`
 
 | id | Clé | Rôle |

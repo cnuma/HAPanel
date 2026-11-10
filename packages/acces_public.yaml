@@ -90,8 +90,8 @@ lvgl:
           # Les touchers ne traversent pas vers la page en dessous.
           clickable: true
           align: TOP_LEFT
-          width: 240
-          height: 320
+          width: ${ecran_largeur}
+          height: ${ecran_hauteur}
           radius: 0
           border_width: 0
           pad_all: 0
@@ -112,7 +112,7 @@ lvgl:
                 id: lbl_maj_texte
                 align: TOP_MID
                 y: 80
-                width: 216
+                width: ${fmt_texte_largeur}
                 long_mode: WRAP
                 text_align: CENTER
                 text_font: police_titre
@@ -122,7 +122,7 @@ lvgl:
                 id: lbl_maj_resume
                 align: TOP_MID
                 y: 150
-                width: 216
+                width: ${fmt_texte_largeur}
                 long_mode: WRAP
                 text_align: CENTER
                 text_color: 0xB0BEC5

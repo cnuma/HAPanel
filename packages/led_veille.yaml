@@ -33,6 +33,9 @@ substitutions:
   retro_plancher: "0.30"
   ecran_intensite_min: "20"
   ecran_intensite_defaut: "100"
+  # « Intensite message » (T13) : remplace « Intensite ecran » pendant le message
+  # d'accueil, memes bornes et meme plancher.
+  message_intensite_defaut: "100"
 
 # « Intensite ecran » est restauree avant le retroeclairage (priorites HARDWARE et
 # HARDWARE - 1) : la luminosite posee par son on_value est ecrasee par le 100 % de
@@ -76,6 +79,9 @@ globals:
     type: bool
     initial_value: "false"
   - id: reglage_impose_ecran_intensite
+    type: bool
+    initial_value: "false"
+  - id: reglage_impose_message_intensite
     type: bool
     initial_value: "false"
   # Couleur du prereglage, calculee par accueil_rafraichir ; 0 : eteinte.
@@ -161,6 +167,25 @@ number:
                 transition_length: 0.5s
       - script.execute: reglages_rafraichir
       - script.execute: enregistrement_signaler
+  # Luminosite de l'ecran pendant le message d'accueil (T13), meme calcul
+  # qu'« Intensite ecran » : suit la lumiere de la piece, jamais sous le plancher.
+  - platform: template
+    id: message_intensite
+    name: Intensité message
+    icon: mdi:message-badge-outline
+    entity_category: config
+    min_value: ${ecran_intensite_min}
+    max_value: 100
+    step: 5
+    unit_of_measurement: "%"
+    mode: slider
+    initial_value: ${message_intensite_defaut}
+    optimistic: true
+    restore_value: true
+    on_value:
+      - script.execute: retro_appliquer
+      - script.execute: reglages_rafraichir
+      - script.execute: enregistrement_signaler
 
 switch:
   - platform: template
@@ -191,15 +216,31 @@ touchscreen:
 
 script:
   # Luminosite selon la piece (D023) multipliee par « Intensite ecran » (D031),
-  # jamais sous le plancher.
+  # ou par « Intensite message » pendant le message d'accueil (T13), jamais
+  # sous le plancher.
   - id: retro_cible_calculer
     then:
       - lambda: |-
           float base = ${retro_jour} + id(ldr_obscurite) * (${retro_nuit} - ${retro_jour});
-          float k = id(ecran_intensite).state / 100.0f;
-          if (isnan(k)) k = ${ecran_intensite_defaut} / 100.0f;
+          bool message = id(message_ms) != 0;
+          float k = (message ? id(message_intensite).state : id(ecran_intensite).state) / 100.0f;
+          if (isnan(k)) k = (message ? ${message_intensite_defaut} : ${ecran_intensite_defaut}) / 100.0f;
           float c = base * k;
           id(retro_cible) = c < ${retro_plancher} ? ${retro_plancher} : c;
+  # Applique aussitot la luminosite voulue, ecran allume seulement (eteint :
+  # appliquee au reveil). Ouverture et fermeture du message d'accueil (T13).
+  - id: retro_appliquer
+    then:
+      - script.execute: retro_cible_calculer
+      - if:
+          condition:
+            not: lvgl.is_paused
+          then:
+            - lambda: id(retro_niveau) = id(retro_cible);
+            - light.turn_on:
+                id: retroeclairage
+                brightness: !lambda return id(retro_niveau);
+                transition_length: 0.5s
   - id: veille_reveiller
     then:
       - lvgl.resume:

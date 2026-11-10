@@ -1,5 +1,5 @@
-"""Maquettes des pages en paysage, 480 x 272 (TODO T04, D053), a valider par le
-proprietaire avant le code. Memes elements, memes couleurs et meme barre d'etat que le
+"""Maquettes des pages en paysage, 480 x 272 (TODO T04, D053), validees par le
+proprietaire le 10 novembre 2026, puis calees sur packages/format_paysage.yaml. Memes elements, memes couleurs et meme barre d'etat que le
 portrait (D036) ; seules les positions et les tailles changent (fichier de format,
 D053 option A). L'accueil se sert de la bande du bas, sans bouton Accueil (T16).
 
@@ -72,39 +72,37 @@ def menu():
 
 
 def meteo():
-    """Gauche : temps actuel ; droite : trois jours en colonnes."""
+    """Gauche : temps actuel ; droite : trois jours en colonnes de 88 px."""
     e = ecran("Météo")
-    e.icone("nuage", 44, 88, 48)
-    e.texte(196, 56, "12,5°", BLANC, 48, 500, "ra")
-    e.texte(12, 136, "Nuageux")
-    e.rect(212, 48, 2, 168, GRIS_FONCE)
-    for i, (jour, icone, maxi, mini) in enumerate([("lun.", "soleil", "14°", "6°"), ("mar.", "nuage", "12°", "7°"),
-                                                   ("mer.", "pluie", "10°", "5°")]):
-        x = 260 + i * 88
-        e.texte(x, 56, jour, BLANC, 16, 400, "ma")
-        e.icone(icone, x, 112, 32)
-        e.texte(x, 144, maxi, BLANC, 22, 500, "ma")
-        e.texte(x, 176, mini, GRIS, 22, 500, "ma")
+    e.icone("nuage", 36, 80, 32)
+    e.texte(196, 58, "12,5°", BLANC, 48, 500, "ra")
+    e.texte(12, 130, "Nuageux")
+    for i, (jour, icone, temp) in enumerate([("lun.", "soleil", "14° / 6°"), ("mar.", "nuage", "12° / 7°"),
+                                             ("mer.", "pluie", "10° / 5°")]):
+        x = 214 + i * 88 + 44
+        e.texte(x, 64, jour, BLANC, 16, 400, "ma")
+        e.icone(icone, x, 110, 32)
+        e.texte(x, 140, temp, BLANC, 22, 500, "ma")
     return e
 
 
 def planning():
-    """Ligne du temps sur toute la largeur, trois calendriers en dessous."""
+    """Resume a droite du nom, frise sur toute la largeur, trois calendriers en dessous."""
     e = ecran("Planning")
-    e.texte(12, 42, "Aujourd'hui")
-    e.texte(468, 42, "14:32", GRIS, 16, 400, "ra")
-    e.texte(12, 70, "Maison", GRIS)
-    e.texte(468, 66, "Prévu jusqu'à 22:00", ORANGE, 22, 500, "ra")
+    e.texte(12, 38, "Aujourd'hui")
+    e.texte(468, 38, "14:32", GRIS, 16, 400, "ra")
+    e.texte(12, 66, "Maison", GRIS)
+    e.texte(468, 62, "Prévu jusqu'à 22:00", ORANGE, 22, 500, "ra")
     largeur = 456
-    e.rect(12, 100, largeur, 18, GRIS_FONCE, 6)
-    e.rect(12 + largeur * 5 // 24, 100, largeur * 2 // 24, 18, ORANGE, 6)
-    e.rect(12 + largeur * 14 // 24, 100, largeur * 6 // 24, 18, ORANGE, 6)
-    e.rect(12 + largeur * 29 // 48 - 1, 96, 2, 26, BLANC)
+    e.rect(12, 96, largeur, 18, GRIS_FONCE, 6)
+    e.rect(12 + largeur * 20 // 96, 96, largeur * 8 // 96, 18, ORANGE, 6)
+    e.rect(12 + largeur * 56 // 96, 96, largeur * 24 // 96, 18, ORANGE, 6)
+    e.rect(12 + largeur * 870 // 1440, 92, 2, 26, BLANC)
     for h in (0, 6, 12, 18, 24):
         ancre = "la" if h == 0 else "ra" if h == 24 else "ma"
-        e.texte(12 + largeur * h // 24, 122, str(h), GRIS, 16, 400, ancre)
-    lignes = [(150, "Salon", "17:00 - 21:00", False), (174, "Chambre", "14:00 - 16:00", True),
-              (198, "Atelier", "terminé", False)]
+        e.texte(12 + largeur * h // 24, 118, str(h), GRIS, 16, 400, ancre)
+    lignes = [(144, "Salon", "17:00 - 21:00", False), (170, "Chambre", "14:00 - 16:00", True),
+              (196, "Atelier", "terminé", False)]
     for y, nom, horaire, actif in lignes:
         e.rect(12, y + 6, 8, 8, ORANGE if actif else INACTIF, 4)
         e.texte(28, y, nom)
@@ -126,30 +124,34 @@ def scenarios(etat="", couleur=ORANGE, attente=False):
     return e
 
 
-def interrupteur(e, x, y, libelle, actif):
-    e.texte(x, y + 6, libelle)
-    xi = x + 160
+def interrupteur(e, x_libelle, x_droite, y, libelle, actif):
+    """Libelle a gauche de la colonne, interrupteur cale a droite (x_droite : bord droit)."""
+    e.texte(x_libelle, y + 6, libelle)
+    xi = x_droite - 56
     e.rect(xi, y, 56, 30, BLEU if actif else GRIS_FONCE, 15, None if actif else GRIS, 0 if actif else 2)
     e.rect(xi + 29 if actif else xi + 3, y + 3, 24, 24, BLANC, 12)
 
 
-def curseur(e, x, y, libelle, valeur, minimum):
-    e.texte(x, y, libelle)
-    e.texte(x + 216, y, f"{valeur} %", BLANC, 16, 400, "ra")
+def curseur(e, x_libelle, x_droite, centre, y, y_curseur, libelle, valeur, minimum):
+    e.texte(x_libelle, y, libelle)
+    e.texte(x_droite, y, f"{valeur} %", BLANC, 16, 400, "ra")
+    x = centre - 98
     plein = round(196 * (valeur - minimum) / (100 - minimum))
-    e.rect(x + 10, y + 34, 196, 10, "#123C5E", 5)
-    e.rect(x + 10, y + 34, max(plein, 10), 10, BLEU, 5)
-    e.rect(x + 10 + plein - 10, y + 29, 20, 20, BLEU, 10)
+    e.rect(x, y_curseur, 196, 10, "#123C5E", 5)
+    e.rect(x, y_curseur, max(plein, 10), 10, BLEU, 5)
+    e.rect(x + plein - 10, y_curseur - 5, 20, 20, BLEU, 10)
 
 
 def reglages():
-    """Deux colonnes : la LED a gauche, l'ecran et l'alerte a droite."""
+    """La LED a gauche (interrupteur, alerte, intensite), l'ecran a droite :
+    intensite, et intensite pendant le message d'accueil (T13) (proprietaire,
+    10 novembre 2026)."""
     e = ecran("Réglages", disquette=VERT)
-    interrupteur(e, 12, 48, "LED", True)
-    curseur(e, 12, 100, "Intensité LED", 20, 0)
-    interrupteur(e, 252, 48, "Alerte LED", True)
-    curseur(e, 252, 100, "Intensité écran", 80, 20)
-    e.rect(240, 48, 2, 112, GRIS_FONCE)
+    interrupteur(e, 12, 228, 48, "LED", True)
+    interrupteur(e, 12, 228, 90, "Alerte LED", True)
+    curseur(e, 12, 228, 120, 138, 172, "Intensité LED", 20, 0)
+    curseur(e, 252, 468, 360, 54, 88, "Intensité écran", 80, 20)
+    curseur(e, 252, 468, 360, 138, 172, "Intensité message", 100, 20)
     return e
 
 
@@ -161,7 +163,7 @@ def apropos():
     # Adresse masquee : aucune adresse reelle dans le depot (G9).
     e.texte(12, 130, "Adresse IP : 192.168.x.x")
     e.texte(252, 46, "Mémoire : 162 Ko libres,")
-    e.texte(252, 72, "plus grand bloc 108 Ko")
+    e.texte(252, 66, "plus grand bloc 108 Ko")
     e.bouton(12, 168, 456, 44)
     e.texte(240, 190, "Rechercher une mise à jour", BLANC, 16, 400, "mm")
     return e
