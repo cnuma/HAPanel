@@ -48,6 +48,13 @@ globals:
   - id: maj_disponible
     type: bool
     initial_value: "false"
+  # Bouton de la page A propos passe au violet par une recherche (D047) : le
+  # toucher suivant ouvre la confirmation au lieu de chercher de nouveau
+  # (demande du proprietaire, 9 novembre 2026). Remis a faux a l'ouverture de
+  # la page ; jamais vrai dans le binaire prive.
+  - id: apropos_maj_trouvee
+    type: bool
+    initial_value: "false"
   # Etat de connexion affiche : 0 non connecte, 1 connecte. Le libelle n'est
   # redessine qu'au changement d'etat.
   - id: ha_connecte_affiche
@@ -74,7 +81,9 @@ lvgl:
         - lvgl.label.update:
             id: lbl_apropos_maj
             text: "Rechercher une mise à jour"
-        - lambda: lv_obj_remove_local_style_prop(id(btn_apropos_maj), LV_STYLE_BG_COLOR, LV_PART_MAIN);
+        - lambda: |-
+            id(apropos_maj_trouvee) = false;
+            lv_obj_remove_local_style_prop(id(btn_apropos_maj), LV_STYLE_BG_COLOR, LV_PART_MAIN);
       widgets:
         - label:
             id: lbl_apropos_version

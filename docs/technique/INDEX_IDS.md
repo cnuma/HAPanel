@@ -23,6 +23,7 @@ Relancer le script après toute modification du YAML.
 | `accueil_regler_consigne` | script | packages/pages/accueil.yaml | — |
 | `accueil_wifi` | script | packages/pages/accueil.yaml | packages/lvgl.yaml |
 | `apropos_ip` | text_sensor (ip_address) | packages/lvgl.yaml | — |
+| `apropos_maj_trouvee` | globals | packages/lvgl.yaml | packages/acces_public.yaml |
 | `banc_memoire_libre` | sensor (free) | hapanel_banc.yaml | hapanel_2432s028_banc.yaml |
 | `banc_memoire_libre` | sensor (free) | hapanel_2432s028_banc.yaml | hapanel_banc.yaml |
 | `banc_plus_grand_bloc` | sensor (block) | hapanel_banc.yaml | hapanel_2432s028_banc.yaml |
@@ -200,6 +201,7 @@ Relancer le script après toute modification du YAML.
 | `maj_recherche_demarrage_lancer` | script | packages/acces_public.yaml | — |
 | `maj_rechercher` | script | packages/acces_prive.yaml | packages/acces_public.yaml, packages/lvgl.yaml |
 | `maj_rechercher` | script | packages/acces_public.yaml | packages/acces_prive.yaml, packages/lvgl.yaml |
+| `maj_rechercher_reseau` | script | packages/acces_public.yaml | — |
 | `maj_reponses` | globals | packages/acces_public.yaml | — |
 | `message_actif` | switch (template) | packages/message_accueil.yaml | — |
 | `message_fermer` | script | packages/message_accueil.yaml | packages/liaison_ha.yaml |

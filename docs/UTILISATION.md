@@ -115,7 +115,9 @@ Version du logiciel, connexion à Home Assistant, adresse IP du panneau sur le r
 (« aucune » sans Wi-Fi) et mémoire. Ces informations sont utiles en cas de dépannage.
 En dessous, le bouton **Rechercher une mise à jour** demande tout de suite s'il existe
 une nouvelle version ; il affiche ensuite « À jour », « Version … disponible »,
-« Recherche impossible » ou « Pas de Wi-Fi ».
+« Recherche impossible » ou « Pas de Wi-Fi ». Quand une version est trouvée, le bouton
+devient violet : touchez-le de nouveau pour ouvrir la confirmation d'installation,
+comme avec la tuile **Mise à jour** du Menu.
 
 ## Réglages
 
@@ -187,8 +189,8 @@ Quand une nouvelle version du logiciel est publiée, le panneau la voit la nuit 
 - la **LED** fait deux éclairs violets toutes les 10 secondes, à son intensité
   habituelle ; avec « LED » arrêtée dans les Réglages, seule la flèche le montre.
 
-Pour l'installer depuis le panneau : **Menu**, tuile violette **Mise à jour**, puis
-**Installer**. Le message « Mise à jour en cours, module indisponible » reste affiché
+Pour l'installer depuis le panneau : **Menu**, tuile violette **Mise à jour** (ou le
+bouton violet de la page À propos, après une recherche), puis **Installer**. Le message « Mise à jour en cours, module indisponible » reste affiché
 2 à 3 minutes, sans réagir au toucher, puis le panneau redémarre dans la nouvelle
 version. En cas d'échec, un message le dit : touchez **Fermer** et réessayez plus tard.
 

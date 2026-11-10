@@ -9,6 +9,10 @@ l'affiche sous « Installer la version X ? », et Home Assistant dans la fenêtr
 La ligne s'écrit dans le même commit que la fonction qu'elle décrit ; la version
 proposée pour la prochaine publication est confirmée à la fusion.
 
+## 0.11.2
+
+Le bouton violet de la page À propos ouvre directement la confirmation de mise à jour.
+
 ## 0.11.1
 
 Logiciel inchangé ; nouvelle page d'installation par carte (cnuma.github.io/HAPanel).
