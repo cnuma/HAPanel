@@ -17,10 +17,10 @@ lvgl:
         - button:
             id: btn_men_meteo
             align: TOP_LEFT
-            x: 8
-            y: 40
-            width: 108
-            height: 72
+            x: ${fmt_men_meteo_x}
+            y: ${fmt_men_meteo_y}
+            width: ${fmt_men_tuile_l}
+            height: ${fmt_men_tuile_h}
             pad_all: 4
             widgets:
               - label:
@@ -39,10 +39,10 @@ lvgl:
         - button:
             id: btn_men_planning
             align: TOP_LEFT
-            x: 124
-            y: 40
-            width: 108
-            height: 72
+            x: ${fmt_men_planning_x}
+            y: ${fmt_men_planning_y}
+            width: ${fmt_men_tuile_l}
+            height: ${fmt_men_tuile_h}
             pad_all: 4
             widgets:
               - label:
@@ -61,10 +61,10 @@ lvgl:
         - button:
             id: btn_men_scenarios
             align: TOP_LEFT
-            x: 8
-            y: 118
-            width: 108
-            height: 72
+            x: ${fmt_men_scenarios_x}
+            y: ${fmt_men_scenarios_y}
+            width: ${fmt_men_tuile_l}
+            height: ${fmt_men_tuile_h}
             pad_all: 4
             widgets:
               - label:
@@ -83,10 +83,10 @@ lvgl:
         - button:
             id: btn_men_apropos
             align: TOP_LEFT
-            x: 8
-            y: 196
-            width: 108
-            height: 72
+            x: ${fmt_men_apropos_x}
+            y: ${fmt_men_apropos_y}
+            width: ${fmt_men_tuile_l}
+            height: ${fmt_men_tuile_h}
             pad_all: 4
             widgets:
               - label:
@@ -105,10 +105,10 @@ lvgl:
         - button:
             id: btn_men_reglages
             align: TOP_LEFT
-            x: 124
-            y: 118
-            width: 108
-            height: 72
+            x: ${fmt_men_reglages_x}
+            y: ${fmt_men_reglages_y}
+            width: ${fmt_men_tuile_l}
+            height: ${fmt_men_tuile_h}
             pad_all: 4
             widgets:
               - label:
@@ -130,10 +130,10 @@ lvgl:
         - button:
             id: btn_men_maj
             align: TOP_LEFT
-            x: 124
-            y: 196
-            width: 108
-            height: 72
+            x: ${fmt_men_maj_x}
+            y: ${fmt_men_maj_y}
+            width: ${fmt_men_tuile_l}
+            height: ${fmt_men_tuile_h}
             pad_all: 4
             hidden: true
             bg_color: 0xAB47BC

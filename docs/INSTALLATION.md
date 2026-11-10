@@ -13,7 +13,7 @@ commande, rien à compiler, aucun mot de passe à inventer.
   |---|---|
   | ESP32-2432S024C | 2,4 pouces, tactile capacitif |
   | ESP32-2432S028, prises USB-C **et** micro-USB | 2,8 pouces, tactile résistif (appui franc) |
-  | Guition JC4827W543 (en essai) | 4,3 pouces, tactile capacitif ; pages en portrait au centre de l'écran, bande noire en bas, pas de LED |
+  | Guition JC4827W543 (en essai) | 4,3 pouces, tactile capacitif, en paysage (prise USB à gauche) ; pas de LED |
 
   Une S028 avec une seule prise micro-USB n'est pas encore prise en charge.
 - **Un câble USB de données.** Certains câbles ne font que charger : si l'ordinateur

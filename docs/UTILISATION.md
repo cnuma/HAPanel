@@ -134,6 +134,7 @@ fonctionne même sans Home Assistant ni Wi-Fi.
 | 3 | Alerte LED | Interrupteur. Arrêté : plus de rouge clignotant en cas d'anomalie ; seul l'écran la montre. |
 | 4 | Intensité écran | Faites glisser, de 20 à 100 %. L'écran continue de baisser tout seul dans le noir, et ne devient jamais illisible. |
 | 5 | Disquette | Apparaît après un changement : grise pendant l'enregistrement, verte quand il est fait. |
+| 6 | Intensité message | Faites glisser, de 20 à 100 %. Luminosité de l'écran pendant le message d'accueil, à la place d'« Intensité écran » ; elle suit aussi la lumière de la pièce. 100 % par défaut. |
 
 - **Un curseur s'applique quand vous levez le doigt** : la valeur affichée suit le
   doigt, la LED ou l'écran change au relâchement.
@@ -158,7 +159,8 @@ le régler depuis le panneau, mettez-le sur « Ne pas imposer » dans l'automati
 
 **Luminosité de l'écran :** elle baisse dans une pièce sombre et remonte quand la
 pièce est éclairée, en quelques secondes. Le réglage « Intensité écran » (page
-Réglages) la diminue en plus, partout.
+Réglages) la diminue en plus, partout ; pendant le message d'accueil, c'est
+« Intensité message » qui s'applique.
 
 **LED de façade :** elle montre l'état du chauffage même écran éteint.
 

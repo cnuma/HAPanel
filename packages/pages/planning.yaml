@@ -43,16 +43,17 @@ lvgl:
             align: TOP_LEFT
             x: 12
             y: 66
-            width: 216
+            width: ${fmt_pla_nom_1_l}
             text_color: 0x9E9E9E
             hidden: true
             text: ""
         - label:
             id: lbl_pla_resume
             align: TOP_LEFT
-            x: 12
-            y: 88
-            width: 216
+            text_align: ${fmt_pla_resume_ta}
+            x: ${fmt_pla_resume_x}
+            y: ${fmt_pla_resume_y}
+            width: ${fmt_pla_resume_l}
             text_font: police_titre
             hidden: true
             text: ""
@@ -60,8 +61,8 @@ lvgl:
             id: obj_pla_bande
             align: TOP_LEFT
             x: 12
-            y: 122
-            width: 216
+            y: ${fmt_pla_bande_y}
+            width: ${fmt_pla_bande_l}
             height: 18
             radius: 6
             border_width: 0
@@ -74,15 +75,15 @@ lvgl:
             id: lbl_pla_h0
             align: TOP_LEFT
             x: 12
-            y: 144
+            y: ${fmt_pla_heures_y}
             text_color: 0x9E9E9E
             hidden: true
             text: "0"
         - label:
             id: lbl_pla_h6
             align: TOP_LEFT
-            x: 51
-            y: 144
+            x: ${fmt_pla_h6_x}
+            y: ${fmt_pla_heures_y}
             width: 30
             text_align: CENTER
             text_color: 0x9E9E9E
@@ -91,8 +92,8 @@ lvgl:
         - label:
             id: lbl_pla_h12
             align: TOP_LEFT
-            x: 105
-            y: 144
+            x: ${fmt_pla_h12_x}
+            y: ${fmt_pla_heures_y}
             width: 30
             text_align: CENTER
             text_color: 0x9E9E9E
@@ -101,8 +102,8 @@ lvgl:
         - label:
             id: lbl_pla_h18
             align: TOP_LEFT
-            x: 159
-            y: 144
+            x: ${fmt_pla_h18_x}
+            y: ${fmt_pla_heures_y}
             width: 30
             text_align: CENTER
             text_color: 0x9E9E9E
@@ -112,7 +113,7 @@ lvgl:
             id: lbl_pla_h24
             align: TOP_RIGHT
             x: -12
-            y: 144
+            y: ${fmt_pla_heures_y}
             width: 30
             text_align: RIGHT
             text_color: 0x9E9E9E
@@ -123,7 +124,7 @@ lvgl:
             id: obj_pla_maintenant
             align: TOP_LEFT
             x: 12
-            y: 118
+            y: ${fmt_pla_maintenant_y}
             width: 2
             height: 26
             radius: 0
@@ -139,7 +140,7 @@ lvgl:
             id: obj_pla_point_2
             align: TOP_LEFT
             x: 12
-            y: 180
+            y: ${fmt_pla_point_2_y}
             width: 8
             height: 8
             radius: 4
@@ -152,8 +153,8 @@ lvgl:
             id: lbl_pla_nom_2
             align: TOP_LEFT
             x: 28
-            y: 174
-            width: 104
+            y: ${fmt_pla_ligne_2_y}
+            width: ${fmt_pla_ligne_l}
             long_mode: DOT
             hidden: true
             text: ""
@@ -161,8 +162,8 @@ lvgl:
             id: lbl_pla_horaire_2
             align: TOP_RIGHT
             x: -12
-            y: 174
-            width: 104
+            y: ${fmt_pla_ligne_2_y}
+            width: ${fmt_pla_ligne_l}
             text_align: RIGHT
             hidden: true
             text: ""
@@ -170,7 +171,7 @@ lvgl:
             id: obj_pla_point_3
             align: TOP_LEFT
             x: 12
-            y: 220
+            y: ${fmt_pla_point_3_y}
             width: 8
             height: 8
             radius: 4
@@ -183,8 +184,8 @@ lvgl:
             id: lbl_pla_nom_3
             align: TOP_LEFT
             x: 28
-            y: 214
-            width: 104
+            y: ${fmt_pla_ligne_3_y}
+            width: ${fmt_pla_ligne_l}
             long_mode: DOT
             hidden: true
             text: ""
@@ -192,8 +193,8 @@ lvgl:
             id: lbl_pla_horaire_3
             align: TOP_RIGHT
             x: -12
-            y: 214
-            width: 104
+            y: ${fmt_pla_ligne_3_y}
+            width: ${fmt_pla_ligne_l}
             text_align: RIGHT
             hidden: true
             text: ""
@@ -201,7 +202,7 @@ lvgl:
             id: obj_pla_point_4
             align: TOP_LEFT
             x: 12
-            y: 260
+            y: ${fmt_pla_point_4_y}
             width: 8
             height: 8
             radius: 4
@@ -214,8 +215,8 @@ lvgl:
             id: lbl_pla_nom_4
             align: TOP_LEFT
             x: 28
-            y: 254
-            width: 104
+            y: ${fmt_pla_ligne_4_y}
+            width: ${fmt_pla_ligne_l}
             long_mode: DOT
             hidden: true
             text: ""
@@ -223,8 +224,8 @@ lvgl:
             id: lbl_pla_horaire_4
             align: TOP_RIGHT
             x: -12
-            y: 254
-            width: 104
+            y: ${fmt_pla_ligne_4_y}
+            width: ${fmt_pla_ligne_l}
             text_align: RIGHT
             hidden: true
             text: ""
@@ -320,13 +321,13 @@ script:
                 bool a = actif(hex, i);
                 if (a && debut < 0) debut = i;
                 if (!a && debut >= 0) {
-                  // 216 pixels pour 96 quarts d'heure.
-                  int x = debut * 9 / 4;
+                  // Largeur de la frise pour 96 quarts d'heure.
+                  int x = debut * ${fmt_pla_bande_l} / 96;
                   lv_obj_t *segment = lv_obj_create(id(obj_pla_bande));
                   lv_obj_remove_style_all(segment);
                   lv_obj_remove_flag(segment, LV_OBJ_FLAG_CLICKABLE);
                   lv_obj_set_pos(segment, x, 0);
-                  lv_obj_set_size(segment, i * 9 / 4 - x, 18);
+                  lv_obj_set_size(segment, i * ${fmt_pla_bande_l} / 96 - x, 18);
                   lv_obj_set_style_radius(segment, 6, 0);
                   lv_obj_set_style_bg_color(segment, lv_color_hex(ORANGE), 0);
                   lv_obj_set_style_bg_opa(segment, LV_OPA_COVER, 0);
@@ -335,7 +336,7 @@ script:
               }
             }
           }
-          lv_obj_set_x(id(obj_pla_maintenant), 12 + (heure_ok ? (t.hour * 60 + t.minute) * 3 / 20 : 0));
+          lv_obj_set_x(id(obj_pla_maintenant), 12 + (heure_ok ? (t.hour * 60 + t.minute) * ${fmt_pla_bande_l} / 1440 : 0));
           montrer(id(obj_pla_maintenant), principal && valide && heure_ok);
 
           // Calendriers suivants.

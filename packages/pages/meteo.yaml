@@ -43,15 +43,15 @@ lvgl:
         - label:
             id: lbl_met_icone
             align: TOP_LEFT
-            x: 12
-            y: 72
+            x: ${fmt_met_icone_x}
+            y: ${fmt_met_icone_y}
             text_font: police_meteo
             text_color: 0x9E9E9E
             text: "\U000F0625"
         - label:
             id: lbl_met_temperature
-            align: TOP_RIGHT
-            x: -12
+            align: ${fmt_met_temp_align}
+            x: ${fmt_met_temp_x}
             y: 58
             width: 170
             text_align: RIGHT
@@ -61,77 +61,83 @@ lvgl:
             id: lbl_met_condition
             align: TOP_LEFT
             x: 12
-            y: 114
-            width: 216
+            y: ${fmt_met_condition_y}
+            width: ${fmt_met_condition_l}
             text: ""
         # Previsions : jour, icone, maximale / minimale.
         - label:
             id: lbl_met_j1_jour
             align: TOP_LEFT
-            x: 12
-            y: 152
+            text_align: ${fmt_met_jour_ta}
+            width: ${fmt_met_jour_l}
+            x: ${fmt_met_j1_jour_x}
+            y: ${fmt_met_j1_jour_y}
             text: "--"
         - label:
             id: lbl_met_j1_icone
             align: TOP_LEFT
-            x: 76
-            y: 144
+            x: ${fmt_met_j1_icone_x}
+            y: ${fmt_met_j1_icone_y}
             text_font: police_meteo
             text_color: 0x9E9E9E
             text: "\U000F0625"
         - label:
             id: lbl_met_j1_temp
-            align: TOP_RIGHT
-            x: -12
-            y: 148
-            width: 110
-            text_align: RIGHT
+            align: ${fmt_met_temp_j_align}
+            x: ${fmt_met_j1_temp_x}
+            y: ${fmt_met_j1_temp_y}
+            width: ${fmt_met_temp_j_l}
+            text_align: ${fmt_met_temp_j_ta}
             text_font: police_titre
             text: "-- / --"
         - label:
             id: lbl_met_j2_jour
             align: TOP_LEFT
-            x: 12
-            y: 198
+            text_align: ${fmt_met_jour_ta}
+            width: ${fmt_met_jour_l}
+            x: ${fmt_met_j2_jour_x}
+            y: ${fmt_met_j2_jour_y}
             text: "--"
         - label:
             id: lbl_met_j2_icone
             align: TOP_LEFT
-            x: 76
-            y: 190
+            x: ${fmt_met_j2_icone_x}
+            y: ${fmt_met_j2_icone_y}
             text_font: police_meteo
             text_color: 0x9E9E9E
             text: "\U000F0625"
         - label:
             id: lbl_met_j2_temp
-            align: TOP_RIGHT
-            x: -12
-            y: 194
-            width: 110
-            text_align: RIGHT
+            align: ${fmt_met_temp_j_align}
+            x: ${fmt_met_j2_temp_x}
+            y: ${fmt_met_j2_temp_y}
+            width: ${fmt_met_temp_j_l}
+            text_align: ${fmt_met_temp_j_ta}
             text_font: police_titre
             text: "-- / --"
         - label:
             id: lbl_met_j3_jour
             align: TOP_LEFT
-            x: 12
-            y: 244
+            text_align: ${fmt_met_jour_ta}
+            width: ${fmt_met_jour_l}
+            x: ${fmt_met_j3_jour_x}
+            y: ${fmt_met_j3_jour_y}
             text: "--"
         - label:
             id: lbl_met_j3_icone
             align: TOP_LEFT
-            x: 76
-            y: 236
+            x: ${fmt_met_j3_icone_x}
+            y: ${fmt_met_j3_icone_y}
             text_font: police_meteo
             text_color: 0x9E9E9E
             text: "\U000F0625"
         - label:
             id: lbl_met_j3_temp
-            align: TOP_RIGHT
-            x: -12
-            y: 240
-            width: 110
-            text_align: RIGHT
+            align: ${fmt_met_temp_j_align}
+            x: ${fmt_met_j3_temp_x}
+            y: ${fmt_met_j3_temp_y}
+            width: ${fmt_met_temp_j_l}
+            text_align: ${fmt_met_temp_j_ta}
             text_font: police_titre
             text: "-- / --"
 

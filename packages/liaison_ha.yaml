@@ -20,7 +20,8 @@
 # Affichage : packages/pages/scenarios.yaml (script scenarios_rafraichir).
 #
 # Reglages du module (D027, D031) : led_mode (respiration, eteinte),
-# led_intensite (0 a 100), led_alerte (on, off), ecran_intensite (20 a 100).
+# led_intensite (0 a 100), led_alerte (on, off), ecran_intensite (20 a 100),
+# message_intensite (20 a 100, T13).
 # « libre » : le blueprint n'impose pas ce reglage (D031). Entites :
 # packages/led_veille.yaml ; page : packages/pages/reglages.yaml.
 substitutions:
@@ -202,7 +203,7 @@ api:
             // entites du module, que HA affiche aussitot. Rien ne change s'ils
             // sont deja en place, pas d'ecriture en flash toutes les 5 min (G3).
             // « libre » : reglage laisse au module et a la page de l'appareil.
-            if (strncmp(k, "led_", 4) == 0 || strcmp(k, "ecran_intensite") == 0) {
+            if (strncmp(k, "led_", 4) == 0 || strcmp(k, "ecran_intensite") == 0 || strcmp(k, "message_intensite") == 0) {
               bool libre = strcmp(v, "libre") == 0;
               if (strcmp(k, "led_mode") == 0 && (libre || strcmp(v, "respiration") == 0 || strcmp(v, "eteinte") == 0)) {
                 id(reglage_impose_led_mode) = !libre;
@@ -221,6 +222,9 @@ api:
               } else if (strcmp(k, "ecran_intensite") == 0 && (libre || (nombre && f >= ${ecran_intensite_min} && f <= 100))) {
                 id(reglage_impose_ecran_intensite) = !libre;
                 if (!libre && id(ecran_intensite).state != f) id(ecran_intensite).make_call().set_value(f).perform();
+              } else if (strcmp(k, "message_intensite") == 0 && (libre || (nombre && f >= ${ecran_intensite_min} && f <= 100))) {
+                id(reglage_impose_message_intensite) = !libre;
+                if (!libre && id(message_intensite).state != f) id(message_intensite).make_call().set_value(f).perform();
               } else {
                 ESP_LOGW("hapanel.liaison", "cle ou valeur inconnue : %s %s", k, v);
                 return;

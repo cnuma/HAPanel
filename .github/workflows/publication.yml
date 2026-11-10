@@ -10,9 +10,11 @@
 # Declenche par l'envoi d'une etiquette v<version>, par exemple v0.8.0-dev.1 :
 # la version doit commencer par le contenu du fichier VERSION (G5).
 #
-# Version sans suffixe (0.12.0) : la page d'installation par carte est aussi
-# construite (tools/construire_page.sh) et publiee sur GitHub Pages (D044) ; une
-# version -dev ne la change pas.
+# Version sans suffixe (0.12.0) : Release marquee « Latest », page d'installation
+# par carte construite (tools/construire_page.sh) et publiee sur GitHub Pages
+# (D044). Version -dev : preversion, jamais « Latest » (D055) : ni Home
+# Assistant ni les modules, qui lisent releases/latest, ne la voient ; la page
+# ne change pas.
 name: Publication
 
 on:
@@ -116,11 +118,16 @@ jobs:
       - name: Release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: >
-          gh release create "$GITHUB_REF_NAME" publication/*
-          --title "HAPanel ${{ steps.id.outputs.version }}"
-          --notes "Binaires publics sans secret (D039, D041). Premiere installation : hapanel-2432s024c-factory.bin (ecran 2,4 pouces capacitif), hapanel-2432s028-factory.bin (2,8 pouces resistif) ou hapanel-jc4827w543-factory.bin (Guition 4,3 pouces, ESP32-S3). Mise a jour : depuis le module (Menu, Mise a jour) ou entite Firmware dans Home Assistant."
-          --latest
+        run: |
+          if [ "${{ steps.id.outputs.finale }}" = "true" ]; then
+            statut="--latest"
+          else
+            statut="--prerelease --latest=false"
+          fi
+          gh release create "$GITHUB_REF_NAME" publication/* \
+            --title "HAPanel ${{ steps.id.outputs.version }}" \
+            --notes "Binaires publics sans secret (D039, D041). Premiere installation : hapanel-2432s024c-factory.bin (ecran 2,4 pouces capacitif), hapanel-2432s028-factory.bin (2,8 pouces resistif) ou hapanel-jc4827w543-factory.bin (Guition 4,3 pouces, ESP32-S3). Mise a jour : depuis le module (Menu, Mise a jour) ou entite Firmware dans Home Assistant." \
+            $statut
 
       - name: Page d'installation (D044)
         if: steps.id.outputs.finale == 'true'

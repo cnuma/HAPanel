@@ -73,11 +73,16 @@ time:
         minutes: 0
         seconds: 0
         then:
-          - logger.log:
-              tag: hapanel.maj
-              level: INFO
-              format: "recherche de 3 h"
-          - update.check: maj_firmware
+          # Version d'essai (-dev) : jamais de recherche automatique (D055).
+          - if:
+              condition:
+                lambda: return !(strstr("${version}", "-dev") != nullptr);
+              then:
+                - logger.log:
+                    tag: hapanel.maj
+                    level: INFO
+                    format: "recherche de 3 h"
+                - update.check: maj_firmware
 
 # Confirmation, puis installation (D047). Au-dessus de tout, y compris du
 # message d'accueil (paquet inclus apres application.yaml).
@@ -90,8 +95,8 @@ lvgl:
           # Les touchers ne traversent pas vers la page en dessous.
           clickable: true
           align: TOP_LEFT
-          width: 240
-          height: 320
+          width: ${ecran_largeur}
+          height: ${ecran_hauteur}
           radius: 0
           border_width: 0
           pad_all: 0
@@ -112,7 +117,7 @@ lvgl:
                 id: lbl_maj_texte
                 align: TOP_MID
                 y: 80
-                width: 216
+                width: ${fmt_texte_largeur}
                 long_mode: WRAP
                 text_align: CENTER
                 text_font: police_titre
@@ -122,7 +127,7 @@ lvgl:
                 id: lbl_maj_resume
                 align: TOP_MID
                 y: 150
-                width: 216
+                width: ${fmt_texte_largeur}
                 long_mode: WRAP
                 text_align: CENTER
                 text_color: 0xB0BEC5
@@ -181,14 +186,26 @@ script:
           if (faite) return;
           faite = true;
           id(maj_recherche_demarrage_lancer).execute();
+  # Version d'essai (-dev, binaire d'une branche) : pas de recherche
+  # automatique, pour qu'aucune version publiee ne la remplace sans qu'on le
+  # demande (D055) ; la recherche du bouton d'A propos reste possible.
   - id: maj_recherche_demarrage_lancer
     then:
       - delay: 10s
-      - logger.log:
-          tag: hapanel.maj
-          level: INFO
-          format: "recherche du demarrage"
-      - update.check: maj_firmware
+      - if:
+          condition:
+            lambda: return strstr("${version}", "-dev") != nullptr;
+          then:
+            - logger.log:
+                tag: hapanel.maj
+                level: INFO
+                format: "version d'essai : pas de recherche automatique"
+          else:
+            - logger.log:
+                tag: hapanel.maj
+                level: INFO
+                format: "recherche du demarrage"
+            - update.check: maj_firmware
 
   # Bouton de la page A propos (D047) : « Recherche... », puis le resultat dans
   # le libelle du bouton. Bouton deja violet (version trouvee) : ouvre la

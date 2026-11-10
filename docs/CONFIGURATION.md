@@ -168,7 +168,7 @@ Le bouton n'envoie qu'un numéro : il ne peut lancer que les scénarios choisis 
 
 ## 5. Régler la LED et l'écran
 
-Chaque module a quatre réglages, à deux endroits qui montrent toujours la même
+Chaque module a cinq réglages, à deux endroits qui montrent toujours la même
 valeur :
 
 - sa page d'appareil dans Home Assistant (**Paramètres › Appareils et services ›
@@ -181,6 +181,7 @@ valeur :
 | Intensité LED | 0 à 100 % ; 100 % est le maximum | 20 % |
 | Alerte LED | Activée, désactivée : clignotement rouge en cas d'anomalie | Activée |
 | Intensité écran | 20 à 100 % : multiplie la luminosité choisie selon la pièce | 100 % |
+| Intensité message | 20 à 100 % : remplace « Intensité écran » pendant le message d'accueil (section 6) | 100 % |
 
 L'effet est immédiat et le module garde ses réglages après un redémarrage, même sans
 Home Assistant. L'intensité de la LED et celle de l'écran baissent d'elles-mêmes dans

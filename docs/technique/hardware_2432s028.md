@@ -50,6 +50,12 @@ boutons sont fiables. Binaire public `hapanel-2432s028-factory.bin` publié à p
 | `pin_led_rouge`, `pin_led_vert`, `pin_led_bleu` | `GPIO4`, `GPIO16`, `GPIO17` | LED RVB, supposée allumée à l'état bas comme sur la S024C. |
 | `pin_ldr` | `GPIO34` | LDR. |
 
+### Bloc `packages` : le format de l'écran (D053)
+
+`format: !include format_portrait.yaml` : positions, tailles et polices des pages pour
+240 × 320 en portrait (substitutions `ecran_largeur`, `ecran_hauteur`, `fmt_…`), valeurs
+d'origine des pages. La Guition 4,3" inclut `format_paysage.yaml`, aux mêmes clés.
+
 ### Bloc `spi` : deux bus
 
 | id | Rôle |

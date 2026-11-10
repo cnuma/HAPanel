@@ -39,8 +39,10 @@ de test de l'atelier.
    Le manifeste de la S024C garde le nom `manifest.json` : son adresse est compilée
    dans les modules déjà installés. Jusqu'à `v0.8.1` incluse, la Release ne contenait
    que la S024C, sous les noms `hapanel-factory.bin` et `hapanel-ota.bin`.
-4. Vérifier la Release : les neuf fichiers sont présents, elle est marquée
-   **Latest** ; `manifest-jc4827w543.json` porte `"chipFamily": "ESP32-S3"`, les deux
+4. Vérifier la Release : les neuf fichiers sont présents ; une version finale est
+   marquée **Latest**, une version `-dev` (ou `-beta`, `-rc`) est une **préversion**,
+   jamais « Latest » : ni HA ni les modules ne la voient (D055) ;
+   `manifest-jc4827w543.json` porte `"chipFamily": "ESP32-S3"`, les deux
    autres `"ESP32"` (D049).
 5. Version finale seulement (`0.12.0`, sans suffixe) : la tâche « page » publie la
    page d'installation par carte (D044). Vérifier que <https://cnuma.github.io/HAPanel/>

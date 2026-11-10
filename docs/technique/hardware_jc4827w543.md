@@ -10,19 +10,19 @@ ou un bus pour cette carte (G2).
 Il déclare **les mêmes `id`** que `hardware.yaml`. Le reste du panneau (pages, LVGL,
 veille, LED) les utilise sans savoir quelle carte est montée.
 
-**État : à valider au banc** (cahier Q). Le brochage vient d'AquaLook, qui a validé cette
+**État :** validée au banc le 9 novembre 2026 en portrait provisoire (cahier Q) ;
+paysage à valider (cahier U). Le brochage vient d'AquaLook, qui a validé cette
 carte sur matériel le 27 août 2026 (`docs/architecture/HW_JC4827W543_PORT_IMPACT.md` du
 dépôt `cnuma/AquaLook`), et du modèle `JC4827W543` d'ESPHome.
 
-**Provisoire (D049) :** l'écran est tourné en portrait (272 × 480) et les pages de
-240 × 320 y sont centrées en largeur, avec une bande noire en bas, en attendant des
-pages dessinées pour le paysage (TODO T04).
+**Paysage (D053) :** l'écran est en paysage, 480 × 272, port USB à gauche ; les pages
+prennent leurs positions dans `packages/format_paysage.yaml`, inclus par ce fichier.
+Jusqu'à 0.11.2, il était tourné en portrait, pages de 240 × 320 centrées (D049).
 
 ## Dépendances
 
-- **Utilise :** les `id` des pages (`page_accueil`… `page_apropos`) pour leurs marges,
-  au démarrage. C'est la seule exception à « rien des autres fichiers », le temps du
-  portrait provisoire.
+- **Inclut :** `format_paysage.yaml`, positions et tailles des pages pour 480 × 272
+  (D053).
 - **Fournit :** les mêmes `id` que `hardware.yaml` (`bus_spi_ecran`, `bus_i2c_tactile`,
   `sortie_retroeclairage`, `sortie_led_rouge`, `sortie_led_vert`, `sortie_led_bleu`,
   `ldr_tension`, `retroeclairage`, `ecran`, `tactile`).
@@ -34,14 +34,14 @@ pages dessinées pour le paysage (TODO T04).
 |---|---|---|
 | Puce | ESP32, révision 3.1, sans PSRAM | **ESP32-S3**, 8 Mo de PSRAM octale |
 | Écran | ILI9341, 240 × 320, bus SPI | **NV3041A, 480 × 272, bus QSPI** (4 lignes de données) |
-| Orientation | Portrait natif | Paysage natif, tourné en portrait par LVGL |
+| Orientation | Portrait natif, format portrait | Paysage, tourné de 180° par LVGL (port USB à gauche), format paysage |
 | Tactile | CST820, lu toutes les 20 ms | **GT911**, interruption sur GPIO3 |
 | Rétroéclairage | GPIO27 | **GPIO1** |
 | LED RVB, LDR | GPIO4/16/17, GPIO34 | **Aucune** : sorties et capteur sans effet |
 
 ## Bloc par bloc
 
-### Bloc `substitutions` : le brochage et la zone des pages
+### Bloc `substitutions` : le brochage
 
 | Substitution | Valeur | Rôle |
 |---|---|---|
@@ -50,7 +50,12 @@ pages dessinées pour le paysage (TODO T04).
 | `pin_retroeclairage` | `GPIO1` | Rétroéclairage, variable. |
 | `pin_i2c_sda`, `pin_i2c_scl` | `GPIO8`, `GPIO4` | Bus I²C du tactile. |
 | `pin_tactile_int`, `pin_tactile_rst` | `GPIO3`, `GPIO38` | Interruption et remise à zéro du GT911. GPIO3 est une broche de démarrage (`ignore_strapping_warning`). |
-| `ecran_marge_gauche`, `ecran_marge_droite`, `ecran_marge_bas` | `16`, `16`, `160` | Zone des pages (240 × 320) dans l'écran tourné (272 × 480). |
+
+### Bloc `packages` : le format de l'écran (D053)
+
+`format: !include format_paysage.yaml` : positions, tailles et polices des pages pour
+480 × 272 (substitutions `ecran_largeur`, `ecran_hauteur`, `fmt_…`). Les cartes en
+240 × 320 incluent `format_portrait.yaml`, aux mêmes clés.
 
 ### Blocs `esp32` et `psram`
 
@@ -81,22 +86,15 @@ tactile, à 400 kHz comme sur la S024C.
 |---|---|---|
 | `display` | `mipi_spi`, modèle `JC4827W543` | Le modèle d'ESPHome fournit la séquence d'initialisation du NV3041A, `cs` sur GPIO45, couleurs inversées, 20 MHz. |
 | `touchscreen` | `gt911`, interruption et remise à zéro, `transform` : `mirror_x` et `mirror_y` | Le GT911 donne sa propre résolution ; pas de calibrage. Il est monté à 180° de l'écran : ses deux axes sont inversés, comme dans AquaLook (cahier Q3). |
-| `lvgl.rotation` | `270` | Portrait, barre d'état du côté opposé au port USB (cahier Q2). Le NV3041A n'échange pas les axes : LVGL tourne l'image en mémoire (PSRAM), le tactile suit. |
-
-### Bloc `esphome.on_boot` : marges des pages
-
-Au démarrage, une lambda pose des marges sur l'écran de chaque page et sur la couche
-commune (`lv_layer_top`) : 16 px à gauche et à droite, 160 px en bas. Les pages placent
-leurs éléments par rapport à cette zone, qui fait donc 240 × 320 comme sur les autres
-cartes. Priorité `-100`, comme les autres `on_boot` (fusionnés).
+| `lvgl.rotation` | `180` | Paysage, port USB à gauche (D053, cahier U2). En portrait, `270` mettait la barre d'état du côté opposé au port USB (cahier Q2) : le port est donc à droite de l'image native, et 180° le met à gauche. LVGL tourne l'image en mémoire (PSRAM), le tactile suit. |
 
 ## Maintenance
 
 | Opération | Méthode |
 |---|---|
-| Écran à l'envers ou tactile inversé | **D'abord couper le courant** (piège ci-dessous). Puis changer `lvgl.rotation` (`90` ou `270`) : l'image et le toucher tournent ensemble ; si seul le tactile est inversé, changer `transform` (`mirror_x`, `mirror_y`) du bloc `touchscreen`. |
-| Passer en paysage | Pages redessinées pour 480 × 272 (TODO T04), puis retirer `lvgl.rotation`, les marges et le bloc `on_boot`. |
-| Nouvelle page | L'ajouter à la lambda du bloc `on_boot`, sinon elle est décalée de 16 px. |
+| Écran à l'envers ou tactile inversé | **D'abord couper le courant** (piège ci-dessous). Puis changer `lvgl.rotation` (`0` ou `180` en paysage) : l'image et le toucher tournent ensemble ; si seul le tactile est inversé, changer `transform` (`mirror_x`, `mirror_y`) du bloc `touchscreen`. |
+| Déplacer un élément d'une page | Changer sa substitution `fmt_…` dans `format_paysage.yaml` (D053), régénérer les maquettes (`tools/generer_maquettes_paysage.py`). |
+| Nouvel élément ou nouvelle page | Ses positions en substitutions, ajoutées aux deux fichiers de format, aux mêmes clés. |
 
 **Pièges :**
 - L'écran n'a pas de broche de remise à zéro : après un flash par USB, il garde l'état

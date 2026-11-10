@@ -116,7 +116,8 @@ le module.
 | `retro_nuit` | `packages/led_veille.yaml` | 0.40 | Luminosité, pièce sombre (après gamma : environ 8 %) |
 | `retro_ecart_min` | `packages/led_veille.yaml` | 0.05 | Écart minimal avant de changer la luminosité |
 | `retro_plancher` | `packages/led_veille.yaml` | 0.30 | Luminosité minimale de l'écran, quel que soit « Intensité écran » |
-| `ecran_intensite_min` / `ecran_intensite_defaut` | `packages/led_veille.yaml` | 20 / 100 | Bornes et valeur d'un module neuf pour « Intensité écran » |
+| `ecran_intensite_min` / `ecran_intensite_defaut` | `packages/led_veille.yaml` | 20 / 100 | Bornes et valeur d'un module neuf pour « Intensité écran » (minimum commun avec « Intensité message ») |
+| `message_intensite_defaut` | `packages/led_veille.yaml` | 100 | « Intensité message » d'un module neuf (T13) |
 | `led_plafond_jour` / `led_plafond_nuit` | `packages/led_veille.yaml` | 0.25 / 0.05 | Intensité de la LED à 100 % du réglage « Intensité LED » |
 | `led_intensite_defaut` | `packages/led_veille.yaml` | 20 | « Intensité LED » d'un module neuf |
 | `ldr_tension_jour` / `ldr_tension_nuit` | `packages/led_veille.yaml` | 0.09 / 0.20 | Tensions qui définissent pièce éclairée et pièce sombre |

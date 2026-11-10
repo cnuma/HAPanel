@@ -57,7 +57,7 @@ lvgl:
             align: TOP_LEFT
             x: 12
             y: 38
-            width: 216
+            width: ${fmt_texte_largeur}
             long_mode: DOT
             text_color: 0xFF9800
             text: ""
@@ -65,10 +65,10 @@ lvgl:
         - button:
             id: btn_sce_1
             align: TOP_LEFT
-            x: 8
-            y: 60
-            width: 108
-            height: 66
+            x: ${fmt_sce_1_x}
+            y: ${fmt_sce_1_y}
+            width: ${fmt_sce_bouton_l}
+            height: ${fmt_sce_bouton_h}
             pad_all: 4
             hidden: true
             layout:
@@ -85,7 +85,7 @@ lvgl:
                   text: ""
               - label:
                   id: lbl_sce_1
-                  width: 100
+                  width: ${fmt_sce_nom_l}
                   text_align: CENTER
                   text: ""
             on_click:
@@ -95,10 +95,10 @@ lvgl:
         - button:
             id: btn_sce_2
             align: TOP_LEFT
-            x: 124
-            y: 60
-            width: 108
-            height: 66
+            x: ${fmt_sce_2_x}
+            y: ${fmt_sce_2_y}
+            width: ${fmt_sce_bouton_l}
+            height: ${fmt_sce_bouton_h}
             pad_all: 4
             hidden: true
             layout:
@@ -115,7 +115,7 @@ lvgl:
                   text: ""
               - label:
                   id: lbl_sce_2
-                  width: 100
+                  width: ${fmt_sce_nom_l}
                   text_align: CENTER
                   text: ""
             on_click:
@@ -125,10 +125,10 @@ lvgl:
         - button:
             id: btn_sce_3
             align: TOP_LEFT
-            x: 8
-            y: 132
-            width: 108
-            height: 66
+            x: ${fmt_sce_3_x}
+            y: ${fmt_sce_3_y}
+            width: ${fmt_sce_bouton_l}
+            height: ${fmt_sce_bouton_h}
             pad_all: 4
             hidden: true
             layout:
@@ -145,7 +145,7 @@ lvgl:
                   text: ""
               - label:
                   id: lbl_sce_3
-                  width: 100
+                  width: ${fmt_sce_nom_l}
                   text_align: CENTER
                   text: ""
             on_click:
@@ -155,10 +155,10 @@ lvgl:
         - button:
             id: btn_sce_4
             align: TOP_LEFT
-            x: 124
-            y: 132
-            width: 108
-            height: 66
+            x: ${fmt_sce_4_x}
+            y: ${fmt_sce_4_y}
+            width: ${fmt_sce_bouton_l}
+            height: ${fmt_sce_bouton_h}
             pad_all: 4
             hidden: true
             layout:
@@ -175,7 +175,7 @@ lvgl:
                   text: ""
               - label:
                   id: lbl_sce_4
-                  width: 100
+                  width: ${fmt_sce_nom_l}
                   text_align: CENTER
                   text: ""
             on_click:
@@ -185,10 +185,10 @@ lvgl:
         - button:
             id: btn_sce_5
             align: TOP_LEFT
-            x: 8
-            y: 204
-            width: 108
-            height: 66
+            x: ${fmt_sce_5_x}
+            y: ${fmt_sce_5_y}
+            width: ${fmt_sce_bouton_l}
+            height: ${fmt_sce_bouton_h}
             pad_all: 4
             hidden: true
             layout:
@@ -205,7 +205,7 @@ lvgl:
                   text: ""
               - label:
                   id: lbl_sce_5
-                  width: 100
+                  width: ${fmt_sce_nom_l}
                   text_align: CENTER
                   text: ""
             on_click:
@@ -215,10 +215,10 @@ lvgl:
         - button:
             id: btn_sce_6
             align: TOP_LEFT
-            x: 124
-            y: 204
-            width: 108
-            height: 66
+            x: ${fmt_sce_6_x}
+            y: ${fmt_sce_6_y}
+            width: ${fmt_sce_bouton_l}
+            height: ${fmt_sce_bouton_h}
             pad_all: 4
             hidden: true
             layout:
@@ -235,7 +235,7 @@ lvgl:
                   text: ""
               - label:
                   id: lbl_sce_6
-                  width: 100
+                  width: ${fmt_sce_nom_l}
                   text_align: CENTER
                   text: ""
             on_click:

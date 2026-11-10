@@ -1286,7 +1286,8 @@ qui cite la précédente.
   AquaLook (montage à faire) ; LDR ajoutée sur une broche libre.
 - Justification : la carte fonctionne et se met à jour comme les autres dès la
   première version, sans attendre la refonte des pages ; la refonte en paysage
-  (TODO T04, point 1) se fera page par page avec le propriétaire.
+  (TODO T04, point 1) se fera page par page avec le propriétaire. Remplacé pour
+  l'orientation par D053 (10 novembre 2026) : paysage, port USB à gauche.
 - Conséquences : un module 4,3" ne reçoit jamais un binaire ESP32 (manifeste et puce
   distincts) ; une nouvelle page doit être ajoutée aux marges du fichier matériel tant
   que le portrait provisoire dure ; écran sous-utilisé (bande noire) jusqu'au paysage.
@@ -1371,3 +1372,108 @@ qui cite la précédente.
 - Complément du 9 novembre 2026 (relevé en préparant T03) : les captures 08, 09 et 12
   à 19 du guide montraient encore le nom réel d'un module, et la 12 son adresse MAC
   complète ; masquées. Les noms de pièces courants (« Cuisine ») restent en exemple.
+
+## D053 — Pages selon le format de l'écran : un fichier de format par écran (TODO T04)
+
+- Date : 10 novembre 2026 — Statut : option choisie par le propriétaire (HAP-R003 :
+  « Q1 A », « Q3 … port USB à gauche ») ; maquettes validées (HAP-R004 : bouton
+  Accueil gardé en bas, accueil « ok », Réglages laissés tels quels, « fait au
+  mieux » pour le reste) ; implémenté sur `feature/t04-paysage`, à tester (cahier U).
+- Contexte : T04, point 1. Les pages placent leurs éléments au pixel près pour
+  240 × 320 en portrait ; la Guition 4,3" (480 × 272) les affiche tournées, sur 60 %
+  de la dalle (D049). D'autres cartes vont arriver « dans peu de temps » (propriétaire,
+  10 novembre 2026), tailles encore inconnues.
+- Options proposées :
+  - **A, retenue :** un fichier de format par taille d'écran (`format_portrait` pour
+    240 × 320, `format_paysage` pour 480 × 272) donne positions, tailles et polices ;
+    les pages gardent une seule fois leurs éléments et leur logique ; chaque fichier
+    matériel choisit son format ;
+  - B, écartée : mise en page automatique de LVGL (rangées, grilles) ; adapte toute
+    taille, mais réécrit les sept pages validées et refait tout le cahier sur toutes
+    les cartes ;
+  - C, écartée : pages en double pour le paysage ; logique en double, contraire aux
+    règles du dépôt.
+- Décision :
+  - portrait 240 × 320 inchangé, au pixel près, sur la S024C et la S028, sauf
+    l'accueil (T16 ci-dessous) ;
+  - paysage 480 × 272 pour la Guition, port USB à gauche ; mêmes éléments, mêmes
+    couleurs, même barre d'état (D036) et même bouton Accueil en bas (D025) ;
+    l'accueil se sert de la bande du bas, sans bouton Accueil (T16) ;
+  - maquettes : `tools/generer_maquettes_paysage.py`, images dans
+    `docs/images/paysage/` ;
+  - une nouvelle taille d'écran demande un nouveau fichier de format et ses maquettes.
+- Mise en œuvre : 146 substitutions (`ecran_largeur`, `ecran_hauteur`,
+  `fmt_texte_largeur`, `fmt_<page>_<élément>`), aux mêmes clés dans
+  `packages/format_portrait.yaml` et `packages/format_paysage.yaml`, inclus par le bloc
+  `packages` de chaque fichier matériel ; elles remplacent aussi les constantes des
+  lambdas (glissière de l'accueil, frise du planning). Portrait vérifié inchangé :
+  configuration complète comparée avant et après, seules diffèrent des valeurs par
+  défaut de LVGL devenues explicites et un calcul équivalent (216 / 96 = 9 / 4).
+  Guition : `lvgl.rotation` 180 (port USB à gauche, déduit du portrait à 270, cahier
+  Q2), marges du portrait provisoire et leur `on_boot` retirées. Écarts aux maquettes
+  du 10 novembre (« au mieux ») : Météo sans trait de séparation, températures du jour
+  sur une ligne (« 14° / 6° »), icône actuelle en 32 px (polices inchangées).
+  Réglages, demande du propriétaire du 10 novembre après les maquettes : LED, Alerte
+  LED et Intensité LED dans la colonne de gauche, Intensité écran seule à droite.
+- T16, accueil moins tassé (demande du propriétaire du 10 novembre 2026 : « passer
+  T16 » avec T04) : en portrait aussi, l'accueil se répartit sur toute la hauteur, la
+  bande du bas étant libre (pas de bouton Accueil) : pièce y 44, température y 62,
+  ligne extérieure y 124, préréglages y 152, − et + y 206 sur 48 px de haut (44
+  avant), glissière y 266 sur 48 px (40 avant). Seules les valeurs `fmt_acc_…` de
+  `format_portrait.yaml` changent ; maquette `docs/images/accueil.png`.
+- Hors périmètre : glissière de la S028 (K5), qui peut attendre (propriétaire).
+
+## D054 — Luminosité de l'écran pendant le message d'accueil (TODO T13)
+
+- Date : 10 novembre 2026 — Statut : demandé par le propriétaire (« intègre aussi les
+  slider de t13 et la gestion avec », avec T04 et T16) ; points à cadrer de T13
+  tranchés par l'agent sur le modèle d'« Intensité écran » (D031), à confirmer au
+  test ; implémenté sur `feature/t04-paysage` (cahier V).
+- Contexte : T13 (demande du 9 novembre 2026) laissait ouverts le lieu du réglage, le
+  niveau fixe ou relatif à la pièce et le plancher.
+- Décision :
+  - entité de configuration « Intensité message » par module (`message_intensite`,
+    20 à 100 %, pas de 5, 100 % par défaut, gardée en flash), sur la page de
+    l'appareil dans HA et en curseur sur la page Réglages (cinquième réglage) ;
+  - pendant le message d'accueil, elle remplace « Intensité écran » dans
+    `retro_cible_calculer` : la luminosité suit toujours la lumière de la pièce
+    (D023) et ne descend jamais sous `retro_plancher` (D031) ; appliquée aussitôt à
+    l'ouverture et à la fermeture du message (`retro_appliquer`, transition 0,5 s) ;
+  - imposable par le blueprint (entrée « Intensité message », section LED et écran,
+    clé `message_intensite`, « Ne pas imposer » par défaut), cadenas sur la page
+    Réglages comme les autres (D031) ;
+  - page Réglages en portrait : rangées resserrées (curseurs 28 px sous leur libellé
+    au lieu de 30) ; en paysage, sous « Intensité écran », à droite.
+- Options écartées : réglage dans le blueprint seulement (rien sur le module) ; niveau
+  fixe, sans la lumière de la pièce (éblouissant la nuit).
+- Conséquences : blueprint à réimporter (section 7 de `CONFIGURATION.md`) ; un
+  firmware plus ancien ignore la clé `message_intensite` (avertissement dans son
+  journal).
+
+## D055 — Versions d'essai : jamais proposées, jamais recherchées (TODO T18)
+
+- Date : 10 novembre 2026 — Statut : demandé par le propriétaire (« coupe la
+  recherche sur les -dev car nous avons aussi vu que le -dev posait pb pour HA ») ;
+  implémenté sur `feature/t04-paysage` (cahier W).
+- Contexte : le binaire de la branche, écrit par USB sur la 4,3" le 10 novembre 2026,
+  portait le numéro de la Release (`VERSION` 0.11.2 sur la branche) ; pendant
+  l'essai, la Release `v0.11.2` a été installée par le bouton violet et a remplacé
+  le binaire d'essai (ordre exact des événements non établi). D'autre part, chaque
+  Release `-dev` était marquée « Latest » : HA la proposait à tous les modules
+  publics, y compris chez d'autres utilisateurs (T18, D052).
+- Décision :
+  - **publication** : une étiquette avec suffixe (`-dev`, `-beta`, `-rc`) crée une
+    **préversion**, jamais « Latest » (`gh release create --prerelease
+    --latest=false`) ; `releases/latest`, lu par HA et par les modules, reste sur la
+    dernière version finale ;
+  - **module** : un binaire dont la version contient `-dev` ne fait aucune recherche
+    automatique (démarrage, 3 h) ; le bouton d'À propos reste, recherche manuelle et
+    confirmée, seul moyen depuis l'écran de revenir à la version publiée ;
+  - **branche** : `VERSION` porte le suffixe `-dev` de la version visée (règle déjà
+    suivie avant 0.11.1, oubliée sur `feature/t04-paysage` jusqu'à ce jour) ; il est
+    retiré à la fusion.
+- Conséquences : une version d'essai s'installe par USB (binaire de la branche ou
+  fichier `factory` de la préversion) ; elle ne se met plus à jour seule. Reste de
+  T18 : rien, sauf si le propriétaire veut un canal d'essai par le Wi-Fi.
+- Option écartée : couper aussi le bouton d'À propos sur une version d'essai (retour
+  à la version publiée par USB seulement).

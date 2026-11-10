@@ -9,6 +9,10 @@ l'affiche sous « Installer la version X ? », et Home Assistant dans la fenêtr
 La ligne s'écrit dans le même commit que la fonction qu'elle décrit ; la version
 proposée pour la prochaine publication est confirmée à la fusion.
 
+## 0.12.0
+
+Paysage sur la 4,3" ; accueil aéré ; réglage « Intensité message » pour le message d'accueil.
+
 ## 0.11.2
 
 Le bouton violet de la page À propos ouvre directement la confirmation de mise à jour.

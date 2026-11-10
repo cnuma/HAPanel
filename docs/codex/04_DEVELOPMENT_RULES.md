@@ -21,6 +21,12 @@ du C++ au YAML.
   substitutions, relevés sur la carte réelle et jamais supposés. Chaque
   configuration de tête inclut un seul fichier matériel ; tous déclarent les
   mêmes `id`.
+- Positions, tailles et polices des pages : substitutions `fmt_…` d'un fichier de
+  format par taille d'écran (`packages/format_portrait.yaml`, `format_paysage.yaml`),
+  inclus par le fichier matériel de la carte (D053). Tous les formats déclarent les
+  mêmes clés ; un élément ajouté à une page reçoit ses substitutions dans chacun, et
+  les maquettes sont régénérées (`tools/generer_images_doc.py`,
+  `tools/generer_maquettes_paysage.py`).
 - `secrets.yaml` (ignoré) et `secrets.example.yaml` (versionné, sans valeur
   réelle).
 
