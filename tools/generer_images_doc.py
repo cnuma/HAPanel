@@ -42,28 +42,32 @@ def police(taille, graisse=400):
 
 
 class Ecran:
-    """Ecran de 240 x 320 du module, coordonnees en pixels du module."""
+    """Ecran du module, coordonnees en pixels du module : 240 x 320 (portrait), ou
+    480 x 272 (paysage, maquettes de T04)."""
 
-    def __init__(self, titre=None, maison=True, menu=True, wifi=True, ha=True, disquette=None):
+    def __init__(self, titre=None, maison=True, menu=True, wifi=True, ha=True, disquette=None,
+                 largeur=240, hauteur=320):
         """Barre d'etat en haut (D036) : bouton Menu (masque sur le menu), titre, ou date et
         heure sur l'accueil (titre None), disquette, Wi-Fi et connexion a HA. En bas,
         maison centree, sans barre sur l'accueil (D025 revisee)."""
-        self.image = Image.new("RGB", (240 * S, 320 * S), "#000000")
+        self.largeur, self.hauteur = largeur, hauteur
+        dx = largeur - 240  # elements de droite de la barre, cales sur le bord droit
+        self.image = Image.new("RGB", (largeur * S, hauteur * S), "#000000")
         self.d = ImageDraw.Draw(self.image)
         self.reperes = []
-        self.rect(0, 0, 240, 36, "#212121")
+        self.rect(0, 0, largeur, 36, "#212121")
         if menu:
             self.icone("menu", 22, 18, 24)
         self.texte(52, 9, titre if titre else "1 nov.  14:32")
         if disquette:
-            self.icone("disquette", 172, 18, 24, disquette)
+            self.icone("disquette", 172 + dx, 18, 24, disquette)
         for i, (x, y, h) in enumerate([(192, 21, 4), (198, 18, 7), (204, 15, 10), (210, 12, 13)]):
-            self.rect(x, y, 4, h, BLANC if wifi and i < 3 else INACTIF)
-        self.rect(220, 12, 13, 13, VERT if ha else ROUGE, 7)
+            self.rect(x + dx, y, 4, h, BLANC if wifi and i < 3 else INACTIF)
+        self.rect(220 + dx, 12, 13, 13, VERT if ha else ROUGE, 7)
         if maison:
-            self.rect(0, 276, 240, 44, "#212121")
-            self.bouton(86, 280, 68, 36, BLEU)
-            self.icone("maison", 120, 298, 24)
+            self.rect(0, hauteur - 44, largeur, 44, "#212121")
+            self.bouton(largeur // 2 - 34, hauteur - 40, 68, 36, BLEU)
+            self.icone("maison", largeur // 2, hauteur - 22, 24)
 
     def rect(self, x, y, l, h, couleur, rayon=0, bord=None, epaisseur=0):
         boite = [x * S, y * S, (x + l) * S - 1, (y + h) * S - 1]
@@ -378,4 +382,6 @@ def main():
         print(f.name, f.stat().st_size // 1024, "Ko")
 
 
-main()
+
+if __name__ == "__main__":
+    main()

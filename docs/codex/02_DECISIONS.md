@@ -1371,3 +1371,32 @@ qui cite la précédente.
 - Complément du 9 novembre 2026 (relevé en préparant T03) : les captures 08, 09 et 12
   à 19 du guide montraient encore le nom réel d'un module, et la 12 son adresse MAC
   complète ; masquées. Les noms de pièces courants (« Cuisine ») restent en exemple.
+
+## D053 — Pages selon le format de l'écran : un fichier de format par écran (TODO T04)
+
+- Date : 10 novembre 2026 — Statut : option choisie par le propriétaire (HAP-R003 :
+  « Q1 A », « Q3 … port USB à gauche ») ; maquettes en paysage proposées sur
+  `feature/t04-paysage`, à valider avant le code.
+- Contexte : T04, point 1. Les pages placent leurs éléments au pixel près pour
+  240 × 320 en portrait ; la Guition 4,3" (480 × 272) les affiche tournées, sur 60 %
+  de la dalle (D049). D'autres cartes vont arriver « dans peu de temps » (propriétaire,
+  10 novembre 2026), tailles encore inconnues.
+- Options proposées :
+  - **A, retenue :** un fichier de format par taille d'écran (`format_portrait` pour
+    240 × 320, `format_paysage` pour 480 × 272) donne positions, tailles et polices ;
+    les pages gardent une seule fois leurs éléments et leur logique ; chaque fichier
+    matériel choisit son format ;
+  - B, écartée : mise en page automatique de LVGL (rangées, grilles) ; adapte toute
+    taille, mais réécrit les sept pages validées et refait tout le cahier sur toutes
+    les cartes ;
+  - C, écartée : pages en double pour le paysage ; logique en double, contraire aux
+    règles du dépôt.
+- Décision (à compléter après validation des maquettes) :
+  - portrait 240 × 320 inchangé, au pixel près, sur la S024C et la S028 ;
+  - paysage 480 × 272 pour la Guition, port USB à gauche ; mêmes éléments, mêmes
+    couleurs, même barre d'état (D036) et même bouton Accueil en bas (D025) ;
+    l'accueil se sert de la bande du bas, sans bouton Accueil (T16) ;
+  - maquettes : `tools/generer_maquettes_paysage.py`, images dans
+    `docs/images/paysage/` ;
+  - une nouvelle taille d'écran demande un nouveau fichier de format et ses maquettes.
+- Hors périmètre : glissière de la S028 (K5), qui peut attendre (propriétaire).
