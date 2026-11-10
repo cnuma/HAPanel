@@ -58,7 +58,7 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `hapanel_public.yaml` | 25 | Modules de la maison : binaire public sans secret, fonctions et accès public (D039, D037 révisée) |
 | `packages/application.yaml` | 20 | Liste ordonnée des fichiers de fonctions, commune aux configurations |
 | `packages/acces_prive.yaml` | 26 | Wi-Fi, clé de l'API et OTA depuis le PC, lus dans `secrets.yaml` ; scripts de mise à jour vides (D047) |
-| `packages/acces_public.yaml` | 346 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub, mise à jour en attente signalée (D045), recherche, confirmation et installation depuis l'écran (D047) |
+| `packages/acces_public.yaml` | 363 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub, mise à jour en attente signalée (D045), recherche, confirmation et installation depuis l'écran (D047) |
 | `packages/base.yaml` | 50 | Nœud, journaux, écriture des réglages, identité de build (puce : fichier matériel, D049) |
 | `packages/hardware.yaml` | 130 | Carte ESP32-2432S024C : puce, broches, bus, écran, tactile, sorties PWM, LDR (G2) |
 | `packages/hardware_2432s028.yaml` | 136 | Carte ESP32-2432S028 : mêmes `id`, rétroéclairage GPIO21, tactile résistif XPT2046 |

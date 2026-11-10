@@ -1449,3 +1449,31 @@ qui cite la précédente.
 - Conséquences : blueprint à réimporter (section 7 de `CONFIGURATION.md`) ; un
   firmware plus ancien ignore la clé `message_intensite` (avertissement dans son
   journal).
+
+## D055 — Versions d'essai : jamais proposées, jamais recherchées (TODO T18)
+
+- Date : 10 novembre 2026 — Statut : demandé par le propriétaire (« coupe la
+  recherche sur les -dev car nous avons aussi vu que le -dev posait pb pour HA ») ;
+  implémenté sur `feature/t04-paysage` (cahier W).
+- Contexte : le binaire de la branche, écrit par USB sur la 4,3" le 10 novembre 2026,
+  portait le numéro de la Release (`VERSION` 0.11.2 sur la branche) ; pendant
+  l'essai, la Release `v0.11.2` a été installée par le bouton violet et a remplacé
+  le binaire d'essai (ordre exact des événements non établi). D'autre part, chaque
+  Release `-dev` était marquée « Latest » : HA la proposait à tous les modules
+  publics, y compris chez d'autres utilisateurs (T18, D052).
+- Décision :
+  - **publication** : une étiquette avec suffixe (`-dev`, `-beta`, `-rc`) crée une
+    **préversion**, jamais « Latest » (`gh release create --prerelease
+    --latest=false`) ; `releases/latest`, lu par HA et par les modules, reste sur la
+    dernière version finale ;
+  - **module** : un binaire dont la version contient `-dev` ne fait aucune recherche
+    automatique (démarrage, 3 h) ; le bouton d'À propos reste, recherche manuelle et
+    confirmée, seul moyen depuis l'écran de revenir à la version publiée ;
+  - **branche** : `VERSION` porte le suffixe `-dev` de la version visée (règle déjà
+    suivie avant 0.11.1, oubliée sur `feature/t04-paysage` jusqu'à ce jour) ; il est
+    retiré à la fusion.
+- Conséquences : une version d'essai s'installe par USB (binaire de la branche ou
+  fichier `factory` de la préversion) ; elle ne se met plus à jour seule. Reste de
+  T18 : rien, sauf si le propriétaire veut un canal d'essai par le Wi-Fi.
+- Option écartée : couper aussi le bouton d'À propos sur une version d'essai (retour
+  à la version publiée par USB seulement).

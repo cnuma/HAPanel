@@ -451,6 +451,18 @@ blueprint du module réimporté depuis la branche (`05_BUILD_AND_TEST.md`).
 | V7 | Blueprint : « Intensité message » imposée à 60 % | Valeur appliquée sous 5 min, cadenas sur le curseur, « imposé par HA » ; « Ne pas imposer » le libère | `feature/t04-paysage` | |
 | V8 | Redémarrer le module | « Intensité message » gardée | — | |
 
+## W — Versions d'essai sans recherche ni publication « Latest » (D055, TODO T18)
+
+Binaire de la branche `feature/t04-paysage`, version `0.12.0-dev`.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| W1 | Démarrer un module avec le binaire `0.12.0-dev` de la branche, journal ouvert | « version d'essai : pas de recherche automatique » ; pas de flèche violette ni de tuile « Mise à jour » | `feature/t04-paysage` | |
+| W2 | Laisser le module passer 3 h du matin | Pas de « recherche de 3 h » dans le journal ; toujours `0.12.0-dev` le matin | — | |
+| W3 | À propos, « Rechercher une mise à jour » | « Version 0.11.2 disponible » (bouton violet) ; un second toucher ouvre la confirmation, « Annuler » garde la version d'essai | `feature/t04-paysage` | |
+| W4 | À la prochaine étiquette `-dev` (publication) | Release en **préversion**, pas « Latest » ; `releases/latest` reste sur la dernière version finale ; aucun module ni HA ne la propose | — (à la publication) | |
+| W5 | À la publication de 0.12.0 | Release « Latest », page d'installation en 0.12.0 (comme S5) | — (à la publication) | |
+
 ## R — Documentation publique sans élément personnel (D052)
 
 Sur GitHub, branche `docs/t02-projet-publiable` choisie dans le menu des branches.
