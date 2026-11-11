@@ -1482,7 +1482,8 @@ qui cite la précédente.
 
 - Date : 11 novembre 2026 — Statut : demandé par le propriétaire le 9 novembre 2026 ;
   cadrage répondu le 11 novembre 2026 (HAP-R002) ; implémenté sur
-  `feature/t12-verrou-enfants` (cahier X).
+  `feature/t12-verrou-enfants` (cahier X), validé par le propriétaire et fusionné le
+  11 novembre 2026 (0.13.0).
 - Contexte : un enfant peut changer le chauffage, lancer un scénario ou une mise à
   jour depuis un module. Réponses du propriétaire : bloquer les commandes seulement,
   la consultation reste libre ; activation depuis HA, rien depuis l'écran ; aucun
