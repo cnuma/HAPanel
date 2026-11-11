@@ -7,14 +7,15 @@ blueprint:
     conditions actuelles et prévisions sur 3 jours. Planning : créneaux du jour
     de 1 à 4 calendriers. Scénarios : 6 scènes, scripts ou automatisations au
     plus, lancés depuis le panneau. LED et écran : réglages facultatifs, imposés
-    au module, dont la luminosité pendant le message d'accueil. Message d'accueil : facultatif, à l'arrivée de quelqu'un. Envoi à chaque changement, toutes les 5 minutes, au
+    au module, dont la luminosité pendant le message d'accueil. Verrouillage enfants :
+    facultatif, imposé au module. Message d'accueil : facultatif, à l'arrivée de quelqu'un. Envoi à chaque changement, toutes les 5 minutes, au
     démarrage de Home Assistant et quand le panneau le demande (connexion).
     Exécute les commandes du panneau (allumer, couper, consigne, préréglage)
     seulement si elles viennent de ce panneau, si le thermostat est disponible
     et non verrouillé et si la consigne est dans les bornes ; consigne et
     préréglage exigent un chauffage allumé. Le module n'a pas besoin d'être
     autorisé à effectuer des actions Home Assistant.
-    Décisions D014, D015, D019, D020, D021, D024, D026, D028, D031, D042 et D054 du dépôt
+    Décisions D014, D015, D019, D020, D021, D024, D026, D028, D031, D042, D054 et D056 du dépôt
     cnuma/HAPanel.
   domain: automation
   source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/module.yaml
@@ -373,6 +374,31 @@ blueprint:
                 - { label: "80 %", value: "80" }
                 - { label: "90 %", value: "90" }
                 - { label: "100 %", value: "100" }
+    verrouillage:
+      name: Verrouillage enfants
+      description: >-
+        Verrouillé, l'écran du module ne sert plus qu'à consulter : chauffage,
+        scénarios, page Réglages et mise à jour depuis l'écran sont grisés, un
+        cadenas s'affiche dans la barre d'état. Aucun déverrouillage sur le module.
+        Le verrouillage se commande aussi par l'entité « Verrouillage enfants » de
+        la page de l'appareil, ou par une automatisation. « Ne pas imposer » la
+        laisse libre ; une valeur choisie ici la remplace à la connexion et toutes
+        les 5 minutes (D056).
+      collapsed: true
+      input:
+        verrou_enfants:
+          name: Verrouillage enfants
+          default: ne_pas_imposer
+          selector:
+            select:
+              mode: dropdown
+              options:
+                - label: Ne pas imposer
+                  value: ne_pas_imposer
+                - label: Verrouillé
+                  value: "on"
+                - label: Déverrouillé
+                  value: "off"
     accueil:
       name: Message d'accueil
       description: >-
@@ -505,6 +531,9 @@ variables:
       valeur: !input ecran_intensite
     - cle: message_intensite
       valeur: !input message_intensite
+    # Verrouillage enfants (D056), envoye comme les reglages.
+    - cle: verrou_enfants
+      valeur: !input verrou_enfants
   accueil_declencheurs: !input accueil_declencheurs
   accueil_inactivite: !input accueil_inactivite
   accueil_liste_messages: !input accueil_liste_messages

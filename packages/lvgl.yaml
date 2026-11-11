@@ -18,7 +18,8 @@ font:
   # scenarios (play-box-multiple, D024), menu et a propos (information-outline, D025),
   # fermeture du message d'accueil (close, D028), reglages (cog, D031),
   # reglage impose (lock, D031), enregistrement (content-save, D035),
-  # mise a jour disponible (arrow-up-bold-circle, D045).
+  # mise a jour disponible (arrow-up-bold-circle, D045) ; lock sert aussi au
+  # verrouillage enfants (D056).
   - file:
       type: web
       url: https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/fonts/materialdesignicons-webfont.ttf
@@ -261,6 +262,18 @@ lvgl:
                 text_font: police_icones
                 text_color: 0xAB47BC
                 text: "\U000F005F"
+            # Verrouillage enfants (D056) : meme place, cede la place a la
+            # disquette et, une demi-seconde sur deux, a l'icone de mise a jour.
+            # Intervalle de 500 ms en bas de ce fichier.
+            - label:
+                id: ico_barre_verrou
+                align: TOP_LEFT
+                x: ${fmt_barre_icone_x}
+                y: 6
+                hidden: true
+                text_font: police_icones
+                text_color: 0xFF9800
+                text: "\U000F033E"
             # Wi-Fi : 4 barres, script accueil_wifi.
             - obj:
                 id: obj_barre_wifi_1
@@ -388,7 +401,8 @@ interval:
                   - script.execute: liaison_deconnectee
   # Icone de mise a jour (D045) : allumee 500 ms, eteinte 500 ms, tant qu'une
   # mise a jour attend et que la disquette n'est pas affichee. Le drapeau n'est
-  # change qu'au besoin : sans mise a jour, rien n'est redessine.
+  # change qu'au besoin : sans mise a jour, rien n'est redessine. Puis cadenas
+  # du verrouillage enfants (D056).
   - interval: 500ms
     then:
       - lambda: |-
@@ -399,6 +413,13 @@ interval:
           bool cachee = lv_obj_has_flag(id(ico_barre_maj), LV_OBJ_FLAG_HIDDEN);
           if (montrer && cachee) lv_obj_remove_flag(id(ico_barre_maj), LV_OBJ_FLAG_HIDDEN);
           else if (!montrer && !cachee) lv_obj_add_flag(id(ico_barre_maj), LV_OBJ_FLAG_HIDDEN);
+          // Cadenas du verrouillage enfants (D056) : fixe, sauf quand la
+          // disquette ou l'icone de mise a jour occupe la place.
+          bool cadenas = id(verrou_enfants).state && !montrer &&
+                         lv_obj_has_flag(id(ico_barre_enregistrement), LV_OBJ_FLAG_HIDDEN);
+          bool cadenas_cache = lv_obj_has_flag(id(ico_barre_verrou), LV_OBJ_FLAG_HIDDEN);
+          if (cadenas && cadenas_cache) lv_obj_remove_flag(id(ico_barre_verrou), LV_OBJ_FLAG_HIDDEN);
+          else if (!cadenas && !cadenas_cache) lv_obj_add_flag(id(ico_barre_verrou), LV_OBJ_FLAG_HIDDEN);
   - interval: 10s
     then:
       - lvgl.label.update:

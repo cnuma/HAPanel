@@ -469,6 +469,28 @@ Binaire de la branche `feature/t04-paysage`, version `0.12.0-dev`.
 | W4 | À la prochaine étiquette `-dev` (publication) | Release en **préversion**, pas « Latest » ; `releases/latest` reste sur la dernière version finale ; aucun module ni HA ne la propose | — (à la publication) | |
 | W5 | À la publication de 0.12.0 | Release « Latest », page d'installation en 0.12.0 (comme S5) | — (à la publication) | OK 10 nov. : Release « Latest », manifeste et page en 0.12.0 |
 
+## X — Verrouillage enfants (D056, TODO T12)
+
+Binaire de la branche `feature/t12-verrou-enfants`, version `0.13.0-dev`, sur une S024C ; blueprint du module
+réimporté depuis la branche. X10 demande le binaire public et une mise à jour en
+attente : à la prochaine publication.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| X1 | Page de l'appareil dans HA, rubrique Configuration | Entité « Verrouillage enfants », arrêtée ; aucun cadenas sur le module | `feature/t12-verrou-enfants` | |
+| X2 | Activer « Verrouillage enfants » dans HA | En 1 s environ : cadenas orange dans la barre d'état, sur toutes les pages ; disquette quelques secondes, puis le cadenas revient | `feature/t12-verrou-enfants` | |
+| X3 | Verrouillé, accueil, chauffage allumé : toucher un préréglage, − / +, la glissière (toucher et glisser) | Tout est gris (pastille grise), rien ne bouge ; dans HA, le thermostat ne change pas | `feature/t12-verrou-enfants` | |
+| X4 | Verrouillé, page Scénarios : toucher un bouton | Boutons gris, « Verrouillage enfants » en haut ; aucun scénario lancé dans HA | `feature/t12-verrou-enfants` | |
+| X5 | Verrouillé, page Réglages : toucher chaque interrupteur et curseur | Tous gris avec cadenas, « verrouillage enfants » en bas ; aucune valeur ne change | `feature/t12-verrou-enfants` | |
+| X6 | Verrouillé : Menu, Météo, Planning, À propos, retour à l'accueil ; laisser l'écran s'éteindre puis le toucher | Navigation et consultation normales ; l'écran se rallume | `feature/t12-verrou-enfants` | |
+| X7 | Verrouillé : couper l'alimentation, rebrancher | Toujours verrouillé au redémarrage (cadenas, commandes grises) | `feature/t12-verrou-enfants` | |
+| X8 | Verrouillé : couper HA (ou le Wi-Fi) quelques minutes, puis le rétablir | Cadenas toujours là, point rouge ; après retour, toujours verrouillé | `feature/t12-verrou-enfants` | |
+| X9 | Désactiver « Verrouillage enfants » dans HA | Cadenas parti ; accueil, scénarios et réglages commandent de nouveau | `feature/t12-verrou-enfants` | |
+| X10 | Binaire public, mise à jour en attente, verrouillé | Tuile violette du Menu et bouton d'À propos gris, sans effet ; flèche violette et cadenas alternent ; HA peut toujours installer | — (à la publication) | |
+| X11 | Blueprint : « Verrouillé » imposé ; puis désactiver l'entité dans HA | Verrouillé sous 5 min ; l'entité revient à « activée » sous 5 min ; « Ne pas imposer » rend la main à l'entité | `feature/t12-verrou-enfants` | |
+| X12 | Verrouillé, message d'accueil (comme A1) : toucher l'écran | Le message se ferme | — | |
+| X13 | Pendant l'attente d'une consigne (− / + puis verrouiller dans les 2 s) | La consigne n'est pas envoyée, l'affichage revient à la valeur réelle | — | |
+
 ## R — Documentation publique sans élément personnel (D052)
 
 Sur GitHub, branche `docs/t02-projet-publiable` choisie dans le menu des branches.

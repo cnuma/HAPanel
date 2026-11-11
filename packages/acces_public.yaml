@@ -213,6 +213,21 @@ script:
   - id: maj_rechercher
     mode: single
     then:
+      # Verrouillage enfants (D056) : bouton grise ; garde-fou si l'appui arrive.
+      - if:
+          condition:
+            lambda: return id(verrou_enfants).state;
+          then:
+            - logger.log:
+                tag: hapanel.maj
+                level: INFO
+                format: "recherche refusee : verrouillage enfants"
+          else:
+            - script.execute: maj_rechercher_choix
+
+  - id: maj_rechercher_choix
+    mode: single
+    then:
       - if:
           condition:
             lambda: return id(apropos_maj_trouvee) && id(maj_firmware).state == update::UPDATE_STATE_AVAILABLE;
@@ -275,7 +290,10 @@ script:
     then:
       - if:
           condition:
-            update.is_available: maj_firmware
+            and:
+              - update.is_available: maj_firmware
+              # Verrouillage enfants (D056) : tuile grisee ; garde-fou.
+              - lambda: return !id(verrou_enfants).state;
           then:
             - lambda: |-
                 id(maj_installation) = false;
@@ -304,7 +322,9 @@ script:
     then:
       - if:
           condition:
-            update.is_available: maj_firmware
+            and:
+              - update.is_available: maj_firmware
+              - lambda: return !id(verrou_enfants).state;
           then:
             - lambda: |-
                 id(maj_installation) = true;
@@ -353,8 +373,10 @@ interval:
             lv_obj_remove_flag(id(btn_apropos_maj), LV_OBJ_FLAG_HIDDEN);
           // Confirmation ou echec laisses sans toucher : fermes comme le retour
           // a l'accueil (D022), jamais pendant l'installation.
+          // Verrouillage enfants (D056) arrive pendant la confirmation : fermee
+          // aussi, jamais pendant l'installation.
           if (!id(maj_installation) && !lv_obj_has_flag(id(obj_maj), LV_OBJ_FLAG_HIDDEN) &&
-              lv_display_get_inactive_time(nullptr) > ${veille_delai_ms})
+              (lv_display_get_inactive_time(nullptr) > ${veille_delai_ms} || id(verrou_enfants).state))
             lv_obj_add_flag(id(obj_maj), LV_OBJ_FLAG_HIDDEN);
 
 # Adoption dans le module ESPHome de Home Assistant : configuration reprise

@@ -16,5 +16,7 @@ packages:
   lvgl: !include lvgl.yaml
   liaison_ha: !include liaison_ha.yaml
   led_veille: !include led_veille.yaml
+  # Verrouillage enfants (D056) : apres les pages, qu'il rafraichit.
+  verrou_enfants: !include verrou_enfants.yaml
   # Apres lvgl : le message se dessine par-dessus la barre de navigation.
   message_accueil: !include message_accueil.yaml

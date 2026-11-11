@@ -485,7 +485,9 @@ script:
           // consigne et prereglages masques et interdits.
           bool eteint = ha && ec == 1 && (mode == 0 || id(accueil_mode_cible) == 0);
 
-          bool commun = ha && ec == 1 && id(liaison_chauffage_verrou) == 0;
+          // Verrou du thermostat (D014) ou verrouillage enfants (D056) : etat
+          // affiche, commandes grisees.
+          bool commun = ha && ec == 1 && id(liaison_chauffage_verrou) == 0 && !id(verrou_enfants).state;
           bool cons_ok = commun && !eteint && !isnan(consigne) && !isnan(id(liaison_consigne_min)) &&
                          !isnan(id(liaison_consigne_max)) &&
                          id(liaison_consigne_min) <= id(liaison_consigne_max);
