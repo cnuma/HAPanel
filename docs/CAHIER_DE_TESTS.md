@@ -21,6 +21,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 
 | Date | Binaire | Partie | Résultat | Suite |
 |---|---|---|---|---|
+| 11 novembre 2026 | Release `v0.13.0` (`1500d0c`), vérifiée par l'agent | Publication | Tâches « publier » et « page » réussies ; Release « Latest », 9 fichiers ; `manifest-jc4827w543.json` en `ESP32-S3`, les deux autres en `ESP32`, version 0.13.0 et résumé de `NOUVEAUTES.md` dans les trois ; page d'installation en 0.13.0 | X10, O15, O17 à la mise à jour des modules (propriétaire) ; W2, W4 à la prochaine étiquette `-dev` |
 | 11 novembre 2026 | `0.13.0-dev (6405191)`, Guition 4,3" (binaire public de la carte), par USB ; blueprint de la branche | X | **X1 à X9, X11 à X13 OK** (propriétaire) | X10 à la publication ; essai fait sur la 4,3" et non sur une S024C |
 | 9 novembre 2026 | `0.11.0-dev (807f372)`, module de la cuisine, par USB | O | OK : O1, O2, O4 à O7, O12 ; O3 sans retour | Demandes du propriétaire : bouton violet (O13), descriptif dans la confirmation (O14, `NOUVEAUTES.md`). Module revenu sur `0.10.0 (99a9a10)` par O7 |
 | 9 novembre 2026 | `0.11.0-dev (e1407a4)`, module de la cuisine | O3, O13, O14 | **OK** (propriétaire) | — |
