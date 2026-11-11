@@ -156,8 +156,9 @@ def packages():
     s.boite(320, 660, 220, 65, "lvgl.yaml", "", BLEU, B_BLEU)
     s.etiquette((670, 692), "lvgl.yaml : À propos,\nnavigation, connexion.\nAccueil inclus d'abord :\npage de démarrage.", DOUX, taille=16)
     s.zone(820, 365, 260, 390, "Services")
-    s.boite(840, 410, 220, 150, "liaison_ha.yaml", "action maj_valeur,\nétat et péremption\ndes valeurs", VERT, B_VERT)
-    s.boite(840, 580, 220, 150, "led_veille.yaml", "veille, retour accueil,\nLED, rétroéclairage,\nLDR", VERT, B_VERT)
+    s.boite(840, 405, 220, 105, "liaison_ha.yaml", "action maj_valeur,\nvaleurs et péremption", VERT, B_VERT)
+    s.boite(840, 520, 220, 105, "led_veille.yaml", "veille, LED,\nrétroéclairage, LDR", VERT, B_VERT)
+    s.boite(840, 635, 220, 105, "verrou_enfants.yaml", "commandes grisées,\ncadenas (D056)", VERT, B_VERT)
     s.zone(20, 785, 1060, 160, "Couplage par identifiants ESPHome")
     s.etiquette((550, 865), "liaison_ha écrit les globals puis appelle accueil / meteo / planning / scenarios_rafraichir.\nLes pages lisent ces globals et ha_connecte_affiche. accueil_rafraichir calcule la couleur de la LED.\nled_veille lit ldr_tension (hardware) et pilote retroeclairage et page_accueil.", ENCRE, taille=20)
     s.sauver("02_packages.png")
@@ -416,6 +417,7 @@ def yaml_matrice():
                       ("pages/menu", ORANGE, B_ORANGE), ("pages/reglages", ORANGE, B_ORANGE),
                       ("lvgl", BLEU, B_BLEU),
                       ("liaison_ha", VERT, B_VERT), ("led_veille", VERT, B_VERT),
+                      ("verrou_enfants", VERT, B_VERT),
                       ("message_accueil", ORANGE, B_ORANGE),
                       ("acces_prive", ROUGE, B_ROUGE), ("acces_public", VIOLET, B_VIOLET)]
     lignes, autres = [], []

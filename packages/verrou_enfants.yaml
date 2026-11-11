@@ -1,0 +1,60 @@
+# Verrouillage enfants (D056, TODO T12) : l'ecran ne sert plus qu'a consulter.
+# Commandes du chauffage, scenarios, page Reglages et mise a jour depuis l'ecran
+# sont grises et sans effet ; navigation, reveil et fermeture du message d'accueil
+# restent libres. Active et desactive depuis Home Assistant seulement (entite de
+# la page de l'appareil, automatisation, ou blueprint par la cle verrou_enfants,
+# packages/liaison_ha.yaml) ; aucun deverrouillage sur place. Garde en flash : un
+# redemarrage ou une coupure ne deverrouille pas (G3 : ecrit seulement quand il
+# change). Cadenas dans la barre d'etat (packages/lvgl.yaml).
+switch:
+  - platform: template
+    id: verrou_enfants
+    name: Verrouillage enfants
+    icon: mdi:lock
+    entity_category: config
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_turn_on:
+      - logger.log:
+          tag: hapanel.verrou
+          level: INFO
+          format: "verrouillage enfants actif"
+      - script.execute: verrou_appliquer
+      - script.execute: enregistrement_signaler
+    on_turn_off:
+      - logger.log:
+          tag: hapanel.verrou
+          level: INFO
+          format: "verrouillage enfants coupe"
+      - script.execute: verrou_appliquer
+      - script.execute: enregistrement_signaler
+
+esphome:
+  # L'etat relu en flash est publie avant que LVGL ait cree les pages : applique
+  # ici, une fois l'ecran pret.
+  on_boot:
+    priority: -100
+    then:
+      - script.execute: verrou_appliquer
+
+script:
+  # Recalcule tout ce que le verrou autorise ; chaque page relit
+  # id(verrou_enfants).state dans son script de rafraichissement.
+  - id: verrou_appliquer
+    then:
+      - if:
+          condition:
+            lambda: return id(btn_men_maj) != nullptr;
+          then:
+            - lambda: |-
+                // Mise a jour depuis l'ecran (D047) : tuile du Menu et bouton
+                // d'A propos inactifs ; Home Assistant peut toujours l'installer.
+                bool v = id(verrou_enfants).state;
+                lv_obj_t *maj[] = {id(btn_men_maj), id(btn_apropos_maj)};
+                for (auto *b : maj) {
+                  if (v) lv_obj_add_state(b, LV_STATE_DISABLED);
+                  else lv_obj_remove_state(b, LV_STATE_DISABLED);
+                }
+            - script.execute: accueil_rafraichir
+            - script.execute: scenarios_rafraichir
+            - script.execute: reglages_rafraichir

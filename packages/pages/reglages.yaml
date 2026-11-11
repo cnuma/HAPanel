@@ -212,6 +212,7 @@ lvgl:
                   text_color: 0x9E9E9E
                   text: "\U000F033E"
               - label:
+                  id: lbl_reg_impose
                   align: LEFT_MID
                   x: 30
                   text_color: 0x9E9E9E
@@ -245,8 +246,11 @@ script:
           if (isnan(mi)) mi = ${message_intensite_defaut};
           lv_slider_set_value(id(sld_reg_message_intensite), (int32_t) lroundf(mi), LV_ANIM_OFF);
           lv_label_set_text_fmt(id(lbl_reg_message_intensite), "%d %%", (int) lroundf(mi));
-          // Impose : cadenas visible et commande inactive.
+          // Impose, ou verrouillage enfants (D056) : cadenas visible et commande
+          // inactive.
+          bool enfants = id(verrou_enfants).state;
           auto verrou = [&](lv_obj_t *commande, lv_obj_t *icone, bool impose) {
+            impose = impose || enfants;
             etat(commande, LV_STATE_DISABLED, impose);
             if (impose) lv_obj_remove_flag(icone, LV_OBJ_FLAG_HIDDEN);
             else lv_obj_add_flag(icone, LV_OBJ_FLAG_HIDDEN);
@@ -259,5 +263,6 @@ script:
           bool impose = id(reglage_impose_led_mode) || id(reglage_impose_led_intensite) ||
                         id(reglage_impose_led_alerte) || id(reglage_impose_ecran_intensite) ||
                         id(reglage_impose_message_intensite);
-          if (impose) lv_obj_remove_flag(id(obj_reg_impose), LV_OBJ_FLAG_HIDDEN);
+          lv_label_set_text(id(lbl_reg_impose), enfants ? "verrouillage enfants" : "imposé par HA");
+          if (impose || enfants) lv_obj_remove_flag(id(obj_reg_impose), LV_OBJ_FLAG_HIDDEN);
           else lv_obj_add_flag(id(obj_reg_impose), LV_OBJ_FLAG_HIDDEN);

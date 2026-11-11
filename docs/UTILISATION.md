@@ -14,7 +14,8 @@ peut légèrement différer.*
   titre de la page (la date et l'heure sur l'accueil) ; à droite le Wi-Fi et le point
   de connexion à Home Assistant (vert : relié, rouge : non relié). Une **flèche
   violette qui clignote** à côté du Wi-Fi annonce une nouvelle version du logiciel
-  (voir « Mise à jour » plus bas).
+  (voir « Mise à jour » plus bas). Un **cadenas orange** au même endroit signale le
+  verrouillage enfants (voir plus bas).
 - **La maison**, en bas au centre, ramène à l'accueil. L'accueil n'a pas de barre en
   bas.
 - La LED et la luminosité de l'écran se règlent depuis le panneau lui-même :
@@ -154,6 +155,26 @@ fond bleu, bouton à droite.
 il ne réagit pas au toucher, et « imposé par HA » est rappelé en bas de la page. Pour
 le régler depuis le panneau, mettez-le sur « Ne pas imposer » dans l'automatisation
 (voir [la configuration](CONFIGURATION.md)).
+
+## Verrouillage enfants
+
+![Accueil verrouillé](images/verrou.png)
+
+Quand le module est verrouillé, un **cadenas orange** est affiché dans la barre du haut
+et l'écran ne sert plus qu'à **consulter** :
+
+- **grisés et sans effet :** préréglages, consigne et glissière de l'accueil, boutons
+  des scénarios, tous les réglages de la page Réglages (« verrouillage enfants » en
+  bas), tuile **Mise à jour** du Menu et bouton de recherche de la page À propos ;
+- **toujours possibles :** changer de page, lire les températures, la météo, le
+  planning, rallumer l'écran, fermer le message d'accueil.
+
+Il n'y a **aucun moyen de déverrouiller depuis le panneau** : le verrouillage se met et
+s'enlève dans Home Assistant (voir [la configuration](CONFIGURATION.md), section 5). Il
+reste en place après une coupure de courant, et même sans Home Assistant.
+
+Pendant l'enregistrement d'un réglage, la disquette prend la place du cadenas quelques
+secondes ; quand une mise à jour attend, la flèche violette et le cadenas alternent.
 
 ## Écran et LED
 

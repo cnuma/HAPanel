@@ -21,7 +21,7 @@
 #
 # Reglages du module (D027, D031) : led_mode (respiration, eteinte),
 # led_intensite (0 a 100), led_alerte (on, off), ecran_intensite (20 a 100),
-# message_intensite (20 a 100, T13).
+# message_intensite (20 a 100, T13) ; verrou_enfants (on, off, D056).
 # « libre » : le blueprint n'impose pas ce reglage (D031). Entites :
 # packages/led_veille.yaml ; page : packages/pages/reglages.yaml.
 substitutions:
@@ -197,6 +197,22 @@ api:
               id(liaison_meteo_ms) = id(liaison_meteo_etat) == 1 ? maintenant : 0;
               ESP_LOGI("hapanel.liaison", "%s %s", k, v);
               id(meteo_rafraichir).execute();
+              return;
+            }
+            // Verrouillage enfants impose par le blueprint (D056) : on, off, ou
+            // « libre » (l'entite du module decide). Rien ne change s'il est deja
+            // en place (G3).
+            if (strcmp(k, "verrou_enfants") == 0) {
+              bool on = strcmp(v, "on") == 0;
+              if (on || strcmp(v, "off") == 0) {
+                if (id(verrou_enfants).state != on) {
+                  if (on) id(verrou_enfants).turn_on(); else id(verrou_enfants).turn_off();
+                }
+              } else if (strcmp(v, "libre") != 0) {
+                ESP_LOGW("hapanel.liaison", "valeur inconnue : %s %s", k, v);
+                return;
+              }
+              ESP_LOGI("hapanel.liaison", "%s %s", k, v);
               return;
             }
             // Reglages imposes par le blueprint (D027, D031) : appliques aux

@@ -46,7 +46,7 @@ class Ecran:
     480 x 272 (paysage, maquettes de T04)."""
 
     def __init__(self, titre=None, maison=True, menu=True, wifi=True, ha=True, disquette=None,
-                 largeur=240, hauteur=320):
+                 largeur=240, hauteur=320, verrou=False):
         """Barre d'etat en haut (D036) : bouton Menu (masque sur le menu), titre, ou date et
         heure sur l'accueil (titre None), disquette, Wi-Fi et connexion a HA. En bas,
         maison centree, sans barre sur l'accueil (D025 revisee)."""
@@ -61,6 +61,9 @@ class Ecran:
         self.texte(52, 9, titre if titre else "1 nov.  14:32")
         if disquette:
             self.icone("disquette", 172 + dx, 18, 24, disquette)
+        elif verrou:
+            # Verrouillage enfants (D056) : meme place que la disquette.
+            self.icone("verrou", 172 + dx, 18, 24, ORANGE)
         for i, (x, y, h) in enumerate([(192, 21, 4), (198, 18, 7), (204, 15, 10), (210, 12, 13)]):
             self.rect(x + dx, y, 4, h, BLANC if wifi and i < 3 else INACTIF)
         self.rect(220 + dx, 12, 13, 13, VERT if ha else ROUGE, 7)
@@ -131,10 +134,10 @@ ACC_PIECE_Y, ACC_TEMP_Y, ACC_LIGNE_Y, ACC_PRE_Y = 44, 62, 124, 152
 ACC_BTN_Y, ACC_BTN_H, ACC_GL_Y, ACC_GL_H = 206, 48, 266, 48
 
 
-def glissiere(e, chauffage=True):
+def glissiere(e, chauffage=True, pastille=ORANGE):
     milieu = ACC_GL_Y + ACC_GL_H // 2
     e.rect(12, ACC_GL_Y, 216, ACC_GL_H, GRIS_FONCE, ACC_GL_H // 2)
-    e.rect(120 if chauffage else 12, ACC_GL_Y, 108, ACC_GL_H, ORANGE, ACC_GL_H // 2)
+    e.rect(120 if chauffage else 12, ACC_GL_Y, 108, ACC_GL_H, pastille, ACC_GL_H // 2)
     e.texte(66, milieu, "Éteint", BLANC if not chauffage else GRIS, 16, 400, "mm")
     e.texte(174, milieu, "Chauffage", BLANC if chauffage else GRIS, 16, 400, "mm")
 
@@ -145,21 +148,28 @@ def accueil_haut(e):
     e.texte(12, ACC_LIGNE_Y, "Extérieur 8,5 °C")
 
 
-def accueil():
-    e = Ecran(maison=False)
-    accueil_haut(e)
+def accueil_commandes(e, verrou=False):
+    """Preregages, consigne et glissiere ; verrouilles (D056) : icones grises, boutons
+    du theme inactif, pastille grise, comme le verrou du thermostat."""
     prereglages = [("manuel", "#AB47BC", 12), ("horsgel", "#42A5F5", 56), ("eco", "#66BB6A", 100),
                    ("confort", ORANGE, 144), ("boost", ROUGE, 188)]
     for nom, couleur, x in prereglages:
         e.rect(x, ACC_PRE_Y, 40, 40, GRIS_FONCE, 8, BLANC if nom == "eco" else None, 3 if nom == "eco" else 0)
-        e.icone(nom, x + 20, ACC_PRE_Y + 20, 24, couleur)
+        e.icone(nom, x + 20, ACC_PRE_Y + 20, 24, "#757575" if verrou else couleur)
     milieu = ACC_BTN_Y + ACC_BTN_H // 2
-    e.bouton(12, ACC_BTN_Y, 56, ACC_BTN_H, "#1E88E5")
-    e.texte(40, milieu, "-", BLANC, 22, 500, "mm")
+    e.bouton(12, ACC_BTN_Y, 56, ACC_BTN_H, INACTIF if verrou else "#1E88E5")
+    e.texte(40, milieu, "-", GRIS if verrou else BLANC, 22, 500, "mm")
     e.texte(120, milieu, "19,0 °C", BLANC, 22, 500, "mm")
-    e.bouton(172, ACC_BTN_Y, 56, ACC_BTN_H, "#E53935")
-    e.texte(200, milieu, "+", BLANC, 22, 500, "mm")
-    glissiere(e)
+    e.bouton(172, ACC_BTN_Y, 56, ACC_BTN_H, INACTIF if verrou else "#E53935")
+    e.texte(200, milieu, "+", GRIS if verrou else BLANC, 22, 500, "mm")
+    glissiere(e, pastille="#616161" if verrou else ORANGE)
+    return milieu
+
+
+def accueil():
+    e = Ecran(maison=False)
+    accueil_haut(e)
+    milieu = accueil_commandes(e)
     for numero, x, y in [(1, 150, 18), (2, 42, 32), (3, 226, ACC_TEMP_Y + 16), (4, 180, ACC_LIGNE_Y + 8),
                          (5, 232, ACC_PRE_Y + 20), (6, 76, milieu), (7, 120, ACC_GL_Y - 8)]:
         e.repere(numero, x, y)
@@ -221,15 +231,19 @@ def curseur(e, y, libelle, valeur, minimum, impose):
         e.icone("verrou", 162, y + 8, 24, GRIS)
 
 
-def reglages_ecran(alerte=True, impose_alerte=False, disquette=None):
-    e = Ecran("Réglages", disquette=disquette)
+def reglages_ecran(alerte=True, impose_alerte=False, disquette=None, verrou=False):
+    e = Ecran("Réglages", disquette=disquette, verrou=verrou)
     # Positions de packages/format_portrait.yaml (fmt_reg_...), cinq rangees (T13).
-    interrupteur(e, 40, "LED", True, False)
-    curseur(e, 76, "Intensité LED", 20, 0, False)
-    interrupteur(e, 124, "Alerte LED", alerte, impose_alerte)
-    curseur(e, 160, "Intensité écran", 80, 20, False)
-    curseur(e, 208, "Intensité message", 100, 20, False)
-    if impose_alerte:
+    # Verrouillage enfants (D056) : tous les reglages comme imposes.
+    interrupteur(e, 40, "LED", True, verrou)
+    curseur(e, 76, "Intensité LED", 20, 0, verrou)
+    interrupteur(e, 124, "Alerte LED", alerte, impose_alerte or verrou)
+    curseur(e, 160, "Intensité écran", 80, 20, verrou)
+    curseur(e, 208, "Intensité message", 100, 20, verrou)
+    if verrou:
+        e.icone("verrou", 44, 264, 24, GRIS)
+        e.texte(60, 264, "verrouillage enfants", GRIS, 16, 400, "lm")
+    elif impose_alerte:
         e.icone("verrou", 68, 264, 24, GRIS)
         e.texte(84, 264, "imposé par HA", GRIS, 16, 400, "lm")
     return e
@@ -243,6 +257,18 @@ def reglages():
     e.finir("reglages.png")
     cote_a_cote([encadrer(reglages_ecran(alerte=False)), encadrer(reglages_ecran(impose_alerte=True))],
                 "reglages_etats.png", ["Alerte LED arrêtée", "Alerte LED imposée par HA"])
+
+
+def verrou_enfants():
+    """Verrouillage enfants (D056) : cadenas dans la barre, commandes grisees."""
+    e = Ecran(maison=False, verrou=True)
+    accueil_haut(e)
+    accueil_commandes(e, verrou=True)
+    e.repere(1, 150, 18)
+    cote_a_cote([encadrer(e),
+                 encadrer(scenarios_ecran("Verrouillage enfants", ORANGE, True, verrou=True)),
+                 encadrer(reglages_ecran(verrou=True))],
+                "verrou.png", ["Accueil", "Scénarios", "Réglages"])
 
 
 def meteo():
@@ -279,8 +305,8 @@ def planning():
     e.finir("planning.png")
 
 
-def scenarios_ecran(etat="", couleur=ORANGE, attente=False, noms=None):
-    e = Ecran("Scénarios")
+def scenarios_ecran(etat="", couleur=ORANGE, attente=False, noms=None, verrou=False):
+    e = Ecran("Scénarios", verrou=verrou)
     e.texte(12, 38, etat, couleur)
     noms = noms if noms is not None else [("Soirée", "canape", "#6A1B9A"), ("Je pars", "depart", "#2E7D32"), ("Nuit", "lune", "#1976D2"),
                                           ("Tout éteindre", "lumiere_eteinte", "#C62828"), ("Film", "film", "#00838F"), ("Réveil", "reveil", "#E65100")]
@@ -388,6 +414,7 @@ def main():
                 "scenarios_etats.png", ["Envoi", "Accepté par HA", "Sans réponse"])
     apropos()
     reglages()
+    verrou_enfants()
     schema_scenario()
     formulaire()
     led()

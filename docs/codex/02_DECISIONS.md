@@ -1477,3 +1477,46 @@ qui cite la précédente.
   T18 : rien, sauf si le propriétaire veut un canal d'essai par le Wi-Fi.
 - Option écartée : couper aussi le bouton d'À propos sur une version d'essai (retour
   à la version publiée par USB seulement).
+
+## D056 — Verrouillage enfants (TODO T12)
+
+- Date : 11 novembre 2026 — Statut : demandé par le propriétaire le 9 novembre 2026 ;
+  cadrage répondu le 11 novembre 2026 (HAP-R002) ; implémenté sur
+  `feature/t12-verrou-enfants` (cahier X), validé par le propriétaire et fusionné le
+  11 novembre 2026 (0.13.0).
+- Contexte : un enfant peut changer le chauffage, lancer un scénario ou une mise à
+  jour depuis un module. Réponses du propriétaire : bloquer les commandes seulement,
+  la consultation reste libre ; activation depuis HA, rien depuis l'écran ; aucun
+  déverrouillage sur place ; cadenas dans la barre d'état ; mise à jour bloquée
+  « comme tout ce qui est du ressort des commandes, que de la consultation ».
+- Décision :
+  - **entité** de configuration « Verrouillage enfants » par module
+    (`verrou_enfants`, interrupteur, arrêté par défaut, gardé en flash : un
+    redémarrage ou une coupure ne déverrouille pas), sur la page de l'appareil dans
+    HA ; commandable aussi par une automatisation ;
+  - **blueprint** : section « Verrouillage enfants », entrée sur « Ne pas imposer »
+    par défaut, clé `verrou_enfants` (`on`, `off`, `libre`), envoyée comme les
+    réglages imposés (D031) : une valeur choisie l'emporte sur l'entité sous 5 min ;
+  - **bloqué** sur l'écran : glissière, préréglages et consigne de l'accueil (comme
+    le verrou du thermostat, D014 : visibles, grisés), boutons des scénarios (gris,
+    « Verrouillage enfants » sur la ligne d'état), tous les réglages de la page
+    Réglages (cadenas, « verrouillage enfants » en bas), tuile « Mise à jour » du
+    Menu et bouton de recherche d'À propos (grisés ; la confirmation ouverte se
+    ferme, jamais pendant une installation) ; les scripts de commande refont le
+    contrôle (consigne en attente non envoyée) ;
+  - **libre** : navigation, consultation de toutes les pages, réveil de l'écran,
+    fermeture du message d'accueil ; tout reste commandable depuis HA, y compris la
+    mise à jour (entité Firmware) ;
+  - **affichage** : cadenas orange dans la barre d'état, à la place de la disquette
+    et de la flèche de mise à jour (D035, D045), qui passent devant : la disquette
+    pendant un enregistrement, la flèche une demi-seconde sur deux ; pas de place
+    pour une icône de plus en portrait (la date de l'accueil va jusqu'à x = 156) ;
+  - **sans HA** : le verrou garde son dernier état.
+- Options écartées : déverrouillage sur place (appui long, code), refusé par le
+  propriétaire ; activation depuis l'écran ; plage horaire dans le firmware (une
+  automatisation HA le fait) ; message au toucher d'une commande grisée (le cadenas
+  suffit ; à ajouter si l'usage le demande).
+- Conséquences : blueprint à réimporter (section 7 de `CONFIGURATION.md`) ; un
+  firmware plus ancien ignore la clé `verrou_enfants` (avertissement dans son
+  journal). Le blueprint ne refuse pas lui-même les commandes d'un module
+  verrouillé : le contrôle est dans le firmware (R12).

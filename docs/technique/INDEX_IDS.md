@@ -19,7 +19,7 @@ Relancer le script après toute modification du YAML.
 | `accueil_prereglage_actuel` | globals | packages/pages/accueil.yaml | — |
 | `accueil_prereglage_cible` | globals | packages/pages/accueil.yaml | — |
 | `accueil_prereglage_permis` | globals | packages/pages/accueil.yaml | — |
-| `accueil_rafraichir` | script | packages/pages/accueil.yaml | packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml |
+| `accueil_rafraichir` | script | packages/pages/accueil.yaml | packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/verrou_enfants.yaml |
 | `accueil_regler_consigne` | script | packages/pages/accueil.yaml | — |
 | `accueil_wifi` | script | packages/pages/accueil.yaml | packages/lvgl.yaml |
 | `apropos_ip` | text_sensor (ip_address) | packages/lvgl.yaml | — |
@@ -35,12 +35,12 @@ Relancer le script après toute modification du YAML.
 | `btn_acc_pre_eco` | widget button | packages/pages/accueil.yaml | — |
 | `btn_acc_pre_frost` | widget button | packages/pages/accueil.yaml | — |
 | `btn_acc_pre_none` | widget button | packages/pages/accueil.yaml | — |
-| `btn_apropos_maj` | widget button | packages/lvgl.yaml | packages/acces_public.yaml |
+| `btn_apropos_maj` | widget button | packages/lvgl.yaml | packages/acces_public.yaml, packages/verrou_enfants.yaml |
 | `btn_maj_annuler` | widget button | packages/acces_public.yaml | — |
 | `btn_maj_fermer` | widget button | packages/acces_public.yaml | — |
 | `btn_maj_installer` | widget button | packages/acces_public.yaml | — |
 | `btn_men_apropos` | widget button | packages/pages/menu.yaml | — |
-| `btn_men_maj` | widget button | packages/pages/menu.yaml | packages/acces_public.yaml |
+| `btn_men_maj` | widget button | packages/pages/menu.yaml | packages/acces_public.yaml, packages/verrou_enfants.yaml |
 | `btn_men_meteo` | widget button | packages/pages/menu.yaml | — |
 | `btn_men_planning` | widget button | packages/pages/menu.yaml | — |
 | `btn_men_reglages` | widget button | packages/pages/menu.yaml | — |
@@ -60,15 +60,16 @@ Relancer le script après toute modification du YAML.
 | `bus_spi_ecran` | spi | packages/hardware_2432s028.yaml | packages/hardware.yaml, packages/hardware_jc4827w543.yaml |
 | `bus_spi_ecran` | spi | packages/hardware_jc4827w543.yaml | packages/hardware.yaml, packages/hardware_2432s028.yaml |
 | `bus_spi_tactile` | spi | packages/hardware_2432s028.yaml | — |
-| `ecran` | display (mipi_spi) | packages/hardware.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
-| `ecran` | display (mipi_spi) | packages/hardware_2432s028.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
-| `ecran` | display (mipi_spi) | packages/hardware_jc4827w543.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |
+| `ecran` | display (mipi_spi) | packages/hardware.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml, packages/verrou_enfants.yaml |
+| `ecran` | display (mipi_spi) | packages/hardware_2432s028.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml, packages/verrou_enfants.yaml |
+| `ecran` | display (mipi_spi) | packages/hardware_jc4827w543.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/acces_prive.yaml, packages/acces_public.yaml, packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/message_accueil.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml, packages/verrou_enfants.yaml |
 | `ecran_intensite` | number (template) | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
-| `enregistrement_signaler` | script | packages/lvgl.yaml | packages/led_veille.yaml, packages/message_accueil.yaml |
+| `enregistrement_signaler` | script | packages/lvgl.yaml | packages/led_veille.yaml, packages/message_accueil.yaml, packages/verrou_enfants.yaml |
 | `ha_connecte_affiche` | globals | packages/lvgl.yaml | packages/led_veille.yaml, packages/pages/accueil.yaml, packages/pages/meteo.yaml, packages/pages/planning.yaml, packages/pages/scenarios.yaml |
 | `heure_ha` | time (homeassistant) | packages/pages/accueil.yaml | packages/acces_public.yaml, packages/pages/planning.yaml |
 | `ico_barre_enregistrement` | widget label | packages/lvgl.yaml | — |
 | `ico_barre_maj` | widget label | packages/lvgl.yaml | — |
+| `ico_barre_verrou` | widget label | packages/lvgl.yaml | — |
 | `ico_reg_ecran_intensite_verrou` | widget label | packages/pages/reglages.yaml | — |
 | `ico_reg_led_alerte_verrou` | widget label | packages/pages/reglages.yaml | — |
 | `ico_reg_led_intensite_verrou` | widget label | packages/pages/reglages.yaml | — |
@@ -132,6 +133,7 @@ Relancer le script après toute modification du YAML.
 | `lbl_pla_resume` | widget label | packages/pages/planning.yaml | — |
 | `lbl_pla_titre` | widget label | packages/pages/planning.yaml | — |
 | `lbl_reg_ecran_intensite` | widget label | packages/pages/reglages.yaml | — |
+| `lbl_reg_impose` | widget label | packages/pages/reglages.yaml | — |
 | `lbl_reg_led_intensite` | widget label | packages/pages/reglages.yaml | — |
 | `lbl_reg_message_intensite` | widget label | packages/pages/reglages.yaml | — |
 | `lbl_sce_1` | widget label | packages/pages/scenarios.yaml | — |
@@ -203,6 +205,7 @@ Relancer le script après toute modification du YAML.
 | `maj_recherche_demarrage_lancer` | script | packages/acces_public.yaml | — |
 | `maj_rechercher` | script | packages/acces_prive.yaml | packages/acces_public.yaml, packages/lvgl.yaml |
 | `maj_rechercher` | script | packages/acces_public.yaml | packages/acces_prive.yaml, packages/lvgl.yaml |
+| `maj_rechercher_choix` | script | packages/acces_public.yaml | — |
 | `maj_rechercher_reseau` | script | packages/acces_public.yaml | — |
 | `maj_reponses` | globals | packages/acces_public.yaml | — |
 | `message_actif` | switch (template) | packages/message_accueil.yaml | — |
@@ -246,7 +249,7 @@ Relancer le script après toute modification du YAML.
 | `reglage_impose_led_intensite` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `reglage_impose_led_mode` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
 | `reglage_impose_message_intensite` | globals | packages/led_veille.yaml | packages/liaison_ha.yaml, packages/pages/reglages.yaml |
-| `reglages_rafraichir` | script | packages/pages/reglages.yaml | packages/led_veille.yaml, packages/liaison_ha.yaml |
+| `reglages_rafraichir` | script | packages/pages/reglages.yaml | packages/led_veille.yaml, packages/liaison_ha.yaml, packages/verrou_enfants.yaml |
 | `retro_appliquer` | script | packages/led_veille.yaml | packages/message_accueil.yaml |
 | `retro_cible` | globals | packages/led_veille.yaml | — |
 | `retro_cible_calculer` | script | packages/led_veille.yaml | — |
@@ -256,7 +259,7 @@ Relancer le script après toute modification du YAML.
 | `retroeclairage` | light (monochromatic) | packages/hardware_jc4827w543.yaml | packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml |
 | `scenarios_indice` | globals | packages/pages/scenarios.yaml | — |
 | `scenarios_lancer` | script | packages/pages/scenarios.yaml | — |
-| `scenarios_rafraichir` | script | packages/pages/scenarios.yaml | packages/liaison_ha.yaml |
+| `scenarios_rafraichir` | script | packages/pages/scenarios.yaml | packages/liaison_ha.yaml, packages/verrou_enfants.yaml |
 | `scenarios_retour` | globals | packages/pages/scenarios.yaml | packages/liaison_ha.yaml |
 | `scenarios_retour_ms` | globals | packages/pages/scenarios.yaml | packages/liaison_ha.yaml |
 | `signal_wifi` | sensor (wifi_signal) | packages/base.yaml | packages/pages/accueil.yaml |
@@ -281,3 +284,5 @@ Relancer le script après toute modification du YAML.
 | `tactile` | touchscreen (xpt2046) | packages/hardware_2432s028.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
 | `tactile` | touchscreen (gt911) | packages/hardware_jc4827w543.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
 | `veille_reveiller` | script | packages/led_veille.yaml | packages/message_accueil.yaml |
+| `verrou_appliquer` | script | packages/verrou_enfants.yaml | — |
+| `verrou_enfants` | switch (template) | packages/verrou_enfants.yaml | packages/acces_public.yaml, packages/application.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/pages/accueil.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |

@@ -21,6 +21,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 
 | Date | Binaire | Partie | Résultat | Suite |
 |---|---|---|---|---|
+| 11 novembre 2026 | `0.13.0-dev (6405191)`, Guition 4,3" (binaire public de la carte), par USB ; blueprint de la branche | X | **X1 à X9, X11 à X13 OK** (propriétaire) | X10 à la publication ; essai fait sur la 4,3" et non sur une S024C |
 | 9 novembre 2026 | `0.11.0-dev (807f372)`, module de la cuisine, par USB | O | OK : O1, O2, O4 à O7, O12 ; O3 sans retour | Demandes du propriétaire : bouton violet (O13), descriptif dans la confirmation (O14, `NOUVEAUTES.md`). Module revenu sur `0.10.0 (99a9a10)` par O7 |
 | 9 novembre 2026 | `0.11.0-dev (e1407a4)`, module de la cuisine | O3, O13, O14 | **OK** (propriétaire) | — |
 | 9 novembre 2026 | `0.11.0-dev (d06100e)`, Guition 4,3", par USB | Q1 à Q4 | Q1 partiel, **Q2 et Q3 KO** (image et toucher à 180° après coupure ; couleurs inversées avant coupure, piège de l'écran sans remise à zéro), Q4 OK (point d'accès instable) | Rotation 270 et axes du GT911 inversés ; Q2, Q3 à refaire après coupure |
@@ -468,6 +469,29 @@ Binaire de la branche `feature/t04-paysage`, version `0.12.0-dev`.
 | W3 | À propos, « Rechercher une mise à jour » | « Version 0.11.2 disponible » (bouton violet) ; un second toucher ouvre la confirmation, « Annuler » garde la version d'essai | `feature/t04-paysage` | OK 11 nov. (propriétaire) : « Version 0.12.0 disponible », 4,3" passée en 0.12.0 par le bouton violet |
 | W4 | À la prochaine étiquette `-dev` (publication) | Release en **préversion**, pas « Latest » ; `releases/latest` reste sur la dernière version finale ; aucun module ni HA ne la propose | — (à la publication) | |
 | W5 | À la publication de 0.12.0 | Release « Latest », page d'installation en 0.12.0 (comme S5) | — (à la publication) | OK 10 nov. : Release « Latest », manifeste et page en 0.12.0 |
+
+## X — Verrouillage enfants (D056, TODO T12)
+
+Binaire de la branche `feature/t12-verrou-enfants`, version `0.13.0-dev`, sur une S024C
+(essai fait sur la Guition 4,3", 11 novembre 2026) ; blueprint du module
+réimporté depuis la branche. X10 demande le binaire public et une mise à jour en
+attente : à la prochaine publication.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| X1 | Page de l'appareil dans HA, rubrique Configuration | Entité « Verrouillage enfants », arrêtée ; aucun cadenas sur le module | `feature/t12-verrou-enfants` (fusionnée) | OK 11 nov. (propriétaire, 4,3") |
+| X2 | Activer « Verrouillage enfants » dans HA | En 1 s environ : cadenas orange dans la barre d'état, sur toutes les pages ; disquette quelques secondes, puis le cadenas revient | `feature/t12-verrou-enfants` (fusionnée) | OK 11 nov. (propriétaire, 4,3") |
+| X3 | Verrouillé, accueil, chauffage allumé : toucher un préréglage, − / +, la glissière (toucher et glisser) | Tout est gris (pastille grise), rien ne bouge ; dans HA, le thermostat ne change pas | `feature/t12-verrou-enfants` (fusionnée) | OK 11 nov. (propriétaire, 4,3") |
+| X4 | Verrouillé, page Scénarios : toucher un bouton | Boutons gris, « Verrouillage enfants » en haut ; aucun scénario lancé dans HA | `feature/t12-verrou-enfants` (fusionnée) | OK 11 nov. (propriétaire, 4,3") |
+| X5 | Verrouillé, page Réglages : toucher chaque interrupteur et curseur | Tous gris avec cadenas, « verrouillage enfants » en bas ; aucune valeur ne change | `feature/t12-verrou-enfants` (fusionnée) | OK 11 nov. (propriétaire, 4,3") |
+| X6 | Verrouillé : Menu, Météo, Planning, À propos, retour à l'accueil ; laisser l'écran s'éteindre puis le toucher | Navigation et consultation normales ; l'écran se rallume | `feature/t12-verrou-enfants` (fusionnée) | OK 11 nov. (propriétaire, 4,3") |
+| X7 | Verrouillé : couper l'alimentation, rebrancher | Toujours verrouillé au redémarrage (cadenas, commandes grises) | `feature/t12-verrou-enfants` (fusionnée) | OK 11 nov. (propriétaire, 4,3") |
+| X8 | Verrouillé : couper HA (ou le Wi-Fi) quelques minutes, puis le rétablir | Cadenas toujours là, point rouge ; après retour, toujours verrouillé | `feature/t12-verrou-enfants` (fusionnée) | OK 11 nov. (propriétaire, 4,3") |
+| X9 | Désactiver « Verrouillage enfants » dans HA | Cadenas parti ; accueil, scénarios et réglages commandent de nouveau | `feature/t12-verrou-enfants` (fusionnée) | OK 11 nov. (propriétaire, 4,3") |
+| X10 | Binaire public, mise à jour en attente, verrouillé | Tuile violette du Menu et bouton d'À propos gris, sans effet ; flèche violette et cadenas alternent ; HA peut toujours installer | — (à la publication) | |
+| X11 | Blueprint : « Verrouillé » imposé ; puis désactiver l'entité dans HA | Verrouillé sous 5 min ; l'entité revient à « activée » sous 5 min ; « Ne pas imposer » rend la main à l'entité | `feature/t12-verrou-enfants` (fusionnée) | OK 11 nov. (propriétaire, 4,3") |
+| X12 | Verrouillé, message d'accueil (comme A1) : toucher l'écran | Le message se ferme | — | OK 11 nov. (propriétaire, 4,3") |
+| X13 | Pendant l'attente d'une consigne (− / + puis verrouiller dans les 2 s) | La consigne n'est pas envoyée, l'affichage revient à la valeur réelle | — | OK 11 nov. (propriétaire, 4,3") |
 
 ## R — Documentation publique sans élément personnel (D052)
 

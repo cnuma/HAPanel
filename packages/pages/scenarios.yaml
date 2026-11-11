@@ -254,7 +254,8 @@ script:
             lambda: |-
               const std::string &nom = id(liaison_scenarios_nom)[indice];
               return id(ha_connecte_affiche) == 1 && id(liaison_scenarios_etat) == 1
-                     && id(scenarios_retour) != 1 && !nom.empty() && nom != "-" && nom != "?";
+                     && id(scenarios_retour) != 1 && !nom.empty() && nom != "-" && nom != "?"
+                     && !id(verrou_enfants).state;
           then:
             - lambda: |-
                 id(scenarios_indice) = indice;
@@ -298,6 +299,8 @@ script:
           lv_obj_t *icos[] = {id(ico_sce_1), id(ico_sce_2), id(ico_sce_3),
                               id(ico_sce_4), id(ico_sce_5), id(ico_sce_6)};
           bool connecte = id(ha_connecte_affiche) == 1;
+          // Verrouillage enfants (D056) : boutons visibles, gris et sans effet.
+          bool verrou = id(verrou_enfants).state;
           int e = id(liaison_scenarios_etat);
           int retour = id(scenarios_retour);
           bool aucun = true;
@@ -330,7 +333,7 @@ script:
             // Inactif : gris quelle que soit la couleur choisie.
             lv_obj_set_style_bg_color(boutons[i], lv_color_hex(0x3A3A3A), LV_STATE_DISABLED);
 
-            if (connecte && dispo && retour != 1) lv_obj_remove_state(boutons[i], LV_STATE_DISABLED);
+            if (connecte && dispo && retour != 1 && !verrou) lv_obj_remove_state(boutons[i], LV_STATE_DISABLED);
             else lv_obj_add_state(boutons[i], LV_STATE_DISABLED);
           }
           // Connexion toujours visible (P2), puis etat des valeurs (P3), puis
@@ -344,6 +347,7 @@ script:
           else if (retour == 2) snprintf(texte, sizeof(texte), "Lancé : %s", nom.c_str());
           else if (retour == 3) snprintf(texte, sizeof(texte), "Pas de réponse de HA");
           else if (retour == 4) snprintf(texte, sizeof(texte), "Refusé par HA");
+          else if (verrou) snprintf(texte, sizeof(texte), "Verrouillage enfants");
           else if (aucun) snprintf(texte, sizeof(texte), "Aucun scénario choisi");
           else texte[0] = '\0';
           lv_label_set_text(id(lbl_sce_etat), texte);
