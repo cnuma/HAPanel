@@ -220,6 +220,12 @@ complets ou un package, avec l'emplacement exact de chacun dans le dépôt.
   reportés avec l'accord du propriétaire (invariant G13, D032).
 - Ne jamais réécrire une branche publiée sans accord explicite du
   propriétaire ; si accordé, `git push --force-with-lease=<branche>:<sha>`.
+- Supprimer une branche de travail (`feature/…`, `fix/…`, `docs/…`, `chore/…`),
+  locale et sur GitHub, seulement avec l'accord du propriétaire et une fois
+  fusionnée dans `main` : vérifier dans la même commande
+  `git merge-base --is-ancestor origin/<branche> origin/main`, puis
+  `git push origin --delete <branche>` et `git branch -d <branche>`. Jamais `main`
+  (propriétaire, 11 novembre 2026 ; permission locale de l'agent, hors dépôt).
 
 ## Style de travail
 
