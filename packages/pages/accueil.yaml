@@ -449,6 +449,11 @@ script:
           if (ec == 0) ligne = "Chauffage : non reçu";
           else if (ec == 3) ligne = "Chauffage : périmé";
           else if (mode != 0 && mode != 1) ligne = "Chauffage : indisponible";
+          // Thermostat en securite (T21, D057) : preset « safety » de Versatile
+          // Thermostat, mis seul quand un capteur ne repond plus ; prereglages
+          // grises (inconnu, P4), cause expliquee ici et sur la page Alarmes.
+          bool securite = ec == 1 && id(liaison_chauffage_prereglage) == "safety";
+          if (*ligne == 0 && securite) ligne = "Thermostat en sécurité";
           lv_label_set_text(id(lbl_acc_chauffage), ligne);
 
           int ee = id(liaison_exterieure_etat);
@@ -585,7 +590,21 @@ script:
 
           // LED (D017) : etat reel, jamais la commande en attente. Alerte :
           // rouge clignotant, pilote par packages/led_veille.yaml.
-          id(led_alerte) = !ha || et != 1 || ee != 1 || ec != 1 || (mode != 0 && mode != 1);
+          // Causes de l'alerte, une par bit dans l'ordre de la page Alarmes (D057,
+          // packages/pages/alarmes.yaml) ; sans HA, seule la liaison compte (les
+          // valeurs sont effacees). La LED clignote tant qu'une cause n'est pas
+          // acquittee (packages/led_veille.yaml).
+          uint32_t alarmes = 0;
+          if (!ha) {
+            alarmes = 1u << 0;
+          } else {
+            if (et != 1) alarmes |= 1u << 1;
+            if (ee != 1) alarmes |= 1u << 2;
+            if (ec != 1 || (mode != 0 && mode != 1)) alarmes |= 1u << 3;
+            else if (securite) alarmes |= 1u << 4;
+          }
+          id(alarmes_actives) = alarmes;
+          id(led_alerte) = alarmes != 0;
           if (id(led_alerte)) {
             id(sortie_led_vert).set_level(0.0f);
             id(sortie_led_bleu).set_level(0.0f);
@@ -600,6 +619,8 @@ script:
             id(led_vert) = allumee ? l[1] : 0.0f;
             id(led_bleu) = allumee ? l[2] : 0.0f;
           }
+      # Page, tuile et bouton des alarmes (D057).
+      - script.execute: alarmes_rafraichir
 
   # Un appui sur - ou + : consigne au pas de 0,5 °C dans les bornes, envoyee
   # apres accueil_envoi_consigne sans nouvel appui.

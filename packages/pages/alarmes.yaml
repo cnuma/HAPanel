@@ -1,0 +1,259 @@
+# Page des alarmes (D057, TODO T22 et T21) : les causes de l'alerte de la LED,
+# expliquees. Ouverte par la tuile rouge du Menu (seulement avec une alarme, a la
+# place de la tuile « Mise a jour ») ou par le bouton « Alarmes » de la page
+# A propos (toujours visible). Les causes sont calculees par accueil_rafraichir
+# (packages/pages/accueil.yaml), qui ecrit alarmes_actives ; ce fichier les
+# date, les affiche et gere l'acquittement. Fonctionne sans Home Assistant (P5).
+#
+# Acquitter arrete le clignotement rouge de la LED ; l'alarme reste affichee
+# (barre d'etat, tuile, page) tant que sa cause existe. Une cause nouvelle, ou
+# disparue puis revenue, relance le clignotement. Le clignotement suppose le
+# reglage « Alerte LED » active (D027). Acquittement non garde en flash : apres
+# un redemarrage, les alarmes encore presentes clignotent de nouveau. Libre en
+# verrouillage enfants (D056) : ce n'est pas une commande envoyee a HA.
+
+globals:
+  # Une cause par bit, dans l'ordre de la page : 0 liaison avec HA (ou Wi-Fi),
+  # 1 temperature de la piece, 2 temperature exterieure, 3 chauffage
+  # (thermostat non recu, perime ou mode inconnu), 4 thermostat en securite
+  # (preset safety, T21). Au demarrage : pas encore de liaison.
+  - id: alarmes_actives
+    type: uint32_t
+    initial_value: "1"
+  # Causes acquittees ; une cause qui disparait quitte aussi ce masque.
+  - id: alarmes_acquittees
+    type: uint32_t
+    initial_value: "0"
+
+lvgl:
+  pages:
+    - id: page_alarmes
+      bg_color: 0x000000
+      on_load:
+        - lvgl.label.update:
+            id: lbl_barre_titre
+            text: "Alarmes"
+        - script.execute: alarmes_rafraichir
+      widgets:
+        # Liste en colonne : une alarme absente est masquee et ne prend pas de
+        # place. Defile si elle depasse (beaucoup d'alarmes en portrait).
+        - obj:
+            id: obj_alm_liste
+            align: TOP_LEFT
+            x: 0
+            y: 38
+            width: ${ecran_largeur}
+            height: ${fmt_alm_liste_h}
+            radius: 0
+            border_width: 0
+            bg_opa: TRANSP
+            pad_left: 12
+            pad_right: 12
+            pad_top: 8
+            pad_bottom: 4
+            layout:
+              type: FLEX
+              flex_flow: COLUMN
+              pad_row: 2
+            widgets:
+              - label:
+                  id: lbl_alm_aucune
+                  text_color: 0x9E9E9E
+                  text: "Aucune alarme en cours."
+              - label:
+                  id: lbl_alm_titre_0
+                  hidden: true
+                  width: ${fmt_texte_largeur}
+                  long_mode: WRAP
+                  text_color: 0xFF9800
+                  text: ""
+              - label:
+                  id: lbl_alm_detail_0
+                  hidden: true
+                  width: ${fmt_texte_largeur}
+                  long_mode: WRAP
+                  text: ""
+              - label:
+                  id: lbl_alm_titre_1
+                  hidden: true
+                  width: ${fmt_texte_largeur}
+                  long_mode: WRAP
+                  text_color: 0xFF9800
+                  text: ""
+              - label:
+                  id: lbl_alm_detail_1
+                  hidden: true
+                  width: ${fmt_texte_largeur}
+                  long_mode: WRAP
+                  text: ""
+              - label:
+                  id: lbl_alm_titre_2
+                  hidden: true
+                  width: ${fmt_texte_largeur}
+                  long_mode: WRAP
+                  text_color: 0xFF9800
+                  text: ""
+              - label:
+                  id: lbl_alm_detail_2
+                  hidden: true
+                  width: ${fmt_texte_largeur}
+                  long_mode: WRAP
+                  text: ""
+              - label:
+                  id: lbl_alm_titre_3
+                  hidden: true
+                  width: ${fmt_texte_largeur}
+                  long_mode: WRAP
+                  text_color: 0xFF9800
+                  text: ""
+              - label:
+                  id: lbl_alm_detail_3
+                  hidden: true
+                  width: ${fmt_texte_largeur}
+                  long_mode: WRAP
+                  text: ""
+              - label:
+                  id: lbl_alm_titre_4
+                  hidden: true
+                  width: ${fmt_texte_largeur}
+                  long_mode: WRAP
+                  text_color: 0xFF9800
+                  text: ""
+              - label:
+                  id: lbl_alm_detail_4
+                  hidden: true
+                  width: ${fmt_texte_largeur}
+                  long_mode: WRAP
+                  text: ""
+        # Seulement quand la LED clignote pour une alarme non acquittee.
+        - button:
+            id: btn_alm_acquitter
+            align: TOP_LEFT
+            x: 12
+            y: ${fmt_alm_acq_y}
+            width: ${fmt_texte_largeur}
+            height: ${fmt_alm_acq_h}
+            hidden: true
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "Acquitter"
+            on_click:
+              - lambda: |-
+                  id(alarmes_acquittees) = id(alarmes_actives);
+                  ESP_LOGI("hapanel.alarmes", "acquittees : 0x%02X", (unsigned) id(alarmes_acquittees));
+                  // Clignotement arrete aussitot, comme « Alerte LED » coupee.
+                  id(sortie_led_rouge).set_level(0.0f);
+              - script.execute: alarmes_rafraichir
+
+script:
+  # Date l'apparition de chaque cause, tient le masque des acquittees a jour et
+  # redessine tuile du Menu, bouton d'A propos et page. Appele par
+  # accueil_rafraichir a chaque changement, a l'ouverture de la page et toutes
+  # les 10 s pendant qu'elle est affichee (duree).
+  - id: alarmes_rafraichir
+    then:
+      - lambda: |-
+          // Appele avant la creation des pages (valeurs relues au demarrage).
+          if (id(btn_men_alarmes) == nullptr) return;
+          static uint32_t debut[5] = {0, 0, 0, 0, 0};
+          static uint32_t precedentes = 0;
+          uint32_t a = id(alarmes_actives);
+          uint32_t maintenant = millis();
+          for (int i = 0; i < 5; i++) {
+            bool active = a & (1u << i);
+            if (active && debut[i] == 0) debut[i] = maintenant ? maintenant : 1;
+            else if (!active) debut[i] = 0;
+          }
+          if (a != precedentes) {
+            ESP_LOGI("hapanel.alarmes", "alarmes : 0x%02X (avant 0x%02X)", (unsigned) a, (unsigned) precedentes);
+            precedentes = a;
+          }
+          id(alarmes_acquittees) &= a;
+          bool clignote = (a & ~id(alarmes_acquittees)) != 0;
+
+          // Tuile rouge du Menu, prioritaire sur la tuile « Mise a jour » (meme
+          // place) ; celle-ci revient seule sans alarme (acces_public.yaml).
+          bool cache = lv_obj_has_flag(id(btn_men_alarmes), LV_OBJ_FLAG_HIDDEN);
+          if (a && cache) lv_obj_remove_flag(id(btn_men_alarmes), LV_OBJ_FLAG_HIDDEN);
+          else if (!a && !cache) lv_obj_add_flag(id(btn_men_alarmes), LV_OBJ_FLAG_HIDDEN);
+          if (a) lv_obj_add_flag(id(btn_men_maj), LV_OBJ_FLAG_HIDDEN);
+          else if (id(maj_disponible)) lv_obj_remove_flag(id(btn_men_maj), LV_OBJ_FLAG_HIDDEN);
+
+          // Bouton d'A propos, toujours visible : rouge avec le nombre d'alarmes.
+          int n = 0;
+          for (int i = 0; i < 5; i++) if (a & (1u << i)) n++;
+          char texte[48];
+          if (n) snprintf(texte, sizeof(texte), "Alarmes : %d", n);
+          else snprintf(texte, sizeof(texte), "Aucune alarme");
+          lv_label_set_text(id(lbl_apropos_alarmes), texte);
+          lv_obj_set_style_bg_color(id(btn_apropos_alarmes), lv_color_hex(n ? 0xF44336 : 0x424242), LV_PART_MAIN);
+
+          // Page : cause, etat, depuis quand, quoi verifier.
+          static const char *const etats[] = {"non reçue", "", "indisponible", "périmée"};
+          int et = id(liaison_temperature_etat);
+          int ee = id(liaison_exterieure_etat);
+          int ec = id(liaison_chauffage_etat);
+          bool wifi_ok = wifi::global_wifi_component->is_connected();
+          lv_obj_t *titres[] = {id(lbl_alm_titre_0), id(lbl_alm_titre_1), id(lbl_alm_titre_2),
+                                id(lbl_alm_titre_3), id(lbl_alm_titre_4)};
+          lv_obj_t *details[] = {id(lbl_alm_detail_0), id(lbl_alm_detail_1), id(lbl_alm_detail_2),
+                                 id(lbl_alm_detail_3), id(lbl_alm_detail_4)};
+          for (int i = 0; i < 5; i++) {
+            if (!(a & (1u << i))) {
+              lv_obj_add_flag(titres[i], LV_OBJ_FLAG_HIDDEN);
+              lv_obj_add_flag(details[i], LV_OBJ_FLAG_HIDDEN);
+              continue;
+            }
+            const char *conseil = "";
+            switch (i) {
+              case 0:
+                snprintf(texte, sizeof(texte), "%s", wifi_ok ? "Home Assistant : pas de liaison" : "Wi-Fi : pas de réseau");
+                conseil = wifi_ok ? "Vérifier que Home Assistant fonctionne." : "Vérifier la box ou le point d'accès.";
+                break;
+              case 1:
+                snprintf(texte, sizeof(texte), "Pièce : %s", etats[et >= 0 && et <= 3 ? et : 0]);
+                conseil = "Vérifier le thermomètre de la pièce dans HA.";
+                break;
+              case 2:
+                snprintf(texte, sizeof(texte), "Extérieur : %s", etats[ee >= 0 && ee <= 3 ? ee : 0]);
+                conseil = "Vérifier le thermomètre extérieur (pile, liaison).";
+                break;
+              case 3:
+                snprintf(texte, sizeof(texte), "Chauffage : %s",
+                         ec == 0 ? "non reçu" : ec == 3 ? "périmé" : "indisponible");
+                conseil = "Vérifier le thermostat dans HA.";
+                break;
+              default:
+                snprintf(texte, sizeof(texte), "Thermostat en sécurité");
+                conseil = "Un capteur du thermostat ne répond plus.";
+                break;
+            }
+            lv_label_set_text(titres[i], texte);
+            char detail[96];
+            uint32_t minutes = (maintenant - debut[i]) / 60000;
+            if (minutes < 1) snprintf(detail, sizeof(detail), "Depuis moins d'une minute. %s", conseil);
+            else if (minutes < 60) snprintf(detail, sizeof(detail), "Depuis %u min. %s", (unsigned) minutes, conseil);
+            else snprintf(detail, sizeof(detail), "Depuis %u h %02u. %s", (unsigned) (minutes / 60),
+                          (unsigned) (minutes % 60), conseil);
+            lv_label_set_text(details[i], detail);
+            lv_obj_remove_flag(titres[i], LV_OBJ_FLAG_HIDDEN);
+            lv_obj_remove_flag(details[i], LV_OBJ_FLAG_HIDDEN);
+          }
+          if (a) lv_obj_add_flag(id(lbl_alm_aucune), LV_OBJ_FLAG_HIDDEN);
+          else lv_obj_remove_flag(id(lbl_alm_aucune), LV_OBJ_FLAG_HIDDEN);
+
+          // Acquitter : seulement s'il y a un clignotement a arreter.
+          bool bouton = clignote && id(led_alerte_active).state;
+          if (bouton) lv_obj_remove_flag(id(btn_alm_acquitter), LV_OBJ_FLAG_HIDDEN);
+          else lv_obj_add_flag(id(btn_alm_acquitter), LV_OBJ_FLAG_HIDDEN);
+
+interval:
+  # Duree affichee (« Depuis 12 min ») : seulement page ouverte.
+  - interval: 10s
+    then:
+      - if:
+          condition:
+            lambda: return lv_screen_active() == id(page_alarmes).obj;
+          then:
+            - script.execute: alarmes_rafraichir

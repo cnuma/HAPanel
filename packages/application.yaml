@@ -13,6 +13,8 @@ packages:
   scenarios: !include pages/scenarios.yaml
   menu: !include pages/menu.yaml
   reglages: !include pages/reglages.yaml
+  # Alarmes (D057) : causes calculees par l'accueil.
+  alarmes: !include pages/alarmes.yaml
   lvgl: !include lvgl.yaml
   liaison_ha: !include liaison_ha.yaml
   led_veille: !include led_veille.yaml

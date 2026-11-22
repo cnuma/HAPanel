@@ -149,3 +149,29 @@ lvgl:
                   text: "Mise à jour"
             on_click:
               - script.execute: maj_proposer
+        # Alarmes (D057) : tuile rouge a la place de la tuile « Mise a jour »,
+        # prioritaire, seulement quand une alarme existe (alarmes_rafraichir).
+        - button:
+            id: btn_men_alarmes
+            align: TOP_LEFT
+            x: ${fmt_men_maj_x}
+            y: ${fmt_men_maj_y}
+            width: ${fmt_men_tuile_l}
+            height: ${fmt_men_tuile_h}
+            pad_all: 4
+            hidden: true
+            bg_color: 0xF44336
+            widgets:
+              - label:
+                  align: TOP_MID
+                  y: 8
+                  text_font: police_icones
+                  text: "\U000F0026"
+              - label:
+                  align: BOTTOM_MID
+                  y: -8
+                  text: "Alarmes"
+            on_click:
+              - lvgl.page.show:
+                  id: page_alarmes
+                  animation: NONE

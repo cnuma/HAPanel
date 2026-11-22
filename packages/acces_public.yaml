@@ -364,10 +364,12 @@ interval:
     then:
       - lambda: |-
           id(maj_disponible) = id(maj_firmware).state == update::UPDATE_STATE_AVAILABLE;
-          // Bouton violet du Menu : seulement quand une mise a jour attend.
+          // Bouton violet du Menu : seulement quand une mise a jour attend, et sans
+          // alarme, dont la tuile rouge prend la meme place (D057).
+          bool tuile = id(maj_disponible) && id(alarmes_actives) == 0;
           bool cache = lv_obj_has_flag(id(btn_men_maj), LV_OBJ_FLAG_HIDDEN);
-          if (id(maj_disponible) && cache) lv_obj_remove_flag(id(btn_men_maj), LV_OBJ_FLAG_HIDDEN);
-          else if (!id(maj_disponible) && !cache) lv_obj_add_flag(id(btn_men_maj), LV_OBJ_FLAG_HIDDEN);
+          if (tuile && cache) lv_obj_remove_flag(id(btn_men_maj), LV_OBJ_FLAG_HIDDEN);
+          else if (!tuile && !cache) lv_obj_add_flag(id(btn_men_maj), LV_OBJ_FLAG_HIDDEN);
           // Bouton de recherche de la page A propos : toujours dans ce binaire.
           if (lv_obj_has_flag(id(btn_apropos_maj), LV_OBJ_FLAG_HIDDEN))
             lv_obj_remove_flag(id(btn_apropos_maj), LV_OBJ_FLAG_HIDDEN);
