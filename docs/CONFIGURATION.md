@@ -371,6 +371,18 @@ clignote dans sa barre du haut et sa LED fait deux éclairs violets toutes les
 
 ![Fenêtre Firmware, mise à jour disponible (capture retouchée, versions d'exemple)](images/installation/19_ha_mise_a_jour.png)
 
+**Module en version d'essai** (À propos affiche un numéro en `-dev`, écrit par USB
+pendant un essai) : il ne cherche jamais seul (D055) et Home Assistant ne lui propose
+rien. Lancez la recherche à la main, puis installez comme ci-dessus :
+
+- sur le module : **Menu › À propos › Rechercher une mise à jour**, puis confirmer
+  (verrouillage enfants désactivé) ;
+- ou dans Home Assistant : **Outils de développement › Actions**, action
+  `homeassistant.update_entity`, entité **Firmware** du module, **Effectuer
+  l'action** ; la mise à jour apparaît ensuite dans **Paramètres**.
+
+Une fois en version publiée, le module cherche de nouveau seul.
+
 3. Mettez aussi le blueprint à jour : onglet **Blueprints**, menu **⋮** de
    **HAPanel — module**, **Réimporter le blueprint**. Une nouvelle version du
    module peut en avoir besoin (par exemple pour un nouveau réglage).
@@ -399,7 +411,8 @@ Sans nouvelle valeur pendant 15 minutes, le module affiche la valeur comme péri
 | « Pas de réponse de HA » | Automatisation absente ou action en échec | Consulter les traces de l'automatisation |
 | Réglage de la LED qui revient tout seul | Valeur imposée par le blueprint | Choisir « Ne pas imposer » dans la section LED, ou régler dans le blueprint |
 | LED rouge clignotante, connexion à HA correcte | Une alarme : capteur de température indisponible ou périmé, thermostat en sécurité | Ouvrir **Menu › Alarmes** sur le module : la cause et quoi vérifier y sont écrits |
-| « Thermostat en sécurité », préréglages grisés, aucun entouré | Versatile Thermostat en préréglage `safety` : un de ses capteurs (pièce ou extérieur) n'a rien envoyé depuis le délai de sécurité (souvent 60 min) | Outils de développement › États, thermostat : comparer `last_temperature_datetime` et `last_ext_temperature_datetime` à l'heure ; vérifier pile et liaison du capteur en retard (historique, page de l'appareil). Un capteur qui n'envoie qu'aux changements peut se taire plus d'une heure par temps stable : allonger le délai de sécurité dans les paramètres avancés de Versatile Thermostat. Le thermostat sort seul de la sécurité au retour du capteur |
+| « Thermostat en sécurité », préréglages grisés, aucun entouré | Versatile Thermostat en préréglage `safety` : un de ses capteurs (pièce ou extérieur) n'a rien envoyé depuis le délai de sécurité (souvent 60 min) | Vérifier d'abord que ses capteurs existent toujours (ligne suivante) ; puis, Outils de développement › États, thermostat : comparer l'heure de la dernière mesure de la pièce et de l'extérieur (`last_temperature_datetime`, `last_ext_temperature_datetime`, noms variables selon la version de Versatile Thermostat) à l'heure ; vérifier pile et liaison du capteur en retard (historique, page de l'appareil). Un capteur qui n'envoie qu'aux changements peut se taire plus d'une heure par temps stable : allonger le délai de sécurité dans les paramètres avancés de Versatile Thermostat. Le thermostat sort seul de la sécurité au retour du capteur |
+| « Extérieur : indisponible » (ou « Pièce : ») et thermostats en sécurité après une reconfiguration ou un nouvel appairage du capteur dans ZHA ; « Entité inconnue sélectionnée » dans l'automatisation | ZHA a recréé les entités sous un autre identifiant (par exemple `sensor.exterieur_exterieur_…` au lieu de `sensor.exterieur_…`) ; automatisations et Versatile Thermostat lisent l'ancien, qui n'existe plus | Outils de développement › **Modèle** : `{{ states.sensor \| selectattr('entity_id', 'search', 'exterieur') \| map(attribute='entity_id') \| list }}` donne le nouveau nom. **Paramètres › Appareils et services › Entités**, rechercher ce nom, cliquer l'entité, **⚙**, champ **ID d'entité** : remettre l'ancien, **Mettre à jour** ; idem pour humidité et batterie. Si l'ancien est « déjà utilisé » : filtre des entités indisponibles, supprimer l'ancienne entité, recommencer. Rouvrir les automatisations où l'entité a été rechoisie entre-temps |
 | Niveau de pile figé depuis des mois (capteur Zigbee à pile) | Le capteur n'envoie plus son niveau | ZHA, page de l'appareil, **Reconfigurer** en appuyant brièvement sur son bouton pour le réveiller |
 | Pas de message d'accueil | Période sans déclenchement non écoulée, hors plage horaire, entité « Message d'accueil » désactivée ou module déconnecté | Consulter les traces de l'automatisation du module |
 | Réparation Z-Wave « Obsolescence : Window/door is open » sur le contact de porte | L'entité `…_window_door_is_open` est remplacée par une entité `binary_sensor` du même capteur | Dans l'automatisation qui l'utilise (section Message d'accueil de chaque module comprise), choisir la nouvelle entité ; désactiver l'ancienne ; redémarrer Home Assistant |
