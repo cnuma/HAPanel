@@ -47,6 +47,10 @@ lvgl:
             radius: 0
             border_width: 0
             bg_opa: TRANSP
+            # Un obj n'herite pas du texte blanc des pages (comme la barre
+            # d'etat) : sans cela, les details sont gris fonce sur noir
+            # (retour du proprietaire, 22 novembre 2026, cahier Y).
+            text_color: 0xFFFFFF
             pad_left: 12
             pad_right: 12
             pad_top: 8
