@@ -1525,7 +1525,8 @@ qui cite la précédente.
 
 - Date : 22 novembre 2026 — Statut : demandé par le propriétaire le 22 novembre 2026
   (HAP-R016 à HAP-R018 : choix 1 à 4 par questionnaire, 5 et 6 acceptés) ; implémenté
-  sur `feature/t22-alarmes` (cahier Y), à valider sur le module de la cuisine.
+  sur `feature/t22-alarmes` (cahier Y), essayé sur le module de la cuisine, publié
+  à la demande du propriétaire et fusionné le 22 novembre 2026 (0.14.0).
 - Contexte : le 22 novembre 2026, le capteur extérieur (Tuya TS0201 en ZHA, niveau de
   pile figé depuis mars) s'est tu 1 h 30 ; Versatile Thermostat a mis les thermostats en
   préréglage `safety`, que le module ne connaît pas (préréglages grisés, P4), puis le
