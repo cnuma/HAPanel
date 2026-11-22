@@ -1520,3 +1520,55 @@ qui cite la précédente.
   firmware plus ancien ignore la clé `verrou_enfants` (avertissement dans son
   journal). Le blueprint ne refuse pas lui-même les commandes d'un module
   verrouillé : le contrôle est dans le firmware (R12).
+
+## D057 — Page des alarmes et thermostat en sécurité (TODO T22 et T21)
+
+- Date : 22 novembre 2026 — Statut : demandé par le propriétaire le 22 novembre 2026
+  (HAP-R016 à HAP-R018 : choix 1 à 4 par questionnaire, 5 et 6 acceptés) ; implémenté
+  sur `feature/t22-alarmes` (cahier Y), essayé sur le module de la cuisine, publié
+  à la demande du propriétaire et fusionné le 22 novembre 2026 (0.14.0).
+- Contexte : le 22 novembre 2026, le capteur extérieur (Tuya TS0201 en ZHA, niveau de
+  pile figé depuis mars) s'est tu 1 h 30 ; Versatile Thermostat a mis les thermostats en
+  préréglage `safety`, que le module ne connaît pas (préréglages grisés, P4), puis le
+  capteur est passé indisponible après le changement de pile. La LED clignotait en
+  rouge sans que le propriétaire en voie la cause.
+- Décision :
+  - **alarmes** : les causes de l'alerte de la LED (D017), une par ligne dans cet ordre :
+    liaison avec HA (ou Wi-Fi), température de la pièce, température extérieure,
+    chauffage (non reçu, périmé, mode inconnu), et **thermostat en sécurité** (préréglage
+    `safety`, T21). Sans HA, seule la liaison est listée (les valeurs sont effacées).
+    Calculées par `accueil_rafraichir`, qui ne garde qu'une seule règle pour la LED et la
+    page ;
+  - **page Alarmes** (`packages/pages/alarmes.yaml`) : pour chaque alarme, la cause et
+    son état en orange, puis « Depuis N min » et quoi vérifier ; « Aucune alarme en
+    cours. » sinon ;
+  - **Menu** : tuile rouge « Alarmes » (icône `alert`) à la 6e place, seulement avec une
+    alarme, **prioritaire** sur la tuile violette « Mise à jour » (D047), qui revient
+    seule sans alarme ; la mise à jour reste accessible par À propos et par HA ;
+  - **À propos** : bouton « Alarmes » **toujours visible**, rouge « Alarmes : N » avec une
+    alarme, gris « Aucune alarme » sinon ; positions de la page remontées en portrait
+    pour lui faire place ;
+  - **barre d'état** : icône `alert` rouge tant qu'une alarme existe, acquittée ou non,
+    à la place commune de la mise à jour et du cadenas (D045, D056) ; une icône seule :
+    alarme et mise à jour clignotent, cadenas fixe ; plusieurs : rotation toutes les
+    500 ms ; la disquette passe devant (D035) ;
+  - **acquittement** : bouton « Acquitter » de la page, visible seulement si la LED
+    clignote pour une alarme non acquittée ; il arrête le clignotement rouge (LED
+    éteinte, comme « Alerte LED » coupée) ; l'alarme reste affichée tant que sa cause
+    existe ; une cause nouvelle, ou disparue puis revenue, relance le clignotement ;
+    non gardé en flash (après un redémarrage, les alarmes présentes clignotent de
+    nouveau) ; permis en verrouillage enfants (D056 : ce n'est pas une commande à HA) ;
+  - **option de la LED** : le réglage existant « Alerte LED » (D027 : page Réglages,
+    entité HA, clé `led_alerte` du blueprint) décide du clignotement, **activé par
+    défaut** comme avant ; arrêté, seuls l'écran et la barre d'état montrent l'alarme ;
+  - **accueil, thermostat en sécurité (T21)** : ligne orange « Thermostat en sécurité » à
+    la place de la ligne Extérieur, préréglages grisés comme pour tout préréglage
+    inconnu (P4) ; la glissière et la consigne restent utilisables.
+- Options écartées : septième tuile (grille des trois formats à refaire) ; alternance
+  des tuiles Alarmes et Mise à jour (le toucher ouvrirait l'une ou l'autre selon
+  l'instant) ; nouvelle option pour la LED, « Alerte LED » existant déjà ; entité HA des
+  alarmes (non demandée ; à ajouter si une automatisation doit les suivre) ;
+  reconnaissance d'autres préréglages inconnus que `safety`.
+- Conséquences : aucun changement du blueprint ni des entités (G10) ; 9 widgets et une
+  page de plus (RAM de la S024C : 34,2 % au lieu de 33,9 %, G6) ; maquettes du Menu,
+  d'À propos et de la page Alarmes régénérées.

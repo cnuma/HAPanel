@@ -164,8 +164,25 @@ def apropos():
     e.texte(12, 130, "Adresse IP : 192.168.x.x")
     e.texte(252, 46, "Mémoire : 162 Ko libres,")
     e.texte(252, 66, "plus grand bloc 108 Ko")
+    # Alarmes (D057), toujours visible : gris sans alarme.
+    e.bouton(252, 100, 216, 44, INACTIF)
+    e.texte(360, 122, "Aucune alarme", BLANC, 16, 400, "mm")
     e.bouton(12, 168, 456, 44)
     e.texte(240, 190, "Rechercher une mise à jour", BLANC, 16, 400, "mm")
+    return e
+
+
+def alarmes():
+    """Page Alarmes (D057) : cause en orange, duree et conseil, Acquitter au-dessus de la maison."""
+    e = ecran("Alarmes", alarme=True)
+    lignes = [("Extérieur : indisponible", ORANGE),
+              ("Depuis 12 min. Vérifier le thermomètre extérieur (pile, liaison).", BLANC),
+              ("Thermostat en sécurité", ORANGE),
+              ("Depuis 8 min. Un capteur du thermostat ne répond plus.", BLANC)]
+    for i, (texte, couleur) in enumerate(lignes):
+        e.texte(12, 46 + i * 21, texte, couleur)
+    e.bouton(12, 180, 456, 40)
+    e.texte(240, 200, "Acquitter", BLANC, 16, 400, "mm")
     return e
 
 
@@ -180,6 +197,7 @@ def main():
     finir(scenarios(), "scenarios.png")
     finir(reglages(), "reglages.png")
     finir(apropos(), "apropos.png")
+    finir(alarmes(), "alarmes.png")
     for f in sorted((SORTIE / DOSSIER).glob("*.png")):
         print(f.name, f.stat().st_size // 1024, "Ko")
 

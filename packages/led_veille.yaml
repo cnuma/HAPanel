@@ -199,9 +199,11 @@ switch:
     on_turn_off:
       - lambda: if (id(led_alerte)) id(sortie_led_rouge).set_level(0.0f);
       - script.execute: reglages_rafraichir
+      - script.execute: alarmes_rafraichir
       - script.execute: enregistrement_signaler
     on_turn_on:
       - script.execute: reglages_rafraichir
+      - script.execute: alarmes_rafraichir
       - script.execute: enregistrement_signaler
 
 # En pause, LVGL ignore le toucher : reveiller au relachement du doigt empeche
@@ -308,8 +310,10 @@ interval:
   - interval: 500ms
     then:
       - lambda: |-
-          // Alerte desactivee (D027) : LED eteinte, l'ecran montre le probleme.
+          // Alerte desactivee (D027) ou toutes les alarmes acquittees (D057) : LED
+          // eteinte, l'ecran montre le probleme (barre d'etat, page Alarmes).
           if (!id(led_alerte) || !id(led_alerte_active).state) return;
+          if ((id(alarmes_actives) & ~id(alarmes_acquittees)) == 0) return;
           id(led_allumee) = !id(led_allumee);
           id(sortie_led_rouge).set_level(id(led_allumee) ? 1.0f : 0.0f);
   # Meme facteur sur les trois canaux : les melanges sont conserves (D018).

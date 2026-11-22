@@ -9,6 +9,10 @@ l'affiche sous « Installer la version X ? », et Home Assistant dans la fenêtr
 La ligne s'écrit dans le même commit que la fonction qu'elle décrit ; la version
 proposée pour la prochaine publication est confirmée à la fusion.
 
+## 0.14.0
+
+Page Alarmes : la cause de la LED rouge expliquée, acquittement ; thermostat en sécurité signalé.
+
 ## 0.13.0
 
 Verrouillage enfants : l'écran ne sert plus qu'à consulter, activé depuis Home Assistant.

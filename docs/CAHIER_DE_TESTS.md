@@ -21,6 +21,8 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 
 | Date | Binaire | Partie | Résultat | Suite |
 |---|---|---|---|---|
+| 22 novembre 2026 | `0.14.0-dev (85cef6d)`, public S024C, cuisine, par USB | Y | Détails de la page Alarmes en blanc (photo précédente prise avant le redémarrage). Alarmes réelles vues : extérieur indisponible (identifiant d'entité changé par ZHA), thermostat en sécurité ; acquittement OK | Publication `v0.14.0` demandée par le propriétaire ; Y1, Y5 à Y9, Y11, Y12, Y16 reportés aux modules mis à jour ; Y13 et Y15 à la mise à jour |
+| 22 novembre 2026 | `0.14.0-dev (c53307c)`, public S024C, cuisine, par USB puis coupure | Y | **Y14 OK** (propriétaire) : version, SHA et disposition d'À propos. Alarmes réelles du jour (extérieur indisponible, thermostat en sécurité) acquittées au journal. **Remarque :** texte complémentaire de la page Alarmes peu lisible, gris sur noir | Cause : le conteneur de la liste n'hérite pas du texte blanc des pages ; corrigé (`e30a8b7`, détails en blanc), réécrit par USB. Suite de la partie Y sur `e30a8b7` |
 | 11 novembre 2026 | Release `v0.13.0` (`1500d0c`), vérifiée par l'agent | Publication | Tâches « publier » et « page » réussies ; Release « Latest », 9 fichiers ; `manifest-jc4827w543.json` en `ESP32-S3`, les deux autres en `ESP32`, version 0.13.0 et résumé de `NOUVEAUTES.md` dans les trois ; page d'installation en 0.13.0 | X10, O15, O17 à la mise à jour des modules (propriétaire) ; W2, W4 à la prochaine étiquette `-dev` |
 | 11 novembre 2026 | `0.13.0-dev (6405191)`, Guition 4,3" (binaire public de la carte), par USB ; blueprint de la branche | X | **X1 à X9, X11 à X13 OK** (propriétaire) | X10 à la publication ; essai fait sur la 4,3" et non sur une S024C |
 | 9 novembre 2026 | `0.11.0-dev (807f372)`, module de la cuisine, par USB | O | OK : O1, O2, O4 à O7, O12 ; O3 sans retour | Demandes du propriétaire : bouton violet (O13), descriptif dans la confirmation (O14, `NOUVEAUTES.md`). Module revenu sur `0.10.0 (99a9a10)` par O7 |
@@ -79,6 +81,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | M | Adresse IP sur la page À propos | `feature/maj-icone` (fusionnée) |
 | R | Documentation publique sans élément personnel (D052) | `docs/t02-projet-publiable` (fusionnée) |
 | S | Page d'installation par carte (D044) | `feature/page-installation` (fusionnée) ; S5, S6, S8 à la publication |
+| Y | Alarmes et thermostat en sécurité (D057, T22, T21) | `feature/t22-alarmes` (Y1 à Y12, Y14, Y16) ; Y13 à la publication ; Y15 sur la 4,3" |
 | 7 novembre 2026 | `9b78597` (S028, USB) | K1, K2, K3 | Écran et couleurs OK (contrôleur ST7789V, sans inversion) ; tactile : x brut décroît de gauche à droite (3605 à 449), y de 419 à 3662. Premier téléversement impossible avec le premier câble USB-C (aucune donnée reçue) ; OK avec un autre câble | Calibrage et `mirror_x` reportés ; K4 sur le binaire suivant |
 | 7 novembre 2026 | `174aa99` (S028, USB) | K4 à K11 | Tout OK ; K5 : glissière Éteint / Chauffage capricieuse au doigt sur dalle résistive, boutons fiables. Mémoire libre 153 Ko, plus grand bloc 96 Ko. Remarque du propriétaire : avoir à configurer le blueprint du message d'accueil en plus de celui du module n'est pas pratique (TODO rang 1) | **Partie K validée**, fusion dans `main` (accord du propriétaire) ; glissière : TODO T04 |
 | 7 novembre 2026 | `745126b` (blueprint, branche) | B10 à B19 | Tout OK : migration, module sans section, même texte sur deux modules, message unique, entité désactivée, météo, plage horaire ; B3 refait (B13) | **Fusion de `feature/accueil-blueprint-module` dans `main`**, accord du propriétaire |
@@ -493,6 +496,34 @@ attente : à la prochaine publication.
 | X11 | Blueprint : « Verrouillé » imposé ; puis désactiver l'entité dans HA | Verrouillé sous 5 min ; l'entité revient à « activée » sous 5 min ; « Ne pas imposer » rend la main à l'entité | `feature/t12-verrou-enfants` (fusionnée) | OK 11 nov. (propriétaire, 4,3") |
 | X12 | Verrouillé, message d'accueil (comme A1) : toucher l'écran | Le message se ferme | — | OK 11 nov. (propriétaire, 4,3") |
 | X13 | Pendant l'attente d'une consigne (− / + puis verrouiller dans les 2 s) | La consigne n'est pas envoyée, l'affichage revient à la valeur réelle | — | OK 11 nov. (propriétaire, 4,3") |
+
+## Y — Alarmes et thermostat en sécurité (D057, TODO T22 et T21)
+
+Binaire public de la S024C de la branche `feature/t22-alarmes`, version `0.14.0-dev`,
+écrit par USB sur le module de la cuisine, puis coupure de l'alimentation (`09_PIEGES.md`).
+Pour faire apparaître une alarme sans toucher aux capteurs : Outils de développement ›
+États, choisir l'entité, changer la valeur, **Définir l'état** ; la vraie valeur revient
+à la prochaine mesure du capteur. Une version `-dev` ne cherche pas de mise à jour
+(D055) : Y13 se fait à la publication.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| Y1 | HA relié, aucune anomalie : barre d'état, Menu, À propos, page Alarmes | Pas de triangle rouge ; pas de tuile « Alarmes » ; bouton gris « Aucune alarme » ; la page dit « Aucune alarme en cours. » ; LED de la couleur du préréglage | `feature/t22-alarmes` (fusionnée) | Reporté aux modules mis à jour en 0.14.0 (accord du propriétaire, 22 nov.) |
+| Y2 | Rendre le thermomètre extérieur indisponible (Outils de développement › États, valeur `unavailable`, ou capteur éteint) | Sous 5 min : « Extérieur : indisponible » en orange sur l'accueil ; LED rouge clignotante ; triangle rouge clignotant dans la barre ; tuile rouge « Alarmes » à la 6e place du Menu ; bouton « Alarmes : 1 » rouge dans À propos | `feature/t22-alarmes` (fusionnée) | Vu en réel 22 nov. (cuisine : extérieur indisponible, thermostat en sécurité, acquittement au journal) |
+| Y3 | Ouvrir la page Alarmes (tuile, puis bouton d'À propos), attendre quelques minutes | « Extérieur : indisponible » en orange, puis « Depuis moins d'une minute. Vérifier le thermomètre extérieur (pile, liaison). » ; la durée avance (« Depuis 3 min ») ; bouton **Acquitter** en bas, au-dessus de la maison | `feature/t22-alarmes` (fusionnée) | Vu en réel 22 nov. (cuisine : extérieur indisponible, thermostat en sécurité, acquittement au journal) |
+| Y4 | **Acquitter** | La LED s'éteint aussitôt, le bouton disparaît ; triangle, tuile, bouton d'À propos et ligne de la page restent | `feature/t22-alarmes` (fusionnée) | Vu en réel 22 nov. (cuisine : extérieur indisponible, thermostat en sécurité, acquittement au journal) |
+| Y5 | Après Y4, rendre aussi la température de la pièce indisponible | La LED reclignote, **Acquitter** revient ; la page liste deux alarmes ; « Alarmes : 2 » | `feature/t22-alarmes` (fusionnée) | Reporté aux modules mis à jour en 0.14.0 (accord du propriétaire, 22 nov.) |
+| Y6 | Rétablir les deux valeurs (nombre dans Outils de développement, ou capteur rallumé) | Sous 5 min : plus de triangle, de tuile ni de ligne ; « Aucune alarme » ; LED de nouveau à la couleur du préréglage | `feature/t22-alarmes` (fusionnée) | Reporté aux modules mis à jour en 0.14.0 (accord du propriétaire, 22 nov.) |
+| Y7 | Acquitter une alarme, la faire disparaître, puis la refaire apparaître | La LED reclignote | `feature/t22-alarmes` (fusionnée) | Reporté aux modules mis à jour en 0.14.0 (accord du propriétaire, 22 nov.) |
+| Y8 | Réglages : « Alerte LED » arrêtée, puis une alarme ; puis la réactiver | Arrêtée : pas de clignotement ni de bouton **Acquitter**, triangle, tuile et page présents ; réactivée : la LED clignote et le bouton revient | `feature/t22-alarmes` (fusionnée) | Reporté aux modules mis à jour en 0.14.0 (accord du propriétaire, 22 nov.) |
+| Y9 | Couper Home Assistant (ou l'intégration ESPHome du module), puis le Wi-Fi | Une seule alarme : « Home Assistant : pas de liaison », puis « Wi-Fi : pas de réseau » ; les températures ne sont pas listées en plus | `feature/t22-alarmes` (fusionnée) | Reporté aux modules mis à jour en 0.14.0 (accord du propriétaire, 22 nov.) |
+| Y10 | Thermostat en sécurité (T21) : à l'occasion, ou dans Outils de développement › États, attribut `preset_mode` du thermostat mis à `safety` en gardant les autres | Accueil : « Thermostat en sécurité » en orange à la place de la ligne Extérieur, préréglages grisés et aucun entouré, glissière et consigne utilisables ; page : « Thermostat en sécurité », « Un capteur du thermostat ne répond plus. » ; LED rouge clignotante | `feature/t22-alarmes` (fusionnée) | Vu en réel 22 nov. (cuisine : extérieur indisponible, thermostat en sécurité, acquittement au journal) |
+| Y11 | Verrouillage enfants actif, une alarme : page Alarmes, **Acquitter** | L'acquittement fonctionne ; triangle et cadenas alternent dans la barre | `feature/t22-alarmes` (fusionnée) | Reporté aux modules mis à jour en 0.14.0 (accord du propriétaire, 22 nov.) |
+| Y12 | Une alarme acquittée : redémarrer le module (coupure) | Après le démarrage, l'alarme toujours présente fait de nouveau clignoter la LED | `feature/t22-alarmes` (fusionnée) | Reporté aux modules mis à jour en 0.14.0 (accord du propriétaire, 22 nov.) |
+| Y13 | Binaire public, mise à jour en attente et une alarme | Tuile rouge « Alarmes » à la place de la violette ; flèche violette et triangle alternent ; bouton violet d'À propos toujours utilisable ; sans alarme, la tuile violette revient | — (à la publication) | |
+| Y14 | Page À propos, S024C | Version, SHA, connexion, adresse IP, mémoire (deux lignes), bouton « Alarmes », bouton de recherche : rien ne se chevauche, tout au-dessus de la maison | `feature/t22-alarmes` (fusionnée) | OK 22 nov. (propriétaire) |
+| Y15 | Guition 4,3" : page À propos, page Alarmes avec deux alarmes | À propos : bouton « Alarmes » à droite, sous la mémoire ; Alarmes : lignes lisibles, **Acquitter** au-dessus de la maison | — (à la mise à jour de la 4,3") | |
+| Y16 | Page À propos du module de test, après quelques minutes | Mémoire libre et plus grand bloc relevés (G6) | `feature/t22-alarmes` (fusionnée) | Reporté aux modules mis à jour en 0.14.0 (accord du propriétaire, 22 nov.) |
 
 ## R — Documentation publique sans élément personnel (D052)
 

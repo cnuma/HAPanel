@@ -15,7 +15,8 @@ peut légèrement différer.*
   de connexion à Home Assistant (vert : relié, rouge : non relié). Une **flèche
   violette qui clignote** à côté du Wi-Fi annonce une nouvelle version du logiciel
   (voir « Mise à jour » plus bas). Un **cadenas orange** au même endroit signale le
-  verrouillage enfants (voir plus bas).
+  verrouillage enfants (voir plus bas), et un **triangle rouge** une alarme (voir
+  « Alarmes »).
 - **La maison**, en bas au centre, ramène à l'accueil. L'accueil n'a pas de barre en
   bas.
 - La LED et la luminosité de l'écran se règlent depuis le panneau lui-même :
@@ -63,7 +64,9 @@ pastille de la glissière devient grise.
 
 Touchez une tuile pour ouvrir la page correspondante : Météo, Planning, Scénarios,
 Réglages ou À propos. Une tuile violette « Mise à jour » s'ajoute quand une nouvelle
-version attend (voir [Mise à jour](#mise-à-jour)). Pour revenir à l'accueil, touchez la maison en bas. Le bouton
+version attend (voir [Mise à jour](#mise-à-jour)). Une tuile **rouge « Alarmes »** prend
+sa place tant qu'une alarme existe (voir [Alarmes](#alarmes)) : la mise à jour reste
+alors accessible par la page À propos. Pour revenir à l'accueil, touchez la maison en bas. Le bouton
 ☰ n'apparaît pas ici : vous êtes déjà sur le Menu.
 
 ## Météo
@@ -120,6 +123,9 @@ une nouvelle version ; il affiche ensuite « À jour », « Version … disponib
 devient violet : touchez-le de nouveau pour ouvrir la confirmation d'installation,
 comme avec la tuile **Mise à jour** du Menu.
 
+Le bouton **Alarmes**, toujours présent, ouvre la page des alarmes : rouge avec leur
+nombre (« Alarmes : 2 »), gris « Aucune alarme » quand tout va bien.
+
 ## Réglages
 
 Ouvrez **Menu › Réglages** pour régler la LED et l'écran de ce panneau, par exemple
@@ -167,7 +173,8 @@ et l'écran ne sert plus qu'à **consulter** :
   des scénarios, tous les réglages de la page Réglages (« verrouillage enfants » en
   bas), tuile **Mise à jour** du Menu et bouton de recherche de la page À propos ;
 - **toujours possibles :** changer de page, lire les températures, la météo, le
-  planning, rallumer l'écran, fermer le message d'accueil.
+  planning, rallumer l'écran, fermer le message d'accueil, consulter et acquitter les
+  alarmes.
 
 Il n'y a **aucun moyen de déverrouiller depuis le panneau** : le verrouillage se met et
 s'enlève dans Home Assistant (voir [la configuration](CONFIGURATION.md), section 5). Il
@@ -175,6 +182,42 @@ reste en place après une coupure de courant, et même sans Home Assistant.
 
 Pendant l'enregistrement d'un réglage, la disquette prend la place du cadenas quelques
 secondes ; quand une mise à jour attend, la flèche violette et le cadenas alternent.
+
+## Alarmes
+
+![Page Alarmes](images/alarmes.png)
+
+Quand quelque chose empêche le panneau de montrer un état sûr, il le signale par une
+**alarme** :
+
+- un **triangle rouge** clignote dans la barre du haut, à côté du Wi-Fi ;
+- la **LED** clignote en rouge (si « Alerte LED » est activée, page Réglages) ;
+- la tuile **Alarmes** du Menu apparaît, en rouge, et le bouton **Alarmes** de la page
+  À propos devient rouge.
+
+La page **Alarmes** dit, pour chacune, ce qui ne va pas, depuis quand, et quoi vérifier :
+
+| Alarme | Que vérifier |
+|---|---|
+| Home Assistant : pas de liaison | Home Assistant fonctionne-t-il ? |
+| Wi-Fi : pas de réseau | La box ou le point d'accès |
+| Pièce : non reçue, indisponible ou périmée | Le thermomètre de la pièce dans Home Assistant |
+| Extérieur : non reçue, indisponible ou périmée | Le thermomètre extérieur : pile, liaison radio |
+| Chauffage : non reçu, indisponible ou périmé | Le thermostat dans Home Assistant |
+| Thermostat en sécurité | Un capteur du thermostat ne répond plus ; le thermostat en sort seul quand il revient |
+
+**Acquitter** arrête le clignotement rouge de la LED : vous avez vu l'alarme. Le
+triangle de la barre du haut, la tuile et la page restent tant que la cause existe, et
+tout disparaît seul quand elle est réglée. Une nouvelle alarme, ou la même qui revient
+après avoir disparu, fait de nouveau clignoter la LED. Après un redémarrage du panneau,
+les alarmes encore présentes clignotent de nouveau.
+
+Avec « Alerte LED » arrêtée (page Réglages, ou imposée par Home Assistant), la LED ne
+clignote jamais : seuls l'écran et la barre du haut montrent l'alarme, et le bouton
+**Acquitter** n'apparaît pas.
+
+Quand plusieurs icônes se partagent la place de la barre du haut (alarme, mise à jour,
+cadenas), elles s'affichent à tour de rôle.
 
 ## Écran et LED
 
@@ -191,7 +234,7 @@ Réglages) la diminue en plus, partout ; pendant le message d'accueil, c'est
 |---|---|
 | Couleur qui « respire » | Chauffage allumé, dans le préréglage de cette couleur. |
 | Éteinte | Chauffage éteint. |
-| Rouge clignotant | Anomalie : Home Assistant déconnecté, ou température ou chauffage non reçu, ancien ou indisponible. |
+| Rouge clignotant | Alarme : Home Assistant déconnecté, température ou chauffage non reçu, ancien ou indisponible, ou thermostat en sécurité. La page Alarmes en donne la cause ; **Acquitter** arrête le clignotement. |
 | Deux éclairs violets toutes les 10 s | Une nouvelle version du logiciel attend (voir « Mise à jour »). Entre les éclairs, la LED montre le chauffage comme d'habitude. |
 
 Boost est un rouge qui respire doucement, l'anomalie un rouge qui clignote franchement.
@@ -238,6 +281,7 @@ haut à droite, ou n'importe où sur l'écran : rien d'autre n'est déclenché.
 | indisponible | Home Assistant ne connaît pas la valeur actuellement. |
 | périmé | Aucune nouvelle valeur depuis 15 minutes. |
 | HA non connecté | Le panneau n'est pas relié à Home Assistant. |
+| Thermostat en sécurité | Le thermostat s'est mis seul en sécurité, faute de nouvelles d'un capteur. Les préréglages sont grisés jusqu'à son retour (voir « Alarmes »). |
 
 Si un de ces messages persiste, consultez la section Dépannage de
 [la configuration](CONFIGURATION.md#dépannage).

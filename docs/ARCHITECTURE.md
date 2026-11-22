@@ -56,28 +56,29 @@ le tactile et le réseau (G1). Ces lambdas restent du C++, inséré tel quel dan
 | `hapanel.yaml` | 19 | Atelier (modules de test) : substitutions, fonctions (`application`) et accès privé |
 | `hapanel_banc.yaml` | 33 | Banc de l'atelier : `hapanel.yaml`, plus mémoire mesurée, journaux DEBUG et dossier de compilation propre |
 | `hapanel_public.yaml` | 25 | Modules de la maison : binaire public sans secret, fonctions et accès public (D039, D037 révisée) |
-| `packages/application.yaml` | 22 | Liste ordonnée des fichiers de fonctions, commune aux configurations |
+| `packages/application.yaml` | 24 | Liste ordonnée des fichiers de fonctions, commune aux configurations |
 | `packages/acces_prive.yaml` | 26 | Wi-Fi, clé de l'API et OTA depuis le PC, lus dans `secrets.yaml` ; scripts de mise à jour vides (D047) |
-| `packages/acces_public.yaml` | 385 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub, mise à jour en attente signalée (D045), recherche, confirmation et installation depuis l'écran (D047) |
+| `packages/acces_public.yaml` | 387 | Wi-Fi saisi à l'installation, clé reçue de HA, mises à jour depuis GitHub, mise à jour en attente signalée (D045), recherche, confirmation et installation depuis l'écran (D047) |
 | `packages/base.yaml` | 50 | Nœud, journaux, écriture des réglages, identité de build (puce : fichier matériel, D049) |
 | `packages/hardware.yaml` | 130 | Carte ESP32-2432S024C : puce, broches, bus, écran, tactile, sorties PWM, LDR (G2) |
 | `packages/hardware_2432s028.yaml` | 136 | Carte ESP32-2432S028 : mêmes `id`, rétroéclairage GPIO21, tactile résistif XPT2046 |
 | `packages/hardware_jc4827w543.yaml` | 123 | Carte Guition JC4827W543 (4,3", ESP32-S3) : mêmes `id`, écran QSPI en paysage, tactile GT911, LED et LDR sans effet (D049, D053) |
-| `packages/format_portrait.yaml` | 156 | Positions, tailles et polices des pages en 240 × 320, incluses par les cartes en portrait (D053) |
-| `packages/format_paysage.yaml` | 155 | Les mêmes en 480 × 272, incluses par la Guition 4,3" (D053) |
+| `packages/format_portrait.yaml` | 163 | Positions, tailles et polices des pages en 240 × 320, incluses par les cartes en portrait (D053) |
+| `packages/format_paysage.yaml` | 162 | Les mêmes en 480 × 272, incluses par la Guition 4,3" (D053) |
 | `hapanel_2432s028_banc.yaml` | 38 | Banc sur carte ESP32-2432S028 |
 | `hapanel_2432s028_public.yaml` | 24 | Binaire public de la carte ESP32-2432S028 (D041) |
 | `hapanel_jc4827w543_public.yaml` | 24 | Binaire public de la carte Guition JC4827W543 (D049) |
-| `packages/lvgl.yaml` | 431 | Polices communes, À propos (version, SHA, connexion, adresse IP, mémoire, bouton de recherche de mise à jour, D047), barre d'état en haut (titre, disquette, mise à jour, Wi-Fi, HA, ☰, D036, D045) et bouton Accueil en bas, suivi de la connexion |
+| `packages/lvgl.yaml` | 465 | Polices communes, À propos (version, SHA, connexion, adresse IP, mémoire, bouton de recherche de mise à jour, D047), barre d'état en haut (titre, disquette, mise à jour, cadenas, alarme, Wi-Fi, HA, ☰, D036, D045, D057), bouton Alarmes d'À propos et bouton Accueil en bas, suivi de la connexion |
 | `packages/liaison_ha.yaml` | 516 | Action `maj_valeur`, valeurs reçues, effacement, péremption |
-| `packages/led_veille.yaml` | 361 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
+| `packages/led_veille.yaml` | 365 | Veille, retour à l'accueil, LED, rétroéclairage, réglages du module (D027, D031) |
 | `packages/message_accueil.yaml` | 165 | Action `message_accueil`, message plein écran, entité « Message d'accueil » |
-| `packages/pages/accueil.yaml` | 774 | Température, chauffage, commandes, couleur de la LED |
+| `packages/pages/accueil.yaml` | 795 | Température, chauffage, commandes, couleur de la LED, causes des alarmes et thermostat en sécurité (D057) |
 | `packages/pages/meteo.yaml` | 200 | Conditions et prévisions |
 | `packages/pages/planning.yaml` | 379 | Résumé et frises |
 | `packages/pages/scenarios.yaml` | 369 | Boutons et lancement |
-| `packages/pages/menu.yaml` | 151 | Tuiles de navigation, tuile « Mise à jour » (D047) |
+| `packages/pages/menu.yaml` | 177 | Tuiles de navigation, tuile « Mise à jour » (D047), tuile rouge « Alarmes » à la même place (D057) |
 | `packages/pages/reglages.yaml` | 268 | Réglages de la LED et de l'écran, synchronisés avec HA, cadenas si imposés (D031) |
+| `packages/pages/alarmes.yaml` | 259 | Page des alarmes : cause, durée, conseil ; acquittement ; tuile du Menu et bouton d'À propos (D057) |
 | `packages/verrou_enfants.yaml` | 60 | Entité « Verrouillage enfants » (D056) : grise les commandes de toutes les pages, cadenas de la barre d'état |
 | `secrets.yaml` | | Wi-Fi et clé d'API des modules de l'atelier, hors de Git (G9) |
 

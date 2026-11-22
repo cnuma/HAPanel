@@ -25,7 +25,7 @@ MDI = {
     "info": "\U000F02FD", "soleil": "\U000F0599", "pluie": "\U000F0597", "nuage": "\U000F0590",
     "canape": "\U000F04B9", "depart": "\U000F0A48", "lune": "\U000F0594", "lumiere_eteinte": "\U000F0E4F",
     "film": "\U000F0FCE", "reveil": "\U000F0020", "reglages": "\U000F0493", "verrou": "\U000F033E", "disquette": "\U000F0193",
-    "maj": "\U000F005F",
+    "maj": "\U000F005F", "alarme": "\U000F0026",
 }
 
 
@@ -46,7 +46,7 @@ class Ecran:
     480 x 272 (paysage, maquettes de T04)."""
 
     def __init__(self, titre=None, maison=True, menu=True, wifi=True, ha=True, disquette=None,
-                 largeur=240, hauteur=320, verrou=False):
+                 largeur=240, hauteur=320, verrou=False, alarme=False):
         """Barre d'etat en haut (D036) : bouton Menu (masque sur le menu), titre, ou date et
         heure sur l'accueil (titre None), disquette, Wi-Fi et connexion a HA. En bas,
         maison centree, sans barre sur l'accueil (D025 revisee)."""
@@ -61,6 +61,9 @@ class Ecran:
         self.texte(52, 9, titre if titre else "1 nov.  14:32")
         if disquette:
             self.icone("disquette", 172 + dx, 18, 24, disquette)
+        elif alarme:
+            # Alarme (D057) : meme place, en rotation avec le cadenas et la flèche.
+            self.icone("alarme", 172 + dx, 18, 24, ROUGE)
         elif verrou:
             # Verrouillage enfants (D056) : meme place que la disquette.
             self.icone("verrou", 172 + dx, 18, 24, ORANGE)
@@ -319,18 +322,47 @@ def scenarios_ecran(etat="", couleur=ORANGE, attente=False, noms=None, verrou=Fa
 
 
 def apropos():
+    # Positions de packages/format_portrait.yaml (fmt_apr_...), remontees pour le
+    # bouton Alarmes (D057).
     e = Ecran("À propos")
-    e.texte(12, 60, "HAPanel 0.7.0")
-    e.texte(12, 88, "SHA 3e880f3")
-    e.texte(12, 128, "Home Assistant : connecté", VERT)
+    e.texte(12, 46, "HAPanel 0.14.0")
+    e.texte(12, 70, "SHA 3e880f3")
+    e.texte(12, 100, "Home Assistant : connecté", VERT)
     # Adresse masquee : aucune adresse reelle dans le depot (G9).
-    e.texte(12, 156, "Adresse IP : 192.168.x.x")
-    e.texte(12, 196, "Mémoire : 162 Ko libres,")
-    e.texte(12, 216, "plus grand bloc 108 Ko")
+    e.texte(12, 124, "Adresse IP : 192.168.x.x")
+    e.texte(12, 150, "Mémoire : 162 Ko libres,")
+    e.texte(12, 170, "plus grand bloc 108 Ko")
+    # Alarmes (D057), toujours visible : gris sans alarme.
+    e.bouton(12, 192, 216, 34, INACTIF)
+    e.texte(120, 209, "Aucune alarme", BLANC, 16, 400, "mm")
     # Recherche d'une mise a jour (D047), binaire public seulement.
-    e.bouton(12, 238, 216, 34)
-    e.texte(120, 255, "Rechercher une mise à jour", BLANC, 16, 400, "mm")
+    e.bouton(12, 234, 216, 34)
+    e.texte(120, 251, "Rechercher une mise à jour", BLANC, 16, 400, "mm")
     e.finir("apropos.png")
+
+
+def alarmes():
+    """Page Alarmes (D057) et tuile rouge du Menu, a la place de la tuile violette."""
+    e = Ecran("Alarmes", alarme=True)
+    lignes = [("Extérieur : indisponible", ORANGE), ("Depuis 12 min. Vérifier le", BLANC),
+              ("thermomètre extérieur (pile,", BLANC), ("liaison).", BLANC),
+              ("Thermostat en sécurité", ORANGE), ("Depuis 8 min. Un capteur du", BLANC),
+              ("thermostat ne répond plus.", BLANC)]
+    for i, (texte, couleur) in enumerate(lignes):
+        e.texte(12, 46 + i * 21, texte, couleur)
+    e.bouton(12, 228, 216, 40)
+    e.texte(120, 248, "Acquitter", BLANC, 16, 400, "mm")
+    m = Ecran("Menu", menu=False, alarme=True)
+    tuiles = [("meteo", "Météo", 8, 40), ("planning", "Planning", 124, 40), ("scenarios", "Scénarios", 8, 118),
+              ("reglages", "Réglages", 124, 118), ("info", "À propos", 8, 196)]
+    for nom, texte, x, y in tuiles:
+        m.bouton(x, y, 108, 72)
+        m.icone(nom, x + 54, y + 22, 24)
+        m.texte(x + 54, y + 54, texte, BLANC, 16, 400, "mm")
+    m.bouton(124, 196, 108, 72, ROUGE)
+    m.icone("alarme", 124 + 54, 196 + 22, 24)
+    m.texte(124 + 54, 196 + 54, "Alarmes", BLANC, 16, 400, "mm")
+    cote_a_cote([encadrer(m), encadrer(e)], "alarmes.png", ["Menu : tuile Alarmes", "Page Alarmes"])
 
 
 def schema_scenario():
@@ -413,6 +445,7 @@ def main():
                  encadrer(scenarios_ecran("Pas de réponse de HA", ORANGE))],
                 "scenarios_etats.png", ["Envoi", "Accepté par HA", "Sans réponse"])
     apropos()
+    alarmes()
     reglages()
     verrou_enfants()
     schema_scenario()

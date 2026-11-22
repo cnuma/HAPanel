@@ -118,6 +118,9 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   `lvgl:` : les fixer sur le conteneur de tout nouveau calque.
 - Le thème montre un interrupteur à l'arrêt en gris clair, qui se confond avec un état
   désactivé : fond sombre bordé sur la page Réglages (D031).
+- Un `obj` placé dans une page reçoit le style du thème (texte sombre) : ses labels
+  n'héritent pas du blanc de la page. Poser `text_color` sur le conteneur et, pour
+  plus de sûreté, sur chaque label (page Alarmes, D057, 22 novembre 2026).
 
 ## Home Assistant et blueprints
 
@@ -150,6 +153,12 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 - Le `device_id` d'un événement `esphome.*` n'est pas une preuve d'origine : HA le met
   avant les données du module, qui peuvent le remplacer (D046, R11). Le filtre
   `device_id == panneau` évite les erreurs, il ne protège pas.
+- Reconfigurer ou réappairer un appareil Zigbee (ZHA) peut changer l'`entity_id` de ses
+  entités : le formulaire de l'automatisation affiche « Entité inconnue sélectionnée »,
+  le module montre la valeur « indisponible » (alarme, D057) et Versatile Thermostat,
+  qui garde l'ancien identifiant, reste en sécurité. Remettre l'ancien identifiant à la
+  nouvelle entité (Paramètres › Entités, ID d'entité), plutôt que de rechoisir
+  l'entité dans chaque automatisation (capteur extérieur, 22 novembre 2026).
 
 ## Binaire public et mises à jour (D039)
 
