@@ -21,6 +21,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 
 | Date | Binaire | Partie | Résultat | Suite |
 |---|---|---|---|---|
+| 22 novembre 2026 | `0.14.0-dev (c53307c)`, public S024C, cuisine, par USB puis coupure | Y | **Y14 OK** (propriétaire) : version, SHA et disposition d'À propos. Alarmes réelles du jour (extérieur indisponible, thermostat en sécurité) acquittées au journal. **Remarque :** texte complémentaire de la page Alarmes peu lisible, gris sur noir | Cause : le conteneur de la liste n'hérite pas du texte blanc des pages ; corrigé (`e30a8b7`, détails en blanc), réécrit par USB. Suite de la partie Y sur `e30a8b7` |
 | 11 novembre 2026 | Release `v0.13.0` (`1500d0c`), vérifiée par l'agent | Publication | Tâches « publier » et « page » réussies ; Release « Latest », 9 fichiers ; `manifest-jc4827w543.json` en `ESP32-S3`, les deux autres en `ESP32`, version 0.13.0 et résumé de `NOUVEAUTES.md` dans les trois ; page d'installation en 0.13.0 | X10, O15, O17 à la mise à jour des modules (propriétaire) ; W2, W4 à la prochaine étiquette `-dev` |
 | 11 novembre 2026 | `0.13.0-dev (6405191)`, Guition 4,3" (binaire public de la carte), par USB ; blueprint de la branche | X | **X1 à X9, X11 à X13 OK** (propriétaire) | X10 à la publication ; essai fait sur la 4,3" et non sur une S024C |
 | 9 novembre 2026 | `0.11.0-dev (807f372)`, module de la cuisine, par USB | O | OK : O1, O2, O4 à O7, O12 ; O3 sans retour | Demandes du propriétaire : bouton violet (O13), descriptif dans la confirmation (O14, `NOUVEAUTES.md`). Module revenu sur `0.10.0 (99a9a10)` par O7 |
@@ -519,7 +520,7 @@ Pour faire apparaître une alarme sans toucher aux capteurs : Outils de dévelop
 | Y11 | Verrouillage enfants actif, une alarme : page Alarmes, **Acquitter** | L'acquittement fonctionne ; triangle et cadenas alternent dans la barre | `feature/t22-alarmes` | |
 | Y12 | Une alarme acquittée : redémarrer le module (coupure) | Après le démarrage, l'alarme toujours présente fait de nouveau clignoter la LED | `feature/t22-alarmes` | |
 | Y13 | Binaire public, mise à jour en attente et une alarme | Tuile rouge « Alarmes » à la place de la violette ; flèche violette et triangle alternent ; bouton violet d'À propos toujours utilisable ; sans alarme, la tuile violette revient | — (à la publication) | |
-| Y14 | Page À propos, S024C | Version, SHA, connexion, adresse IP, mémoire (deux lignes), bouton « Alarmes », bouton de recherche : rien ne se chevauche, tout au-dessus de la maison | `feature/t22-alarmes` | |
+| Y14 | Page À propos, S024C | Version, SHA, connexion, adresse IP, mémoire (deux lignes), bouton « Alarmes », bouton de recherche : rien ne se chevauche, tout au-dessus de la maison | `feature/t22-alarmes` | OK 22 nov. (propriétaire) |
 | Y15 | Guition 4,3" : page À propos, page Alarmes avec deux alarmes | À propos : bouton « Alarmes » à droite, sous la mémoire ; Alarmes : lignes lisibles, **Acquitter** au-dessus de la maison | — (à la mise à jour de la 4,3") | |
 | Y16 | Page À propos du module de test, après quelques minutes | Mémoire libre et plus grand bloc relevés (G6) | `feature/t22-alarmes` | |
 
