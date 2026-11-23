@@ -76,7 +76,10 @@ Ajouter une intégration › Calendrier local**), par exemple « Chauffage Burea
 | tout autre titre | Confort |
 | aucun événement | réglable dans le blueprint (Éco par défaut) |
 
-Majuscules et accents sont ignorés (« eco », « HORS GEL » fonctionnent). Les
+Seul **le début du titre** compte : « Boost douche » donne Boost, « Douche boost »
+Confort. Majuscules et accents sont ignorés (« eco », « HORS GEL » fonctionnent).
+Hors événement, c'est déjà le préréglage par défaut (Éco) : créer surtout les
+créneaux Confort, Boost et, pour les absences, Hors-gel. Les
 répétitions (tous les jours ouvrés, de 6 h 30 à 8 h, etc.) se règlent dans
 l'événement. Évitez de superposer deux événements : seul le premier compte.
 
