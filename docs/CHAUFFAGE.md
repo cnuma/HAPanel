@@ -84,6 +84,12 @@ sur la page Planning du module).
 Les températures sont celles saisies dans les préréglages du thermostat de la
 pièce (§ 2), par exemple Hors-gel 7 °C, Éco 17 °C, Confort 20 °C, Boost 23 °C.
 
+**Entre deux événements** (aucun événement en cours), le thermostat prend le
+préréglage du champ **Hors événement** de l'automatisation de la pièce : Éco par
+défaut, soit 17 °C dans l'exemple. Il se choisit pièce par pièce (Confort, Éco,
+Hors-gel ou Boost) : Hors-gel, par exemple, pour une pièce peu utilisée qui ne doit
+chauffer que pendant ses créneaux.
+
 **Règles à retenir :**
 
 - **Le mot-clé en premier** : « Boost douche » donne Boost, « Douche boost » donne
