@@ -76,6 +76,22 @@ Majuscules et accents sont ignorés (« eco », « HORS GEL » fonctionnent). Le
 répétitions (tous les jours ouvrés, de 6 h 30 à 8 h, etc.) se règlent dans
 l'événement. Évitez de superposer deux événements : seul le premier compte.
 
+**Modifier ou supprimer un calendrier existant**
+
+- **Nom affiché** : **Paramètres › Appareils et services › Entités**, cliquer le
+  `calendar.…`, **⚙ › Nom › Mettre à jour**. L'identifiant ne change pas : les
+  automatisations continuent de fonctionner.
+- **Identifiant** (`calendar.…`) : même endroit, champ **ID d'entité**. Rechoisir
+  ensuite le calendrier dans l'automatisation de chauffage de la pièce et dans le
+  champ Calendriers de l'automatisation du module HAPanel.
+- **Événements** : panneau **Calendrier** de la barre latérale, cliquer
+  l'événement, **Modifier** ou **Supprimer** ; pour un événement répété, choisir
+  cette occurrence, celle-ci et les suivantes, ou toutes.
+- **Supprimer le calendrier** : d'abord le retirer de l'automatisation de chauffage
+  et du champ Calendriers des modules (sinon « Entité inconnue »), puis
+  **Paramètres › Appareils et services › Calendrier local**, sur sa ligne
+  **⋮ › Supprimer**. Ses événements sont perdus, sans retour possible.
+
 ## 4. Importer le blueprint et créer une automatisation par pièce
 
 1. Importer `blueprints/automation/chauffage/agenda_piece.yaml` par son URL GitHub (**Blueprints › Importer un blueprint**), ou le copier dans
