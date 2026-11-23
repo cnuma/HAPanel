@@ -43,14 +43,14 @@ Thermostat générique** :
 | Capteur de température | celui de la pièce |
 | Durée minimale de cycle | 5 min (évite de faire claquer le fil pilote) |
 | Tolérances froid / chaud | 0,3 °C |
-| Préréglages | Confort et Éco : les valeurs VT ; **Absent (`away`) = température Hors-gel** ; **Activité (`activity`) = température Boost** ; laisser Domicile et Sommeil vides |
+| Préréglages | Confort et Éco : les valeurs VT ; **Absent (`away`) = température Hors-gel** ; **Activité (`activity`) = température Boost** ; laisser Maison (`home`) et Nuit (`sleep`) vides, inconnus du module |
 
 Le thermostat générique n'a ni « frost » ni « boost » (ses préréglages : `away`,
 `comfort`, `eco`, `home`, `sleep`, `activity`) : le Hors-gel passe par `away` et le
 Boost par `activity`. Le blueprint fait déjà cette correspondance. Un préréglage
 n'existe que si sa température est saisie ; pour en ajouter un à un thermostat déjà
 créé : **Paramètres › Appareils et services › Entrées**, le thermostat, **⚙ ›
-Options du thermostat générique**, puis l'étape des préréglages.
+Options du thermostat générique**, puis la fenêtre **Préréglages de température** (Absent, Confort, Éco, Maison, Nuit, Activité).
 
 **Si le fil pilote n'est pas un `switch.…` mais un `select.…`** (modes
 confort / éco / hors-gel / arrêt), créez d'abord un interrupteur modèle :
