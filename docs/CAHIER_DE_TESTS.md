@@ -551,6 +551,7 @@ de la pièce éteint pendant l'essai. Suivre dans **Paramètres › Automatisati
 | Z11 | Correspondance Boost mise à `frost`, événement « Boost » | Préréglage inchangé ; avertissement `chauffage.agenda` au journal (Paramètres › Système › Journaux) ; remettre `boost` ensuite | `feature/chauffage-agenda` | |
 | Z12 | Module HAPanel de la pièce, `module.yaml` inchangé : boutons Éco, Confort, Boost, puis Hors-gel | Éco, Confort appliqués ; Hors-gel et Boost refusés (« commande refusée » au journal) tant que `module.yaml` ne traduit pas `frost` et `boost` | `feature/chauffage-agenda` | |
 | Z13 | Après la désinstallation de Versatile Thermostat (guide § 5) | Plus de dossier `custom_components/versatile_thermostat`, ni d'entité, ni de ressource de tableau de bord, ni de réparation ; fils pilotes commandés par les thermostats génériques | — (propriétaire, après la fusion) | |
+| Z14 | Événement « Hors-gel » sur plusieurs jours, commencé avant un créneau quotidien « Boost » de la période | Pendant le créneau Boost, le préréglage reste `away` (Hors-gel) ; à la fin du Hors-gel, préréglage du moment | `feature/chauffage-agenda` | |
 
 ## R — Documentation publique sans élément personnel (D052)
 

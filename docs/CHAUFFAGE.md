@@ -67,21 +67,49 @@ doivent jamais commander le même interrupteur en même temps.
 Un calendrier local par pièce (**Paramètres › Appareils et services ›
 Ajouter une intégration › Calendrier local**), par exemple « Chauffage Bureau ».
 
-| Titre de l'événement | Préréglage appliqué |
-|---|---|
-| Confort | Confort (`comfort`) |
-| Éco | Éco (`eco`) |
-| Hors-gel | Hors-gel (`away`) |
-| Boost | Boost (`activity`) |
-| tout autre titre | Confort |
-| aucun événement | réglable dans le blueprint (Éco par défaut) |
+**Titres reconnus.** Le titre de l'événement en cours choisit le préréglage. Seul
+**le début du titre** compte ; majuscules et accents sont ignorés, le trait d'union
+vaut une espace. La suite du titre est libre et sert de commentaire (elle s'affiche
+sur la page Planning du module).
 
-Seul **le début du titre** compte : « Boost douche » donne Boost, « Douche boost »
-Confort. Majuscules et accents sont ignorés (« eco », « HORS GEL » fonctionnent).
-Hors événement, c'est déjà le préréglage par défaut (Éco) : créer surtout les
-créneaux Confort, Boost et, pour les absences, Hors-gel. Les
-répétitions (tous les jours ouvrés, de 6 h 30 à 8 h, etc.) se règlent dans
-l'événement. Évitez de superposer deux événements : seul le premier compte.
+| Commencer le titre par | Préréglage du thermostat | Exemples de titres acceptés |
+|---|---|---|
+| **Confort** | Confort (`comfort`) | « Confort », « confort matin », « CONFORT soirée » |
+| **Éco** | Éco (`eco`) | « Éco », « eco », « Eco journée » |
+| **Hors-gel** | Absent (`away`), température Hors-gel | « Hors-gel », « hors gel », « Horsgel vacances » |
+| **Boost** | Activité (`activity`), température Boost | « Boost », « boost douche soir » |
+| tout autre mot | Confort | « Douche soir », « Réunion », « Douche boost » |
+| aucun événement en cours | celui choisi dans le blueprint (Éco par défaut) | — |
+
+Les températures sont celles saisies dans les préréglages du thermostat de la
+pièce (§ 2), par exemple Hors-gel 7 °C, Éco 17 °C, Confort 20 °C, Boost 23 °C.
+
+**Règles à retenir :**
+
+- **Le mot-clé en premier** : « Boost douche » donne Boost, « Douche boost » donne
+  Confort ;
+- **un titre non reconnu chauffe en Confort**, jamais en Boost ni en Éco ;
+- **pas de créneau Éco nécessaire** : hors événement, c'est déjà Éco. Créer
+  surtout les créneaux Confort et Boost, et des créneaux Hors-gel pour les absences ;
+- **pas de chevauchement** : quand deux événements se superposent, seul celui qui
+  a commencé le premier compte, jusqu'à sa fin. Exemple : « Boost » de 21 h 18 à
+  22 h et « Douche soir » de 21 h 30 à 22 h : Boost jusqu'à 22 h, « Douche soir »
+  n'est jamais appliqué. Mettre les événements bout à bout (le second commence à
+  l'heure de fin du premier) : le passage de l'un à l'autre est immédiat ;
+- **répétitions** (tous les jours ouvrés, chaque samedi…) : se règlent dans
+  l'événement ; une exception se modifie sur la seule occurrence (voir plus bas) ;
+- **effet immédiat** : modifier l'heure de fin d'un événement en cours (par
+  exemple l'avancer à maintenant) applique le préréglage suivant à cette heure-là.
+
+**Exemple de semaine** (salle de bain), hors événement Éco :
+
+| Jours | Événement | Effet |
+|---|---|---|
+| Lundi à vendredi, 6 h 30 – 7 h 15 | « Boost matin » | 23 °C pendant les douches |
+| Lundi à vendredi, 7 h 15 – 8 h | « Confort » | 20 °C, puis Éco |
+| Tous les jours, 21 h – 21 h 45 | « Boost douche soir » | 23 °C, puis Éco pour la nuit |
+| Samedi et dimanche, 8 h – 11 h | « Confort week-end » | 20 °C |
+| Vacances (du… au…) | « Hors-gel vacances », sur plusieurs jours | 7 °C ; commencé avant les créneaux de la période, il l'emporte sur eux (à vérifier, cahier Z14) ; au moindre doute, supprimer les occurrences de la période |
 
 **Modifier ou supprimer un calendrier existant**
 
@@ -172,3 +200,21 @@ retrouvent alors leur entité sans rien modifier.
 - Le thermostat générique n'a pas de mise en sécurité : si le capteur de la
   pièce se tait, il garde son dernier état. L'alarme « température périmée »
   du module reste le garde-fou visible.
+
+## 7. Dépannage
+
+Pour savoir ce que l'automatisation a fait : **Paramètres › Automatisations et
+scènes**, l'automatisation de la pièce, **⋮ › Traces**, choisir l'exécution de
+l'heure voulue, onglet **Chronologie de l'exécution**. L'onglet **Variables
+modifiées** donne le `titre` lu et le `prereglage` choisi.
+
+| Ce qu'on voit | Cause | Que faire |
+|---|---|---|
+| Préréglage non appliqué ; trace : « Si : Action else exécutée », puis « System Log : Écrire dans le journal système » | Le thermostat ne connaît pas ce préréglage : sa température n'est pas saisie (le Boost demande **Activité**, le Hors-gel **Absent**). Le journal (**Paramètres › Système › Journaux**, chercher `Chauffage :`) donne le nom refusé et la liste connue | Saisir la température manquante (§ 2, **Préréglages de température**) ; vérifier dans **Outils de développement › États**, attribut `preset_modes` du thermostat |
+| Toujours « boost » refusé après cela | Automatisation créée avec une ancienne version du blueprint, qui envoyait `boost` | Réimporter le blueprint (**Blueprints**, **⋮ › Réimporter le blueprint**) ; dans l'automatisation, **Correspondance avec le thermostat**, Boost sur `activity` |
+| Trace arrêtée au premier test (« Tester Si le modèle… ») | Thermostat éteint (`off`), ou calendrier ou thermostat indisponible : rien n'est fait, volontairement | Rallumer le thermostat : le préréglage du moment s'applique aussitôt |
+| Confort au lieu du préréglage attendu | Titre qui ne commence pas par le mot-clé (« Douche boost ») | Mettre le mot-clé en premier (§ 3) |
+| Préréglage d'un événement jamais appliqué | Il chevauche un événement commencé avant lui | Mettre les événements bout à bout (§ 3) |
+| Bon préréglage, mais le radiateur ne chauffe pas | La pièce est déjà au-dessus de la consigne : attribut `hvac_action` à `idle` | Normal ; il chauffe dès que la température passe sous la consigne moins la tolérance |
+| Aucune trace à l'heure de l'événement | Automatisation désactivée, ou calendrier non choisi | Vérifier l'automatisation (activée, calendrier de la pièce) |
+| « Entité inconnue sélectionnée » dans l'automatisation | Calendrier ou thermostat supprimé ou renommé (identifiant changé) | Rechoisir l'entité ; voir § 3, « Modifier ou supprimer un calendrier existant » |
