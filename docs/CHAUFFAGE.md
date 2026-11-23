@@ -194,11 +194,13 @@ retrouvent alors leur entité sans rien modifier.
 
 ## 6. Ce que cela change pour les modules HAPanel
 
-- Le module envoie les préréglages `none`, `frost`, `eco`, `comfort` et
-  `boost`. Le thermostat générique n'a ni `frost` ni `boost` : les boutons
-  Hors-gel et Boost seront refusés tant que `module.yaml` ne traduit pas `frost`
-  en `away` et `boost` en `activity` à l'envoi, et l'inverse dans la valeur
-  renvoyée au module.
+- Le module connaît les préréglages `none`, `frost`, `eco`, `comfort` et
+  `boost`. Le blueprint `module.yaml` traduit pour le thermostat générique :
+  ses boutons Hors-gel et Boost commandent Absent (`away`) et Activité
+  (`activity`), et un thermostat en Absent ou Activité (par le calendrier) est
+  affiché en Hors-gel ou Boost. La traduction n'a lieu que si le thermostat ne
+  connaît pas lui-même `frost` ou `boost` : un module resté sur Versatile
+  Thermostat n'est pas touché. Réimporter `module.yaml` pour en profiter.
 - `is_locked` n'existe plus : le verrou du thermostat ne s'affichera jamais.
   C'est sans gêne.
 - L'alarme « Thermostat en sécurité » (préréglage `safety` de VT) ne se
@@ -222,5 +224,6 @@ modifiées** donne le `titre` lu et le `prereglage` choisi.
 | Confort au lieu du préréglage attendu | Titre qui ne commence pas par le mot-clé (« Douche boost ») | Mettre le mot-clé en premier (§ 3) |
 | Préréglage d'un événement jamais appliqué | Il chevauche un événement commencé avant lui | Mettre les événements bout à bout (§ 3) |
 | Bon préréglage, mais le radiateur ne chauffe pas | La pièce est déjà au-dessus de la consigne : attribut `hvac_action` à `idle` | Normal ; il chauffe dès que la température passe sous la consigne moins la tolérance |
+| Module HAPanel : préréglages tous grisés, aucun entouré, quand le calendrier passe en Boost ou Hors-gel ; boutons Boost et Hors-gel refusés | Blueprint `module.yaml` antérieur à la traduction `away` / `activity` | Réimporter `module.yaml` (**Blueprints**, **⋮ › Réimporter le blueprint**) |
 | Aucune trace à l'heure de l'événement | Automatisation désactivée, ou calendrier non choisi | Vérifier l'automatisation (activée, calendrier de la pièce) |
 | « Entité inconnue sélectionnée » dans l'automatisation | Calendrier ou thermostat supprimé ou renommé (identifiant changé) | Rechoisir l'entité ; voir § 3, « Modifier ou supprimer un calendrier existant » |

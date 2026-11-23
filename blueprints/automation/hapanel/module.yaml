@@ -14,8 +14,10 @@ blueprint:
     seulement si elles viennent de ce panneau, si le thermostat est disponible
     et non verrouillé et si la consigne est dans les bornes ; consigne et
     préréglage exigent un chauffage allumé. Le module n'a pas besoin d'être
-    autorisé à effectuer des actions Home Assistant.
-    Décisions D014, D015, D019, D020, D021, D024, D026, D028, D031, D042, D054 et D056 du dépôt
+    autorisé à effectuer des actions Home Assistant. Avec le Thermostat
+    générique de Home Assistant, ses préréglages Absent et Activité tiennent
+    lieu de Hors-gel et de Boost.
+    Décisions D014, D015, D019, D020, D021, D024, D026, D028, D031, D042, D054, D056 et D058 du dépôt
     cnuma/HAPanel.
   domain: automation
   source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/module.yaml
@@ -610,6 +612,17 @@ actions:
       etat: "{{ states(thermostat) }}"
       disponible: "{{ etat not in ['unavailable', 'unknown'] }}"
       verrou: "{{ state_attr(thermostat, 'is_locked') == true }}"
+      # Préréglages du thermostat. Le module ne connaît que none, frost, eco,
+      # comfort et boost ; le Thermostat générique de HA n'a ni frost ni boost
+      # et les porte par away et activity (D058) : traduits dans les deux sens,
+      # seulement si le thermostat ne connaît pas le nom du module.
+      prereglages: "{{ state_attr(thermostat, 'preset_modes') or [] }}"
+      vers_ha:
+        frost: away
+        boost: activity
+      depuis_ha:
+        away: frost
+        activity: boost
       # Bornes du blueprint, resserrées à celles du thermostat.
       borne_min: >-
         {{ [consigne_min | float, state_attr(thermostat, 'min_temp') | float(consigne_min)] | max }}
@@ -623,6 +636,12 @@ actions:
           - variables:
               commande: "{{ trigger.event.data.get('commande', '') }}"
               valeur: "{{ trigger.event.data.get('valeur', '') }}"
+          - variables:
+              # Nom du préréglage pour le thermostat (D058).
+              prereglage_ha: >-
+                {{ vers_ha[valeur] if valeur is string and valeur in vers_ha
+                   and valeur not in prereglages and vers_ha[valeur] in prereglages
+                   else valeur }}
           - choose:
               # Scénario : le panneau n'envoie qu'un numéro, seules les entités
               # choisies ici peuvent être lancées (D024).
@@ -688,14 +707,14 @@ actions:
                   - condition: template
                     value_template: >-
                       {{ commande == 'chauffage_prereglage'
-                         and valeur in (state_attr(thermostat, 'preset_modes') or [])
+                         and prereglage_ha in prereglages
                          and etat == 'heat' and not verrou }}
                 sequence:
                   - action: climate.set_preset_mode
                     target:
                       entity_id: "{{ thermostat }}"
                     data:
-                      preset_mode: "{{ valeur }}"
+                      preset_mode: "{{ prereglage_ha }}"
             default:
               - action: system_log.write
                 data:
@@ -846,8 +865,11 @@ actions:
                         if state_attr(thermostat, 'temperature') is not none else 'unknown')
                        if disponible else 'unavailable' }}
                 - cle: chauffage_prereglage
+                  # away et activity du Thermostat générique vus comme frost et
+                  # boost par le module (D058).
                   valeur: >-
-                    {{ (state_attr(thermostat, 'preset_mode') or 'none') | string
+                    {% set p = (state_attr(thermostat, 'preset_mode') or 'none') | string %}
+                    {{ (depuis_ha[p] if p in depuis_ha and depuis_ha[p] not in prereglages else p)
                        if disponible else 'unavailable' }}
                 - cle: chauffage_verrou
                   valeur: "{{ ('on' if verrou else 'off') if disponible else 'unavailable' }}"

@@ -142,7 +142,9 @@ pour le même module exécuteraient chaque commande deux fois.
 
 Bon à savoir : le mot « Chauffage » est retiré du nom des calendriers à
 l'affichage. Le module propose les préréglages Manuel, Hors-gel, Éco, Confort et
-Boost ; si votre thermostat ne connaît pas l'un d'eux, il le refuse.
+Boost ; si votre thermostat ne connaît pas l'un d'eux, il le refuse. Avec le
+Thermostat générique de Home Assistant, qui n'a ni Hors-gel ni Boost, le module
+utilise à leur place ses préréglages Absent et Activité ([`CHAUFFAGE.md`](CHAUFFAGE.md)).
 
 ## 4. Choisir les scénarios
 

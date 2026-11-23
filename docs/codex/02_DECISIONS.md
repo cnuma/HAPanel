@@ -1608,8 +1608,8 @@ qui cite la précédente.
   température dans le titre (moins lisible, préréglages déjà connus du module) ;
   dépôt séparé (à reconsidérer si la configuration HA grossit).
 - Conséquences : aucun changement du firmware ni des entités du module (G10) ;
-  `module.yaml` devra traduire `frost` en `away` et `boost` en `activity`, et l'inverse,
-  pour les boutons Hors-gel et Boost (T23, point 3, par le propriétaire) ; l'alarme « Thermostat en sécurité » (D057,
+  `module.yaml` traduit `frost` en `away` et `boost` en `activity`, et l'inverse
+  (T23, point 3, complément ci-dessous) ; l'alarme « Thermostat en sécurité » (D057,
   `safety`) et le verrou (`is_locked`) ne se présenteront plus ; le thermostat générique
   n'a pas de mise en sécurité sur capteur muet : l'alarme « température périmée » du
   module reste le garde-fou visible (`08_RISKS_AND_DEBT.md`).
@@ -1617,3 +1617,12 @@ qui cite la précédente.
   propose que `away`, `comfort`, `eco`, `home`, `sleep` et `activity` ; le guide
   supposait un `boost`. Boost est porté par `activity` (valeur par défaut de la
   correspondance du blueprint, température Boost saisie en Activité).
+- Complément du 23 novembre 2026 (question du propriétaire : états du module non
+  alignés ; « go » donné en HAP-R014) : `module.yaml` traduit les préréglages, à la
+  commande (`frost` → `away`, `boost` → `activity`) et à l'envoi au module (`away` →
+  `frost`, `activity` → `boost`), seulement si le thermostat ne connaît pas le nom du
+  module : un thermostat Versatile Thermostat (qui a `frost` et `boost`) n'est pas
+  touché. Sans traduction, le calendrier en Boost ou Hors-gel grisait les préréglages
+  du module (P4) et ses boutons Boost et Hors-gel étaient refusés. Firmware inchangé ;
+  blueprint à réimporter. Écarté : traduire dans le firmware (reflash de tous les
+  modules pour une question de noms propre à HA).

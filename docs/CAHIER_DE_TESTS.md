@@ -549,9 +549,11 @@ de la pièce éteint pendant l'essai. Suivre dans **Paramètres › Automatisati
 | Z9 | Redémarrer Home Assistant pendant un événement | Après le démarrage, le préréglage de l'événement est appliqué | `feature/chauffage-agenda` | |
 | Z10 | Désactiver l'intégration du calendrier (entité indisponible) | Aucune action ni erreur ; la trace s'arrête à la condition | `feature/chauffage-agenda` | |
 | Z11 | Correspondance Boost mise à `frost`, événement « Boost » | Préréglage inchangé ; avertissement `chauffage.agenda` au journal (Paramètres › Système › Journaux) ; remettre `boost` ensuite | `feature/chauffage-agenda` | |
-| Z12 | Module HAPanel de la pièce, `module.yaml` inchangé : boutons Éco, Confort, Boost, puis Hors-gel | Éco, Confort appliqués ; Hors-gel et Boost refusés (« commande refusée » au journal) tant que `module.yaml` ne traduit pas `frost` et `boost` | `feature/chauffage-agenda` | |
+| Z12 | Module HAPanel de la pièce, `module.yaml` de la branche réimporté, automatisation du module sur le thermostat générique : boutons Éco, Confort, Boost, Hors-gel, Manuel | Chacun appliqué dans HA : `eco`, `comfort`, `activity`, `away`, `none` ; l'icône pressée reste entourée ; consigne du préréglage affichée | `feature/chauffage-agenda` | |
 | Z13 | Après la désinstallation de Versatile Thermostat (guide § 5) | Plus de dossier `custom_components/versatile_thermostat`, ni d'entité, ni de ressource de tableau de bord, ni de réparation ; fils pilotes commandés par les thermostats génériques | — (propriétaire, après la fusion) | |
 | Z14 | Événement « Hors-gel » sur plusieurs jours, commencé avant un créneau quotidien « Boost » de la période | Pendant le créneau Boost, le préréglage reste `away` (Hors-gel) ; à la fin du Hors-gel, préréglage du moment | `feature/chauffage-agenda` | |
+| Z15 | Après Z12, événement « Boost » puis « Hors-gel » dans le calendrier de la pièce | Sur le module : icône Boost entourée et LED rouge, puis Hors-gel entourée et LED bleue (préréglages non grisés) | `feature/chauffage-agenda` | |
+| Z16 | Module d'une pièce encore sur Versatile Thermostat, `module.yaml` de la branche : boutons Hors-gel et Boost | Comme avant : `frost` et `boost` appliqués, affichés entourés (aucune traduction) | `feature/chauffage-agenda` | |
 
 ## R — Documentation publique sans élément personnel (D052)
 
