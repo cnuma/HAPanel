@@ -48,8 +48,9 @@ blueprint:
       name: Correspondance avec le thermostat
       description: >-
         Nom du préréglage du thermostat pour chaque titre. Valeurs par défaut
-        pour le Thermostat générique de Home Assistant, qui n'a pas de
-        « frost » : Hors-gel y devient « away » (Absent).
+        pour le Thermostat générique de Home Assistant, qui n'a ni « frost »
+        ni « boost » : Hors-gel y devient « away » (Absent) et Boost
+        « activity » (Activité).
       collapsed: true
       input:
         prereglage_confort:
@@ -69,7 +70,7 @@ blueprint:
           selector: *prereglage
         prereglage_boost:
           name: Boost
-          default: boost
+          default: activity
           selector: *prereglage
 
 mode: queued

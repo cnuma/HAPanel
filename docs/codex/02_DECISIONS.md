@@ -1586,8 +1586,9 @@ qui cite la précédente.
 - Décision :
   - **régulation** : un « Thermostat générique » de Home Assistant (intégration de base)
     par pièce, sur l'interrupteur du fil pilote (ou un interrupteur modèle si le fil
-    pilote est un `select`) et le capteur de la pièce ; préréglages Confort, Éco, Boost,
-    et Hors-gel porté par `away`, le thermostat générique n'ayant pas `frost` ;
+    pilote est un `select`) et le capteur de la pièce ; préréglages Confort, Éco,
+    Hors-gel porté par `away` et Boost porté par `activity`, le thermostat générique
+    n'ayant ni `frost` ni `boost` ;
   - **blueprint** `blueprints/automation/chauffage/agenda_piece.yaml`, une automatisation
     par pièce : le titre de l'événement en cours donne le préréglage (« Confort »,
     « Éco », « Hors-gel », « Boost », majuscules et accents ignorés, tout autre titre
@@ -1607,8 +1608,12 @@ qui cite la précédente.
   température dans le titre (moins lisible, préréglages déjà connus du module) ;
   dépôt séparé (à reconsidérer si la configuration HA grossit).
 - Conséquences : aucun changement du firmware ni des entités du module (G10) ;
-  `module.yaml` devra traduire `frost` en `away` et l'inverse pour le bouton Hors-gel
-  (T23, point 3, par le propriétaire) ; l'alarme « Thermostat en sécurité » (D057,
+  `module.yaml` devra traduire `frost` en `away` et `boost` en `activity`, et l'inverse,
+  pour les boutons Hors-gel et Boost (T23, point 3, par le propriétaire) ; l'alarme « Thermostat en sécurité » (D057,
   `safety`) et le verrou (`is_locked`) ne se présenteront plus ; le thermostat générique
   n'a pas de mise en sécurité sur capteur muet : l'alarme « température périmée » du
   module reste le garde-fou visible (`08_RISKS_AND_DEBT.md`).
+- Complément du 23 novembre 2026 (cahier Z3 KO) : le Thermostat générique de HA ne
+  propose que `away`, `comfort`, `eco`, `home`, `sleep` et `activity` ; le guide
+  supposait un `boost`. Boost est porté par `activity` (valeur par défaut de la
+  correspondance du blueprint, température Boost saisie en Activité).

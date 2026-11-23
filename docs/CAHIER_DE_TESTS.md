@@ -21,7 +21,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 
 | Date | Binaire | Partie | Résultat | Suite |
 |---|---|---|---|---|
-| 23 novembre 2026 | Blueprint `chauffage/agenda_piece.yaml` (`e58c7dc`), une pièce | Z | **Z1 OK** (automatisation créée). **Z3 KO** (propriétaire) : le préréglage Boost ne s'est pas appliqué | Cause à établir : préréglage `boost` absent des `preset_modes` du thermostat générique, titre ne commençant pas par « Boost », ou thermostat éteint ; demandés : titre, attributs du thermostat, trace, journal `Chauffage :` |
+| 23 novembre 2026 | Blueprint `chauffage/agenda_piece.yaml` (`e58c7dc`), une pièce | Z | **Z1 OK** (automatisation créée). **Z3 KO** (propriétaire) : le préréglage Boost ne s'est pas appliqué | Cause établie (captures) : événement « boost » reconnu, thermostat en `heat`, mais `preset_modes` = `none, away, comfort, eco, sleep` ; trace : branche du journal (préréglage inconnu). Le thermostat générique de HA n'a pas de préréglage `boost` (erreur du guide) : Boost porté par `activity` (blueprint, guide, D058). Z2 et Z3 à refaire après saisie de la température Activité |
 | 22 novembre 2026 | Release `v0.14.0` (`30f932d`), vérifiée par l'agent | Publication | Tâches « publier » et « page » réussies ; Release « Latest », 9 fichiers ; `manifest.json` en 0.14.0 avec la ligne de nouveautés | Mise à jour des autres modules par HA ; Y13 à la prochaine publication (module en 0.14.0 avec une mise à jour en attente) |
 | 22 novembre 2026 | `0.14.0-dev (85cef6d)`, public S024C, cuisine, par USB | Y | Détails de la page Alarmes en blanc (photo précédente prise avant le redémarrage). Alarmes réelles vues : extérieur indisponible (identifiant d'entité changé par ZHA), thermostat en sécurité ; acquittement OK | Publication `v0.14.0` demandée par le propriétaire ; Y1, Y5 à Y9, Y11, Y12, Y16 reportés aux modules mis à jour ; Y13 et Y15 à la mise à jour |
 | 22 novembre 2026 | `0.14.0-dev (c53307c)`, public S024C, cuisine, par USB puis coupure | Y | **Y14 OK** (propriétaire) : version, SHA et disposition d'À propos. Alarmes réelles du jour (extérieur indisponible, thermostat en sécurité) acquittées au journal. **Remarque :** texte complémentaire de la page Alarmes peu lisible, gris sur noir | Cause : le conteneur de la liste n'hérite pas du texte blanc des pages ; corrigé (`e30a8b7`, détails en blanc), réécrit par USB. Suite de la partie Y sur `e30a8b7` |
@@ -538,8 +538,8 @@ de la pièce éteint pendant l'essai. Suivre dans **Paramètres › Automatisati
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
 | Z1 | Importer le blueprint par son URL (branche), créer l'automatisation | Import sans erreur ; saisies Calendrier, Thermostat, Hors événement et Correspondance (repliée) ; textes en français lisibles | `feature/chauffage-agenda` | OK 23 nov. (propriétaire) |
-| Z2 | Outils de développement › États, thermostat générique | `preset_modes` contient `comfort`, `eco`, `away`, `boost` ; mode `heat` | `feature/chauffage-agenda` | |
-| Z3 | Événement « Boost » qui commence dans 2 min | À l'heure dite, préréglage `boost` ; l'interrupteur s'allume si la pièce est sous la consigne | `feature/chauffage-agenda` | KO 23 nov. : Boost non appliqué, cause à établir (Résultats) |
+| Z2 | Outils de développement › États, thermostat générique | `preset_modes` contient `comfort`, `eco`, `away`, `activity` (pas de `boost` : D058, complément) ; mode `heat` | `feature/chauffage-agenda` | |
+| Z3 | Événement « Boost » qui commence dans 2 min | À l'heure dite, préréglage `activity` ; l'interrupteur s'allume si la pièce est sous la consigne | `feature/chauffage-agenda` | KO 23 nov. : `boost` inconnu du thermostat générique ; corrigé (Boost → `activity`), à refaire |
 | Z4 | Fin de l'événement de Z3, sans autre événement | Préréglage `eco` (hors événement par défaut) | `feature/chauffage-agenda` | |
 | Z5 | Deux événements qui se suivent sans trou : « Confort » puis « Éco » | `comfort`, puis `eco` à la jonction | `feature/chauffage-agenda` | |
 | Z6 | Titres « hors gel », « ECO », « Réunion » | `away`, `eco`, `comfort` | `feature/chauffage-agenda` | |
@@ -548,7 +548,7 @@ de la pièce éteint pendant l'essai. Suivre dans **Paramètres › Automatisati
 | Z9 | Redémarrer Home Assistant pendant un événement | Après le démarrage, le préréglage de l'événement est appliqué | `feature/chauffage-agenda` | |
 | Z10 | Désactiver l'intégration du calendrier (entité indisponible) | Aucune action ni erreur ; la trace s'arrête à la condition | `feature/chauffage-agenda` | |
 | Z11 | Correspondance Boost mise à `frost`, événement « Boost » | Préréglage inchangé ; avertissement `chauffage.agenda` au journal (Paramètres › Système › Journaux) ; remettre `boost` ensuite | `feature/chauffage-agenda` | |
-| Z12 | Module HAPanel de la pièce, `module.yaml` inchangé : boutons Éco, Confort, Boost, puis Hors-gel | Éco, Confort, Boost appliqués ; Hors-gel refusé (« commande refusée » au journal) tant que `module.yaml` ne traduit pas `frost` | `feature/chauffage-agenda` | |
+| Z12 | Module HAPanel de la pièce, `module.yaml` inchangé : boutons Éco, Confort, Boost, puis Hors-gel | Éco, Confort appliqués ; Hors-gel et Boost refusés (« commande refusée » au journal) tant que `module.yaml` ne traduit pas `frost` et `boost` | `feature/chauffage-agenda` | |
 | Z13 | Après la désinstallation de Versatile Thermostat (guide § 5) | Plus de dossier `custom_components/versatile_thermostat`, ni d'entité, ni de ressource de tableau de bord, ni de réparation ; fils pilotes commandés par les thermostats génériques | — (propriétaire, après la fusion) | |
 
 ## R — Documentation publique sans élément personnel (D052)

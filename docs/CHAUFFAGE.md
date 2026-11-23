@@ -43,10 +43,14 @@ Thermostat générique** :
 | Capteur de température | celui de la pièce |
 | Durée minimale de cycle | 5 min (évite de faire claquer le fil pilote) |
 | Tolérances froid / chaud | 0,3 °C |
-| Préréglages | Confort, Éco et Boost : les valeurs VT ; **Absent (`away`) = température Hors-gel** |
+| Préréglages | Confort et Éco : les valeurs VT ; **Absent (`away`) = température Hors-gel** ; **Activité (`activity`) = température Boost** ; laisser Domicile et Sommeil vides |
 
-Le thermostat générique n'a pas de préréglage « frost » : le Hors-gel passe par
-`away`. Le blueprint fait déjà cette correspondance.
+Le thermostat générique n'a ni « frost » ni « boost » (ses préréglages : `away`,
+`comfort`, `eco`, `home`, `sleep`, `activity`) : le Hors-gel passe par `away` et le
+Boost par `activity`. Le blueprint fait déjà cette correspondance. Un préréglage
+n'existe que si sa température est saisie ; pour en ajouter un à un thermostat déjà
+créé : **Paramètres › Appareils et services › Entrées**, le thermostat, **⚙ ›
+Options du thermostat générique**, puis l'étape des préréglages.
 
 **Si le fil pilote n'est pas un `switch.…` mais un `select.…`** (modes
 confort / éco / hors-gel / arrêt), créez d'abord un interrupteur modèle :
@@ -68,7 +72,7 @@ Ajouter une intégration › Calendrier local**), par exemple « Chauffage Burea
 | Confort | Confort (`comfort`) |
 | Éco | Éco (`eco`) |
 | Hors-gel | Hors-gel (`away`) |
-| Boost | Boost (`boost`) |
+| Boost | Boost (`activity`) |
 | tout autre titre | Confort |
 | aucun événement | réglable dans le blueprint (Éco par défaut) |
 
@@ -116,7 +120,7 @@ Comportement :
   `chauffage.agenda`.
 
 **Vérifier :** créez un événement « Boost » qui commence dans 2 minutes. À
-l'heure dite, le thermostat passe en Boost et l'interrupteur s'allume si la
+l'heure dite, le thermostat passe en Activité (`activity`, le Boost) et l'interrupteur s'allume si la
 pièce est sous la consigne. À la fin de l'événement, il revient au préréglage
 « hors événement ».
 
@@ -154,9 +158,10 @@ retrouvent alors leur entité sans rien modifier.
 ## 6. Ce que cela change pour les modules HAPanel
 
 - Le module envoie les préréglages `none`, `frost`, `eco`, `comfort` et
-  `boost`. Le thermostat générique n'a pas `frost` : le bouton Hors-gel sera
-  refusé tant que `module.yaml` ne traduit pas `frost` en `away` à l'envoi,
-  et `away` en `frost` dans la valeur renvoyée au module.
+  `boost`. Le thermostat générique n'a ni `frost` ni `boost` : les boutons
+  Hors-gel et Boost seront refusés tant que `module.yaml` ne traduit pas `frost`
+  en `away` et `boost` en `activity` à l'envoi, et l'inverse dans la valeur
+  renvoyée au module.
 - `is_locked` n'existe plus : le verrou du thermostat ne s'affichera jamais.
   C'est sans gêne.
 - L'alarme « Thermostat en sécurité » (préréglage `safety` de VT) ne se
