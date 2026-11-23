@@ -526,6 +526,30 @@ Pour faire apparaître une alarme sans toucher aux capteurs : Outils de dévelop
 | Y15 | Guition 4,3" : page À propos, page Alarmes avec deux alarmes | À propos : bouton « Alarmes » à droite, sous la mémoire ; Alarmes : lignes lisibles, **Acquitter** au-dessus de la maison | — (à la mise à jour de la 4,3") | |
 | Y16 | Page À propos du module de test, après quelques minutes | Mémoire libre et plus grand bloc relevés (G6) | `feature/t22-alarmes` (fusionnée) | Reporté aux modules mis à jour en 0.14.0 (accord du propriétaire, 22 nov.) |
 
+## Z — Chauffage piloté par agenda (D058, TODO T23)
+
+Dans Home Assistant, sur **une** pièce d'abord, selon `docs/CHAUFFAGE.md` : thermostat
+générique créé (§ 2), calendrier de la pièce (§ 3), blueprint importé depuis la branche
+`feature/chauffage-agenda` et automatisation créée (§ 4). Thermostat Versatile Thermostat
+de la pièce éteint pendant l'essai. Suivre dans **Paramètres › Automatisations ›
+⋮ › Traces** et l'historique de l'interrupteur du fil pilote.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| Z1 | Importer le blueprint par son URL (branche), créer l'automatisation | Import sans erreur ; saisies Calendrier, Thermostat, Hors événement et Correspondance (repliée) ; textes en français lisibles | `feature/chauffage-agenda` | |
+| Z2 | Outils de développement › États, thermostat générique | `preset_modes` contient `comfort`, `eco`, `away`, `boost` ; mode `heat` | `feature/chauffage-agenda` | |
+| Z3 | Événement « Boost » qui commence dans 2 min | À l'heure dite, préréglage `boost` ; l'interrupteur s'allume si la pièce est sous la consigne | `feature/chauffage-agenda` | |
+| Z4 | Fin de l'événement de Z3, sans autre événement | Préréglage `eco` (hors événement par défaut) | `feature/chauffage-agenda` | |
+| Z5 | Deux événements qui se suivent sans trou : « Confort » puis « Éco » | `comfort`, puis `eco` à la jonction | `feature/chauffage-agenda` | |
+| Z6 | Titres « hors gel », « ECO », « Réunion » | `away`, `eco`, `comfort` | `feature/chauffage-agenda` | |
+| Z7 | Thermostat éteint (`off`), un événement commence ; puis le rallumer | Éteint : rien ne change, le mode reste `off` ; rallumé : le préréglage du moment est appliqué | `feature/chauffage-agenda` | |
+| Z8 | Pendant un événement, changer le préréglage à la main (tableau de bord ou module) | Le réglage manuel tient jusqu'au prochain début ou fin d'événement | `feature/chauffage-agenda` | |
+| Z9 | Redémarrer Home Assistant pendant un événement | Après le démarrage, le préréglage de l'événement est appliqué | `feature/chauffage-agenda` | |
+| Z10 | Désactiver l'intégration du calendrier (entité indisponible) | Aucune action ni erreur ; la trace s'arrête à la condition | `feature/chauffage-agenda` | |
+| Z11 | Correspondance Boost mise à `frost`, événement « Boost » | Préréglage inchangé ; avertissement `chauffage.agenda` au journal (Paramètres › Système › Journaux) ; remettre `boost` ensuite | `feature/chauffage-agenda` | |
+| Z12 | Module HAPanel de la pièce, `module.yaml` inchangé : boutons Éco, Confort, Boost, puis Hors-gel | Éco, Confort, Boost appliqués ; Hors-gel refusé (« commande refusée » au journal) tant que `module.yaml` ne traduit pas `frost` | `feature/chauffage-agenda` | |
+| Z13 | Après la désinstallation de Versatile Thermostat (guide § 5) | Plus de dossier `custom_components/versatile_thermostat`, ni d'entité, ni de ressource de tableau de bord, ni de réparation ; fils pilotes commandés par les thermostats génériques | — (propriétaire, après la fusion) | |
+
 ## R — Documentation publique sans élément personnel (D052)
 
 Sur GitHub, branche `docs/t02-projet-publiable` choisie dans le menu des branches.

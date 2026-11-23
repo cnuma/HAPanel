@@ -26,7 +26,7 @@ Vérifiez que Home Assistant contient déjà les entités que le module afficher
 |---|---|---|
 | La température de la pièce | Un capteur de température | Oui |
 | La température dehors | Un second capteur de température | Oui |
-| Le chauffage | Un thermostat (entité `climate.…`) avec les modes « Chauffage » et « Éteint » | Oui |
+| Le chauffage | Un thermostat (entité `climate.…`) avec les modes « Chauffage » et « Éteint » ; à défaut, un par pièce selon [`CHAUFFAGE.md`](CHAUFFAGE.md) | Oui |
 | La page Météo | Une entité météo (`weather.…`) avec prévisions par jour | Oui |
 | La page Planning | 1 à 4 calendriers (`calendar.…`) | Oui |
 | La page Scénarios | Des scènes, scripts ou automatisations | Non |

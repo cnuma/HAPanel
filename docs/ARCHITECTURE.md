@@ -224,6 +224,9 @@ toutes les 2 s.
 | Nouvelle page | Voir [Navigation et interface](#navigation-et-interface) |
 
 Le second blueprint, `envoyer_valeur.yaml`, reste un outil générique : `module.yaml` ne s'en sert pas.
+Le troisième, `chauffage/agenda_piece.yaml` (D058), ne parle pas au module : il règle le
+préréglage du thermostat d'une pièce selon son calendrier, et `module.yaml` commande ce
+même thermostat ([`CHAUFFAGE.md`](CHAUFFAGE.md)).
 
 ## Matériel
 

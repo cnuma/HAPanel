@@ -1,0 +1,146 @@
+blueprint:
+  name: Chauffage — agenda d'une pièce
+  description: >-
+    Applique au thermostat d'une pièce le préréglage dicté par le calendrier
+    de cette pièce. Convention : le titre de l'événement en cours donne le
+    préréglage (« Confort », « Éco », « Hors-gel », « Boost », sans tenir
+    compte des majuscules ni des accents ; tout autre titre vaut Confort).
+    Hors événement : le préréglage choisi ci-dessous (Éco par défaut).
+    Réappliqué à chaque début ou fin d'événement, au démarrage de Home
+    Assistant et quand le chauffage est rallumé. Un réglage manuel (panneau,
+    tableau de bord) tient jusqu'au prochain changement du calendrier.
+    Ne touche jamais au mode : un chauffage éteint reste éteint.
+  domain: automation
+  source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/chauffage/agenda_piece.yaml
+  input:
+    calendrier:
+      name: Calendrier
+      description: Calendrier de la pièce (un par pièce).
+      selector:
+        entity:
+          filter:
+            - domain: calendar
+    thermostat:
+      name: Thermostat
+      description: >-
+        Thermostat de la pièce, par exemple un « Thermostat générique » de
+        Home Assistant qui commande l'interrupteur du fil pilote.
+      selector:
+        entity:
+          filter:
+            - domain: climate
+    hors_evenement:
+      name: Hors événement
+      description: Préréglage appliqué quand aucun événement n'est en cours.
+      default: eco
+      selector:
+        select:
+          options:
+            - label: Confort
+              value: confort
+            - label: Éco
+              value: eco
+            - label: Hors-gel
+              value: hors_gel
+            - label: Boost
+              value: boost
+    correspondance:
+      name: Correspondance avec le thermostat
+      description: >-
+        Nom du préréglage du thermostat pour chaque titre. Valeurs par défaut
+        pour le Thermostat générique de Home Assistant, qui n'a pas de
+        « frost » : Hors-gel y devient « away » (Absent).
+      collapsed: true
+      input:
+        prereglage_confort:
+          name: Confort
+          default: comfort
+          selector: &prereglage
+            select:
+              custom_value: true
+              options: [comfort, eco, away, boost, home, sleep, activity, frost, none]
+        prereglage_eco:
+          name: Éco
+          default: eco
+          selector: *prereglage
+        prereglage_hors_gel:
+          name: Hors-gel
+          default: away
+          selector: *prereglage
+        prereglage_boost:
+          name: Boost
+          default: boost
+          selector: *prereglage
+
+mode: queued
+max: 5
+
+variables:
+  calendrier: !input calendrier
+  thermostat: !input thermostat
+  hors_evenement: !input hors_evenement
+  correspondance:
+    confort: !input prereglage_confort
+    eco: !input prereglage_eco
+    hors_gel: !input prereglage_hors_gel
+    boost: !input prereglage_boost
+
+triggers:
+  # Début ou fin d'événement (changement d'état du calendrier).
+  - trigger: state
+    entity_id: !input calendrier
+    to: ~
+  # Deux événements qui se suivent sans trou : l'état reste « on », le titre change.
+  - trigger: state
+    entity_id: !input calendrier
+    attribute: message
+  - trigger: homeassistant
+    event: start
+  # Chauffage rallumé : il reprend le préréglage du moment.
+  - trigger: state
+    entity_id: !input thermostat
+    from: "off"
+    to: heat
+
+conditions:
+  # Rien sur un état inconnu : calendrier ou thermostat indisponible.
+  - condition: template
+    value_template: >-
+      {{ states(calendrier) in ['on', 'off']
+         and states(thermostat) == 'heat' }}
+
+actions:
+  - variables:
+      titre: >-
+        {{ (state_attr(calendrier, 'message') or '') | lower
+           | replace('é', 'e') | replace('è', 'e') | replace('-', ' ')
+           | replace('_', ' ') | trim }}
+      cle: >-
+        {% if states(calendrier) != 'on' %}{{ hors_evenement }}
+        {% elif titre.startswith('hors gel') or titre.startswith('horsgel') %}hors_gel
+        {% elif titre.startswith('eco') %}eco
+        {% elif titre.startswith('boost') %}boost
+        {% else %}confort{% endif %}
+      prereglage: "{{ correspondance[cle | trim] }}"
+      connus: "{{ state_attr(thermostat, 'preset_modes') or [] }}"
+  - if:
+      - condition: template
+        value_template: "{{ prereglage in connus }}"
+    then:
+      - if:
+          - condition: template
+            value_template: "{{ state_attr(thermostat, 'preset_mode') != prereglage }}"
+        then:
+          - action: climate.set_preset_mode
+            target:
+              entity_id: "{{ thermostat }}"
+            data:
+              preset_mode: "{{ prereglage }}"
+    else:
+      - action: system_log.write
+        data:
+          level: warning
+          logger: chauffage.agenda
+          message: >-
+            Chauffage : préréglage « {{ prereglage }} » inconnu de {{ thermostat }}
+            (connus : {{ connus | join(', ') }})

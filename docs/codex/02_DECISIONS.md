@@ -1572,3 +1572,43 @@ qui cite la précédente.
 - Conséquences : aucun changement du blueprint ni des entités (G10) ; 9 widgets et une
   page de plus (RAM de la S024C : 34,2 % au lieu de 33,9 %, G6) ; maquettes du Menu,
   d'À propos et de la page Alarmes régénérées.
+
+## D058 — Chauffage piloté par agenda, sans Versatile Thermostat (TODO T23)
+
+- Date : 23 novembre 2026 — Statut : demandé par le propriétaire le 23 novembre 2026
+  (HAP-R001 à HAP-R003 : choix par questionnaire) ; implémenté sur
+  `feature/chauffage-agenda` (cahier Z), à essayer sur une pièce.
+- Contexte : Versatile Thermostat (intégration HACS) n'apporte pas de réel plus au
+  propriétaire, qui veut le désinstaller et piloter ses radiateurs selon ses agendas.
+  Radiateurs commandés par un interrupteur de fil pilote ; un calendrier par pièce ;
+  convention des événements à définir. Le module HAPanel (D014) attend un `climate.…`
+  avec `heat` / `off` et les préréglages `none`, `frost`, `eco`, `comfort`, `boost`.
+- Décision :
+  - **régulation** : un « Thermostat générique » de Home Assistant (intégration de base)
+    par pièce, sur l'interrupteur du fil pilote (ou un interrupteur modèle si le fil
+    pilote est un `select`) et le capteur de la pièce ; préréglages Confort, Éco, Boost,
+    et Hors-gel porté par `away`, le thermostat générique n'ayant pas `frost` ;
+  - **blueprint** `blueprints/automation/chauffage/agenda_piece.yaml`, une automatisation
+    par pièce : le titre de l'événement en cours donne le préréglage (« Confort »,
+    « Éco », « Hors-gel », « Boost », majuscules et accents ignorés, tout autre titre
+    Confort) ; hors événement, un préréglage choisi (Éco par défaut) ; correspondance
+    titre → nom de préréglage réglable ;
+  - **déclencheurs** : changement d'état du calendrier, changement de titre (événements
+    contigus), démarrage de HA, thermostat rallumé ; rien si calendrier ou thermostat
+    indisponible, ni si le chauffage est éteint ; le mode n'est jamais changé ; préréglage
+    inconnu du thermostat : avertissement au journal, rien d'appliqué ; un réglage manuel
+    tient jusqu'au prochain changement du calendrier ;
+  - **place** : dans HAPanel, guide public `docs/CHAUFFAGE.md` (migration depuis
+    Versatile Thermostat comprise), comme base possible d'une configuration HA livrée
+    avec HAPanel (T23, point 5). Le propriétaire avait d'abord demandé de ne pas le
+    documenter dans HAPanel, puis s'est ravisé le jour même.
+- Options écartées : garder Versatile Thermostat ; planificateur HACS (`scheduler-component`)
+  ou entrée « Planning » de HA (pas d'agenda partagé ni lisible sur le module) ;
+  température dans le titre (moins lisible, préréglages déjà connus du module) ;
+  dépôt séparé (à reconsidérer si la configuration HA grossit).
+- Conséquences : aucun changement du firmware ni des entités du module (G10) ;
+  `module.yaml` devra traduire `frost` en `away` et l'inverse pour le bouton Hors-gel
+  (T23, point 3, par le propriétaire) ; l'alarme « Thermostat en sécurité » (D057,
+  `safety`) et le verrou (`is_locked`) ne se présenteront plus ; le thermostat générique
+  n'a pas de mise en sécurité sur capteur muet : l'alarme « température périmée » du
+  module reste le garde-fou visible (`08_RISKS_AND_DEBT.md`).

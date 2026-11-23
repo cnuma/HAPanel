@@ -11,6 +11,7 @@ par carte (D041, D049, D053).
 - Versions publiées : [page des Releases](https://github.com/cnuma/HAPanel/releases/latest)
 - Utilisation du panneau : [`docs/UTILISATION.md`](docs/UTILISATION.md)
 - Configuration dans Home Assistant : [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md)
+- Chauffage piloté par agenda, facultatif : [`docs/CHAUFFAGE.md`](docs/CHAUFFAGE.md)
 - Architecture : [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - Point d'entrée de la documentation : `docs/START_HERE.md`
 - Règles de développement (humains et agents) : `AGENTS.md`
