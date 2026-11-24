@@ -38,7 +38,7 @@ Thermostat générique** :
 | Champ | Valeur |
 |---|---|
 | Nom | celui de la pièce, par exemple « Bureau » (il deviendra `climate.bureau`, ajustable ensuite) |
-| Mode | Chauffage |
+| Mode | Chauffage : sans ce choix, le thermostat démarre **éteint** et le calendrier ne l'allume jamais (le blueprint ne change pas le mode) |
 | Interrupteur de chauffage | l'interrupteur du fil pilote noté au §1 |
 | Capteur de température | celui de la pièce |
 | Durée minimale de cycle | 5 min (évite de faire claquer le fil pilote) |
@@ -221,6 +221,7 @@ modifiées** donne le `titre` lu et le `prereglage` choisi.
 | Préréglage non appliqué ; trace : « Si : Action else exécutée », puis « System Log : Écrire dans le journal système » | Le thermostat ne connaît pas ce préréglage : sa température n'est pas saisie (le Boost demande **Activité**, le Hors-gel **Absent**). Le journal (**Paramètres › Système › Journaux**, chercher `Chauffage :`) donne le nom refusé et la liste connue | Saisir la température manquante (§ 2, **Préréglages de température**) ; vérifier dans **Outils de développement › États**, attribut `preset_modes` du thermostat |
 | Toujours « boost » refusé après cela | Automatisation créée avec une ancienne version du blueprint, qui envoyait `boost` | Réimporter le blueprint (**Blueprints**, **⋮ › Réimporter le blueprint**) ; dans l'automatisation, **Correspondance avec le thermostat**, Boost sur `activity` |
 | Trace arrêtée au premier test (« Tester Si le modèle… ») | Thermostat éteint (`off`), ou calendrier ou thermostat indisponible : rien n'est fait, volontairement | Rallumer le thermostat : le préréglage du moment s'applique aussitôt |
+| Thermostat trouvé éteint sans savoir pourquoi | Thermostat générique créé sans **Mode** : il démarre éteint, puis garde son dernier état à chaque redémarrage ; ou glissière Éteint / Chauffage d'un module HAPanel ; ou une autre automatisation ou une personne | **Journal de bord** du thermostat : la ligne « est passé à Éteint » donne l'origine (rien à l'heure de la création ou d'un redémarrage, une automatisation, ou une personne par l'action `climate.set_hvac_mode`). Régler **Mode** sur Chauffage dans les options du thermostat |
 | Confort au lieu du préréglage attendu | Titre qui ne commence pas par le mot-clé (« Douche boost ») | Mettre le mot-clé en premier (§ 3) |
 | Préréglage d'un événement jamais appliqué | Il chevauche un événement commencé avant lui | Mettre les événements bout à bout (§ 3) |
 | Bon préréglage, mais le radiateur ne chauffe pas | La pièce est déjà au-dessus de la consigne : attribut `hvac_action` à `idle` | Normal ; il chauffe dès que la température passe sous la consigne moins la tolérance |
