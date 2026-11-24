@@ -1626,3 +1626,15 @@ qui cite la précédente.
   du module (P4) et ses boutons Boost et Hors-gel étaient refusés. Firmware inchangé ;
   blueprint à réimporter. Écarté : traduire dans le firmware (reflash de tous les
   modules pour une question de noms propre à HA).
+- Complément du 24 novembre 2026 (demande du propriétaire, TODO T24) : présence par
+  capteurs de mouvement, dans le même blueprint (section repliée, facultative). Hors
+  événement seulement, un capteur à « on » dans la plage horaire applique le préréglage
+  de présence (Confort par défaut) ; il tient une durée réglable (30 min) après le
+  dernier mouvement ; un événement du calendrier reprend toujours le dessus. Sans état
+  stocké : la présence se déduit à chaque exécution de l'état des capteurs et de leur
+  dernier changement ; la fin est un déclencheur modèle réévalué chaque minute, qui
+  joue aussi après un redémarrage. Un mouvement ou une fin de présence ne remplace pas
+  un réglage manuel (préréglage actuel autre que hors événement ou présence). Écartés :
+  minuterie ou `input_datetime` par pièce (entrée de plus à créer, perdue ou figée au
+  redémarrage) ; automatisation séparée (deux automatisations qui se disputent le même
+  thermostat) ; allumer un thermostat éteint (le blueprint ne touche jamais au mode).

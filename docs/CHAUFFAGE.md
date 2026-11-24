@@ -161,6 +161,40 @@ l'heure dite, le thermostat passe en Activité (`activity`, le Boost) et l'inter
 pièce est sous la consigne. À la fin de l'événement, il revient au préréglage
 « hors événement ».
 
+### Présence (facultatif)
+
+Les capteurs de mouvement (infrarouge) de la pièce peuvent chauffer la pièce quand
+quelqu'un y entre en dehors des événements, par exemple pendant une période Éco. Dans
+l'automatisation, ouvrir la section repliée **Présence (facultatif)** :
+
+| Réglage | Rôle | Par défaut |
+|---|---|---|
+| Capteurs de présence | Un ou plusieurs `binary_sensor` de la pièce (« on » = mouvement détecté). Sans capteur, la présence est ignorée | aucun |
+| Préréglage de présence | Préréglage appliqué tant qu'une présence est détectée | Confort |
+| Durée après le dernier mouvement | Le préréglage de présence tient encore cette durée après le dernier mouvement ; chaque nouveau mouvement la relance | 30 min (5 à 240) |
+| Détection à partir de / jusqu'à | Plage horaire où un mouvement compte ; début égal à la fin = toute la journée ; la plage peut passer minuit (22:00 à 06:00) | 00:00 à 00:00 (toute la journée) |
+
+Règles :
+
+- **Le planning reprend toujours le dessus.** Pendant un événement, les capteurs sont
+  ignorés. Quand un événement commence pendant une présence, son préréglage s'applique ;
+  quand il finit et que quelqu'un a bougé depuis moins que la durée, le préréglage de
+  présence s'applique au lieu du préréglage hors événement.
+- **Fin de présence** : la durée écoulée sans mouvement, ou l'heure de fin de la plage,
+  ramène le préréglage hors événement.
+- **Un réglage manuel est respecté** : un mouvement ou une fin de présence ne change le
+  préréglage que s'il est sur celui de hors événement ou de présence. Un Boost réglé
+  sur le module tient donc jusqu'au prochain changement du calendrier.
+- Le mode n'est jamais changé : un thermostat éteint ne s'allume pas sur un mouvement.
+- Un capteur infrarouge ne voit pas une personne immobile (lecture, sieste) : prévoir une
+  durée assez longue, ou un événement du calendrier pour les moments prévisibles.
+- Après un redémarrage de HA, seul un capteur à « on » compte au démarrage. Si un
+  événement finit dans les minutes qui suivent, la présence peut être retenue au plus
+  pendant la durée choisie, puis le préréglage hors événement revient.
+
+**Vérifier :** sans événement en cours (Éco), passer devant le capteur : le thermostat
+passe en Confort. Ne plus bouger : il revient en Éco après la durée choisie.
+
 ## 5. Désinstaller Versatile Thermostat
 
 À faire une fois toutes les pièces passées en thermostat générique et testées.
@@ -228,3 +262,5 @@ modifiées** donne le `titre` lu et le `prereglage` choisi.
 | Module HAPanel : préréglages tous grisés, aucun entouré, quand le calendrier passe en Boost ou Hors-gel ; boutons Boost et Hors-gel refusés | Blueprint `module.yaml` antérieur à la traduction `away` / `activity` | Réimporter `module.yaml` (**Blueprints**, **⋮ › Réimporter le blueprint**) |
 | Aucune trace à l'heure de l'événement | Automatisation désactivée, ou calendrier non choisi | Vérifier l'automatisation (activée, calendrier de la pièce) |
 | « Entité inconnue sélectionnée » dans l'automatisation | Calendrier ou thermostat supprimé ou renommé (identifiant changé) | Rechoisir l'entité ; voir § 3, « Modifier ou supprimer un calendrier existant » |
+| Un mouvement ne change rien | Événement en cours (le planning prime), heure hors de la plage de détection, préréglage changé à la main, ou capteur qui ne passe pas à « on » | Normal dans les trois premiers cas ; sinon, **Outils de développement › États**, état du capteur ; trace : arrêt au test « présence » (Variables modifiées : `present`, `dans_plage`) |
+| Le Confort de présence ne s'arrête pas | Un capteur reste à « on », ou détecte sans cesse (animal, rideau, radiateur dans son champ) | Historique du capteur ; le déplacer ou en retirer un de la liste |

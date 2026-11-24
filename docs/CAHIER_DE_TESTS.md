@@ -530,7 +530,7 @@ Pour faire apparaître une alarme sans toucher aux capteurs : Outils de dévelop
 | Y15 | Guition 4,3" : page À propos, page Alarmes avec deux alarmes | À propos : bouton « Alarmes » à droite, sous la mémoire ; Alarmes : lignes lisibles, **Acquitter** au-dessus de la maison | — (à la mise à jour de la 4,3") | |
 | Y16 | Page À propos du module de test, après quelques minutes | Mémoire libre et plus grand bloc relevés (G6) | `feature/t22-alarmes` (fusionnée) | Reporté aux modules mis à jour en 0.14.0 (accord du propriétaire, 22 nov.) |
 
-## Z — Chauffage piloté par agenda (D058, TODO T23)
+## Z — Chauffage piloté par agenda (D058, TODO T23 ; présence : T24, Z17 à Z23)
 
 Dans Home Assistant, sur **une** pièce d'abord, selon `docs/CHAUFFAGE.md` : thermostat
 générique créé (§ 2), calendrier de la pièce (§ 3), blueprint importé depuis la branche
@@ -556,6 +556,13 @@ de la pièce éteint pendant l'essai. Suivre dans **Paramètres › Automatisati
 | Z14 | Événement « Hors-gel » sur plusieurs jours, commencé avant un créneau quotidien « Boost » de la période | Pendant le créneau Boost, le préréglage reste `away` (Hors-gel) ; à la fin du Hors-gel, préréglage du moment | `feature/chauffage-agenda` | |
 | Z15 | Après Z12, événement « Boost » puis « Hors-gel » dans le calendrier de la pièce | Sur le module : icône Boost entourée et LED rouge, puis Hors-gel entourée et LED bleue (préréglages non grisés) | `feature/chauffage-agenda` | |
 | Z16 | Module d'une pièce encore sur Versatile Thermostat, `module.yaml` de la branche : boutons Hors-gel et Boost | Comme avant : `frost` et `boost` appliqués, affichés entourés (aucune traduction) | `feature/chauffage-agenda` | |
+| Z17 | Blueprint réimporté ; automatisation de la pièce, section **Présence** : un capteur de mouvement, durée 5 min, plage par défaut | Section repliée lisible ; sans capteur choisi, Z1 à Z16 inchangés | `feature/chauffage-agenda` | |
+| Z18 | Hors événement (Éco), passer devant le capteur | Préréglage `comfort` dans la minute ; trace : déclencheur `presence` | `feature/chauffage-agenda` | |
+| Z19 | Après Z18, ne plus bouger | Retour à `eco` entre 5 et 6 min après le dernier passage à « off » du capteur ; un nouveau mouvement entre-temps relance la durée | `feature/chauffage-agenda` | |
+| Z20 | Pendant un événement « Éco » ou « Hors-gel », passer devant le capteur | Préréglage de l'événement inchangé (le planning prime) | `feature/chauffage-agenda` | |
+| Z21 | Présence en cours (Confort), un événement « Boost » commence puis finit ; bouger encore pendant l'événement | `activity` au début ; à la fin, `comfort` (présence de moins de 5 min), puis `eco` 5 min après le dernier mouvement | `feature/chauffage-agenda` | |
+| Z22 | Hors événement, Boost réglé à la main (module ou tableau de bord), puis mouvement et attente de la durée | Le Boost manuel tient : ni le mouvement ni la fin de présence ne le changent | `feature/chauffage-agenda` | |
+| Z23 | Plage de détection réglée sur une heure passée (ex. 08:00 à 09:00 l'après-midi), mouvement ; puis plage qui couvre l'heure actuelle et finit dans 2 min | Hors plage : rien ; dans la plage : `comfort`, puis `eco` à l'heure de fin même si l'on bouge | `feature/chauffage-agenda` | |
 
 ## R — Documentation publique sans élément personnel (D052)
 
