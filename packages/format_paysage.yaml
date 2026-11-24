@@ -17,7 +17,6 @@ substitutions:
   fmt_acc_gl_demi: "114"
   fmt_acc_gl_h: "48"
   fmt_acc_gl_l: "456"
-  fmt_acc_gl_milieu: "240"
   fmt_acc_gl_r: "24"
   fmt_acc_gl_seuil: "76"
   fmt_acc_gl_y: "212"

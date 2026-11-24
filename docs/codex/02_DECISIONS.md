@@ -1572,3 +1572,39 @@ qui cite la précédente.
 - Conséquences : aucun changement du blueprint ni des entités (G10) ; 9 widgets et une
   page de plus (RAM de la S024C : 34,2 % au lieu de 33,9 %, G6) ; maquettes du Menu,
   d'À propos et de la page Alarmes régénérées.
+
+## D059 — Commandes protégées des touchers fantômes (TODO T25)
+
+- Date : 24 novembre 2026 — Statut : demandé par le propriétaire le 24 novembre 2026,
+  réglages acceptés le même jour (HAP-R040) ; implémenté sur `feature/t25-tactile`
+  (cahier AA).
+- Contexte : le 24 novembre 2026, de 16:04 à 16:40, le module du séjour (S024C) a envoyé
+  environ 45 commandes `esphome.hapanel_commande` sans personne à la maison (journal de
+  HA) : chauffage allumé et éteint à répétition, puis laissé éteint. Seul un toucher
+  relâché envoie une commande : touchers fantômes du tactile capacitif, causés par un
+  bloc d'alimentation défaillant (il « sifflait », remplacé le jour même). Un simple
+  toucher du côté inactif suffisait à basculer la glissière (D014).
+- Décision :
+  - **glissière** du chauffage : seul un glissement d'au moins un tiers de la glissière
+    change le mode ; un toucher ne fait plus rien (révise D014 sur ce point) ;
+    préréglages, − / + et scénarios restent des boutons ;
+  - **coupe-circuit** : au-delà de 6 commandes vers HA en 1 minute, toutes confondues
+    (mode, préréglage, consigne, scénario), la 7e n'est pas envoyée et les commandes
+    sont coupées : grisées comme en verrouillage enfants (D056), « Tactile instable »
+    sur la page Scénarios, alarme « Tactile instable » (6e cause de D057 : LED rouge,
+    triangle, tuile et page Alarmes) ;
+  - **rétablissement** : après 10 minutes sans aucun toucher (un toucher fantôme
+    prolonge donc la coupure), ou par **Acquitter** sur la page Alarmes, toujours
+    proposé pendant la coupure ; un redémarrage rétablit aussi (état non gardé en
+    flash) ;
+  - **journal** : chaque commande envoyée est notée (INFO, `hapanel.tactile`) avec la
+    position et la durée du toucher et le nombre de commandes de la dernière minute ;
+    une commande refusée, en WARN ;
+  - seuils dans `packages/tactile_protege.yaml` (substitutions), état et compteur dans
+    `packages/tactile_protege.h` (fonctions C++ partagées par les pages).
+- Options écartées : confirmation de chaque commande (gêne à chaque usage) ; appui long
+  sur les boutons (même raison) ; coupure gardée en flash (un redémarrage est une action
+  volontaire).
+- Conséquences : aucun changement du blueprint ni des entités (G10) ; la commande des
+  préréglages, de la consigne et des scénarios ne change pas pour l'utilisateur ; la
+  glissière demande un geste net, plus difficile sur dalle résistive (S028, K5).

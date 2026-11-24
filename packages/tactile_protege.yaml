@@ -1,0 +1,35 @@
+# Commandes protegees des touchers fantomes (D059, TODO T25). Le 24 novembre
+# 2026, une alimentation defaillante a fait envoyer au module du sejour 45
+# commandes en 36 min, sans personne. Coupe-circuit : au-dela de
+# tactile_max_commandes commandes vers Home Assistant (mode, prereglage,
+# consigne, scenario) en tactile_fenetre_ms, plus aucun envoi ; commandes
+# grisees comme en verrouillage enfants, alarme « Tactile instable » (bit 5,
+# page Alarmes, D057). Retablies apres tactile_calme_ms sans aucun toucher, ou
+# par Acquitter sur la page Alarmes. Etat et compteur : tactile_protege.h ;
+# position et duree du toucher relevees par packages/led_veille.yaml.
+# Non garde en flash : un redemarrage retablit les commandes.
+
+substitutions:
+  tactile_max_commandes: "6"
+  tactile_fenetre_ms: "60000"
+  # 10 min.
+  tactile_calme_ms: "600000"
+
+esphome:
+  includes:
+    - packages/tactile_protege.h
+
+interval:
+  # Deblocage au calme, et redessin des commandes et des alarmes a chaque
+  # changement (la coupure se decide dans la condition d'envoi).
+  - interval: 1s
+    then:
+      - lambda: |-
+          static bool avant = false;
+          if (hapanel::tactile_coupe() && millis() - hapanel::tactile_dernier_ms() >= ${tactile_calme_ms})
+            hapanel::tactile_debloquer("calme");
+          bool coupe = hapanel::tactile_coupe();
+          if (coupe == avant) return;
+          avant = coupe;
+          id(accueil_rafraichir).execute();
+          id(scenarios_rafraichir).execute();

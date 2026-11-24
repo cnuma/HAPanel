@@ -9,6 +9,10 @@ l'affiche sous « Installer la version X ? », et Home Assistant dans la fenêtr
 La ligne s'écrit dans le même commit que la fonction qu'elle décrit ; la version
 proposée pour la prochaine publication est confirmée à la fusion.
 
+## 0.15.0-dev
+
+Commandes protégées des touchers fantômes : glissière du chauffage par glissement seulement, blocage et alarme « Tactile instable » au-delà de 6 commandes par minute.
+
 ## 0.14.0
 
 Page Alarmes : la cause de la LED rouge expliquée, acquittement ; thermostat en sécurité signalé.
