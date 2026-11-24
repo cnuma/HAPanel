@@ -161,14 +161,17 @@ l'heure dite, le thermostat passe en Activité (`activity`, le Boost) et l'inter
 pièce est sous la consigne. À la fin de l'événement, il revient au préréglage
 « hors événement ».
 
-### Présence (facultatif)
+### Présence (option désactivée par défaut)
 
 Les capteurs de mouvement (infrarouge) de la pièce peuvent chauffer la pièce quand
-quelqu'un y entre en dehors des événements, par exemple pendant une période Éco. Dans
-l'automatisation, ouvrir la section repliée **Présence (facultatif)** :
+quelqu'un y entre en dehors des événements, par exemple pendant une période Éco. C'est
+une option, pièce par pièce : dans l'automatisation, ouvrir la section repliée
+**Présence (option)** et allumer **Activer la présence**. Éteinte, les capteurs sont
+ignorés et seul le calendrier compte, même si des capteurs restent choisis.
 
 | Réglage | Rôle | Par défaut |
 |---|---|---|
+| Activer la présence | Allume ou coupe l'option pour cette pièce | éteint |
 | Capteurs de présence | Un ou plusieurs `binary_sensor` de la pièce (« on » = mouvement détecté). Sans capteur, la présence est ignorée | aucun |
 | Préréglage de présence | Préréglage appliqué tant qu'une présence est détectée | Confort |
 | Durée après le dernier mouvement | Le préréglage de présence tient encore cette durée après le dernier mouvement ; chaque nouveau mouvement la relance | 30 min (5 à 240) |
@@ -262,5 +265,5 @@ modifiées** donne le `titre` lu et le `prereglage` choisi.
 | Module HAPanel : préréglages tous grisés, aucun entouré, quand le calendrier passe en Boost ou Hors-gel ; boutons Boost et Hors-gel refusés | Blueprint `module.yaml` antérieur à la traduction `away` / `activity` | Réimporter `module.yaml` (**Blueprints**, **⋮ › Réimporter le blueprint**) |
 | Aucune trace à l'heure de l'événement | Automatisation désactivée, ou calendrier non choisi | Vérifier l'automatisation (activée, calendrier de la pièce) |
 | « Entité inconnue sélectionnée » dans l'automatisation | Calendrier ou thermostat supprimé ou renommé (identifiant changé) | Rechoisir l'entité ; voir § 3, « Modifier ou supprimer un calendrier existant » |
-| Un mouvement ne change rien | Événement en cours (le planning prime), heure hors de la plage de détection, préréglage changé à la main, ou capteur qui ne passe pas à « on » | Normal dans les trois premiers cas ; sinon, **Outils de développement › États**, état du capteur ; trace : arrêt au test « présence » (Variables modifiées : `present`, `dans_plage`) |
+| Un mouvement ne change rien | Option **Activer la présence** éteinte, événement en cours (le planning prime), heure hors de la plage de détection, préréglage changé à la main, ou capteur qui ne passe pas à « on » | Normal dans les trois premiers cas ; sinon, **Outils de développement › États**, état du capteur ; trace : arrêt au test « présence » (Variables modifiées : `present`, `dans_plage`) |
 | Le Confort de présence ne s'arrête pas | Un capteur reste à « on », ou détecte sans cesse (animal, rideau, radiateur dans son champ) | Historique du capteur ; le déplacer ou en retirer un de la liste |

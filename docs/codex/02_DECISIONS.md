@@ -1627,7 +1627,8 @@ qui cite la précédente.
   blueprint à réimporter. Écarté : traduire dans le firmware (reflash de tous les
   modules pour une question de noms propre à HA).
 - Complément du 24 novembre 2026 (demande du propriétaire, TODO T24) : présence par
-  capteurs de mouvement, dans le même blueprint (section repliée, facultative). Hors
+  capteurs de mouvement, dans le même blueprint (section repliée ; option à activer
+  pièce par pièce, désactivée par défaut, à la demande du propriétaire). Hors
   événement seulement, un capteur à « on » dans la plage horaire applique le préréglage
   de présence (Confort par défaut) ; il tient une durée réglable (30 min) après le
   dernier mouvement ; un événement du calendrier reprend toujours le dessus. Sans état
