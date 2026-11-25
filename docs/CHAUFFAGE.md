@@ -195,6 +195,10 @@ Règles :
   événement finit dans les minutes qui suivent, la présence peut être retenue au plus
   pendant la durée choisie, puis le préréglage hors événement revient.
 
+Exemple de séjour : deux capteurs IR qui couvrent chacun une partie de la pièce, pour le
+même radiateur. On les choisit tous les deux : un mouvement devant l'un ou l'autre
+chauffe, et chacun relance la durée.
+
 Exemple de salle de bain : capteur de mouvement et lumière. Allumer la lumière suffit à
 chauffer ; la présence tient tant que la lumière est allumée, puis la durée choisie après
 l'avoir éteinte ou après le dernier mouvement. Éviter un déclencheur commandé par une

@@ -530,7 +530,7 @@ Pour faire apparaître une alarme sans toucher aux capteurs : Outils de dévelop
 | Y15 | Guition 4,3" : page À propos, page Alarmes avec deux alarmes | À propos : bouton « Alarmes » à droite, sous la mémoire ; Alarmes : lignes lisibles, **Acquitter** au-dessus de la maison | — (à la mise à jour de la 4,3") | |
 | Y16 | Page À propos du module de test, après quelques minutes | Mémoire libre et plus grand bloc relevés (G6) | `feature/t22-alarmes` (fusionnée) | Reporté aux modules mis à jour en 0.14.0 (accord du propriétaire, 22 nov.) |
 
-## Z — Chauffage piloté par agenda (D058, TODO T23 ; présence : T24, Z17 à Z24)
+## Z — Chauffage piloté par agenda (D058, TODO T23 ; présence : T24, Z17 à Z25)
 
 Dans Home Assistant, sur **une** pièce d'abord, selon `docs/CHAUFFAGE.md` : thermostat
 générique créé (§ 2), calendrier de la pièce (§ 3), blueprint importé depuis la branche
@@ -564,6 +564,7 @@ de la pièce éteint pendant l'essai. Suivre dans **Paramètres › Automatisati
 | Z22 | Hors événement, Boost réglé à la main (module ou tableau de bord), puis mouvement et attente de la durée | Le Boost manuel tient : ni le mouvement ni la fin de présence ne le changent | `feature/chauffage-agenda` | |
 | Z23 | Plage de détection réglée sur une heure passée (ex. 08:00 à 09:00 l'après-midi), mouvement ; puis plage qui couvre l'heure actuelle et finit dans 2 min | Hors plage : rien ; dans la plage : `comfort`, puis `eco` à l'heure de fin même si l'on bouge | `feature/chauffage-agenda` | |
 | Z24 | Option allumée, deux déclencheurs de types différents (capteur de mouvement et lumière de la pièce), hors événement : allumer la lumière sans bouger devant le capteur, l'éteindre ; puis bouger devant le capteur seul | Lumière allumée : `comfort`, tenu tant qu'elle reste allumée ; `eco` 5 min après l'avoir éteinte (sans mouvement) ; mouvement seul : `comfort` comme en Z18 ; la liste des déclencheurs propose capteurs binaires, lumières, interrupteurs, entrées booléennes et ventilateurs | `feature/chauffage-agenda` | |
+| Z25 | Option allumée, deux capteurs IR de la même pièce dans **Déclencheurs de présence**, hors événement : bouger devant le capteur A seul, attendre 3 min, bouger devant le capteur B seul, puis ne plus bouger | `comfort` dès A ; toujours `comfort` 5 min après A (B a relancé la durée) ; `eco` 5 min après le dernier passage à « off » de B | `feature/chauffage-agenda` | |
 
 ## R — Documentation publique sans élément personnel (D052)
 
