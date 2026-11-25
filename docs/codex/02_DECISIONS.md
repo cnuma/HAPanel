@@ -1608,3 +1608,24 @@ qui cite la précédente.
 - Conséquences : aucun changement du blueprint ni des entités (G10) ; la commande des
   préréglages, de la consigne et des scénarios ne change pas pour l'utilisateur ; la
   glissière demande un geste net, plus difficile sur dalle résistive (S028, K5).
+
+## D060 — Verrouillage enfants : deux choix dans le blueprint (TODO T26)
+
+- Date : 25 novembre 2026 — Statut : demandé par le propriétaire le 25 novembre 2026 ;
+  implémenté sur `feature/t25-tactile` (cahier AB). Révise D056 sur ce point.
+- Contexte : la Guition 4,3" restait verrouillée (cadenas, commandes grises) alors que
+  le propriétaire croyait l'option coupée : le blueprint était sur « Ne pas imposer »,
+  et l'entité du module, gardée en flash, sur marche depuis un essai. « Ne pas
+  imposer » ne dit pas si le module est verrouillé.
+- Décision : la section « Verrouillage enfants » du blueprint n'a plus que deux choix,
+  **Verrouillage enfants activé** (`on`) et **Verrouillage enfants désactivé** (`off`,
+  par défaut) ; le choix est toujours envoyé au module, à la connexion et toutes les
+  5 minutes. Une automatisation encore enregistrée avec l'ancien « Ne pas imposer »
+  envoie `off`. L'entité du module reste (état visible dans HA, gardé en flash) ; un
+  changement de l'entité est remplacé par le choix du blueprint en 5 minutes au plus.
+  Le firmware ne change pas : il accepte toujours `libre` d'un ancien blueprint.
+- Option écartée : garder « Ne pas imposer » sous un autre nom (refusé par le
+  propriétaire : deux choix seulement).
+- Conséquences : verrouiller à heures fixes par une automatisation qui commande
+  l'entité ne tient plus que 5 minutes ; il faudrait pour cela une entrée du
+  blueprint (non demandée). Blueprint à réimporter (`CONFIGURATION.md`, section 7).

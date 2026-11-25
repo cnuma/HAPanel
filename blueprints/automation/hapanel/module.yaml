@@ -8,14 +8,14 @@ blueprint:
     de 1 à 4 calendriers. Scénarios : 6 scènes, scripts ou automatisations au
     plus, lancés depuis le panneau. LED et écran : réglages facultatifs, imposés
     au module, dont la luminosité pendant le message d'accueil. Verrouillage enfants :
-    facultatif, imposé au module. Message d'accueil : facultatif, à l'arrivée de quelqu'un. Envoi à chaque changement, toutes les 5 minutes, au
+    activé ou désactivé, imposé au module. Message d'accueil : facultatif, à l'arrivée de quelqu'un. Envoi à chaque changement, toutes les 5 minutes, au
     démarrage de Home Assistant et quand le panneau le demande (connexion).
     Exécute les commandes du panneau (allumer, couper, consigne, préréglage)
     seulement si elles viennent de ce panneau, si le thermostat est disponible
     et non verrouillé et si la consigne est dans les bornes ; consigne et
     préréglage exigent un chauffage allumé. Le module n'a pas besoin d'être
     autorisé à effectuer des actions Home Assistant.
-    Décisions D014, D015, D019, D020, D021, D024, D026, D028, D031, D042, D054 et D056 du dépôt
+    Décisions D014, D015, D019, D020, D021, D024, D026, D028, D031, D042, D054, D056 et D060 du dépôt
     cnuma/HAPanel.
   domain: automation
   source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/module.yaml
@@ -377,28 +377,25 @@ blueprint:
     verrouillage:
       name: Verrouillage enfants
       description: >-
-        Verrouillé, l'écran du module ne sert plus qu'à consulter : chauffage,
+        Activé, l'écran du module ne sert plus qu'à consulter : chauffage,
         scénarios, page Réglages et mise à jour depuis l'écran sont grisés, un
         cadenas s'affiche dans la barre d'état. Aucun déverrouillage sur le module.
-        Le verrouillage se commande aussi par l'entité « Verrouillage enfants » de
-        la page de l'appareil, ou par une automatisation. « Ne pas imposer » la
-        laisse libre ; une valeur choisie ici la remplace à la connexion et toutes
-        les 5 minutes (D056).
+        Le choix fait ici est envoyé au module à la connexion et toutes les 5
+        minutes ; il l'emporte sur l'entité « Verrouillage enfants » de la page de
+        l'appareil, qui montre l'état du module (D056, D060).
       collapsed: true
       input:
         verrou_enfants:
           name: Verrouillage enfants
-          default: ne_pas_imposer
+          default: "off"
           selector:
             select:
               mode: dropdown
               options:
-                - label: Ne pas imposer
-                  value: ne_pas_imposer
-                - label: Verrouillé
-                  value: "on"
-                - label: Déverrouillé
+                - label: Verrouillage enfants désactivé
                   value: "off"
+                - label: Verrouillage enfants activé
+                  value: "on"
     accueil:
       name: Message d'accueil
       description: >-
@@ -531,7 +528,8 @@ variables:
       valeur: !input ecran_intensite
     - cle: message_intensite
       valeur: !input message_intensite
-    # Verrouillage enfants (D056), envoye comme les reglages.
+    # Verrouillage enfants (D056), envoye comme les reglages ; toujours impose
+    # depuis D060 (on ou off).
     - cle: verrou_enfants
       valeur: !input verrou_enfants
   accueil_declencheurs: !input accueil_declencheurs
@@ -898,8 +896,13 @@ actions:
                 - action: "{{ action_maj }}"
                   data:
                     cle: "{{ repeat.item.cle }}"
+                    # Verrouillage enfants : toujours on ou off (D060) ;
+                    # l'ancien « Ne pas imposer », encore enregistre dans une
+                    # automatisation, vaut « desactive ».
                     valeur: >-
-                      {{ 'libre' if repeat.item.valeur == 'ne_pas_imposer'
+                      {{ ('on' if repeat.item.valeur == 'on' else 'off')
+                         if repeat.item.cle == 'verrou_enfants'
+                         else 'libre' if repeat.item.valeur == 'ne_pas_imposer'
                          else repeat.item.valeur }}
       # Météo.
       - if:

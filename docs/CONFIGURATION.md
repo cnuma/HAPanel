@@ -205,15 +205,14 @@ Verrouillé, l'écran du module ne sert plus qu'à consulter : chauffage, scéna
 réglages et mise à jour depuis l'écran ne répondent plus, et un cadenas orange
 s'affiche dans la barre du haut (D056). **Rien ne se déverrouille depuis le module.**
 
-1. Sur la page de l'appareil (rubrique **Configuration**), activez **Verrouillage
-   enfants** ; le cadenas apparaît sur le module en une seconde environ. Désactivez-le
-   pour déverrouiller.
-2. Pour verrouiller à heures fixes, créez une automatisation qui active et désactive
-   cette entité (par exemple : activer à 8 h, désactiver à 18 h).
-3. La section **Verrouillage enfants** du blueprint, repliée, peut aussi l'imposer :
-   « Verrouillé » ou « Déverrouillé » l'emporte sur l'entité, remise en place à la
-   connexion et toutes les 5 minutes ; laissez « Ne pas imposer » pour le commander
-   par l'entité ou par une automatisation.
+1. Ouvrez l'automatisation du module, section **Verrouillage enfants** (repliée), et
+   choisissez **Verrouillage enfants activé** ou **Verrouillage enfants désactivé**
+   (choix par défaut). Enregistrez.
+2. Le module reçoit le choix à la connexion et toutes les 5 minutes : le cadenas
+   apparaît ou disparaît en 5 minutes au plus.
+3. L'entité **Verrouillage enfants** de la page de l'appareil (rubrique
+   **Configuration**) montre l'état du module. La changer agit tout de suite, mais le
+   choix du blueprint revient en 5 minutes au plus (D060).
 
 Le module garde le verrouillage après une coupure de courant. Home Assistant garde
 toutes les commandes, y compris l'installation d'une mise à jour (entité **Firmware**).

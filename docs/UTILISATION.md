@@ -177,7 +177,8 @@ et l'écran ne sert plus qu'à **consulter** :
   alarmes.
 
 Il n'y a **aucun moyen de déverrouiller depuis le panneau** : le verrouillage se met et
-s'enlève dans Home Assistant (voir [la configuration](CONFIGURATION.md), section 5). Il
+s'enlève dans Home Assistant, dans l'automatisation du module (voir
+[la configuration](CONFIGURATION.md), section 5). Il
 reste en place après une coupure de courant, et même sans Home Assistant.
 
 Pendant l'enregistrement d'un réglage, la disquette prend la place du cadenas quelques
