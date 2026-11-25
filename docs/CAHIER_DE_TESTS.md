@@ -522,16 +522,16 @@ provoquer le coupe-circuit sans toucher fantôme : sept commandes en moins d'une
 
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
-| AA1 | Accueil, chauffage allumé : toucher brièvement le côté « Éteint » de la glissière | Rien ne change, aucune commande dans HA | `feature/t25-tactile` | |
-| AA2 | Faire glisser la pastille vers « Éteint », puis vers « Chauffage » | Le mode change chaque fois, comme avant ; journal : « mode : toucher (x, y), N ms, n en 60 s » | `feature/t25-tactile` | |
-| AA3 | Glisser la pastille de moins d'un tiers, puis relâcher | La pastille revient, rien n'est envoyé | `feature/t25-tactile` | |
-| AA4 | Sept commandes en moins d'une minute (préréglages, consigne, scénarios mêlés) | Les six premières partent ; la 7e non (journal WARN « commandes coupées ») ; commandes de l'accueil et scénarios grisés, « Tactile instable » sur la page Scénarios ; triangle rouge, LED rouge, tuile « Alarmes » | `feature/t25-tactile` | |
-| AA5 | Page Alarmes pendant la coupure | « Tactile instable », « Depuis … Commandes bloquées. Vérifier l'alimentation ; rétablies après 10 min sans toucher ou par Acquitter. » ; bouton **Acquitter** visible, même avec « Alerte LED » arrêtée | `feature/t25-tactile` | |
-| AA6 | **Acquitter** | Commandes de nouveau actives en 1 s ; l'alarme disparaît ; journal « commandes rétablies (acquittement) » | `feature/t25-tactile` | |
-| AA7 | Refaire AA4, puis ne plus toucher l'écran pendant 10 min | Commandes rétablies seules ; journal « commandes rétablies (calme) » ; alarme partie | `feature/t25-tactile` | |
+| AA1 | Accueil, chauffage allumé : toucher brièvement le côté « Éteint » de la glissière | Rien ne change, aucune commande dans HA | `feature/t25-tactile` || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA2 | Faire glisser la pastille vers « Éteint », puis vers « Chauffage » | Le mode change chaque fois, comme avant ; journal : « mode : toucher (x, y), N ms, n en 60 s » | `feature/t25-tactile` || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA3 | Glisser la pastille de moins d'un tiers, puis relâcher | La pastille revient, rien n'est envoyé | `feature/t25-tactile` || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA4 | Sept commandes en moins d'une minute (préréglages, consigne, scénarios mêlés) | Les six premières partent ; la 7e non (journal WARN « commandes coupées ») ; commandes de l'accueil et scénarios grisés, « Tactile instable » sur la page Scénarios ; triangle rouge, LED rouge, tuile « Alarmes » | `feature/t25-tactile` || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA5 | Page Alarmes pendant la coupure | « Tactile instable », « Depuis … Commandes bloquées. Vérifier l'alimentation ; rétablies après 10 min sans toucher ou par Acquitter. » ; bouton **Acquitter** visible, même avec « Alerte LED » arrêtée | `feature/t25-tactile` || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA6 | **Acquitter** | Commandes de nouveau actives en 1 s ; l'alarme disparaît ; journal « commandes rétablies (acquittement) » | `feature/t25-tactile` || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA7 | Refaire AA4, puis ne plus toucher l'écran pendant 10 min | Commandes rétablies seules ; journal « commandes rétablies (calme) » ; alarme partie | `feature/t25-tactile` || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
 | AA8 | Refaire AA4, puis toucher l'écran (sans commande) toutes les 5 min | Toujours coupé tant que les touchers continuent ; rétabli 10 min après le dernier | `feature/t25-tactile` | |
-| AA9 | Refaire AA4, puis couper l'alimentation et rebrancher | Commandes actives au démarrage, sans alarme « Tactile instable » | `feature/t25-tactile` | |
-| AA10 | Guition 4,3" : AA1, AA2, AA4 et la page Alarmes | Comme sur la S024C ; texte de l'alarme lisible en paysage | — (à la mise à jour de la 4,3") | |
+| AA9 | Refaire AA4, puis couper l'alimentation et rebrancher | Commandes actives au démarrage, sans alarme « Tactile instable » | `feature/t25-tactile` || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA10 | Guition 4,3" : AA1, AA2, AA4 et la page Alarmes | Comme sur la S024C ; texte de l'alarme lisible en paysage | — (à la mise à jour de la 4,3") || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
 | AA11 | Page À propos du module de test, après quelques minutes | Mémoire libre et plus grand bloc relevés (G6) | `feature/t25-tactile` | |
 
 ## Y — Alarmes et thermostat en sécurité (D057, TODO T22 et T21)
