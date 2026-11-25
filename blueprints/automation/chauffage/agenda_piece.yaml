@@ -8,8 +8,9 @@ blueprint:
     « Hors-gel », « Boost » ; sans mot-clé : Confort) et une consigne
     facultative (« Froid 25 », « Chaud 21,5 », « 19 »). Sans mode dans le
     titre, le mode de l'appareil ne change pas, et un appareil éteint reste
-    éteint. Sans consigne dans le titre, le mot-clé applique un préréglage ou
-    une consigne de la série chaud ou froid, selon la méthode choisie.
+    éteint. Sans température dans le titre, le mot-clé applique un préréglage
+    de l'appareil (plutôt radiateur) ou une température fixée ici, série chaud
+    ou froid (plutôt clim), selon le choix « Comment appliquer ».
     Hors événement : le réglage choisi ci-dessous (Éco par défaut, ou Arrêt).
     Présence (option, désactivée par défaut) : hors événement, un déclencheur
     à « on » dans la plage horaire choisie applique le réglage de présence
@@ -39,20 +40,21 @@ blueprint:
           filter:
             - domain: climate
     methode:
-      name: Méthode
+      name: Comment appliquer Confort, Éco, Hors-gel, Boost
       description: >-
-        Comment appliquer un mot-clé (Confort, Éco, Hors-gel, Boost) quand le
-        titre ne donne pas de consigne. Préréglage : pour un thermostat qui en
-        a (thermostat générique, certaines clims). Consigne : la température
-        de la section « Consignes », série chaud ou froid selon le mode, pour
-        une clim sans préréglage.
+        Quand le titre ne donne pas de température. « Préréglages de
+        l'appareil » : l'appareil a ses propres Confort, Éco… avec leurs
+        températures (thermostat générique des radiateurs, certaines clims ;
+        voir son attribut preset_modes). « Températures fixées ici » : le
+        blueprint envoie la température de la section du même nom, série chaud
+        ou froid selon le mode (clim sans préréglage).
       default: prereglage
       selector:
         select:
           options:
-            - label: Préréglage
+            - label: Préréglages de l'appareil (plutôt radiateur)
               value: prereglage
-            - label: Consigne
+            - label: Températures fixées ici (plutôt clim)
               value: consigne
     hors_evenement:
       name: Hors événement
@@ -153,10 +155,10 @@ blueprint:
           selector:
             time: {}
     correspondance:
-      name: Correspondance avec le thermostat (méthode Préréglage)
+      name: Préréglages de l'appareil (noms)
       description: >-
-        Ignorée si la méthode est Consigne. Nom du préréglage du thermostat
-        pour chaque mot-clé. Valeurs par défaut
+        Ignorée avec « Températures fixées ici ». Nom du préréglage de
+        l'appareil pour chaque mot-clé. Valeurs par défaut
         pour le Thermostat générique de Home Assistant, qui n'a ni « frost »
         ni « boost » : Hors-gel y devient « away » (Absent) et Boost
         « activity » (Activité).
@@ -182,10 +184,10 @@ blueprint:
           default: activity
           selector: *prereglage
     consignes:
-      name: Consignes (méthode Consigne)
+      name: Températures fixées ici
       description: >-
-        Ignorée si la méthode est Préréglage (une consigne écrite dans le titre
-        s'applique avec les deux méthodes). Température de chaque mot-clé, série chaud (modes chaud et auto) et
+        Ignorée avec « Préréglages de l'appareil » (une température écrite dans
+        le titre s'applique dans les deux cas). Température de chaque mot-clé, série chaud (modes chaud et auto) et
         série froid (mode froid). En mode auto à deux bornes, la série chaud
         donne la borne basse et la série froid la borne haute. Bornées au
         minimum et au maximum de l'appareil.
@@ -444,7 +446,7 @@ actions:
         {% set v = nombres[1] if nombres | count > 1 else consignes.froid[cle | trim] %}
         {{ [[[v | float, borne_basse | float] | max, tmin | float] | max, tmax | float] | min }}
   - choose:
-      # Consigne (du titre ou de la section « Consignes »).
+      # Température (du titre ou de la section « Températures fixées ici »).
       - conditions:
           - condition: template
             value_template: "{{ par_consigne }}"

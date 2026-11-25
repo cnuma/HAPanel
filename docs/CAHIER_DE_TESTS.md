@@ -567,16 +567,16 @@ de la pièce éteint pendant l'essai. Suivre dans **Paramètres › Automatisati
 | Z23 | Plage de détection réglée sur une heure passée (ex. 08:00 à 09:00 l'après-midi), mouvement ; puis plage qui couvre l'heure actuelle et finit dans 2 min | Hors plage : rien ; dans la plage : `comfort`, puis `eco` à l'heure de fin même si l'on bouge | `feature/chauffage-agenda` | |
 | Z24 | Option allumée, deux déclencheurs de types différents (capteur de mouvement et lumière de la pièce), hors événement : allumer la lumière sans bouger devant le capteur, l'éteindre ; puis bouger devant le capteur seul | Lumière allumée : `comfort`, tenu tant qu'elle reste allumée ; `eco` 5 min après l'avoir éteinte (sans mouvement) ; mouvement seul : `comfort` comme en Z18 ; la liste des déclencheurs propose capteurs binaires, lumières, interrupteurs, entrées booléennes et ventilateurs | `feature/chauffage-agenda` | |
 | Z25 | Option allumée, deux capteurs IR de la même pièce dans **Déclencheurs de présence**, hors événement : bouger devant le capteur A seul, attendre 3 min, bouger devant le capteur B seul, puis ne plus bouger | `comfort` dès A ; toujours `comfort` 5 min après A (B a relancé la durée) ; `eco` 5 min après le dernier passage à « off » de B | `feature/chauffage-agenda` | |
-| Z26 | Blueprint réimporté ; automatisation existante d'un radiateur, sans rien changer ; refaire Z3 et Z4 | Nom « Chauffage et clim — agenda d'une pièce » ; méthode Préréglage par défaut ; Boost puis Éco comme avant | `feature/chauffage-agenda` | |
-| Z27 | Automatisation d'une clim, méthode selon `preset_modes` ; clim éteinte ; événement « Froid 25 » qui commence dans 2 min | La clim s'allume en froid (`cool`), consigne 25 °C | `feature/chauffage-agenda` | |
+| Z26 | Blueprint réimporté ; automatisation existante d'un radiateur, sans rien changer ; refaire Z3 et Z4 | Nom « Chauffage et clim — agenda d'une pièce » ; « Préréglages de l'appareil (plutôt radiateur) » choisi par défaut ; Boost puis Éco comme avant | `feature/chauffage-agenda` | |
+| Z27 | Automatisation d'une clim, « Comment appliquer » selon `preset_modes` ; clim éteinte ; événement « Froid 25 » qui commence dans 2 min | La clim s'allume en froid (`cool`), consigne 25 °C | `feature/chauffage-agenda` | |
 | Z28 | Événement « Chaud 21,5 », clim en froid | Passage en chaud (`heat`), consigne 21,5 °C | `feature/chauffage-agenda` | |
-| Z29 | Méthode Consigne ; événement « Froid éco », puis « Froid » seul | Consigne 28 °C, puis 25 °C (Confort froid par défaut) | `feature/chauffage-agenda` | |
+| Z29 | « Températures fixées ici » ; événement « Froid éco », puis « Froid » seul | Consigne 28 °C, puis 25 °C (Confort froid par défaut) | `feature/chauffage-agenda` | |
 | Z30 | Hors événement **Arrêt** ; fin d'un événement « Froid 25 » | La clim s'éteint (`off`) à la fin de l'événement | `feature/chauffage-agenda` | |
 | Z31 | Hors événement **Arrêt**, clim éteinte ; événement « Confort » (sans mode) | La clim reste éteinte (le mode n'est changé que par Chaud, Froid ou Arrêt) | `feature/chauffage-agenda` | |
 | Z32 | Pendant « Froid 25 », passer la clim en chaud à la main ; puis l'éteindre à la main | Le mode manuel est respecté : ni retour en froid ni consigne changée ; la clim reste éteinte jusqu'au prochain changement du calendrier | `feature/chauffage-agenda` | |
 | Z33 | Événement « Arrêt » | La clim s'éteint | `feature/chauffage-agenda` | |
 | Z34 | Radiateur (thermostat générique), événement « Confort 21 » | Préréglage remis à `none`, consigne 21 °C ; à la fin, préréglage hors événement (`eco`) | `feature/chauffage-agenda` | |
-| Z35 | Clim limitée (par exemple 16 à 30 °C), méthode Consigne, événement « Froid hors-gel » | Consigne 30 °C (32 bornée au maximum) ; aucun message d'erreur | `feature/chauffage-agenda` | |
+| Z35 | Clim limitée (par exemple 16 à 30 °C), « Températures fixées ici », événement « Froid hors-gel » | Consigne 30 °C (32 bornée au maximum) ; aucun message d'erreur | `feature/chauffage-agenda` | |
 
 ## R — Documentation publique sans élément personnel (D052)
 

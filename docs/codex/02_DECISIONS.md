@@ -1682,3 +1682,9 @@ qui cite la précédente.
   automatique, et sur un titre commençant par « Chaud », « Froid » ou « Arrêt ») ; le
   blueprint s'appelle « Chauffage et clim — agenda d'une pièce », même fichier et même
   adresse ; aucun changement de `module.yaml` ni du firmware ici.
+- Complément du 25 novembre 2026 (propriétaire : « Préréglage » et « Consigne » peu
+  compréhensibles) : libellés renommés « Préréglages de l'appareil (plutôt radiateur) »
+  et « Températures fixées ici (plutôt clim) », saisie « Comment appliquer Confort, Éco,
+  Hors-gel, Boost », sections « Préréglages de l'appareil (noms) » et « Températures
+  fixées ici ». Valeurs internes inchangées (`prereglage`, `consigne`) : les
+  automatisations existantes ne sont pas touchées.

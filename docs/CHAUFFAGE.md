@@ -104,7 +104,7 @@ nombre du titre, virgule ou point, « °C » facultatif).
   l'appareil. Attention : tout nombre compte (« Réunion 2 » demande 2 °C, ramené au
   minimum) ;
 - **sans consigne**, le mot-clé applique le préréglage, ou la consigne de la série
-  chaud ou froid si la méthode **Consigne** est choisie (§ 4) ;
+  chaud ou froid avec le choix **Températures fixées ici** (§ 4) ;
 - **mode automatique à deux bornes** (`heat_cool`, `auto` avec borne basse et borne
   haute) : un nombre donne la borne basse, un second la borne haute (« Confort 20
   25 ») ; sans nombre, la série chaud donne la borne basse et la série froid la borne
@@ -177,15 +177,21 @@ que pendant ses créneaux (elle est éteinte à la fin de chaque événement).
 2. **Paramètres › Automatisations et scènes › Blueprints › Chauffage et clim —
    agenda d'une pièce › Créer une automatisation** : choisir le calendrier et le
    thermostat (ou la clim) de la pièce. Laisser la correspondance par défaut.
-3. **Méthode** : **Préréglage** (par défaut) pour un thermostat qui en a (thermostat
-   générique, clim avec préréglages : vérifier l'attribut `preset_modes` dans
-   **Outils de développement › États**) ; **Consigne** pour une clim sans
-   préréglage. Avec Consigne, régler la section repliée **Consignes** : une
-   température par mot-clé, série chaud et série froid.
-   Home Assistant ne sait pas masquer la section de l'autre méthode : elle reste
+3. **Comment appliquer Confort, Éco, Hors-gel, Boost** (quand le titre ne donne
+   pas de température) :
+   - **Préréglages de l'appareil (plutôt radiateur)**, par défaut : l'appareil a
+     ses propres Confort, Éco… avec leurs températures, comme le thermostat
+     générique (§ 2) ou certaines clims (vérifier l'attribut `preset_modes` dans
+     **Outils de développement › États**) ; leurs noms se règlent dans la section
+     repliée **Préréglages de l'appareil (noms)** ;
+   - **Températures fixées ici (plutôt clim)** : pour une clim sans préréglage ; le
+     blueprint envoie la température de la section repliée **Températures fixées
+     ici**, une par mot-clé, série chaud et série froid.
+
+   Home Assistant ne sait pas masquer la section de l'autre choix : elle reste
    affichée, mais elle est ignorée (sa description le rappelle).
 
-| Consigne par défaut | Confort | Éco | Hors-gel | Boost |
+| Températures fixées ici, par défaut | Confort | Éco | Hors-gel | Boost |
 |---|---|---|---|---|
 | Chaud (modes chaud et auto) | 20 °C | 17 °C | 7 °C | 23 °C |
 | Froid (mode froid) | 25 °C | 28 °C | 32 °C (presque pas de froid) | 22 °C |
@@ -228,7 +234,7 @@ ignorés et seul le calendrier compte, même si des capteurs restent choisis.
 |---|---|---|
 | Activer la présence | Allume ou coupe l'option pour cette pièce | éteint |
 | Déclencheurs de présence | Autant de déclencheurs que voulu, de types mélangés, tous à « on » quand quelqu'un est là : capteur de mouvement, de présence ou d'ouverture (`binary_sensor`), lumière (`light`), prise ou interrupteur (`switch`), entrée booléenne (`input_boolean`, par exemple un bouton « Je suis là » du tableau de bord), ventilateur (`fan`). Un seul à « on » suffit ; la durée part du dernier changement de l'un d'eux. Sans déclencheur, la présence est ignorée | aucun |
-| Préréglage de présence | Préréglage appliqué tant qu'une présence est détectée | Confort |
+| Réglage de présence | Mot-clé appliqué tant qu'une présence est détectée (préréglage ou température, selon le choix ci-dessus) | Confort |
 | Durée après le dernier mouvement | Le préréglage de présence tient encore cette durée après le dernier mouvement ; chaque nouveau mouvement la relance | 30 min (5 à 240) |
 | Détection à partir de / jusqu'à | Plage horaire où un mouvement compte ; début égal à la fin = toute la journée ; la plage peut passer minuit (22:00 à 06:00) | 00:00 à 00:00 (toute la journée) |
 
@@ -337,7 +343,7 @@ modifiées** donne le `titre` lu et le `prereglage` choisi.
 | « Entité inconnue sélectionnée » dans l'automatisation | Calendrier ou thermostat supprimé ou renommé (identifiant changé) | Rechoisir l'entité ; voir § 3, « Modifier ou supprimer un calendrier existant » |
 | Clim : « Froid 25 » sans effet ; journal « Chauffage : mode « cool » inconnu » | La clim n'a pas ce mode (attribut `hvac_modes`) | Vérifier `hvac_modes` dans **Outils de développement › États** |
 | Clim : l'événement sans « Chaud » ni « Froid » ne l'allume pas | Normal : sans mode dans le titre, le mode n'est jamais changé | Commencer le titre par « Chaud » ou « Froid » |
-| Clim : consigne non appliquée, journal « préréglage … inconnu » | Méthode **Préréglage** sur une clim qui n'en a pas | Méthode **Consigne**, ou une consigne dans le titre |
+| Clim : consigne non appliquée, journal « préréglage … inconnu » | **Préréglages de l'appareil** choisi pour une clim qui n'en a pas | Choisir **Températures fixées ici**, ou écrire la température dans le titre |
 | Consigne différente du titre | Bornée au minimum ou au maximum de l'appareil (`min_temp`, `max_temp`), ou un autre nombre dans le titre | Corriger le titre ; un seul nombre, la consigne |
 | Un mouvement ne change rien | Option **Activer la présence** éteinte, événement en cours (le planning prime), heure hors de la plage de détection, préréglage changé à la main, ou capteur qui ne passe pas à « on » | Normal dans les trois premiers cas ; sinon, **Outils de développement › États**, état du capteur ; trace : arrêt au test « présence » (Variables modifiées : `present`, `dans_plage`) |
 | Le Confort de présence ne s'arrête pas | Un déclencheur reste à « on » (lumière ou prise oubliée), ou détecte sans cesse (animal, rideau, radiateur dans son champ) | Historique du capteur ; le déplacer ou en retirer un de la liste |
