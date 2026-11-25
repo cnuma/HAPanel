@@ -1577,7 +1577,7 @@ qui cite la précédente.
 
 - Date : 24 novembre 2026 — Statut : demandé par le propriétaire le 24 novembre 2026,
   réglages acceptés le même jour (HAP-R040) ; implémenté sur `feature/t25-tactile`
-  (cahier AA).
+  (cahier AA), essayé sur la 4,3" et fusionné le 25 novembre 2026 (0.15.0-dev).
 - Contexte : le 24 novembre 2026, de 16:04 à 16:40, le module du séjour (S024C) a envoyé
   environ 45 commandes `esphome.hapanel_commande` sans personne à la maison (journal de
   HA) : chauffage allumé et éteint à répétition, puis laissé éteint. Seul un toucher
@@ -1612,7 +1612,7 @@ qui cite la précédente.
 ## D060 — Verrouillage enfants : deux choix dans le blueprint (TODO T26)
 
 - Date : 25 novembre 2026 — Statut : demandé par le propriétaire le 25 novembre 2026 ;
-  implémenté sur `feature/t25-tactile` (cahier AB). Révise D056 sur ce point.
+  implémenté sur `feature/t25-tactile` (cahier AB), fusionné le 25 novembre 2026. Révise D056 sur ce point.
 - Contexte : la Guition 4,3" restait verrouillée (cadenas, commandes grises) alors que
   le propriétaire croyait l'option coupée : le blueprint était sur « Ne pas imposer »,
   et l'entité du module, gardée en flash, sur marche depuis un essai. « Ne pas
