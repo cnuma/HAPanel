@@ -66,16 +66,22 @@ blueprint:
           selector:
             boolean: {}
         capteurs_presence:
-          name: Capteurs de présence
+          name: Déclencheurs de présence
           description: >-
-            Capteurs de mouvement ou de présence de la pièce (« on » = quelqu'un
-            est détecté). Un seul suffit.
+            Un ou plusieurs déclencheurs de la pièce, à « on » quand quelqu'un
+            est là : capteurs de mouvement, de présence ou d'ouverture, lumière,
+            prise ou interrupteur, entrée booléenne. Un seul à « on » suffit ; la
+            durée part du dernier changement de l'un d'eux.
           default: []
           selector:
             entity:
               multiple: true
               filter:
                 - domain: binary_sensor
+                - domain: light
+                - domain: switch
+                - domain: input_boolean
+                - domain: fan
         prereglage_presence:
           name: Préréglage de présence
           description: Préréglage appliqué tant qu'une présence est détectée.

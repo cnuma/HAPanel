@@ -1639,3 +1639,8 @@ qui cite la précédente.
   minuterie ou `input_datetime` par pièce (entrée de plus à créer, perdue ou figée au
   redémarrage) ; automatisation séparée (deux automatisations qui se disputent le même
   thermostat) ; allumer un thermostat éteint (le blueprint ne touche jamais au mode).
+- Complément du 25 novembre 2026 (demande du propriétaire : plusieurs déclencheurs) : la
+  présence accepte, en plus des `binary_sensor`, les `light`, `switch`, `input_boolean`
+  et `fan`, mélangés, tous lus sur l'état « on ». Écartés : `media_player`, `person`,
+  `device_tracker` (états autres que « on », sens différent selon l'entité) ; ils passent
+  par un capteur binaire Modèle.

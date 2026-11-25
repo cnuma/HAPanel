@@ -172,7 +172,7 @@ ignorés et seul le calendrier compte, même si des capteurs restent choisis.
 | Réglage | Rôle | Par défaut |
 |---|---|---|
 | Activer la présence | Allume ou coupe l'option pour cette pièce | éteint |
-| Capteurs de présence | Un ou plusieurs `binary_sensor` de la pièce (« on » = mouvement détecté). Sans capteur, la présence est ignorée | aucun |
+| Déclencheurs de présence | Autant de déclencheurs que voulu, de types mélangés, tous à « on » quand quelqu'un est là : capteur de mouvement, de présence ou d'ouverture (`binary_sensor`), lumière (`light`), prise ou interrupteur (`switch`), entrée booléenne (`input_boolean`, par exemple un bouton « Je suis là » du tableau de bord), ventilateur (`fan`). Un seul à « on » suffit ; la durée part du dernier changement de l'un d'eux. Sans déclencheur, la présence est ignorée | aucun |
 | Préréglage de présence | Préréglage appliqué tant qu'une présence est détectée | Confort |
 | Durée après le dernier mouvement | Le préréglage de présence tient encore cette durée après le dernier mouvement ; chaque nouveau mouvement la relance | 30 min (5 à 240) |
 | Détection à partir de / jusqu'à | Plage horaire où un mouvement compte ; début égal à la fin = toute la journée ; la plage peut passer minuit (22:00 à 06:00) | 00:00 à 00:00 (toute la journée) |
@@ -194,6 +194,17 @@ Règles :
 - Après un redémarrage de HA, seul un capteur à « on » compte au démarrage. Si un
   événement finit dans les minutes qui suivent, la présence peut être retenue au plus
   pendant la durée choisie, puis le préréglage hors événement revient.
+
+Exemple de salle de bain : capteur de mouvement et lumière. Allumer la lumière suffit à
+chauffer ; la présence tient tant que la lumière est allumée, puis la durée choisie après
+l'avoir éteinte ou après le dernier mouvement. Éviter un déclencheur commandé par une
+automatisation qui reste allumé longtemps (lumière d'ambiance, prise toujours sous
+tension) : la pièce resterait chauffée.
+
+Un déclencheur d'un autre type (lecteur multimédia, personne présente dans la maison)
+n'est pas proposé, car son état n'est pas « on ». Le ramener à « on » par une entité
+**Modèle** de type capteur binaire (**Paramètres › Appareils et services › Entrées ›
+Créer une entrée › Modèle**), puis la choisir ici.
 
 **Vérifier :** sans événement en cours (Éco), passer devant le capteur : le thermostat
 passe en Confort. Ne plus bouger : il revient en Éco après la durée choisie.
@@ -266,4 +277,4 @@ modifiées** donne le `titre` lu et le `prereglage` choisi.
 | Aucune trace à l'heure de l'événement | Automatisation désactivée, ou calendrier non choisi | Vérifier l'automatisation (activée, calendrier de la pièce) |
 | « Entité inconnue sélectionnée » dans l'automatisation | Calendrier ou thermostat supprimé ou renommé (identifiant changé) | Rechoisir l'entité ; voir § 3, « Modifier ou supprimer un calendrier existant » |
 | Un mouvement ne change rien | Option **Activer la présence** éteinte, événement en cours (le planning prime), heure hors de la plage de détection, préréglage changé à la main, ou capteur qui ne passe pas à « on » | Normal dans les trois premiers cas ; sinon, **Outils de développement › États**, état du capteur ; trace : arrêt au test « présence » (Variables modifiées : `present`, `dans_plage`) |
-| Le Confort de présence ne s'arrête pas | Un capteur reste à « on », ou détecte sans cesse (animal, rideau, radiateur dans son champ) | Historique du capteur ; le déplacer ou en retirer un de la liste |
+| Le Confort de présence ne s'arrête pas | Un déclencheur reste à « on » (lumière ou prise oubliée), ou détecte sans cesse (animal, rideau, radiateur dans son champ) | Historique du capteur ; le déplacer ou en retirer un de la liste |
