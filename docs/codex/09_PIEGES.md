@@ -99,6 +99,12 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
 - Ouvrir le port série (journaux, script d'écoute) redémarre la carte : la broche EN
   est reliée au port. Un `POWERON_RESET` à ce moment n'est pas une coupure
   d'alimentation (7 novembre 2026).
+- Commandes envoyées sans personne devant le module (chauffage allumé et éteint à
+  répétition) : touchers fantômes du tactile capacitif, causés par une alimentation
+  défaillante (bloc qui « siffle », module du séjour, 24 novembre 2026, T25). Le
+  journal de HA le prouve : « triggered by event 'esphome.hapanel_commande' » sur
+  l'automatisation du module (heures de l'export en UTC). Changer l'alimentation ;
+  verrouillage enfants en attendant.
 
 ## LVGL
 
@@ -226,6 +232,12 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   et ceux des voisins) et mots de passe (G9) ; un masque partiel laisse lire la
   première et la dernière lettre. Captures de téléphone : trois fois la taille
   d'affichage, les réduire au tiers.
+- Blueprint importé depuis une branche : il remplace dans HA celui de toutes les
+  autres branches. Le 25 novembre 2026, le blueprint de `feature/t25-tactile` a
+  effacé la traduction away/activity de `feature/chauffage-agenda` (D058) :
+  préréglages gris sur tous les modules à thermostat générique. Avant d'importer
+  d'une branche, y reporter les changements de blueprint des autres branches en
+  cours.
 
 ## Échanges avec le propriétaire
 

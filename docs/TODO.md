@@ -7,7 +7,7 @@ Liste unique du reste à faire (G14).
   d'ouvrir un nouveau chantier, décider avant de coder, le matériel avant le code).
   Un changement d'ordre se décide avec le propriétaire.
 - **Numéro :** la colonne « N° » identifie le sujet (`T01`, `T02`…). Il est donné à la
-  création (numéro suivant, prochain : `T23`) et ne change jamais, même quand l'ordre
+  création (numéro suivant, prochain : `T27`) et ne change jamais, même quand l'ordre
   change ou que le sujet est fini ; il n'est jamais réattribué. Les décisions, le
   cahier, le code et les checkpoints citent ce numéro, jamais l'ordre (D051). Avant
   le 9 novembre 2026, ils citaient un « rang », la place du moment dans la liste :
@@ -262,3 +262,14 @@ Liste unique du reste à faire (G14).
 
 - T19 (LED sur les cartes qui n'en ont pas, 10 novembre 2026) : fondu dans T20 le
   18 novembre 2026, à la demande du propriétaire.
+
+### P20 — Touchers fantômes et verrouillage enfants (25 novembre 2026)
+
+- [x] T25, commandes protégées des touchers fantômes (D059) : glissière par vrai
+      glissement seulement, coupe-circuit à 6 commandes par minute avec alarme
+      « Tactile instable », rétablissement après 10 min de calme ou par Acquitter,
+      journal des touchers. Cahier AA1 à AA7, AA9 et AA10 OK sur la 4,3" ; AA8, AA11
+      et l'essai sur une S024C non faits (fusion demandée par le propriétaire).
+- [x] T26, verrouillage enfants à deux choix dans le blueprint (D060), envoyé dès
+      l'enregistrement de l'automatisation. Cahier AB1 à AB3 et AB5 OK.
+- Fusionné dans `main` le 25 novembre 2026, `VERSION` 0.15.0-dev (non publiée).

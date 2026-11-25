@@ -40,7 +40,7 @@ peut légèrement différer.*
 | 4 | Température extérieure | Affichage seul. |
 | 5 | Préréglages : Manuel, Hors-gel, Éco, Confort, Boost | Touchez une icône pour changer. Le préréglage actif est entouré de blanc. |
 | 6 | Consigne, avec **-** et **+** | Chaque toucher change de 0,5 °C. L'envoi part 2 secondes après le dernier toucher. |
-| 7 | Glissière Éteint / Chauffage | Touchez le côté inactif, ou faites glisser la pastille. |
+| 7 | Glissière Éteint / Chauffage | Faites glisser la pastille vers l'autre côté (un simple toucher ne change rien). |
 
 **Après une commande**, la valeur demandée reste en attente jusqu'à la confirmation
 de Home Assistant. Sans confirmation au bout de 10 secondes, l'écran revient à la
@@ -177,7 +177,8 @@ et l'écran ne sert plus qu'à **consulter** :
   alarmes.
 
 Il n'y a **aucun moyen de déverrouiller depuis le panneau** : le verrouillage se met et
-s'enlève dans Home Assistant (voir [la configuration](CONFIGURATION.md), section 5). Il
+s'enlève dans Home Assistant, dans l'automatisation du module (voir
+[la configuration](CONFIGURATION.md), section 5). Il
 reste en place après une coupure de courant, et même sans Home Assistant.
 
 Pendant l'enregistrement d'un réglage, la disquette prend la place du cadenas quelques
@@ -205,6 +206,7 @@ La page **Alarmes** dit, pour chacune, ce qui ne va pas, depuis quand, et quoi v
 | Extérieur : non reçue, indisponible ou périmée | Le thermomètre extérieur : pile, liaison radio |
 | Chauffage : non reçu, indisponible ou périmé | Le thermostat dans Home Assistant |
 | Thermostat en sécurité | Un capteur du thermostat ne répond plus ; le thermostat en sort seul quand il revient |
+| Tactile instable | Trop de commandes en une minute (plus de 6) : l'écran voit des touchers qui n'existent pas, souvent à cause d'une alimentation défaillante. Les commandes sont bloquées, grisées ; elles reviennent après 10 minutes sans toucher, ou par **Acquitter**. Changez le bloc d'alimentation si cela se répète |
 
 **Acquitter** arrête le clignotement rouge de la LED : vous avez vu l'alarme. Le
 triangle de la barre du haut, la tuile et la page restent tant que la cause existe, et

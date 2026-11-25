@@ -1572,3 +1572,63 @@ qui cite la précédente.
 - Conséquences : aucun changement du blueprint ni des entités (G10) ; 9 widgets et une
   page de plus (RAM de la S024C : 34,2 % au lieu de 33,9 %, G6) ; maquettes du Menu,
   d'À propos et de la page Alarmes régénérées.
+
+## D059 — Commandes protégées des touchers fantômes (TODO T25)
+
+- Date : 24 novembre 2026 — Statut : demandé par le propriétaire le 24 novembre 2026,
+  réglages acceptés le même jour (HAP-R040) ; implémenté sur `feature/t25-tactile`
+  (cahier AA), essayé sur la 4,3" et fusionné le 25 novembre 2026 (0.15.0-dev).
+- Contexte : le 24 novembre 2026, de 16:04 à 16:40, le module du séjour (S024C) a envoyé
+  environ 45 commandes `esphome.hapanel_commande` sans personne à la maison (journal de
+  HA) : chauffage allumé et éteint à répétition, puis laissé éteint. Seul un toucher
+  relâché envoie une commande : touchers fantômes du tactile capacitif, causés par un
+  bloc d'alimentation défaillant (il « sifflait », remplacé le jour même). Un simple
+  toucher du côté inactif suffisait à basculer la glissière (D014).
+- Décision :
+  - **glissière** du chauffage : seul un glissement d'au moins un tiers de la glissière
+    change le mode ; un toucher ne fait plus rien (révise D014 sur ce point) ;
+    préréglages, − / + et scénarios restent des boutons ;
+  - **coupe-circuit** : au-delà de 6 commandes vers HA en 1 minute, toutes confondues
+    (mode, préréglage, consigne, scénario), la 7e n'est pas envoyée et les commandes
+    sont coupées : grisées comme en verrouillage enfants (D056), « Tactile instable »
+    sur la page Scénarios, alarme « Tactile instable » (6e cause de D057 : LED rouge,
+    triangle, tuile et page Alarmes) ;
+  - **rétablissement** : après 10 minutes sans aucun toucher (un toucher fantôme
+    prolonge donc la coupure), ou par **Acquitter** sur la page Alarmes, toujours
+    proposé pendant la coupure ; un redémarrage rétablit aussi (état non gardé en
+    flash) ;
+  - **journal** : chaque commande envoyée est notée (INFO, `hapanel.tactile`) avec la
+    position et la durée du toucher et le nombre de commandes de la dernière minute ;
+    une commande refusée, en WARN ;
+  - seuils dans `packages/tactile_protege.yaml` (substitutions), état et compteur dans
+    `packages/tactile_protege.h` (fonctions C++ partagées par les pages).
+- Options écartées : confirmation de chaque commande (gêne à chaque usage) ; appui long
+  sur les boutons (même raison) ; coupure gardée en flash (un redémarrage est une action
+  volontaire).
+- Conséquences : aucun changement du blueprint ni des entités (G10) ; la commande des
+  préréglages, de la consigne et des scénarios ne change pas pour l'utilisateur ; la
+  glissière demande un geste net, plus difficile sur dalle résistive (S028, K5).
+
+## D060 — Verrouillage enfants : deux choix dans le blueprint (TODO T26)
+
+- Date : 25 novembre 2026 — Statut : demandé par le propriétaire le 25 novembre 2026 ;
+  implémenté sur `feature/t25-tactile` (cahier AB), fusionné le 25 novembre 2026. Révise D056 sur ce point.
+- Contexte : la Guition 4,3" restait verrouillée (cadenas, commandes grises) alors que
+  le propriétaire croyait l'option coupée : le blueprint était sur « Ne pas imposer »,
+  et l'entité du module, gardée en flash, sur marche depuis un essai. « Ne pas
+  imposer » ne dit pas si le module est verrouillé.
+- Décision : la section « Verrouillage enfants » du blueprint n'a plus que deux choix,
+  **Verrouillage enfants activé** (`on`) et **Verrouillage enfants désactivé** (`off`,
+  par défaut) ; le choix est toujours envoyé au module, à la connexion et toutes les
+  5 minutes, et aussitôt à l'enregistrement d'une automatisation (événement
+  `automation_reloaded`, demande du propriétaire du 25 novembre 2026 : « sans
+  latence ») ; ce déclencheur renvoie tout, comme le démarrage de HA, et sert aussi
+  aux réglages imposés de la LED et de l'écran. Une automatisation encore enregistrée avec l'ancien « Ne pas imposer »
+  envoie `off`. L'entité du module reste (état visible dans HA, gardé en flash) ; un
+  changement de l'entité est remplacé par le choix du blueprint en 5 minutes au plus.
+  Le firmware ne change pas : il accepte toujours `libre` d'un ancien blueprint.
+- Option écartée : garder « Ne pas imposer » sous un autre nom (refusé par le
+  propriétaire : deux choix seulement).
+- Conséquences : verrouiller à heures fixes par une automatisation qui commande
+  l'entité ne tient plus que 5 minutes ; il faudrait pour cela une entrée du
+  blueprint (non demandée). Blueprint à réimporter (`CONFIGURATION.md`, section 7).

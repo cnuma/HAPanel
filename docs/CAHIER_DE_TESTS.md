@@ -83,6 +83,8 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | R | Documentation publique sans élément personnel (D052) | `docs/t02-projet-publiable` (fusionnée) |
 | S | Page d'installation par carte (D044) | `feature/page-installation` (fusionnée) ; S5, S6, S8 à la publication |
 | Y | Alarmes et thermostat en sécurité (D057, T22, T21) | `feature/t22-alarmes` (Y1 à Y12, Y14, Y16) ; Y13 à la publication ; Y15 sur la 4,3" |
+| AA | Commandes protégées des touchers fantômes (D059, T25) | `feature/t25-tactile` (fusionnée) ; AA8, AA11 et la S024C non faits |
+| AB | Verrouillage enfants à deux choix dans le blueprint (D060, T26) | `feature/t25-tactile` (fusionnée) |
 | 7 novembre 2026 | `9b78597` (S028, USB) | K1, K2, K3 | Écran et couleurs OK (contrôleur ST7789V, sans inversion) ; tactile : x brut décroît de gauche à droite (3605 à 449), y de 419 à 3662. Premier téléversement impossible avec le premier câble USB-C (aucune donnée reçue) ; OK avec un autre câble | Calibrage et `mirror_x` reportés ; K4 sur le binaire suivant |
 | 7 novembre 2026 | `174aa99` (S028, USB) | K4 à K11 | Tout OK ; K5 : glissière Éteint / Chauffage capricieuse au doigt sur dalle résistive, boutons fiables. Mémoire libre 153 Ko, plus grand bloc 96 Ko. Remarque du propriétaire : avoir à configurer le blueprint du message d'accueil en plus de celui du module n'est pas pratique (TODO rang 1) | **Partie K validée**, fusion dans `main` (accord du propriétaire) ; glissière : TODO T04 |
 | 7 novembre 2026 | `745126b` (blueprint, branche) | B10 à B19 | Tout OK : migration, module sans section, même texte sur deux modules, message unique, entité désactivée, météo, plage horaire ; B3 refait (B13) | **Fusion de `feature/accueil-blueprint-module` dans `main`**, accord du propriétaire |
@@ -106,6 +108,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | 10 novembre 2026 | Release `v0.12.0` (agent) | W5 | **OK** : Release « Latest », 9 fichiers, manifeste et page d'installation en 0.12.0 | |
 | 11 novembre 2026 | `v0.12.0` et blueprint réimporté (propriétaire) | U12 à U15, V1 à V8 | **OK** | Premier essai du message (V3) refusé par le blueprint : déclencheur rallumé moins d'une minute après son extinction (« Période sans déclenchement »), comportement voulu (D028) |
 | 11 novembre 2026 | Guition 4,3", de `0.12.0-dev` à `v0.12.0` par le bouton d'À propos (propriétaire) | W1 (écran), W3 | **OK** | O15, O17 non notés, gardés pour la prochaine mise à jour |
+| 25 novembre 2026 | `feature/t25-tactile`, `1180b5e` (Guition 4,3", USB ; blueprint de la branche) | AA1 à AA7, AA9, AA10, AB1 à AB3, AB5 | **OK** ; premier import du blueprint de la branche : préréglages gris sur tous les modules (traduction D058 absente), corrigé par `e252862` | **Fusion de `feature/t25-tactile` dans `main`**, accord du propriétaire ; AA8, AA11, AB4 et l'essai sur une S024C non faits |
 
 ## Préparation (une fois, avant A et B)
 
@@ -497,6 +500,40 @@ attente : à la prochaine publication.
 | X11 | Blueprint : « Verrouillé » imposé ; puis désactiver l'entité dans HA | Verrouillé sous 5 min ; l'entité revient à « activée » sous 5 min ; « Ne pas imposer » rend la main à l'entité | `feature/t12-verrou-enfants` (fusionnée) | OK 11 nov. (propriétaire, 4,3") |
 | X12 | Verrouillé, message d'accueil (comme A1) : toucher l'écran | Le message se ferme | — | OK 11 nov. (propriétaire, 4,3") |
 | X13 | Pendant l'attente d'une consigne (− / + puis verrouiller dans les 2 s) | La consigne n'est pas envoyée, l'affichage revient à la valeur réelle | — | OK 11 nov. (propriétaire, 4,3") |
+
+## AB — Verrouillage enfants à deux choix dans le blueprint (D060, TODO T26)
+
+Blueprint de la branche `feature/t25-tactile` réimporté (`05_BUILD_AND_TEST.md`,
+« Blueprint importé depuis une branche ») ; firmware inchangé pour ce point.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| AB1 | Automatisation d'un module, section Verrouillage enfants | Deux choix seulement : « Verrouillage enfants désactivé » (par défaut) et « Verrouillage enfants activé » | `feature/t25-tactile` (fusionnée) || OK 25 nov. (propriétaire, 4,3" : mise à jour immédiate à l'enregistrement) |
+| AB2 | Choisir « activé », enregistrer | Cadenas et commandes grises sur le module en quelques secondes ; entité « Verrouillage enfants » sur marche dans HA | `feature/t25-tactile` (fusionnée) || OK 25 nov. (propriétaire, 4,3" : mise à jour immédiate à l'enregistrement) |
+| AB3 | Choisir « désactivé », enregistrer | Cadenas parti en quelques secondes ; entité sur arrêt | `feature/t25-tactile` (fusionnée) || OK 25 nov. (propriétaire, 4,3" : mise à jour immédiate à l'enregistrement) |
+| AB4 | Module verrouillé par l'entité, automatisation restée sur l'ancien « Ne pas imposer » (Guition 4,3" du 25 novembre 2026) | Après réimport du blueprint et un enregistrement de l'automatisation : déverrouillé en quelques secondes ; l'automatisation s'ouvre sans erreur, sinon choisir de nouveau une valeur | `feature/t25-tactile` (fusionnée) | Non fait (fusion demandée par le propriétaire le 25 nov. 2026) |
+| AB5 | Préréglages avec un thermostat générique (away, activity) après import du blueprint de la branche | Boutons de préréglage en couleur, LED de la couleur du préréglage, Hors-gel et Boost envoyés en away et activity (D058 conservé) | `feature/t25-tactile` (fusionnée) | OK le 25 nov. 2026 (tous modules, après e252862 ; régression du premier import corrigée) |
+
+## AA — Commandes protégées des touchers fantômes (D059, TODO T25)
+
+Binaire public de la S024C de la branche `feature/t25-tactile`, version `0.15.0-dev`,
+écrit par USB, puis coupure de l'alimentation. Journal : `hapanel.tactile`. Pour
+provoquer le coupe-circuit sans toucher fantôme : sept commandes en moins d'une minute
+(par exemple préréglages Éco, Confort, Éco, Confort…), chauffage allumé.
+
+| N° | Action | Attendu | Bloque la fusion de | OK / KO |
+|---|---|---|---|---|
+| AA1 | Accueil, chauffage allumé : toucher brièvement le côté « Éteint » de la glissière | Rien ne change, aucune commande dans HA | `feature/t25-tactile` (fusionnée) || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA2 | Faire glisser la pastille vers « Éteint », puis vers « Chauffage » | Le mode change chaque fois, comme avant ; journal : « mode : toucher (x, y), N ms, n en 60 s » | `feature/t25-tactile` (fusionnée) || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA3 | Glisser la pastille de moins d'un tiers, puis relâcher | La pastille revient, rien n'est envoyé | `feature/t25-tactile` (fusionnée) || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA4 | Sept commandes en moins d'une minute (préréglages, consigne, scénarios mêlés) | Les six premières partent ; la 7e non (journal WARN « commandes coupées ») ; commandes de l'accueil et scénarios grisés, « Tactile instable » sur la page Scénarios ; triangle rouge, LED rouge, tuile « Alarmes » | `feature/t25-tactile` (fusionnée) || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA5 | Page Alarmes pendant la coupure | « Tactile instable », « Depuis … Commandes bloquées. Vérifier l'alimentation ; rétablies après 10 min sans toucher ou par Acquitter. » ; bouton **Acquitter** visible, même avec « Alerte LED » arrêtée | `feature/t25-tactile` (fusionnée) || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA6 | **Acquitter** | Commandes de nouveau actives en 1 s ; l'alarme disparaît ; journal « commandes rétablies (acquittement) » | `feature/t25-tactile` (fusionnée) || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA7 | Refaire AA4, puis ne plus toucher l'écran pendant 10 min | Commandes rétablies seules ; journal « commandes rétablies (calme) » ; alarme partie | `feature/t25-tactile` (fusionnée) || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA8 | Refaire AA4, puis toucher l'écran (sans commande) toutes les 5 min | Toujours coupé tant que les touchers continuent ; rétabli 10 min après le dernier | `feature/t25-tactile` (fusionnée) | Non fait (fusion demandée par le propriétaire le 25 nov. 2026) |
+| AA9 | Refaire AA4, puis couper l'alimentation et rebrancher | Commandes actives au démarrage, sans alarme « Tactile instable » | `feature/t25-tactile` (fusionnée) || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA10 | Guition 4,3" : AA1, AA2, AA4 et la page Alarmes | Comme sur la S024C ; texte de l'alarme lisible en paysage | — (à la mise à jour de la 4,3") || OK le 25 nov. 2026 (Guition 4,3", 0.15.0-dev) |
+| AA11 | Page À propos du module de test, après quelques minutes | Mémoire libre et plus grand bloc relevés (G6) | `feature/t25-tactile` (fusionnée) | Non fait (fusion demandée par le propriétaire le 25 nov. 2026) |
 
 ## Y — Alarmes et thermostat en sécurité (D057, TODO T22 et T21)
 

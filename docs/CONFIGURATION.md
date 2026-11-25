@@ -205,15 +205,15 @@ Verrouillé, l'écran du module ne sert plus qu'à consulter : chauffage, scéna
 réglages et mise à jour depuis l'écran ne répondent plus, et un cadenas orange
 s'affiche dans la barre du haut (D056). **Rien ne se déverrouille depuis le module.**
 
-1. Sur la page de l'appareil (rubrique **Configuration**), activez **Verrouillage
-   enfants** ; le cadenas apparaît sur le module en une seconde environ. Désactivez-le
-   pour déverrouiller.
-2. Pour verrouiller à heures fixes, créez une automatisation qui active et désactive
-   cette entité (par exemple : activer à 8 h, désactiver à 18 h).
-3. La section **Verrouillage enfants** du blueprint, repliée, peut aussi l'imposer :
-   « Verrouillé » ou « Déverrouillé » l'emporte sur l'entité, remise en place à la
-   connexion et toutes les 5 minutes ; laissez « Ne pas imposer » pour le commander
-   par l'entité ou par une automatisation.
+1. Ouvrez l'automatisation du module, section **Verrouillage enfants** (repliée), et
+   choisissez **Verrouillage enfants activé** ou **Verrouillage enfants désactivé**
+   (choix par défaut). Enregistrez.
+2. Le module reçoit le choix dès l'enregistrement : le cadenas apparaît ou
+   disparaît en quelques secondes. Le choix est renvoyé à la connexion et toutes les
+   5 minutes.
+3. L'entité **Verrouillage enfants** de la page de l'appareil (rubrique
+   **Configuration**) montre l'état du module. La changer agit tout de suite, mais le
+   choix du blueprint revient en 5 minutes au plus (D060).
 
 Le module garde le verrouillage après une coupure de courant. Home Assistant garde
 toutes les commandes, y compris l'installation d'une mise à jour (entité **Firmware**).
@@ -413,6 +413,7 @@ Sans nouvelle valeur pendant 15 minutes, le module affiche la valeur comme péri
 | LED rouge clignotante, connexion à HA correcte | Une alarme : capteur de température indisponible ou périmé, thermostat en sécurité | Ouvrir **Menu › Alarmes** sur le module : la cause et quoi vérifier y sont écrits |
 | « Thermostat en sécurité », préréglages grisés, aucun entouré | Versatile Thermostat en préréglage `safety` : un de ses capteurs (pièce ou extérieur) n'a rien envoyé depuis le délai de sécurité (souvent 60 min) | Vérifier d'abord que ses capteurs existent toujours (ligne suivante) ; puis, Outils de développement › États, thermostat : comparer l'heure de la dernière mesure de la pièce et de l'extérieur (`last_temperature_datetime`, `last_ext_temperature_datetime`, noms variables selon la version de Versatile Thermostat) à l'heure ; vérifier pile et liaison du capteur en retard (historique, page de l'appareil). Un capteur qui n'envoie qu'aux changements peut se taire plus d'une heure par temps stable : allonger le délai de sécurité dans les paramètres avancés de Versatile Thermostat. Le thermostat sort seul de la sécurité au retour du capteur |
 | « Extérieur : indisponible » (ou « Pièce : ») et thermostats en sécurité après une reconfiguration ou un nouvel appairage du capteur dans ZHA ; « Entité inconnue sélectionnée » dans l'automatisation | ZHA a recréé les entités sous un autre identifiant (par exemple `sensor.exterieur_exterieur_…` au lieu de `sensor.exterieur_…`) ; automatisations et Versatile Thermostat lisent l'ancien, qui n'existe plus | Outils de développement › **Modèle** : `{{ states.sensor \| selectattr('entity_id', 'search', 'exterieur') \| map(attribute='entity_id') \| list }}` donne le nouveau nom. **Paramètres › Appareils et services › Entités**, rechercher ce nom, cliquer l'entité, **⚙**, champ **ID d'entité** : remettre l'ancien, **Mettre à jour** ; idem pour humidité et batterie. Si l'ancien est « déjà utilisé » : filtre des entités indisponibles, supprimer l'ancienne entité, recommencer. Rouvrir les automatisations où l'entité a été rechoisie entre-temps |
+| Chauffage allumé et éteint à répétition sans personne, ou alarme « Tactile instable » | Touchers fantômes de l'écran tactile, le plus souvent une alimentation défaillante (bloc qui siffle, chargeur bas de gamme) ; le module bloque ses commandes au-delà de 6 par minute (D059) | Journal de HA, automatisation du module : « déclenché par l'événement esphome.hapanel_commande » sans personne devant le module (heures de l'export en UTC). Changer le bloc d'alimentation (5 V, 1 A au moins, de marque). En attendant : entité « Verrouillage enfants » du module |
 | Niveau de pile figé depuis des mois (capteur Zigbee à pile) | Le capteur n'envoie plus son niveau | ZHA, page de l'appareil, **Reconfigurer** en appuyant brièvement sur son bouton pour le réveiller |
 | Pas de message d'accueil | Période sans déclenchement non écoulée, hors plage horaire, entité « Message d'accueil » désactivée ou module déconnecté | Consulter les traces de l'automatisation du module |
 | Réparation Z-Wave « Obsolescence : Window/door is open » sur le contact de porte | L'entité `…_window_door_is_open` est remplacée par une entité `binary_sensor` du même capteur | Dans l'automatisation qui l'utilise (section Message d'accueil de chaque module comprise), choisir la nouvelle entité ; désactiver l'ancienne ; redémarrer Home Assistant |

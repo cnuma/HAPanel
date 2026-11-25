@@ -208,9 +208,14 @@ switch:
 
 # En pause, LVGL ignore le toucher : reveiller au relachement du doigt empeche
 # le premier toucher d'envoyer une commande (P4).
+# Position et instants de chaque toucher, pour le coupe-circuit et le journal
+# des commandes (D059, packages/tactile_protege.h).
 touchscreen:
   - id: !extend tactile
+    on_touch:
+      - lambda: hapanel::tactile_appui(touch.x, touch.y);
     on_release:
+      - lambda: hapanel::tactile_relache();
       - if:
           condition: lvgl.is_paused
           then:

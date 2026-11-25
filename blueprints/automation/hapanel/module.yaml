@@ -8,14 +8,17 @@ blueprint:
     de 1 à 4 calendriers. Scénarios : 6 scènes, scripts ou automatisations au
     plus, lancés depuis le panneau. LED et écran : réglages facultatifs, imposés
     au module, dont la luminosité pendant le message d'accueil. Verrouillage enfants :
-    facultatif, imposé au module. Message d'accueil : facultatif, à l'arrivée de quelqu'un. Envoi à chaque changement, toutes les 5 minutes, au
-    démarrage de Home Assistant et quand le panneau le demande (connexion).
+    activé ou désactivé, imposé au module. Message d'accueil : facultatif, à l'arrivée de quelqu'un. Envoi à chaque changement, toutes les 5 minutes, au
+    démarrage de Home Assistant, à l'enregistrement d'une automatisation et quand
+    le panneau le demande (connexion).
     Exécute les commandes du panneau (allumer, couper, consigne, préréglage)
     seulement si elles viennent de ce panneau, si le thermostat est disponible
     et non verrouillé et si la consigne est dans les bornes ; consigne et
     préréglage exigent un chauffage allumé. Le module n'a pas besoin d'être
-    autorisé à effectuer des actions Home Assistant.
-    Décisions D014, D015, D019, D020, D021, D024, D026, D028, D031, D042, D054 et D056 du dépôt
+    autorisé à effectuer des actions Home Assistant. Avec le Thermostat
+    générique de Home Assistant, ses préréglages Absent et Activité tiennent
+    lieu de Hors-gel et de Boost.
+    Décisions D014, D015, D019, D020, D021, D024, D026, D028, D031, D042, D054, D056, D058 et D060 du dépôt
     cnuma/HAPanel.
   domain: automation
   source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/hapanel/module.yaml
@@ -377,28 +380,25 @@ blueprint:
     verrouillage:
       name: Verrouillage enfants
       description: >-
-        Verrouillé, l'écran du module ne sert plus qu'à consulter : chauffage,
+        Activé, l'écran du module ne sert plus qu'à consulter : chauffage,
         scénarios, page Réglages et mise à jour depuis l'écran sont grisés, un
         cadenas s'affiche dans la barre d'état. Aucun déverrouillage sur le module.
-        Le verrouillage se commande aussi par l'entité « Verrouillage enfants » de
-        la page de l'appareil, ou par une automatisation. « Ne pas imposer » la
-        laisse libre ; une valeur choisie ici la remplace à la connexion et toutes
-        les 5 minutes (D056).
+        Le choix fait ici est envoyé au module dès l'enregistrement, puis à la
+        connexion et toutes les 5 minutes ; il l'emporte sur l'entité « Verrouillage enfants » de la page de
+        l'appareil, qui montre l'état du module (D056, D060).
       collapsed: true
       input:
         verrou_enfants:
           name: Verrouillage enfants
-          default: ne_pas_imposer
+          default: "off"
           selector:
             select:
               mode: dropdown
               options:
-                - label: Ne pas imposer
-                  value: ne_pas_imposer
-                - label: Verrouillé
-                  value: "on"
-                - label: Déverrouillé
+                - label: Verrouillage enfants désactivé
                   value: "off"
+                - label: Verrouillage enfants activé
+                  value: "on"
     accueil:
       name: Message d'accueil
       description: >-
@@ -531,7 +531,8 @@ variables:
       valeur: !input ecran_intensite
     - cle: message_intensite
       valeur: !input message_intensite
-    # Verrouillage enfants (D056), envoye comme les reglages.
+    # Verrouillage enfants (D056), envoye comme les reglages ; toujours impose
+    # depuis D060 (on ou off).
     - cle: verrou_enfants
       valeur: !input verrou_enfants
   accueil_declencheurs: !input accueil_declencheurs
@@ -565,6 +566,12 @@ triggers:
   - trigger: homeassistant
     id: demarrage
     event: start
+  # Automatisations rechargees (enregistrement depuis l'editeur) : tout est
+  # renvoye aussitot, comme au demarrage ; un choix change dans le blueprint
+  # (verrouillage enfants, reglages imposes) arrive sans attendre (D060).
+  - trigger: event
+    id: demarrage
+    event_type: automation_reloaded
   - trigger: event
     id: demande
     event_type: esphome.hapanel_demande_valeurs
@@ -610,6 +617,17 @@ actions:
       etat: "{{ states(thermostat) }}"
       disponible: "{{ etat not in ['unavailable', 'unknown'] }}"
       verrou: "{{ state_attr(thermostat, 'is_locked') == true }}"
+      # Préréglages du thermostat. Le module ne connaît que none, frost, eco,
+      # comfort et boost ; le Thermostat générique de HA n'a ni frost ni boost
+      # et les porte par away et activity (D058) : traduits dans les deux sens,
+      # seulement si le thermostat ne connaît pas le nom du module.
+      prereglages: "{{ state_attr(thermostat, 'preset_modes') or [] }}"
+      vers_ha:
+        frost: away
+        boost: activity
+      depuis_ha:
+        away: frost
+        activity: boost
       # Bornes du blueprint, resserrées à celles du thermostat.
       borne_min: >-
         {{ [consigne_min | float, state_attr(thermostat, 'min_temp') | float(consigne_min)] | max }}
@@ -623,6 +641,12 @@ actions:
           - variables:
               commande: "{{ trigger.event.data.get('commande', '') }}"
               valeur: "{{ trigger.event.data.get('valeur', '') }}"
+          - variables:
+              # Nom du préréglage pour le thermostat (D058).
+              prereglage_ha: >-
+                {{ vers_ha[valeur] if valeur is string and valeur in vers_ha
+                   and valeur not in prereglages and vers_ha[valeur] in prereglages
+                   else valeur }}
           - choose:
               # Scénario : le panneau n'envoie qu'un numéro, seules les entités
               # choisies ici peuvent être lancées (D024).
@@ -688,14 +712,14 @@ actions:
                   - condition: template
                     value_template: >-
                       {{ commande == 'chauffage_prereglage'
-                         and valeur in (state_attr(thermostat, 'preset_modes') or [])
+                         and prereglage_ha in prereglages
                          and etat == 'heat' and not verrou }}
                 sequence:
                   - action: climate.set_preset_mode
                     target:
                       entity_id: "{{ thermostat }}"
                     data:
-                      preset_mode: "{{ valeur }}"
+                      preset_mode: "{{ prereglage_ha }}"
             default:
               - action: system_log.write
                 data:
@@ -846,8 +870,11 @@ actions:
                         if state_attr(thermostat, 'temperature') is not none else 'unknown')
                        if disponible else 'unavailable' }}
                 - cle: chauffage_prereglage
+                  # away et activity du Thermostat générique vus comme frost et
+                  # boost par le module (D058).
                   valeur: >-
-                    {{ (state_attr(thermostat, 'preset_mode') or 'none') | string
+                    {% set p = (state_attr(thermostat, 'preset_mode') or 'none') | string %}
+                    {{ (depuis_ha[p] if p in depuis_ha and depuis_ha[p] not in prereglages else p)
                        if disponible else 'unavailable' }}
                 - cle: chauffage_verrou
                   valeur: "{{ ('on' if verrou else 'off') if disponible else 'unavailable' }}"
@@ -898,8 +925,13 @@ actions:
                 - action: "{{ action_maj }}"
                   data:
                     cle: "{{ repeat.item.cle }}"
+                    # Verrouillage enfants : toujours on ou off (D060) ;
+                    # l'ancien « Ne pas imposer », encore enregistre dans une
+                    # automatisation, vaut « desactive ».
                     valeur: >-
-                      {{ 'libre' if repeat.item.valeur == 'ne_pas_imposer'
+                      {{ ('on' if repeat.item.valeur == 'on' else 'off')
+                         if repeat.item.cle == 'verrou_enfants'
+                         else 'libre' if repeat.item.valeur == 'ne_pas_imposer'
                          else repeat.item.valeur }}
       # Météo.
       - if:

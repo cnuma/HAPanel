@@ -19,7 +19,7 @@ Relancer le script après toute modification du YAML.
 | `accueil_prereglage_actuel` | globals | packages/pages/accueil.yaml | — |
 | `accueil_prereglage_cible` | globals | packages/pages/accueil.yaml | — |
 | `accueil_prereglage_permis` | globals | packages/pages/accueil.yaml | — |
-| `accueil_rafraichir` | script | packages/pages/accueil.yaml | packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/pages/alarmes.yaml, packages/verrou_enfants.yaml |
+| `accueil_rafraichir` | script | packages/pages/accueil.yaml | packages/led_veille.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/pages/alarmes.yaml, packages/tactile_protege.yaml, packages/verrou_enfants.yaml |
 | `accueil_regler_consigne` | script | packages/pages/accueil.yaml | — |
 | `accueil_wifi` | script | packages/pages/accueil.yaml | packages/lvgl.yaml |
 | `alarmes_acquittees` | globals | packages/pages/alarmes.yaml | packages/led_veille.yaml |
@@ -105,11 +105,13 @@ Relancer le script après toute modification du YAML.
 | `lbl_alm_detail_2` | widget label | packages/pages/alarmes.yaml | — |
 | `lbl_alm_detail_3` | widget label | packages/pages/alarmes.yaml | — |
 | `lbl_alm_detail_4` | widget label | packages/pages/alarmes.yaml | — |
+| `lbl_alm_detail_5` | widget label | packages/pages/alarmes.yaml | — |
 | `lbl_alm_titre_0` | widget label | packages/pages/alarmes.yaml | — |
 | `lbl_alm_titre_1` | widget label | packages/pages/alarmes.yaml | — |
 | `lbl_alm_titre_2` | widget label | packages/pages/alarmes.yaml | — |
 | `lbl_alm_titre_3` | widget label | packages/pages/alarmes.yaml | — |
 | `lbl_alm_titre_4` | widget label | packages/pages/alarmes.yaml | — |
+| `lbl_alm_titre_5` | widget label | packages/pages/alarmes.yaml | — |
 | `lbl_apropos_alarmes` | widget label | packages/lvgl.yaml | packages/pages/alarmes.yaml |
 | `lbl_apropos_connexion` | widget label | packages/lvgl.yaml | — |
 | `lbl_apropos_ip` | widget label | packages/lvgl.yaml | — |
@@ -280,7 +282,7 @@ Relancer le script après toute modification du YAML.
 | `retroeclairage` | light (monochromatic) | packages/hardware_jc4827w543.yaml | packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml |
 | `scenarios_indice` | globals | packages/pages/scenarios.yaml | — |
 | `scenarios_lancer` | script | packages/pages/scenarios.yaml | — |
-| `scenarios_rafraichir` | script | packages/pages/scenarios.yaml | packages/liaison_ha.yaml, packages/verrou_enfants.yaml |
+| `scenarios_rafraichir` | script | packages/pages/scenarios.yaml | packages/liaison_ha.yaml, packages/tactile_protege.yaml, packages/verrou_enfants.yaml |
 | `scenarios_retour` | globals | packages/pages/scenarios.yaml | packages/liaison_ha.yaml |
 | `scenarios_retour_ms` | globals | packages/pages/scenarios.yaml | packages/liaison_ha.yaml |
 | `signal_wifi` | sensor (wifi_signal) | packages/base.yaml | packages/pages/accueil.yaml |
@@ -301,9 +303,9 @@ Relancer le script après toute modification du YAML.
 | `sortie_retroeclairage` | output (ledc) | packages/hardware_jc4827w543.yaml | packages/hardware.yaml, packages/hardware_2432s028.yaml |
 | `sw_reg_led` | widget switch | packages/pages/reglages.yaml | — |
 | `sw_reg_led_alerte` | widget switch | packages/pages/reglages.yaml | — |
-| `tactile` | touchscreen (cst816) | packages/hardware.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
-| `tactile` | touchscreen (xpt2046) | packages/hardware_2432s028.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
-| `tactile` | touchscreen (gt911) | packages/hardware_jc4827w543.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/lvgl.yaml |
+| `tactile` | touchscreen (cst816) | packages/hardware.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware_2432s028.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/lvgl.yaml, packages/pages/accueil.yaml, packages/pages/alarmes.yaml |
+| `tactile` | touchscreen (xpt2046) | packages/hardware_2432s028.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware.yaml, packages/hardware_jc4827w543.yaml, packages/led_veille.yaml, packages/lvgl.yaml, packages/pages/accueil.yaml, packages/pages/alarmes.yaml |
+| `tactile` | touchscreen (gt911) | packages/hardware_jc4827w543.yaml | hapanel_banc.yaml, hapanel_2432s028_banc.yaml, packages/hardware.yaml, packages/hardware_2432s028.yaml, packages/led_veille.yaml, packages/lvgl.yaml, packages/pages/accueil.yaml, packages/pages/alarmes.yaml |
 | `veille_reveiller` | script | packages/led_veille.yaml | packages/message_accueil.yaml |
 | `verrou_appliquer` | script | packages/verrou_enfants.yaml | — |
 | `verrou_enfants` | switch (template) | packages/verrou_enfants.yaml | packages/acces_public.yaml, packages/application.yaml, packages/liaison_ha.yaml, packages/lvgl.yaml, packages/pages/accueil.yaml, packages/pages/reglages.yaml, packages/pages/scenarios.yaml |

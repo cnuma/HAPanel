@@ -308,9 +308,10 @@ lvgl:
                   id: accueil_regler_consigne
                   sens: 1
         # Glissiere du chauffage (D014, D016) : la pastille orange couvre le
-        # mode reel (Eteint a gauche, Chauffage a droite). Toucher le cote
-        # inactif, ou glisser le doigt d'au moins un tiers de la glissiere vers
-        # l'autre cote, envoie l'autre mode.
+        # mode reel (Eteint a gauche, Chauffage a droite). Glisser le doigt d'au
+        # moins un tiers de la glissiere vers l'autre cote envoie l'autre mode ;
+        # un simple toucher ne fait rien (D059 : un toucher fantome ne coupe
+        # plus le chauffage).
         - obj:
             id: obj_acc_glissiere
             align: TOP_MID
@@ -344,12 +345,7 @@ lvgl:
                     lambda: |-
                       if (!id(accueil_glisse_actif)) return false;
                       id(accueil_glisse_actif) = false;
-                      if (abs(lv_obj_get_x(id(obj_acc_pastille)) - id(accueil_glisse_depart)) >= ${fmt_acc_gl_seuil}) return true;
-                      // Toucher : doigt relache du cote inactif (milieu de la
-                      // glissiere, ${fmt_acc_gl_milieu} en x).
-                      lv_point_t p;
-                      lv_indev_get_point(lv_indev_active(), &p);
-                      return id(accueil_glisse_depart) >= ${fmt_acc_gl_demi} ? p.x < ${fmt_acc_gl_milieu} : p.x >= ${fmt_acc_gl_milieu};
+                      return abs(lv_obj_get_x(id(obj_acc_pastille)) - id(accueil_glisse_depart)) >= ${fmt_acc_gl_seuil};
                   then:
                     - script.execute:
                         id: accueil_envoyer_mode
@@ -490,9 +486,10 @@ script:
           // consigne et prereglages masques et interdits.
           bool eteint = ha && ec == 1 && (mode == 0 || id(accueil_mode_cible) == 0);
 
-          // Verrou du thermostat (D014) ou verrouillage enfants (D056) : etat
-          // affiche, commandes grisees.
-          bool commun = ha && ec == 1 && id(liaison_chauffage_verrou) == 0 && !id(verrou_enfants).state;
+          // Verrou du thermostat (D014), verrouillage enfants (D056) ou
+          // tactile instable (D059) : etat affiche, commandes grisees.
+          bool commun = ha && ec == 1 && id(liaison_chauffage_verrou) == 0 && !id(verrou_enfants).state &&
+                        !hapanel::tactile_coupe();
           bool cons_ok = commun && !eteint && !isnan(consigne) && !isnan(id(liaison_consigne_min)) &&
                          !isnan(id(liaison_consigne_max)) &&
                          id(liaison_consigne_min) <= id(liaison_consigne_max);
@@ -603,6 +600,8 @@ script:
             if (ec != 1 || (mode != 0 && mode != 1)) alarmes |= 1u << 3;
             else if (securite) alarmes |= 1u << 4;
           }
+          // Commandes coupees (D059), avec ou sans HA.
+          if (hapanel::tactile_coupe()) alarmes |= 1u << 5;
           id(alarmes_actives) = alarmes;
           id(led_alerte) = alarmes != 0;
           if (id(led_alerte)) {
@@ -652,7 +651,9 @@ script:
       - delay: ${accueil_envoi_consigne}
       - if:
           condition:
-            lambda: return id(accueil_consigne_permise) && !isnan(id(accueil_consigne_cible));
+            lambda: |-
+              return id(accueil_consigne_permise) && !isnan(id(accueil_consigne_cible)) &&
+                     hapanel::tactile_autoriser("consigne", ${tactile_max_commandes}, ${tactile_fenetre_ms});
           then:
             - homeassistant.event:
                 event: esphome.hapanel_commande
@@ -695,7 +696,9 @@ script:
     then:
       - if:
           condition:
-            lambda: return id(accueil_mode_permis) && id(liaison_chauffage_mode) == 1 - mode_cible;
+            lambda: |-
+              return id(accueil_mode_permis) && id(liaison_chauffage_mode) == 1 - mode_cible &&
+                     hapanel::tactile_autoriser("mode", ${tactile_max_commandes}, ${tactile_fenetre_ms});
           then:
             - globals.set:
                 id: accueil_mode_cible
@@ -732,7 +735,9 @@ script:
     then:
       - if:
           condition:
-            lambda: return id(accueil_prereglage_permis) && indice != id(accueil_prereglage_actuel);
+            lambda: |-
+              return id(accueil_prereglage_permis) && indice != id(accueil_prereglage_actuel) &&
+                     hapanel::tactile_autoriser("prereglage", ${tactile_max_commandes}, ${tactile_fenetre_ms});
           then:
             - globals.set:
                 id: accueil_prereglage_cible
