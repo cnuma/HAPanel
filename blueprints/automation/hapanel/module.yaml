@@ -9,7 +9,8 @@ blueprint:
     plus, lancés depuis le panneau. LED et écran : réglages facultatifs, imposés
     au module, dont la luminosité pendant le message d'accueil. Verrouillage enfants :
     activé ou désactivé, imposé au module. Message d'accueil : facultatif, à l'arrivée de quelqu'un. Envoi à chaque changement, toutes les 5 minutes, au
-    démarrage de Home Assistant et quand le panneau le demande (connexion).
+    démarrage de Home Assistant, à l'enregistrement d'une automatisation et quand
+    le panneau le demande (connexion).
     Exécute les commandes du panneau (allumer, couper, consigne, préréglage)
     seulement si elles viennent de ce panneau, si le thermostat est disponible
     et non verrouillé et si la consigne est dans les bornes ; consigne et
@@ -380,8 +381,8 @@ blueprint:
         Activé, l'écran du module ne sert plus qu'à consulter : chauffage,
         scénarios, page Réglages et mise à jour depuis l'écran sont grisés, un
         cadenas s'affiche dans la barre d'état. Aucun déverrouillage sur le module.
-        Le choix fait ici est envoyé au module à la connexion et toutes les 5
-        minutes ; il l'emporte sur l'entité « Verrouillage enfants » de la page de
+        Le choix fait ici est envoyé au module dès l'enregistrement, puis à la
+        connexion et toutes les 5 minutes ; il l'emporte sur l'entité « Verrouillage enfants » de la page de
         l'appareil, qui montre l'état du module (D056, D060).
       collapsed: true
       input:
@@ -563,6 +564,12 @@ triggers:
   - trigger: homeassistant
     id: demarrage
     event: start
+  # Automatisations rechargees (enregistrement depuis l'editeur) : tout est
+  # renvoye aussitot, comme au demarrage ; un choix change dans le blueprint
+  # (verrouillage enfants, reglages imposes) arrive sans attendre (D060).
+  - trigger: event
+    id: demarrage
+    event_type: automation_reloaded
   - trigger: event
     id: demande
     event_type: esphome.hapanel_demande_valeurs

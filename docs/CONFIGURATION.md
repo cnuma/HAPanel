@@ -208,8 +208,9 @@ s'affiche dans la barre du haut (D056). **Rien ne se déverrouille depuis le mod
 1. Ouvrez l'automatisation du module, section **Verrouillage enfants** (repliée), et
    choisissez **Verrouillage enfants activé** ou **Verrouillage enfants désactivé**
    (choix par défaut). Enregistrez.
-2. Le module reçoit le choix à la connexion et toutes les 5 minutes : le cadenas
-   apparaît ou disparaît en 5 minutes au plus.
+2. Le module reçoit le choix dès l'enregistrement : le cadenas apparaît ou
+   disparaît en quelques secondes. Le choix est renvoyé à la connexion et toutes les
+   5 minutes.
 3. L'entité **Verrouillage enfants** de la page de l'appareil (rubrique
    **Configuration**) montre l'état du module. La changer agit tout de suite, mais le
    choix du blueprint revient en 5 minutes au plus (D060).

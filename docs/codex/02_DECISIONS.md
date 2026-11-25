@@ -1620,7 +1620,10 @@ qui cite la précédente.
 - Décision : la section « Verrouillage enfants » du blueprint n'a plus que deux choix,
   **Verrouillage enfants activé** (`on`) et **Verrouillage enfants désactivé** (`off`,
   par défaut) ; le choix est toujours envoyé au module, à la connexion et toutes les
-  5 minutes. Une automatisation encore enregistrée avec l'ancien « Ne pas imposer »
+  5 minutes, et aussitôt à l'enregistrement d'une automatisation (événement
+  `automation_reloaded`, demande du propriétaire du 25 novembre 2026 : « sans
+  latence ») ; ce déclencheur renvoie tout, comme le démarrage de HA, et sert aussi
+  aux réglages imposés de la LED et de l'écran. Une automatisation encore enregistrée avec l'ancien « Ne pas imposer »
   envoie `off`. L'entité du module reste (état visible dans HA, gardé en flash) ; un
   changement de l'entité est remplacé par le choix du blueprint en 5 minutes au plus.
   Le firmware ne change pas : il accepte toujours `libre` d'un ancien blueprint.

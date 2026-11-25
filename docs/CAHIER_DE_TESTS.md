@@ -508,9 +508,9 @@ Blueprint de la branche `feature/t25-tactile` réimporté (`05_BUILD_AND_TEST.md
 | N° | Action | Attendu | Bloque la fusion de | OK / KO |
 |---|---|---|---|---|
 | AB1 | Automatisation d'un module, section Verrouillage enfants | Deux choix seulement : « Verrouillage enfants désactivé » (par défaut) et « Verrouillage enfants activé » | `feature/t25-tactile` | |
-| AB2 | Choisir « activé », enregistrer | Cadenas et commandes grises sur le module en 5 min au plus ; entité « Verrouillage enfants » sur marche dans HA | `feature/t25-tactile` | |
-| AB3 | Choisir « désactivé », enregistrer | Cadenas parti en 5 min au plus ; entité sur arrêt | `feature/t25-tactile` | |
-| AB4 | Module verrouillé par l'entité, automatisation restée sur l'ancien « Ne pas imposer » (Guition 4,3" du 25 novembre 2026) | Après réimport du blueprint : déverrouillé en 5 min au plus ; l'automatisation s'ouvre sans erreur, sinon choisir de nouveau une valeur | `feature/t25-tactile` | |
+| AB2 | Choisir « activé », enregistrer | Cadenas et commandes grises sur le module en quelques secondes ; entité « Verrouillage enfants » sur marche dans HA | `feature/t25-tactile` | |
+| AB3 | Choisir « désactivé », enregistrer | Cadenas parti en quelques secondes ; entité sur arrêt | `feature/t25-tactile` | |
+| AB4 | Module verrouillé par l'entité, automatisation restée sur l'ancien « Ne pas imposer » (Guition 4,3" du 25 novembre 2026) | Après réimport du blueprint et un enregistrement de l'automatisation : déverrouillé en quelques secondes ; l'automatisation s'ouvre sans erreur, sinon choisir de nouveau une valeur | `feature/t25-tactile` | |
 
 ## AA — Commandes protégées des touchers fantômes (D059, TODO T25)
 
