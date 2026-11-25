@@ -84,7 +84,7 @@ aucun. Chaque ligne se coche **OK** ou **KO** ; en cas de KO, noter ce qui a ét
 | S | Page d'installation par carte (D044) | `feature/page-installation` (fusionnée) ; S5, S6, S8 à la publication |
 | Y | Alarmes et thermostat en sécurité (D057, T22, T21) | `feature/t22-alarmes` (Y1 à Y12, Y14, Y16) ; Y13 à la publication ; Y15 sur la 4,3" |
 | AA | Commandes protégées des touchers fantômes (D059, T25) | `feature/t25-tactile` (AA1 à AA9, AA11) ; AA10 sur la 4,3" |
-| AB | Verrouillage enfants à deux choix dans le blueprint (D060, T26) | `feature/t25-tactile` (AB1 à AB4) |
+| AB | Verrouillage enfants à deux choix dans le blueprint (D060, T26) | `feature/t25-tactile` (AB1 à AB5) |
 | 7 novembre 2026 | `9b78597` (S028, USB) | K1, K2, K3 | Écran et couleurs OK (contrôleur ST7789V, sans inversion) ; tactile : x brut décroît de gauche à droite (3605 à 449), y de 419 à 3662. Premier téléversement impossible avec le premier câble USB-C (aucune donnée reçue) ; OK avec un autre câble | Calibrage et `mirror_x` reportés ; K4 sur le binaire suivant |
 | 7 novembre 2026 | `174aa99` (S028, USB) | K4 à K11 | Tout OK ; K5 : glissière Éteint / Chauffage capricieuse au doigt sur dalle résistive, boutons fiables. Mémoire libre 153 Ko, plus grand bloc 96 Ko. Remarque du propriétaire : avoir à configurer le blueprint du message d'accueil en plus de celui du module n'est pas pratique (TODO rang 1) | **Partie K validée**, fusion dans `main` (accord du propriétaire) ; glissière : TODO T04 |
 | 7 novembre 2026 | `745126b` (blueprint, branche) | B10 à B19 | Tout OK : migration, module sans section, même texte sur deux modules, message unique, entité désactivée, météo, plage horaire ; B3 refait (B13) | **Fusion de `feature/accueil-blueprint-module` dans `main`**, accord du propriétaire |
@@ -511,6 +511,7 @@ Blueprint de la branche `feature/t25-tactile` réimporté (`05_BUILD_AND_TEST.md
 | AB2 | Choisir « activé », enregistrer | Cadenas et commandes grises sur le module en quelques secondes ; entité « Verrouillage enfants » sur marche dans HA | `feature/t25-tactile` || OK 25 nov. (propriétaire, 4,3" : mise à jour immédiate à l'enregistrement) |
 | AB3 | Choisir « désactivé », enregistrer | Cadenas parti en quelques secondes ; entité sur arrêt | `feature/t25-tactile` || OK 25 nov. (propriétaire, 4,3" : mise à jour immédiate à l'enregistrement) |
 | AB4 | Module verrouillé par l'entité, automatisation restée sur l'ancien « Ne pas imposer » (Guition 4,3" du 25 novembre 2026) | Après réimport du blueprint et un enregistrement de l'automatisation : déverrouillé en quelques secondes ; l'automatisation s'ouvre sans erreur, sinon choisir de nouveau une valeur | `feature/t25-tactile` | |
+| AB5 | Préréglages avec un thermostat générique (away, activity) après import du blueprint de la branche | Boutons de préréglage en couleur, LED de la couleur du préréglage, Hors-gel et Boost envoyés en away et activity (D058 conservé) | `feature/t25-tactile` | OK le 25 nov. 2026 (tous modules, après e252862 ; régression du premier import corrigée) |
 
 ## AA — Commandes protégées des touchers fantômes (D059, TODO T25)
 
