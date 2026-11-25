@@ -232,6 +232,12 @@ recopie aucun. Un piège qui ne vaut plus est barré, avec sa date.
   et ceux des voisins) et mots de passe (G9) ; un masque partiel laisse lire la
   première et la dernière lettre. Captures de téléphone : trois fois la taille
   d'affichage, les réduire au tiers.
+- Blueprint importé depuis une branche : il remplace dans HA celui de toutes les
+  autres branches. Le 25 novembre 2026, le blueprint de `feature/t25-tactile` a
+  effacé la traduction away/activity de `feature/chauffage-agenda` (D058) :
+  préréglages gris sur tous les modules à thermostat générique. Avant d'importer
+  d'une branche, y reporter les changements de blueprint des autres branches en
+  cours.
 
 ## Échanges avec le propriétaire
 
