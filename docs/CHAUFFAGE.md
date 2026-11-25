@@ -182,6 +182,8 @@ que pendant ses créneaux (elle est éteinte à la fin de chaque événement).
    **Outils de développement › États**) ; **Consigne** pour une clim sans
    préréglage. Avec Consigne, régler la section repliée **Consignes** : une
    température par mot-clé, série chaud et série froid.
+   Home Assistant ne sait pas masquer la section de l'autre méthode : elle reste
+   affichée, mais elle est ignorée (sa description le rappelle).
 
 | Consigne par défaut | Confort | Éco | Hors-gel | Boost |
 |---|---|---|---|---|

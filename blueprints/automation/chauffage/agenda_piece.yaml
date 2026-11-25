@@ -155,7 +155,8 @@ blueprint:
     correspondance:
       name: Correspondance avec le thermostat (méthode Préréglage)
       description: >-
-        Nom du préréglage du thermostat pour chaque mot-clé. Valeurs par défaut
+        Ignorée si la méthode est Consigne. Nom du préréglage du thermostat
+        pour chaque mot-clé. Valeurs par défaut
         pour le Thermostat générique de Home Assistant, qui n'a ni « frost »
         ni « boost » : Hors-gel y devient « away » (Absent) et Boost
         « activity » (Activité).
@@ -183,7 +184,8 @@ blueprint:
     consignes:
       name: Consignes (méthode Consigne)
       description: >-
-        Température de chaque mot-clé, série chaud (modes chaud et auto) et
+        Ignorée si la méthode est Préréglage (une consigne écrite dans le titre
+        s'applique avec les deux méthodes). Température de chaque mot-clé, série chaud (modes chaud et auto) et
         série froid (mode froid). En mode auto à deux bornes, la série chaud
         donne la borne basse et la série froid la borne haute. Bornées au
         minimum et au maximum de l'appareil.
