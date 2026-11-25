@@ -1,20 +1,24 @@
 blueprint:
-  name: Chauffage — agenda d'une pièce
+  name: Chauffage et clim — agenda d'une pièce
   description: >-
-    Applique au thermostat d'une pièce le préréglage dicté par le calendrier
-    de cette pièce. Convention : le titre de l'événement en cours donne le
-    préréglage (« Confort », « Éco », « Hors-gel », « Boost », sans tenir
-    compte des majuscules ni des accents ; tout autre titre vaut Confort).
-    Hors événement : le préréglage choisi ci-dessous (Éco par défaut).
-    Présence (option, désactivée par défaut) : hors événement, un capteur de mouvement qui se
-    déclenche dans la plage horaire choisie applique le préréglage de présence
-    (Confort par défaut) jusqu'à une durée sans mouvement ; un événement du
-    calendrier reprend toujours le dessus.
+    Pilote le radiateur ou la clim d'une pièce selon le calendrier de cette
+    pièce. Le titre de l'événement en cours se lit dans cet ordre, sans tenir
+    compte des majuscules ni des accents : un mode facultatif (« Chaud »,
+    « Froid », « Arrêt »), un mot-clé facultatif (« Confort », « Éco »,
+    « Hors-gel », « Boost » ; sans mot-clé : Confort) et une consigne
+    facultative (« Froid 25 », « Chaud 21,5 », « 19 »). Sans mode dans le
+    titre, le mode de l'appareil ne change pas, et un appareil éteint reste
+    éteint. Sans consigne dans le titre, le mot-clé applique un préréglage ou
+    une consigne de la série chaud ou froid, selon la méthode choisie.
+    Hors événement : le réglage choisi ci-dessous (Éco par défaut, ou Arrêt).
+    Présence (option, désactivée par défaut) : hors événement, un déclencheur
+    à « on » dans la plage horaire choisie applique le réglage de présence
+    jusqu'à une durée sans mouvement ; un événement du calendrier reprend
+    toujours le dessus.
     Réappliqué à chaque début ou fin d'événement, au démarrage de Home
-    Assistant et quand le chauffage est rallumé. Un réglage manuel (panneau,
-    tableau de bord) tient jusqu'au prochain changement du calendrier ; la
-    présence ne remplace pas un réglage manuel.
-    Ne touche jamais au mode : un chauffage éteint reste éteint.
+    Assistant et à chaque changement de mode de l'appareil. Un réglage manuel
+    (panneau, tableau de bord) tient jusqu'au prochain changement du
+    calendrier ; la présence ne remplace pas un réglage manuel.
   domain: automation
   source_url: https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/chauffage/agenda_piece.yaml
   input:
@@ -26,19 +30,38 @@ blueprint:
           filter:
             - domain: calendar
     thermostat:
-      name: Thermostat
+      name: Thermostat ou clim
       description: >-
-        Thermostat de la pièce, par exemple un « Thermostat générique » de
-        Home Assistant qui commande l'interrupteur du fil pilote.
+        Entité « climate » de la pièce : par exemple un « Thermostat générique »
+        de Home Assistant qui commande l'interrupteur du fil pilote, ou une clim.
       selector:
         entity:
           filter:
             - domain: climate
+    methode:
+      name: Méthode
+      description: >-
+        Comment appliquer un mot-clé (Confort, Éco, Hors-gel, Boost) quand le
+        titre ne donne pas de consigne. Préréglage : pour un thermostat qui en
+        a (thermostat générique, certaines clims). Consigne : la température
+        de la section « Consignes », série chaud ou froid selon le mode, pour
+        une clim sans préréglage.
+      default: prereglage
+      selector:
+        select:
+          options:
+            - label: Préréglage
+              value: prereglage
+            - label: Consigne
+              value: consigne
     hors_evenement:
       name: Hors événement
-      description: Préréglage appliqué quand aucun événement n'est en cours.
+      description: >-
+        Réglage appliqué quand aucun événement n'est en cours. Arrêt : l'appareil
+        est éteint ; un événement suivant ne le rallume que si son titre commence
+        par « Chaud » ou « Froid ».
       default: eco
-      selector: &cle
+      selector:
         select:
           options:
             - label: Confort
@@ -49,18 +72,21 @@ blueprint:
               value: hors_gel
             - label: Boost
               value: boost
+            - label: Arrêt
+              value: arret
     presence:
       name: Présence (option)
       description: >-
-        Hors événement, chauffer la pièce quand quelqu'un y est détecté.
-        Désactivée par défaut : sans l'interrupteur ci-dessous, les capteurs
-        sont ignorés.
+        Hors événement, chauffer ou rafraîchir la pièce quand quelqu'un y est
+        détecté. Désactivée par défaut : sans l'interrupteur ci-dessous, les
+        déclencheurs sont ignorés. La présence ne rallume jamais un appareil
+        éteint.
       collapsed: true
       input:
         presence_activee:
           name: Activer la présence
           description: >-
-            Allumé : un mouvement hors événement applique le préréglage de
+            Allumé : un mouvement hors événement applique le réglage de
             présence. Éteint : comportement du seul calendrier.
           default: false
           selector:
@@ -83,16 +109,26 @@ blueprint:
                 - domain: input_boolean
                 - domain: fan
         prereglage_presence:
-          name: Préréglage de présence
-          description: Préréglage appliqué tant qu'une présence est détectée.
+          name: Réglage de présence
+          description: Mot-clé appliqué tant qu'une présence est détectée.
           default: confort
-          selector: *cle
+          selector:
+            select:
+              options:
+                - label: Confort
+                  value: confort
+                - label: Éco
+                  value: eco
+                - label: Hors-gel
+                  value: hors_gel
+                - label: Boost
+                  value: boost
         duree_presence:
           name: Durée après le dernier mouvement
           description: >-
-            Le préréglage de présence tient encore cette durée après le dernier
-            mouvement, puis le préréglage hors événement revient. Chaque
-            nouveau mouvement relance la durée.
+            Le réglage de présence tient encore cette durée après le dernier
+            mouvement, puis le réglage hors événement revient. Chaque nouveau
+            mouvement relance la durée.
           default: 30
           selector:
             number:
@@ -112,14 +148,14 @@ blueprint:
           name: Détection jusqu'à
           description: >-
             Fin de la plage : à cette heure, la présence en cours s'arrête et
-            le préréglage hors événement revient.
+            le réglage hors événement revient.
           default: "00:00:00"
           selector:
             time: {}
     correspondance:
-      name: Correspondance avec le thermostat
+      name: Correspondance avec le thermostat (méthode Préréglage)
       description: >-
-        Nom du préréglage du thermostat pour chaque titre. Valeurs par défaut
+        Nom du préréglage du thermostat pour chaque mot-clé. Valeurs par défaut
         pour le Thermostat générique de Home Assistant, qui n'a ni « frost »
         ni « boost » : Hors-gel y devient « away » (Absent) et Boost
         « activity » (Activité).
@@ -144,6 +180,52 @@ blueprint:
           name: Boost
           default: activity
           selector: *prereglage
+    consignes:
+      name: Consignes (méthode Consigne)
+      description: >-
+        Température de chaque mot-clé, série chaud (modes chaud et auto) et
+        série froid (mode froid). En mode auto à deux bornes, la série chaud
+        donne la borne basse et la série froid la borne haute. Bornées au
+        minimum et au maximum de l'appareil.
+      collapsed: true
+      input:
+        chaud_confort:
+          name: Chaud — Confort
+          default: 20
+          selector: &temperature
+            number:
+              min: 5
+              max: 35
+              step: 0.5
+              unit_of_measurement: °C
+        chaud_eco:
+          name: Chaud — Éco
+          default: 17
+          selector: *temperature
+        chaud_hors_gel:
+          name: Chaud — Hors-gel
+          default: 7
+          selector: *temperature
+        chaud_boost:
+          name: Chaud — Boost
+          default: 23
+          selector: *temperature
+        froid_confort:
+          name: Froid — Confort
+          default: 25
+          selector: *temperature
+        froid_eco:
+          name: Froid — Éco
+          default: 28
+          selector: *temperature
+        froid_hors_gel:
+          name: Froid — Hors-gel (presque pas de froid)
+          default: 32
+          selector: *temperature
+        froid_boost:
+          name: Froid — Boost
+          default: 22
+          selector: *temperature
 
 mode: queued
 max: 5
@@ -156,6 +238,7 @@ trigger_variables:
 variables:
   calendrier: !input calendrier
   thermostat: !input thermostat
+  methode: !input methode
   hors_evenement: !input hors_evenement
   prereglage_presence: !input prereglage_presence
   plage_debut: !input plage_debut
@@ -165,6 +248,18 @@ variables:
     eco: !input prereglage_eco
     hors_gel: !input prereglage_hors_gel
     boost: !input prereglage_boost
+  consignes:
+    chaud:
+      confort: !input chaud_confort
+      eco: !input chaud_eco
+      hors_gel: !input chaud_hors_gel
+      boost: !input chaud_boost
+    froid:
+      confort: !input froid_confort
+      eco: !input froid_eco
+      hors_gel: !input froid_hors_gel
+      boost: !input froid_boost
+  modes_actifs: [heat, cool, heat_cool, auto]
 
 triggers:
   # Début ou fin d'événement (changement d'état du calendrier).
@@ -180,20 +275,20 @@ triggers:
   - trigger: homeassistant
     event: start
     id: demarrage
-  # Chauffage rallumé : il reprend le préréglage du moment.
+  # Changement de mode de l'appareil (rallumage, passage chaud ↔ froid) :
+  # le réglage du moment est réappliqué dans le nouveau mode, sans le changer.
   - trigger: state
     entity_id: !input thermostat
-    from: "off"
-    to: heat
-    id: rallumage
-  # Présence : un capteur passe à « on ». Toujours faux si l'option est
-  # désactivée ou sans capteur choisi.
+    to: ~
+    id: mode
+  # Présence : un déclencheur passe à « on ». Toujours faux si l'option est
+  # désactivée ou sans déclencheur choisi.
   - trigger: template
     value_template: >-
-      {{ presence_activee and expand(capteurs_presence) | selectattr('state', 'eq', 'on')
-         | list | count > 0 }}
+      {{ presence_activee and expand(capteurs_presence)
+         | selectattr('state', 'eq', 'on') | list | count > 0 }}
     id: presence
-  # Fin de présence : aucun capteur à « on » depuis la durée choisie.
+  # Fin de présence : aucun déclencheur à « on » depuis la durée choisie.
   # Réévalué chaque minute (now()), donc aussi après un redémarrage.
   - trigger: template
     value_template: >-
@@ -208,25 +303,38 @@ triggers:
     id: fin_presence
 
 conditions:
-  # Rien sur un état inconnu : calendrier ou thermostat indisponible.
+  # Rien sur un état inconnu : calendrier ou appareil indisponible.
   - condition: template
     value_template: >-
       {{ states(calendrier) in ['on', 'off']
-         and states(thermostat) == 'heat' }}
+         and states(thermostat) not in ['unavailable', 'unknown'] }}
 
 actions:
   - variables:
+      evenement: "{{ states(calendrier) == 'on' }}"
       titre: >-
-        {{ (state_attr(calendrier, 'message') or '') | lower
-           | replace('é', 'e') | replace('è', 'e') | replace('-', ' ')
-           | replace('_', ' ') | trim }}
+        {% set ns = namespace(t=(state_attr(calendrier, 'message') or '') | lower) %}
+        {% for a, b in [('é','e'),('è','e'),('ê','e'),('ë','e'),('à','a'),('â','a'),
+                        ('î','i'),('ï','i'),('ô','o'),('ù','u'),('û','u'),('ç','c'),
+                        ('°c',' '),('°',' '),('-',' '),('_',' '),(',','.')] %}
+          {% set ns.t = ns.t | replace(a, b) %}
+        {% endfor %}
+        {{ ns.t | trim }}
+      mots: "{{ (titre | string).split() if evenement else [] }}"
+      mot_mode: >-
+        {{ mots[0] if mots | count > 0 and mots[0] in ['chaud', 'froid', 'arret'] else '' }}
+      reste: "{{ (mots[1:] if mot_mode else mots) | map('string') | join(' ') }}"
+      # Consigne(s) du titre : le premier nombre ; en mode auto à deux bornes,
+      # un second nombre donne la borne haute (« Confort 20 25 »).
+      nombres: "{{ reste | string | regex_findall('[0-9]+(?:[.][0-9]+)?') | map('float') | list }}"
+      nombre: "{{ nombres[0] if nombres | count > 0 else none }}"
       dans_plage: >-
         {% set d = plage_debut[:5] %}{% set f = plage_fin[:5] %}
         {% set h = now().strftime('%H:%M') %}
         {{ d == f or (d < f and d <= h and h < f)
            or (d > f and (h >= d or h < f)) }}
-      # Au démarrage, l'horodatage des capteurs est remis à zéro : seul un
-      # capteur à « on » compte.
+      # Au démarrage, l'horodatage des déclencheurs est remis à zéro : seul un
+      # déclencheur à « on » compte.
       present: >-
         {% set c = expand(capteurs_presence) %}
         {{ presence_activee and c | count > 0 and dans_plage
@@ -235,41 +343,170 @@ actions:
                     and (c | map(attribute='last_changed') | max)
                         >= now() - timedelta(minutes=duree_presence | int))) }}
       cle: >-
-        {% if states(calendrier) == 'on' %}
-          {% if titre.startswith('hors gel') or titre.startswith('horsgel') %}hors_gel
-          {% elif titre.startswith('eco') %}eco
-          {% elif titre.startswith('boost') %}boost
+        {% if evenement %}
+          {% set r = reste | string %}
+          {% if r.startswith('hors gel') or r.startswith('horsgel') %}hors_gel
+          {% elif r.startswith('eco') %}eco
+          {% elif r.startswith('boost') %}boost
           {% else %}confort{% endif %}
         {% elif present %}{{ prereglage_presence }}
         {% else %}{{ hors_evenement }}{% endif %}
-      prereglage: "{{ correspondance[cle | trim] }}"
-      connus: "{{ state_attr(thermostat, 'preset_modes') or [] }}"
-  # Présence : seulement hors événement, et sans écraser un réglage manuel
-  # (le préréglage actuel doit être celui de hors événement ou de présence).
+      mode_actuel: "{{ states(thermostat) }}"
+      # Mode voulu par le calendrier ; jamais changé sur un changement de mode
+      # fait à la main (déclencheur « mode »).
+      mode_voulu: >-
+        {% set m = {'chaud': 'heat', 'froid': 'cool', 'arret': 'off'} %}
+        {% if mot_mode %}{{ m[mot_mode] }}
+        {% elif not evenement and cle | trim == 'arret' %}off
+        {% else %}{{ mode_actuel }}{% endif %}
+      mode_cible: "{{ mode_actuel if trigger.id == 'mode' else mode_voulu }}"
+  # Mode changé à la main contre le titre en cours (ex. chaud pendant un
+  # « Froid 25 ») ou appareil laissé éteint : rien.
   - condition: template
     value_template: >-
-      {{ trigger.id not in ['presence', 'fin_presence']
-         or (presence_activee and states(calendrier) != 'on'
-             and state_attr(thermostat, 'preset_mode') in
-                 [correspondance[hors_evenement], correspondance[prereglage_presence]]) }}
+      {{ mode_voulu == mode_actuel or trigger.id != 'mode' }}
+  # Présence : seulement hors événement, et sans écraser un réglage manuel.
+  - condition: template
+    value_template: >-
+      {% set k = [hors_evenement, prereglage_presence] | reject('eq', 'arret') | list %}
+      {% if trigger.id not in ['presence', 'fin_presence'] %}true
+      {% elif not presence_activee or evenement or mode_actuel not in modes_actifs %}false
+      {% elif methode == 'prereglage' %}
+        {% set ns = namespace(p=[]) %}
+        {% for x in k %}{% set ns.p = ns.p + [correspondance[x]] %}{% endfor %}
+        {{ state_attr(thermostat, 'preset_mode') in ns.p }}
+      {% else %}
+        {% set s = 'froid' if mode_actuel == 'cool' else 'chaud' %}
+        {% set lo = state_attr(thermostat, 'min_temp') | float(7) %}
+        {% set hi = state_attr(thermostat, 'max_temp') | float(35) %}
+        {% set ns = namespace(ok=false) %}
+        {% for x in k %}
+          {% set v = [[consignes[s][x] | float, lo] | max, hi] | min %}
+          {% if state_attr(thermostat, 'temperature') is not none
+                and state_attr(thermostat, 'temperature') | float == v %}{% set ns.ok = true %}{% endif %}
+          {% if state_attr(thermostat, 'target_temp_low') is not none
+                and state_attr(thermostat, 'target_temp_low') | float
+                    == [[consignes.chaud[x] | float, lo] | max, hi] | min %}{% set ns.ok = true %}{% endif %}
+        {% endfor %}
+        {{ ns.ok }}
+      {% endif %}
+  # Rien à faire : appareil éteint (ou en déshumidification, ventilation) et
+  # aucun mode demandé.
+  - condition: template
+    value_template: "{{ mode_cible != mode_actuel or mode_actuel in modes_actifs }}"
   - if:
       - condition: template
-        value_template: "{{ prereglage in connus }}"
+        value_template: "{{ mode_cible != mode_actuel }}"
     then:
       - if:
           - condition: template
-            value_template: "{{ state_attr(thermostat, 'preset_mode') != prereglage }}"
+            value_template: "{{ mode_cible in (state_attr(thermostat, 'hvac_modes') or []) }}"
         then:
-          - action: climate.set_preset_mode
+          - action: climate.set_hvac_mode
             target:
               entity_id: "{{ thermostat }}"
             data:
-              preset_mode: "{{ prereglage }}"
-    else:
-      - action: system_log.write
-        data:
-          level: warning
-          logger: chauffage.agenda
-          message: >-
-            Chauffage : préréglage « {{ prereglage }} » inconnu de {{ thermostat }}
-            (connus : {{ connus | join(', ') }})
+              hvac_mode: "{{ mode_cible }}"
+          - wait_template: "{{ states(thermostat) == mode_cible }}"
+            timeout: "00:00:10"
+        else:
+          - action: system_log.write
+            data:
+              level: warning
+              logger: chauffage.agenda
+              message: >-
+                Chauffage : mode « {{ mode_cible }} » inconnu de {{ thermostat }}
+                (connus : {{ (state_attr(thermostat, 'hvac_modes') or []) | join(', ') }})
+          - stop: Mode inconnu
+  - condition: template
+    value_template: "{{ mode_cible in modes_actifs }}"
+  # Valeurs relues après un éventuel changement de mode.
+  - variables:
+      serie: "{{ 'froid' if mode_cible == 'cool' else 'chaud' }}"
+      tmin: "{{ state_attr(thermostat, 'min_temp') | float(7) }}"
+      tmax: "{{ state_attr(thermostat, 'max_temp') | float(35) }}"
+      deux_bornes: >-
+        {{ state_attr(thermostat, 'target_temp_low') is not none
+           and state_attr(thermostat, 'target_temp_high') is not none
+           and state_attr(thermostat, 'temperature') is none }}
+      connus: "{{ state_attr(thermostat, 'preset_modes') or [] }}"
+      prereglage: "{{ correspondance[cle | trim] }}"
+      par_consigne: "{{ nombre is not none or methode == 'consigne' }}"
+      consigne: >-
+        {% set v = nombre if nombre is not none else consignes[serie][cle | trim] %}
+        {{ [[v | float, tmin | float] | max, tmax | float] | min }}
+      borne_basse: >-
+        {% set v = nombre if nombre is not none else consignes.chaud[cle | trim] %}
+        {{ [[v | float, tmin | float] | max, tmax | float] | min }}
+      borne_haute: >-
+        {% set v = nombres[1] if nombres | count > 1 else consignes.froid[cle | trim] %}
+        {{ [[[v | float, borne_basse | float] | max, tmin | float] | max, tmax | float] | min }}
+  - choose:
+      # Consigne (du titre ou de la section « Consignes »).
+      - conditions:
+          - condition: template
+            value_template: "{{ par_consigne }}"
+        sequence:
+          # Un préréglage actif reprendrait la main sur la consigne.
+          - if:
+              - condition: template
+                value_template: >-
+                  {{ state_attr(thermostat, 'preset_mode') not in [none, 'none']
+                     and 'none' in connus }}
+            then:
+              - action: climate.set_preset_mode
+                target:
+                  entity_id: "{{ thermostat }}"
+                data:
+                  preset_mode: none
+          - if:
+              - condition: template
+                value_template: "{{ deux_bornes }}"
+            then:
+              - if:
+                  - condition: template
+                    value_template: >-
+                      {{ state_attr(thermostat, 'target_temp_low') | float != borne_basse | float
+                         or state_attr(thermostat, 'target_temp_high') | float != borne_haute | float }}
+                then:
+                  - action: climate.set_temperature
+                    target:
+                      entity_id: "{{ thermostat }}"
+                    data:
+                      target_temp_low: "{{ borne_basse }}"
+                      target_temp_high: "{{ borne_haute }}"
+            else:
+              - if:
+                  - condition: template
+                    value_template: >-
+                      {{ state_attr(thermostat, 'temperature') is none
+                         or state_attr(thermostat, 'temperature') | float != consigne | float }}
+                then:
+                  - action: climate.set_temperature
+                    target:
+                      entity_id: "{{ thermostat }}"
+                    data:
+                      temperature: "{{ consigne }}"
+    # Préréglage.
+    default:
+      - if:
+          - condition: template
+            value_template: "{{ prereglage in connus }}"
+        then:
+          - if:
+              - condition: template
+                value_template: "{{ state_attr(thermostat, 'preset_mode') != prereglage }}"
+            then:
+              - action: climate.set_preset_mode
+                target:
+                  entity_id: "{{ thermostat }}"
+                data:
+                  preset_mode: "{{ prereglage }}"
+        else:
+          - action: system_log.write
+            data:
+              level: warning
+              logger: chauffage.agenda
+              message: >-
+                Chauffage : préréglage « {{ prereglage }} » inconnu de {{ thermostat }}
+                (connus : {{ connus | join(', ') }})

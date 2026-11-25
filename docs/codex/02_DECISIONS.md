@@ -1644,3 +1644,41 @@ qui cite la précédente.
   et `fan`, mélangés, tous lus sur l'état « on ». Écartés : `media_player`, `person`,
   `device_tracker` (états autres que « on », sens différent selon l'entité) ; ils passent
   par un capteur binaire Modèle.
+
+
+## D059 — Clim pilotée par agenda : mode et consigne dans le titre (TODO T25)
+
+- Date : 25 novembre 2026.
+- Contexte : le blueprint `chauffage/agenda_piece.yaml` (D058) ne gérait pas les clims :
+  il n'agissait qu'en mode `heat`, ne changeait jamais le mode et ne passait que par les
+  préréglages, que beaucoup de clims n'ont pas (ou sous d'autres noms). Recherche faite
+  sur les possibilités de HA (`climate.set_hvac_mode`, `set_temperature` à une consigne
+  ou à deux bornes, `set_preset_mode` selon l'intégration) et sur les blueprints de la
+  communauté : aucun ne pilote chaud et froid depuis un calendrier. Le propriétaire a
+  demandé que le calendrier gère le chaud et le froid, avec la consigne dans le titre ;
+  le côté module HAPanel (affichage du froid) est traité ailleurs, hors de ce sujet.
+- Décision : le même blueprint, rendu compatible :
+  - titre lu dans l'ordre mode (« Chaud », « Froid », « Arrêt », facultatif), mot-clé
+    (facultatif, Confort par défaut), consigne (premier nombre, facultatif ; second
+    nombre = borne haute en mode automatique à deux bornes) ;
+  - le mode n'est changé que par un mode dans le titre ou par « Arrêt » hors événement
+    (nouvelle valeur du champ) ; sans mode, un appareil éteint reste éteint ;
+  - méthode au choix par pièce : Préréglage (comportement de D058) ou Consigne (séries
+    chaud et froid de températures par mot-clé, choisies selon le mode) ; une consigne
+    du titre l'emporte toujours et remet d'abord le préréglage à `none` ;
+  - consignes bornées à `min_temp` et `max_temp` de l'appareil ;
+  - agit dans les modes `heat`, `cool`, `heat_cool`, `auto` ; réappliqué à chaque
+    changement de mode de l'appareil, sans jamais rechanger un mode modifié à la main
+    contre le titre en cours ; `dry` et `fan_only` laissés tels quels ;
+  - présence (T24) inchangée, comparée au préréglage ou à la consigne selon la méthode.
+- Options écartées : blueprint séparé pour les clims (deux automatisations par pièce
+  mixte, logique dupliquée) ; consignes seulement dans le titre (une clim sans
+  préréglage n'aurait rien hors événement) ; passage automatique chaud ou froid selon la
+  saison ou la température extérieure (non demandé ; le titre ou l'utilisateur
+  choisit) ; mode automatique dans le titre (`heat_cool` rarement utile, bornes à
+  deux nombres suffisantes).
+- Conséquences : les automatisations existantes gardent leur comportement (méthode
+  Préréglage par défaut ; seule différence : elles agissent aussi en froid et en
+  automatique, et sur un titre commençant par « Chaud », « Froid » ou « Arrêt ») ; le
+  blueprint s'appelle « Chauffage et clim — agenda d'une pièce », même fichier et même
+  adresse ; aucun changement de `module.yaml` ni du firmware ici.

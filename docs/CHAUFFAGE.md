@@ -1,11 +1,13 @@
-# Chauffage : un thermostat générique piloté par agenda
+# Chauffage et clim pilotés par agenda
 
 Facultatif : le module HAPanel accepte n'importe quel thermostat `climate.…`. Ce
 guide propose une régulation simple, sans intégration complémentaire : un
 « Thermostat générique » de Home Assistant par pièce, qui commande l'interrupteur
 du radiateur (fil pilote), et le blueprint `chauffage/agenda_piece.yaml`, qui lui
-applique le préréglage du calendrier de la pièce (D058). Les §1 et §5 décrivent le
-passage depuis Versatile Thermostat ; sans lui, passer directement au §2.
+applique le préréglage du calendrier de la pièce (D058). Le même blueprint pilote une
+clim : mode chaud ou froid et consigne donnés par le titre de l'événement (§ 3 et § 4,
+D059). Les §1 et §5 décrivent le passage depuis Versatile Thermostat ; sans lui,
+passer directement au §2.
 
 Ordre conseillé : **construire le nouveau d'abord, désinstaller ensuite**. Les
 radiateurs ne restent jamais sans régulation.
@@ -84,11 +86,42 @@ sur la page Planning du module).
 Les températures sont celles saisies dans les préréglages du thermostat de la
 pièce (§ 2), par exemple Hors-gel 7 °C, Éco 17 °C, Confort 20 °C, Boost 23 °C.
 
+**Mode et consigne dans le titre (clim, ou radiateur à une température précise).**
+Le titre se lit dans cet ordre : **un mode** facultatif, **un mot-clé** facultatif
+(tableau ci-dessus ; sans mot-clé : Confort), **une consigne** facultative (le premier
+nombre du titre, virgule ou point, « °C » facultatif).
+
+| Commencer le titre par | Effet | Exemples |
+|---|---|---|
+| **Chaud** | Allume l'appareil en mode chaud (`heat`), puis applique la suite | « Chaud », « Chaud 21 », « Chaud éco » |
+| **Froid** | Allume l'appareil en mode froid (`cool`), puis applique la suite | « Froid 25 », « Froid éco », « Froid confort sieste » |
+| **Arrêt** | Éteint l'appareil (`off`) | « Arrêt », « arret nuit » |
+| un mot-clé ou un nombre, sans mode | Mode de l'appareil inchangé ; un appareil éteint reste éteint | « Confort 21 », « 19,5 », « Éco » |
+
+- **Une consigne dans le titre** l'emporte sur le mot-clé : « Froid 25 » règle 25 °C,
+  « Confort 21 » règle 21 °C. Un préréglage actif est d'abord remis à « aucun »
+  (`none`), sinon il reprendrait la main. Elle est bornée au minimum et au maximum de
+  l'appareil. Attention : tout nombre compte (« Réunion 2 » demande 2 °C, ramené au
+  minimum) ;
+- **sans consigne**, le mot-clé applique le préréglage, ou la consigne de la série
+  chaud ou froid si la méthode **Consigne** est choisie (§ 4) ;
+- **mode automatique à deux bornes** (`heat_cool`, `auto` avec borne basse et borne
+  haute) : un nombre donne la borne basse, un second la borne haute (« Confort 20
+  25 ») ; sans nombre, la série chaud donne la borne basse et la série froid la borne
+  haute. Le blueprint ne passe jamais lui-même en mode automatique ;
+- **sans mode dans le titre**, le mode n'est jamais changé : pour qu'un événement
+  rallume une clim éteinte, commencer son titre par « Chaud » ou « Froid ».
+
+Exemple d'été (séjour, clim, hors événement **Arrêt**) : « Froid 26 » de 14 h à 19 h,
+« Froid confort » de 19 h à 23 h ; la clim s'allume en froid à 14 h, passe à la
+consigne Confort froid (25 °C) à 19 h et s'éteint à 23 h.
+
 **Entre deux événements** (aucun événement en cours), le thermostat prend le
 préréglage du champ **Hors événement** de l'automatisation de la pièce : Éco par
 défaut, soit 17 °C dans l'exemple. Il se choisit pièce par pièce (Confort, Éco,
-Hors-gel ou Boost) : Hors-gel, par exemple, pour une pièce peu utilisée qui ne doit
-chauffer que pendant ses créneaux.
+Hors-gel, Boost ou Arrêt) : Hors-gel, par exemple, pour une pièce peu utilisée qui ne
+doit chauffer que pendant ses créneaux ; **Arrêt** pour une clim qui ne doit tourner
+que pendant ses créneaux (elle est éteinte à la fin de chaque événement).
 
 **Règles à retenir :**
 
@@ -141,19 +174,39 @@ chauffer que pendant ses créneaux.
    Recharger les automatisations**. Adresse à importer :
    `https://github.com/cnuma/HAPanel/blob/main/blueprints/automation/chauffage/agenda_piece.yaml`
    (avant la fusion, remplacer `main` par le nom de la branche d'essai).
-2. **Paramètres › Automatisations et scènes › Blueprints › Chauffage — agenda
-   d'une pièce › Créer une automatisation** : choisir le calendrier et le
-   thermostat de la pièce. Laisser la correspondance par défaut.
+2. **Paramètres › Automatisations et scènes › Blueprints › Chauffage et clim —
+   agenda d'une pièce › Créer une automatisation** : choisir le calendrier et le
+   thermostat (ou la clim) de la pièce. Laisser la correspondance par défaut.
+3. **Méthode** : **Préréglage** (par défaut) pour un thermostat qui en a (thermostat
+   générique, clim avec préréglages : vérifier l'attribut `preset_modes` dans
+   **Outils de développement › États**) ; **Consigne** pour une clim sans
+   préréglage. Avec Consigne, régler la section repliée **Consignes** : une
+   température par mot-clé, série chaud et série froid.
+
+| Consigne par défaut | Confort | Éco | Hors-gel | Boost |
+|---|---|---|---|---|
+| Chaud (modes chaud et auto) | 20 °C | 17 °C | 7 °C | 23 °C |
+| Froid (mode froid) | 25 °C | 28 °C | 32 °C (presque pas de froid) | 22 °C |
+
+La série suit le mode de l'appareil au moment d'appliquer : passer la clim de chaud à
+froid applique aussitôt la consigne froid du moment. Les consignes sont bornées au
+minimum et au maximum de l'appareil (une clim limitée à 30 °C reçoit 30 pour 32).
 
 Comportement :
 
-- le préréglage est réappliqué à chaque début ou fin d'événement, au démarrage
-  de HA et quand on rallume le chauffage ;
+- le réglage est réappliqué à chaque début ou fin d'événement, au démarrage de HA et
+  à chaque changement de mode de l'appareil (rallumage, passage chaud ↔ froid) ;
 - un changement manuel (panneau, tableau de bord) tient jusqu'au prochain
+  changement du calendrier ; un mode changé à la main contre le titre en cours (clim
+  mise en chaud pendant « Froid 25 », ou éteinte) est respecté jusqu'au prochain
   changement du calendrier ;
-- le mode n'est jamais changé : un chauffage éteint (été) reste éteint ;
+- le mode n'est changé que par un titre commençant par « Chaud », « Froid » ou
+  « Arrêt », ou par « Arrêt » hors événement ; sinon un appareil éteint (été) reste
+  éteint ; au démarrage de HA, le mode du titre en cours est réappliqué ;
+- en déshumidification (`dry`) ou ventilation (`fan_only`), rien n'est fait, sauf
+  sur un titre avec mode ;
 - avec un calendrier ou un thermostat indisponible, rien n'est fait ;
-- un préréglage inconnu du thermostat est écrit dans le journal, sous
+- un préréglage ou un mode inconnu de l'appareil est écrit dans le journal, sous
   `chauffage.agenda`.
 
 **Vérifier :** créez un événement « Boost » qui commence dans 2 minutes. À
@@ -280,5 +333,9 @@ modifiées** donne le `titre` lu et le `prereglage` choisi.
 | Module HAPanel : préréglages tous grisés, aucun entouré, quand le calendrier passe en Boost ou Hors-gel ; boutons Boost et Hors-gel refusés | Blueprint `module.yaml` antérieur à la traduction `away` / `activity` | Réimporter `module.yaml` (**Blueprints**, **⋮ › Réimporter le blueprint**) |
 | Aucune trace à l'heure de l'événement | Automatisation désactivée, ou calendrier non choisi | Vérifier l'automatisation (activée, calendrier de la pièce) |
 | « Entité inconnue sélectionnée » dans l'automatisation | Calendrier ou thermostat supprimé ou renommé (identifiant changé) | Rechoisir l'entité ; voir § 3, « Modifier ou supprimer un calendrier existant » |
+| Clim : « Froid 25 » sans effet ; journal « Chauffage : mode « cool » inconnu » | La clim n'a pas ce mode (attribut `hvac_modes`) | Vérifier `hvac_modes` dans **Outils de développement › États** |
+| Clim : l'événement sans « Chaud » ni « Froid » ne l'allume pas | Normal : sans mode dans le titre, le mode n'est jamais changé | Commencer le titre par « Chaud » ou « Froid » |
+| Clim : consigne non appliquée, journal « préréglage … inconnu » | Méthode **Préréglage** sur une clim qui n'en a pas | Méthode **Consigne**, ou une consigne dans le titre |
+| Consigne différente du titre | Bornée au minimum ou au maximum de l'appareil (`min_temp`, `max_temp`), ou un autre nombre dans le titre | Corriger le titre ; un seul nombre, la consigne |
 | Un mouvement ne change rien | Option **Activer la présence** éteinte, événement en cours (le planning prime), heure hors de la plage de détection, préréglage changé à la main, ou capteur qui ne passe pas à « on » | Normal dans les trois premiers cas ; sinon, **Outils de développement › États**, état du capteur ; trace : arrêt au test « présence » (Variables modifiées : `present`, `dans_plage`) |
 | Le Confort de présence ne s'arrête pas | Un déclencheur reste à « on » (lumière ou prise oubliée), ou détecte sans cesse (animal, rideau, radiateur dans son champ) | Historique du capteur ; le déplacer ou en retirer un de la liste |
